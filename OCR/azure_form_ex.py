@@ -25,16 +25,19 @@ try:
 except Exception as e:
     print(f"An error occurred: {e}")
 else:
-    for idx, style in enumerate(result.styles):
-        if style.is_handwritten:
-            print(f"Document contains handwritten content: {style.confidence}")
+    with open('output.json', 'w') as json_file:
+        for idx, style in enumerate(result.styles):
+            if style.is_handwritten:
+                print(f"Document contains handwritten content: {style.confidence}")
 
-    for page in result.pages:
-        print(f"Page number: {page.page_number} has {len(page.lines)} lines and {len(page.words)} words.")
-
-    for page in result.pages:
-        print(f"Page number: {page.page_number} has {len(page.lines)} lines and {len(page.words)} words.")
-        lines = page.lines[:] 
-        lines_content = [line.content for line in lines]
-        print(json.dumps(lines_content, indent=4))
+        for page in result.pages:
+            print(f"Page number: {page.page_number} has {len(page.lines)} lines and {len(page.words)} words.")
+            lines = page.lines[:] 
+            lines_content = [line.content for line in lines]
+            kv_pairs = {}
+            for line in lines_content:
+                if ':' in line:
+                    key, value = line.split(':', 1)
+                    kv_pairs[key.strip()] = value.strip()
+            json.dump(kv_pairs, json_file, indent=4)
 
