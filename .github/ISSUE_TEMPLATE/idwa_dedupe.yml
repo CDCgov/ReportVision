@@ -2,3 +2,11 @@ name: IDWA Dedupe
 description: Create a ticket/issue related to IDWA's deduplication efforts
 labels: ['dedupe']
 projects: ['cdcgov/34']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **User Story:** |
+        As a(n) <insert user persona> I want/have to <insert pain point or feature request> so that I can <insert desired outcome or value add>. |
+        |
+        **Acceptance Criteria:** |
