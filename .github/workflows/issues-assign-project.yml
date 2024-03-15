@@ -1,9 +1,6 @@
-name: Add bugs to bugs project
+name: Add issues to repo projects
 
 on:
-  push:
-    branches:
-      - IDWA-17-Auto-assign-projects-to-issues
   issues:
     types:
       - opened
