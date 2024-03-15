@@ -5,7 +5,7 @@ on:
       - opened
 jobs:
   add-to-dedupe-project:
-    if: contains(github.event.issues.labels.*.name, 'dedupe')
+    if: contains(github.event.issue.labels.*.name, 'dedupe')
     name: Add issue to dedupe project
     runs-on: ubuntu-latest
     steps:
