@@ -3,10 +3,19 @@ description: Create a ticket/issue related to IDWA's deduplication efforts
 labels: ['dedupe']
 projects: ['cdcgov/34']
 body:
-  - type: markdown
+  - type: textarea
+    id: user-story
     attributes:
-      value: |
-        **User Story:** |
-        As a(n) <insert user persona> I want/have to <insert pain point or feature request> so that I can <insert desired outcome or value add>. |
-        |
-        **Acceptance Criteria:** |
+      label: User Story
+      description: Describe the pain point or feature request of a user persona
+      placeholder: As a(n) <insert user persona> I have/want to <insert pain point> so that I can <insert value add>
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Describe the functionality that must be implemented in order to consider this issue resolved
+      placeholder: When a user <insert functionality> then <explain expected outcome>
+    validations:
+      required: true
