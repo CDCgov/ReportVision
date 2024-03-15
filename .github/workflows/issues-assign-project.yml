@@ -1,10 +1,8 @@
 name: Add issues to repo projects
-
 on:
   issues:
     types:
       - opened
-
 jobs:
   add-to-dedupe-project:
     if: ${{ github.event.label.name == 'dedupe' }}
@@ -16,7 +14,7 @@ jobs:
           # You can target a project in a different organization
           # to the issue
           project-url: https://github.com/orgs/CDCgov/projects/34
-          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
   add-to-ocr-project:
     if: ${{ github.event.label.name == 'OCR' }}
     name: Add issue to the ocr project
@@ -27,4 +25,4 @@ jobs:
           # You can target a project in a different organization
           # to the issue
           project-url: https://github.com/orgs/CDCgov/projects/33
-          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
