@@ -14,9 +14,9 @@ jobs:
           # You can target a project in a different organization
           # to the issue
           project-url: https://github.com/orgs/CDCgov/projects/34
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.ASSIGN_ISSUES_TO_PROJECTS }}
   add-to-ocr-project:
-    if: ${{ github.event.label.name == 'OCR' }}
+    if: contains(github.event.issue.labels.*.name, 'OCR')
     name: Add issue to the ocr project
     runs-on: ubuntu-latest
     steps:
@@ -25,4 +25,4 @@ jobs:
           # You can target a project in a different organization
           # to the issue
           project-url: https://github.com/orgs/CDCgov/projects/33
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.ASSIGN_ISSUES_TO_PROJECTS }}
