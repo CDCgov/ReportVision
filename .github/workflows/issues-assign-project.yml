@@ -1,0 +1,34 @@
+name: Add bugs to bugs project
+
+on:
+  push:
+    branches:
+      - IDWA-17-Auto-assign-projects-to-issues
+  issues:
+    types:
+      - opened
+      - labeled
+
+jobs:
+  add-to-dedupe-project:
+    if: ${{ github.event.label.name == 'dedupe' }}
+    name: Add issue to dedupe project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@RELEASE_VERSION
+        with:
+          # You can target a project in a different organization
+          # to the issue
+          project-url: https://github.com/orgs/CDCgov/projects/34
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+  add-to-ocr-project:
+    if: ${{ github.event.label.name == 'OCR' }}
+    name: Add issue to the ocr project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@RELEASE_VERSION
+        with:
+          # You can target a project in a different organization
+          # to the issue
+          project-url: https://github.com/orgs/CDCgov/projects/33
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
