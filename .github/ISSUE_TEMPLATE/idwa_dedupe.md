@@ -4,7 +4,7 @@ about: Create a ticket/issue related to IDWA's deduplication efforts
 title: ''
 labels: ['dedupe']
 assignees: ''
-projects: ['CDCgov/34']
+projects: ['cdcgov/34']
 ---
 
 **User Story**
