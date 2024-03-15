@@ -11,10 +11,8 @@ jobs:
     steps:
       - uses: actions/add-to-project@v0.5.0
         with:
-          # You can target a project in a different organization
-          # to the issue
           project-url: https://github.com/orgs/CDCgov/projects/34
-          github-token: ${{ secrets.ASSIGN_ISSUES_TO_PROJECTS }}
+          github-token: ${{ secrets.ASSIGN_ISSUES_TO_PROJECTS }} #this custom action doesn't allow the default GITHUB_TOKEN, it requires us to use a PAT as the secret unfortunetly..
   add-to-ocr-project:
     if: contains(github.event.issue.labels.*.name, 'OCR')
     name: Add issue to the ocr project
@@ -22,7 +20,5 @@ jobs:
     steps:
       - uses: actions/add-to-project@v0.5.0
         with:
-          # You can target a project in a different organization
-          # to the issue
           project-url: https://github.com/orgs/CDCgov/projects/33
-          github-token: ${{ secrets.ASSIGN_ISSUES_TO_PROJECTS }}
+          github-token: ${{ secrets.ASSIGN_ISSUES_TO_PROJECTS }} #this custom action doesn't allow the default GITHUB_TOKEN, it requires us to use a PAT as the secret unfortunetly..
