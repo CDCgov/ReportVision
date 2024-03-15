@@ -1,6 +1,4 @@
 name: IDWA Dedupe
-about: Create a ticket/issue related to IDWA's deduplication efforts
-title: ''
+description: Create a ticket/issue related to IDWA's deduplication efforts
 labels: ['dedupe']
-assignees: ''
 projects: ['cdcgov/34']
