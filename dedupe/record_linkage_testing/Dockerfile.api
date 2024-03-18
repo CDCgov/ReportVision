@@ -1,0 +1,13 @@
+ARG VERSION=v1.2.11
+FROM ghcr.io/cdcgov/phdi/record-linkage:${VERSION}
+
+RUN apt-get update && apt-get install -y curl
+
+# Install OpenTelemetry packages for monitoring the record linkage API
+RUN pip install opentelemetry-distro opentelemetry-exporter-otlp
+
+# Auto instrument the record linkage API
+RUN opentelemetry-bootstrap -a install
+
+# Copy our custom testing code into the container
+COPY src /code
