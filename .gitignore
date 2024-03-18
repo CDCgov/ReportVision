@@ -1,1 +1,8 @@
 .env
+
+# Vim settings
+.exrc
+_exrc
+.vimrc
+_vimrc
+.nvimrc
