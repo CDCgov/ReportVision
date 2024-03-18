@@ -1,8 +1,7 @@
 name: Add issues to repo projects
 on:
   issues:
-    types:
-      - opened
+    types: [opened, edited, labeled]
 jobs:
   add-to-dedupe-project:
     if: contains(github.event.issue.labels.*.name, 'dedupe')
