@@ -11,7 +11,7 @@ import logging
 import inspect
 
 # Load the original app.main module early so logging and other service values
-# are properly initialized, before we monkey patch the module.
+# are properly initialized, before we monkey patch the modules.
 from app.main import app
 from phdi.linkage import link
 
@@ -37,5 +37,5 @@ def instrument_module(module):
         if inspect.isfunction(obj):
             setattr(module, name, instrument_function(obj))
 
-LOGGER.warning("Monkey patching %s functions with opentelemetry traces", link.__name__)
+LOGGER.info("Monkey patching %s functions with opentelemetry traces", link.__name__)
 instrument_module(link)
