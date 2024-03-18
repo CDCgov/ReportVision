@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  runner:
+    # The orchestration container of the environment that is used to initialize
+    # run the tests. This container will eventually use Synthea to generate
+    # syntehtic data, transform it into FHIR payloads acceptable by the linkage
+    # API and then run the tests.
+    build:
+      context: .
+      dockerfile: Dockerfile.runner
+    command: ["bash", "scripts/test.sh"]
+    depends_on:
+      api:
+        condition: service_healthy
+
+  api:
+    # The phdi record linkage API that we are testing. We are using a custom Dockerfile
+    # that extends from the phdi container so we can inject OpenTelemetry instrumentation
+    # for tracing.
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+        - "8080:8080"
+    environment:
+      - MPI_DB_TYPE=postgres
+      - MPI_DBNAME=postgres
+      - MPI_HOST=db
+      - MPI_PORT=5432
+      - MPI_USER=postgres
+      - MPI_PASSWORD=pw
+      - MPI_PATIENT_TABLE=patient
+      - MPI_PERSON_TABLE=person
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+    command: ["opentelemetry-instrument", "--service_name", "record-linkage-api",
+      "uvicorn", "main:app", "--host=0.0.0.0", "--port=8080", "--log-config=app/log_config.yml"]
+    depends_on:
+      - db
+      - jaeger
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sS http://localhost:8080 | grep '\"mpi_connection_status\":\"OK\"' || exit 1"]
+      interval: 5s
+      retries: 5
+
+  db:
+    # The PostgreSQL database that is used to store the patient and person data.
+    image: "postgres:13-alpine"
+    environment:
+      - POSTGRES_PASSWORD=pw
+    ports:
+        - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+
+  jaeger:
+    # The Jaeger all-in-one container that is used to collect, store and visualize
+    # the traces of the service(s).
+    image: "jaegertracing/all-in-one:latest"
+    ports:
+      - "16686:16686"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:16686/"]
