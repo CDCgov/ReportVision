@@ -9,7 +9,7 @@ WORKDIR /code
 RUN apt-get update && apt-get install -y curl uuid-runtime
 
 # Download the Synthea JAR file that we'll use to generate synthetic patient data
-RUN curl https://github.com/synthetichealth/synthea/releases/download/${SYNTHEA_VERSION}/synthea-with-dependencies.jar
+RUN curl -L https://github.com/synthetichealth/synthea/releases/download/${SYNTHEA_VERSION}/synthea-with-dependencies.jar -o synthea.jar
 
 # Copy our custom testing code into the container
 COPY scripts /code/scripts
