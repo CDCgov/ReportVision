@@ -1,5 +1,8 @@
 ARG VERSION=v1.2.11
-FROM ghcr.io/cdcgov/phdi/record-linkage:${VERSION}
+# The record linkage image is not specifically built for the arm64 architecture,
+# so we need to explicitly state the amd64 architecture here so users running
+# Docker on Apple Silicon know to build the image for the correct architecture.
+FROM --platform=linux/amd64 ghcr.io/cdcgov/phdi/record-linkage:${VERSION}
 
 RUN apt-get update && apt-get install -y curl
 
