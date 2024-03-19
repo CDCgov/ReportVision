@@ -4,6 +4,7 @@ import os
 from OCR.services.image_segmenter import ImageSegmenter
 from dotenv import load_dotenv
 import numpy as np
+import cv2 as cv
 
 
 load_dotenv()
@@ -33,6 +34,17 @@ class TestImageSegmenter:
         segments = self.segmenter.segment()
         for segment in segments.values():
             assert len(segment.shape) == 3
+    
+
+    def test_no_matching_pixels(self):
+        segmentation_template = np.zeros((10, 10, 3), dtype=np.uint8)
+        cv.imwrite('no_matching_colors.png', segmentation_template)
+        segmenter = ImageSegmenter(self.raw_image, 'no_matching_colors.png', self.labels_path)
+        with pytest.raises(ValueError):
+            segmenter.segment()
+
+
+        os.remove('no_matching_colors.png')
     
     def test_invalid_file_paths(self):
         with pytest.raises(FileNotFoundError):

@@ -27,11 +27,12 @@ class ImageSegmenter:
             labels = json.load(f)
         #iterate over the labels
         for color, label in labels.items():
-
             color = tuple(map(int, color.split(',')))
             #find indices of the color in the segmentation template where the color matches the expected colors
             indices = np.where(np.all(self.segmentation_template == color, axis=-1))
             #if there any matching pixels
+            if indices[0].size == 0:
+                raise ValueError(f"No pixels found for color {color} in segmentation template.")
             if indices[0].size > 0:
                 #Find the x-y coordinates
                 y_min, y_max = indices[0].min(), indices[0].max()
