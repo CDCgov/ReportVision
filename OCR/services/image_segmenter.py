@@ -30,9 +30,10 @@ class ImageSegmenter:
             color = tuple(map(int, color.split(',')))
             #find indices of the color in the segmentation template where the color matches the expected colors
             indices = np.where(np.all(self.segmentation_template == color, axis=-1))
-            #if there any matching pixels
+            #if there are no matching pixels
             if indices[0].size == 0:
                 raise ValueError(f"No pixels found for color {color} in segmentation template.")
+             #if there are matching pixels
             if indices[0].size > 0:
                 #Find the x-y coordinates
                 y_min, y_max = indices[0].min(), indices[0].max()
