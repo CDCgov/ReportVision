@@ -6,15 +6,15 @@ This repository contains a performance testing project aimed at evaluating the s
 
 Before getting started, ensure you have the following installed:
 
-- Docker
-- Docker Compose
+- [Docker](https://docs.docker.com/engine/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
 ## Setup
 
 1. Build the Docker images and start the environment:
 
     ```bash
-    docker-compose up --build -d
+    docker compose up --build -d
     ```
 
     This command will build the necessary Docker images and start the environment in detached mode.
@@ -38,5 +38,5 @@ By default, the OpenTelemetry collector is configured to export telemetry data t
 After you've finished running performance tests and analyzing the results, you can stop and remove the Docker containers by running:
 
 ```bash
-docker-compose down
+docker compose down
 ```
