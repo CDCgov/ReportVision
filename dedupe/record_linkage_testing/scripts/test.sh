@@ -66,3 +66,5 @@ EOF
 )
 
 curl -X POST http://api:8080/link-record -d "${EXAMPLE_FHIR}" --header "Content-Type: application/json"
+
+java -jar synthea.jar -p "${POPULATION_SIZE}" -s "${SEED}" -cs "${CLINICIAN_SEED}" --generate.only_alive_patients=1 -o "${SYNTHEA_OUTPUT_DIR}"

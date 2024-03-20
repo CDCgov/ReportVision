@@ -10,6 +10,11 @@ services:
       context: .
       dockerfile: Dockerfile.runner
     command: ["bash", "scripts/test.sh"]
+    environment:
+      - POPULATION_SIZE=100
+      - SEED=1
+      - CLINICIAN_SEED=1
+      - SYNTHEA_OUTPUT_DIR=output/
     depends_on:
       api:
         condition: service_healthy
