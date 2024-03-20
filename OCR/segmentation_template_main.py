@@ -1,7 +1,6 @@
 
 from dotenv import load_dotenv
 import os
-import json
 import cv2 as cv
 
 from services.image_segmenter import ImageSegmenter
@@ -11,7 +10,7 @@ def main():
 
     segmentation_template = os.getenv('SEGMENTATION_TEMPLATE_PATH')
     raw_image = os.getenv('RAW_IMAGE_PATH')
-    labels_path = os.getenv('LABgtELS_PATH')
+    labels_path = os.getenv('LABELS_PATH')
 
 
 
@@ -19,7 +18,7 @@ def main():
     segments = segmenter.segment()
 
     segment_info = {label: segment_data.shape for label, segment_data in segments.items()}
-
+    print(segment_info)
 
 
     nbs_patient_id_image_path = 'nbs_patient_id_image_path.png'
