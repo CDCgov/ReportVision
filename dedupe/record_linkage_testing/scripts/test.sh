@@ -67,4 +67,6 @@ EOF
 
 curl -X POST http://api:8080/link-record -d "${EXAMPLE_FHIR}" --header "Content-Type: application/json"
 
+# Run Synthea with parameters for seeding and population size, also limit the dataset to only alive patients.
+# For a full list of parameters, see the [configuration file](https://github.com/synthetichealth/synthea/blob/master/src/main/resources/synthea.properties).
 java -jar synthea.jar -p "${POPULATION_SIZE}" -s "${SEED}" -cs "${CLINICIAN_SEED}" --generate.only_alive_patients=true -o "${SYNTHEA_OUTPUT_DIR}"
