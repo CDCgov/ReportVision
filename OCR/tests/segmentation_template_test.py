@@ -34,13 +34,10 @@ class TestImageSegmenter:
         for segment in segments.values():
             assert len(segment.shape) == 3
     
-    def test_segment_locations(self):
+    def test_segment_shapes(self):
         expected_shapes = {'nbs_patient_id': (41, 376, 3), 'nbs_cas_id': (57, 366, 3)}
         segments = self.segmenter.segment()
-        #verify that the shapes of the segments match the expected shapes otherwise skip the test
         for label, segment in segments.items():
-            if segment.shape != expected_shapes[label]:
-                pytest.skip("Segment shapes do not match expected shapes.")
             assert segment.shape == expected_shapes[label]
 
     def test_no_matching_pixels(self):
