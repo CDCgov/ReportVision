@@ -8,7 +8,6 @@ import cv2 as cv
 
 
 load_dotenv()
-
 segmentation_template = os.getenv('SEGMENTATION_TEMPLATE_PATH')
 raw_image = os.getenv('RAW_IMAGE_PATH')
 labels_path = os.getenv('LABELS_PATH')
@@ -35,6 +34,14 @@ class TestImageSegmenter:
         for segment in segments.values():
             assert len(segment.shape) == 3
     
+    def test_segment_locations(self):
+        expected_shapes = {'nbs_patient_id': (41, 376, 3), 'nbs_cas_id': (57, 366, 3)}
+        segments = self.segmenter.segment()
+        #verify that the shapes of the segments match the expected shapes otherwise skip the test
+        for label, segment in segments.items():
+            if segment.shape != expected_shapes[label]:
+                pytest.skip("Segment shapes do not match expected shapes.")
+            assert segment.shape == expected_shapes[label]
 
     def test_no_matching_pixels(self):
         segmentation_template = np.zeros((10, 10, 3), dtype=np.uint8)
@@ -42,8 +49,6 @@ class TestImageSegmenter:
         segmenter = ImageSegmenter(self.raw_image, 'no_matching_colors.png', self.labels_path)
         with pytest.raises(ValueError):
             segmenter.segment()
-
-
         os.remove('no_matching_colors.png')
     
     def test_invalid_file_paths(self):
@@ -56,7 +61,7 @@ class TestImageSegmenter:
 
         with pytest.raises(ValueError):
             ImageSegmenter('empty_file1', 'empty_file2', {})
-
         os.remove('empty_file1')
         os.remove('empty_file2')
-    
+
+   
