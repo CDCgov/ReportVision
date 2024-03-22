@@ -14,6 +14,8 @@ services:
       - POPULATION_SIZE=1
       - SEED=1
       - CLINICIAN_SEED=1
+      - STATE=California
+      - CITY=Los Angeles
       - SYNTHEA_OUTPUT_DIR=output/
     depends_on:
       api:

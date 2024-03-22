@@ -67,10 +67,23 @@ EOF
 
 curl -X POST http://api:8080/link-record -d "${EXAMPLE_FHIR}" --header "Content-Type: application/json"
 
+# Set Synthea location arguments
+synthea_args=()
+if [ -n "${STATE}" ]; then
+    synthea_args+=("${STATE}")
+fi
+if [ -n "${CITY}" ]; then
+    synthea_args+=("${CITY}")
+fi
+
 # Run Synthea with parameters for seeding, the population size and the output directory.
 # Additionally disable generating hospital and practitioner FHIR resources, as we only
 # want patient data and limit the results to only alive patients.
 # For a full list of parameters, see the [configuration file](https://github.com/synthetichealth/synthea/blob/master/src/main/resources/synthea.properties).
-java -jar synthea.jar --exporter.hospital.fhir.export=false --exporter.practitioner.fhir.export=false \
+java -jar synthea.jar --exporter.hospital.fhir.export=false \
+    --exporter.practitioner.fhir.export=false \
+    --exporter.split_records=true \
+    --exporter.split_records.duplicate_data=true \
     --generate.only_alive_patients=true \
-    -p "${POPULATION_SIZE}" -s "${SEED}" -cs "${CLINICIAN_SEED}" -o "${SYNTHEA_OUTPUT_DIR}"
+    -p "${POPULATION_SIZE}" -s "${SEED}" -cs "${CLINICIAN_SEED}" \
+    -o "${SYNTHEA_OUTPUT_DIR}" "${synthea_args[@]}"
