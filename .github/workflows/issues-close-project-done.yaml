@@ -14,7 +14,7 @@ jobs:
       - name: Sync issue states
         uses: dasmerlon/project-issue-state-sync@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN}}
+          github_token: ${{ secrets.CLOSE_ISSUE_WHEN_PROJECT_DONE }}
           owner: CDCgov
           project_number: 34
           closed_statuses: Done
