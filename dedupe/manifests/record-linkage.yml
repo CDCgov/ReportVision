@@ -109,22 +109,6 @@ spec:
       labels:
         app: record-linkage
     spec:
-      initContainers:
-        - name: await-db-ready
-          image: postgres:13
-          command: ["/bin/sh"]
-          args: ["-c", "until pg_isready -h $(POSTGRES_DB_LB_SERVICE_HOST) -p 5432; do echo waiting for database; sleep 2; done;"]
-          volumeMounts:
-            - mountPath: "/app"
-              name: record-linkage-source-code-storage
-          envFrom:
-            - configMapRef:
-                name: record-linkage-config
-            - configMapRef:
-                name: postgres-db-config
-          env:
-            - name: CUSTOMCONNSTR_RecordLinkageContext
-              value: Host=$(POSTGRES_DB_LB_SERVICE_HOST);Database=$(POSTGRES_DB);Username=$(POSTGRES_USER);Password=$(POSTGRES_PASSWORD)
       containers:
         - name: record-linkage
           image: ${IMAGE}
@@ -145,6 +129,12 @@ spec:
             - name: MPI_HOST
               value: $(POSTGRES_DB_LB_SERVICE_HOST)
           imagePullPolicy: IfNotPresent
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
           resources:
             limits:
               memory: 2Gi
