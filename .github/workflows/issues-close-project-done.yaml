@@ -3,9 +3,6 @@ on:
   # schedule:
   #   # At minute 0 every 2 hours
   #   - cron: 0 0-23/2 * * *
-  pull_request:
-    branches:
-      - idwa-28-close-issues-on-project-done
   push:
     branches:
       - idwa-28-close-issues-on-project-done
@@ -17,7 +14,7 @@ jobs:
       - name: Sync issue states
         uses: dasmerlon/project-issue-state-sync@v2
         with:
-          github_token: ${{ secrets.CLOSE_ISSUE_WHEN_PROJECT_DONE }}
+          github_token: ${{ secrets.GITHUB_TOKEN}}
           owner: CDCgov
           project_number: 34
           closed_statuses: Done
