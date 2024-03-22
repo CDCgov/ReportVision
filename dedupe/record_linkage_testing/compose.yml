@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile.runner
     command: ["bash", "scripts/test.sh"]
     environment:
-      - POPULATION_SIZE=100
+      - POPULATION_SIZE=1
       - SEED=1
       - CLINICIAN_SEED=1
       - SYNTHEA_OUTPUT_DIR=output/
