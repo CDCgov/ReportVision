@@ -13,4 +13,5 @@ RUN pip install opentelemetry-distro opentelemetry-exporter-otlp
 RUN opentelemetry-bootstrap -a install
 
 # Copy our custom testing code into the container
-COPY src /code
+COPY src/main.py /code/main.py
+COPY src/link.py /usr/local/lib/python3.10/site-packages/phdi/linkage/link.py
