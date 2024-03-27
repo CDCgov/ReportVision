@@ -12,14 +12,14 @@ jobs:
       - name: Sync issues for dedupe
         uses: dasmerlon/project-issue-state-sync@v2
         with:
-          github_token: ${{ secrets.CLOSE_ISSUE_WHEN_PROJECT_DONE }} #this custom action doesn't allow the default GITHUB_TOKEN, it requires us to use a PAT as the secret unfortunetly..
+          github_token: ${{ secrets.CLOSE_ISSUE_WHEN_PROJECT_DONE }} #this custom action doesn't allow the default GITHUB_TOKEN, it requires us to use a PAT as the secret unfortunately..
           owner: CDCgov
           project_number: 34
           closed_statuses: Done
       - name: Sync issues for OCR
         uses: dasmerlon/project-issue-state-sync@v2
         with:
-          github_token: ${{ secrets.CLOSE_ISSUE_WHEN_PROJECT_DONE }} #this custom action doesn't allow the default GITHUB_TOKEN, it requires us to use a PAT as the secret unfortunetly..
+          github_token: ${{ secrets.CLOSE_ISSUE_WHEN_PROJECT_DONE }} #this custom action doesn't allow the default GITHUB_TOKEN, it requires us to use a PAT as the secret unfortunately..
           owner: CDCgov
           project_number: 33
           closed_statuses: Done
