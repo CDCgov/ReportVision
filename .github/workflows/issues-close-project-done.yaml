@@ -3,11 +3,11 @@ on:
   push:
     branches:
       - idwa-28-close-issues-on-project-done
-  # schedule:
-  #   # Runs on minute 0 every 2 hours
-  #   - cron: 0 0-23/2 * * *
-  # workflow_dispatch:
-  # # Manual trigger
+      # schedule:
+      #   # Runs on minute 0 every 2 hours
+      #   - cron: 0 0-23/2 * * *
+      # workflow_dispatch:
+      # # Manual trigger
 jobs:
   issue-state-sync:
     runs-on: ubuntu-latest
