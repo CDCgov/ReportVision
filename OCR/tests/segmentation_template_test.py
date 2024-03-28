@@ -8,9 +8,9 @@ import cv2 as cv
 
 
 load_dotenv()
-segmentation_template = os.getenv('SEGMENTATION_TEMPLATE_PATH')
-raw_image = os.getenv('RAW_IMAGE_PATH')
-labels_path = os.getenv('LABELS_PATH')
+segmentation_template = "./tests/assets/form_segmention_template.png"
+raw_image = "./tests/assets/form_filled.png"
+labels_path = "./tests/assets/labels.json"
 
 class TestImageSegmenter:
     @pytest.fixture(autouse=True)
