@@ -36,7 +36,7 @@ LINKING_FIELDS_TO_FHIRPATHS = {
 }
 
 
-REDUCE_COMPARES = os.environ.get("REDUCE_COMPARES", False)
+REDUCE_COMPARES = (os.environ.get("REDUCE_COMPARES", "0").lower() in ["true", "t", "1",])
 if REDUCE_COMPARES:
     logging.warning("REDUCE COMPARE MODE: Only comparing first record in each cluster.")
 
@@ -1319,7 +1319,7 @@ def _condense_extract_address_from_resource(resource: dict, field: str):
     expanded_address_fhirpath = ".".join(expanded_address_fhirpath.split(".")[:-1])
     list_of_address_objects = extract_value_with_resource_path(
         resource, expanded_address_fhirpath, "all"
-    )
+    ) or []
     if field == "address":
         list_of_address_lists = [
             ao.get(LINKING_FIELDS_TO_FHIRPATHS[field].split(".")[-1], [])
