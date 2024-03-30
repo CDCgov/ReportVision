@@ -14,15 +14,6 @@ Before getting started, ensure you have the following installed:
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
-## Environment Variables
-
-For the compose services, environment variables have been split across two attributes.
-
-1. `env_file`: The attributes that should be tuned for your particular performance test,
-    are located in the `rlpt.env` file.
-2. `environment`: The attributes that should likely remain static for all performance
-    tests, are located directly in the `compose.yml` file.
-
 ## Setup
 
 1. Build the Docker images:
@@ -55,6 +46,27 @@ For the compose services, environment variables have been split across two attri
     have completed. The Jaeger UI can be accessed at
     [http://localhost:16686](http://localhost:16686). While the MPI database can be
     accessed on port 5432, using the Postgres client of your choice.
+
+## Environment Variables
+
+For the compose services, environment variables have been split across two attributes.
+
+1. `env_file`: The attributes that should be tuned for your particular performance test,
+    are located in the `rlpt.env` file.
+2. `environment`: The attributes that should likely remain static for all performance
+    tests, are located directly in the `compose.yml` file.
+
+### Performance Test Parameters
+
+The following environment variables can be tuned in the `rlpt.env` file:
+
+- `POPULATION_SIZE`: The number of synthetic patients to generate using Synthea.
+- `ITERATIONS`: The number of times to run the performance test on the same population,
+    to see how the algorithm performs with multiple patients in a person cluster.
+- `STATE`: The state to use when generating synthetic patients.
+- `CITY`: The city to use when generating synthetic patients.
+- `REDUCE_COMPARES`: Whether to reduce the number of comparisons in the linkage algorithm
+    by combining patients records with the same attributes.
 
 ## Monitoring with OpenTelemetry
 
