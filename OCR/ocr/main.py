@@ -1,7 +1,7 @@
 import os
-import cv2 as cv
 
 from ocr.services.image_segmenter import ImageSegmenter
+from ocr.services.image_ocr import ImageOCR
 
 path = os.path.dirname(__file__)
 
@@ -17,17 +17,16 @@ def main():
     segmenter = ImageSegmenter(raw_image, segmentation_template, labels_path)
     segments = segmenter.segment()
 
-    segment_info = {
-        label: segment_data.shape for label, segment_data in segments.items()
-    }
-    print(segment_info)
+    print("{:<20} {:<20}".format("Label", "Segment shape"))
+    for label, segment in segments.items():
+        print("{:<20} {:<20}".format(label, f"{segment.shape}"))
 
-    nbs_patient_id_image_path = "nbs_patient_id_image_path.png"
-    nbs_cas_id_image_path = "nbs_cas_id_image_path.png"
+    vision = ImageOCR()
+    values = vision.image_to_text(segments=segments)
 
-    # Save the images
-    cv.imwrite(nbs_patient_id_image_path, segments["nbs_patient_id"])
-    cv.imwrite(nbs_cas_id_image_path, segments["nbs_cas_id"])
+    print("{:<20} {:<20}".format("Label", "Text"))
+    for label, text in values.items():
+        print("{:<20} {:<20}".format(label, text))
 
 
 if __name__ == "__main__":
