@@ -1,0 +1,26 @@
+name: OCR Poetry Tests
+on:
+  push:
+    branches: [idwa-OCR-58-poetry-test-action]
+    paths:
+      - OCR/**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: OCR
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install --with dev
+      - name: Run tests
+        run: poetry run pytest
+      - name: Lint
+        run: poetry run pylint $(git ls-files '*.py')
