@@ -3,6 +3,7 @@ on:
   push:
     branches: [idwa-OCR-58-poetry-test-action]
     paths:
+      - .github/workflows/ocr-tests.yml
       - OCR/**
 jobs:
   build:
