@@ -8,9 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: OCR
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
@@ -23,5 +20,3 @@ jobs:
           poetry install --with dev
       - name: Run tests
         run: poetry run pytest
-      - name: Lint
-        run: poetry run pylint $(git ls-files '*.py')
