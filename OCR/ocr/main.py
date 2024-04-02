@@ -21,8 +21,8 @@ def main():
     for label, segment in segments.items():
         print("{:<20} {:<20}".format(label, f"{segment.shape}"))
 
-    vision = ImageOCR()
-    values = vision.image_to_text(segments=segments)
+    ocr = ImageOCR()
+    values = ocr.image_to_text(segments=segments)
 
     print("{:<20} {:<20}".format("Label", "Text"))
     for label, text in values.items():
