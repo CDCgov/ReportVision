@@ -15,12 +15,12 @@ class ImageOCR:
         for label, image in segments.items():
 
             pixel_values = self.processor(
-                images=image, return_tensors="pt", warnings=False
+                images=image, return_tensors="pt"
             ).pixel_values
 
             generated_ids = self.model.generate(pixel_values)
             generated_text = self.processor.batch_decode(
-                generated_ids, skip_special_tokens=True, warnings=False
+                generated_ids, skip_special_tokens=True
             )
             digitized[label] = generated_text[0]
 
