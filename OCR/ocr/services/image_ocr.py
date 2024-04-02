@@ -4,11 +4,9 @@ from transformers import TrOCRProcessor, VisionEncoderDecoderModel
 
 class ImageOCR:
 
-    def __init__(self):
-        self.processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-printed")
-        self.model = VisionEncoderDecoderModel.from_pretrained(
-            "microsoft/trocr-base-printed"
-        )
+    def __init__(self, model="microsoft/trocr-base-printed"):
+        self.processor = TrOCRProcessor.from_pretrained(model)
+        self.model = VisionEncoderDecoderModel.from_pretrained(model)
 
     def image_to_text(self, segments: dict[str, np.ndarray]) -> dict[str, str]:
         digitized: dict[str, str] = {}
