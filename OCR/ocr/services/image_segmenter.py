@@ -4,9 +4,6 @@ import json
 import os
 
 
-# type segments = dict[str, np.ndarray]
-
-
 class ImageSegmenter:
     def __init__(self, raw_image, segmentation_template, labels):
 
