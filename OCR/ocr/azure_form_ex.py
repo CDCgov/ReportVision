@@ -7,7 +7,7 @@ import json
 
 load_dotenv()
 
-
+# comment for test
 endpoint = os.getenv('FORM_RECOGNIZER_ENDPOINT')
 key = os.getenv('FORM_RECOGNIZER_KEY')
 file_path = os.getenv('FORM_RECOGNIZER_FILE_PATH')
