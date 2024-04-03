@@ -1,14 +1,14 @@
 name: OCR Poetry Tests
 on:
-  pull_request:
-    types: [opened, reopened]
-    paths:
-      - .github/workflows/ocr-tests.yml
-      - OCR/**
+  # pull_request:
+  #   types: [opened, reopened]
+  #   paths:
+  #     - .github/workflows/ocr-tests.yml
+  #     - OCR/**
   push:
+    branches: ["idwa-ocr-58-fix-test-trigger"]
     paths:
-      - .github/workflows/ocr-tests.yml
-      - OCR/**
+      - 'OCR/**'
 jobs:
   build:
     runs-on: ubuntu-latest
