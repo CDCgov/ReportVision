@@ -4,7 +4,7 @@ from ocr.services.image_segmenter import ImageSegmenter
 from ocr.services.image_ocr import ImageOCR
 
 path = os.path.dirname(__file__)
-
+# commenting for a test
 
 def main():
 
