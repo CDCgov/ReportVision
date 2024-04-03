@@ -8,7 +8,7 @@ on:
   push:
     branches: ["idwa-ocr-58-fix-test-trigger"]
     paths:
-      - 'OCR/**'
+      - OCR/**
 jobs:
   build:
     runs-on: ubuntu-latest
