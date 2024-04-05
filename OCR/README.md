@@ -17,6 +17,12 @@ Run tests
 poetry run pytest
 ```
 
+Run main, hoping to convert this to a cli at some point
+```shell
+poetry run main
+```
+
+
 Adding new dependencies
 ```shell
 poetry add package-name
