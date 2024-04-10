@@ -360,7 +360,6 @@ class DataAccessLayer(object):
         )  # NOTE extra config can be implemented in this call to sessionmaker factory
         return session()
 
-    @functools.cache
     def get_table_by_name(self, table_name: str) -> Table:
         """
         Get an SqlAlchemy ORM Table Object based upon the table
@@ -379,7 +378,6 @@ class DataAccessLayer(object):
                     return table
         return None
 
-    @functools.cache
     def get_table_by_column(self, column_name: str) -> Table:
         """
         Finds a table in the MPI based upon the column name.
