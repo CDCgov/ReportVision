@@ -62,6 +62,11 @@ services:
       - POSTGRES_PASSWORD=pw
     ports:
         - "5432:5432"
+    volumes:
+      - ./conf/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./conf/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./tmp/results/psql/:/var/log/psql/
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
 
