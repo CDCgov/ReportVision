@@ -41,9 +41,7 @@ LINKING_FIELDS_TO_FHIRPATHS = {
 }
 
 
-REDUCE_COMPARES = (os.environ.get("REDUCE_COMPARES", "0").lower() in ["true", "t", "1",])
-if REDUCE_COMPARES:
-    logging.warning("REDUCE COMPARE MODE: Only comparing first record in each cluster.")
+OPTIMIZATIONS = (os.environ.get("OPTIMIZATIONS", "0").lower() in ["true", "t", "1",])
 
 
 def block_data(data: pd.DataFrame, blocks: List) -> dict:
@@ -657,9 +655,6 @@ def link_record_against_mpi(
                     f"Done with _group_patient_block_by_person at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
                 )
                 
-                if REDUCE_COMPARES:
-                    clusters = _consolidate_person_clusters(clusters)
-
                 # Check if incoming record should belong to one of the person clusters
                 kwargs = linkage_pass.get("kwargs", {})
                 logging.warning(f"Person Size: {len(clusters)}")
@@ -667,9 +662,6 @@ def link_record_against_mpi(
                     for person in clusters:
                         num_matched_in_cluster = 0.0
                         linked_patients = clusters[person]
-                        if REDUCE_COMPARES:
-                            count = float(len(linked_patients))
-                            linked_patients = linked_patients[0:1]
                         logging.warning(f"Patient Size: {len(linked_patients)}")
                         for linked_patient in linked_patients:
                             logging.info(
@@ -688,10 +680,7 @@ def link_record_against_mpi(
                             )
 
                             if is_match:
-                                if REDUCE_COMPARES:
-                                    num_matched_in_cluster += count
-                                else:
-                                    num_matched_in_cluster += 1.0
+                                num_matched_in_cluster += 1.0
 
                         # Update membership score for this person cluster so that we can
                         # track best possible link across multiple passes
@@ -699,8 +688,6 @@ def link_record_against_mpi(
                             f"Starting to update membership score at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
                         )
                         belongingness_ratio = num_matched_in_cluster / len(clusters[person])
-                        if REDUCE_COMPARES:
-                            person = person[0]
                         if belongingness_ratio >= linkage_pass.get("cluster_ratio", 0):
                             logging.info(
                                 f"belongingness_ratio >= linkage_pass.get('cluster_ratio', 0): {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
@@ -1421,19 +1408,6 @@ def _group_patient_block_by_person(data_block: List[list]) -> dict[str, List]:
     return clusters
 
 
-def _consolidate_person_clusters(clusters: dict[str, List]) -> dict[(str, str), List]:
-    """
-    Helper method that consolidates the clusters into groups of patients based on
-    similar attributes for the patients.
-    """
-    consolidated_clusters = collections.defaultdict(list)
-    for person_id, patients in clusters.items():
-        for patient in patients:
-            hash_key = '\t'.join(str(x).lower().strip() for x in patient[2:])
-            consolidated_clusters[(person_id, hash_key)].append(patient)
-    return consolidated_clusters
-
-
 def _map_matches_to_record_ids(
     match_list: Union[List[tuple], List[set]], data_block, cluster_mode: bool = False
 ) -> List[tuple]:
@@ -1603,6 +1577,21 @@ def aggregate_given_names_for_linkage(data: list[list]):
     :param data: List of lists block data.
     :return: List of lists with aggregated given names.
     """
+    if OPTIMIZATIONS:
+        result = []
+        given_name_idx = -1
+        for idx, row in enumerate(data):
+            if idx == 0:
+                given_name_idx = row.index("given_name")
+                result.append(
+                    row[:given_name_idx] + ["first_name"] + row[given_name_idx + 1:]
+                )
+            else:
+                first_name = " ".join(row[given_name_idx])
+                result.append(
+                    row[:given_name_idx] + [first_name] + row[given_name_idx + 1:]
+                )
+        return result
     # Convert LoL to pandas dataframe
     raw_data = pd.DataFrame(data[1:], columns=data[0])
 

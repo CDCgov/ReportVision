@@ -12,9 +12,11 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 
 
-import functools
+import os
 from opentelemetry import trace
 TRACER = trace.get_tracer(__name__)
+
+OPTIMIZATIONS = (os.environ.get("OPTIMIZATIONS", "0").lower() in ["true", "t", "1",])
 
 
 class DataAccessLayer(object):
@@ -367,8 +369,8 @@ class DataAccessLayer(object):
         :param table_name: the name of the table you want to get.
         :return: SqlAlchemy ORM Table Object.
         """
-
-        self.initialize_schema()
+        if not OPTIMIZATIONS:
+            self.initialize_schema()
 
         if table_name is not None and table_name != "":
             # TODO: I am sure there is an easier way to do this
@@ -388,8 +390,8 @@ class DataAccessLayer(object):
             table it belongs to.
         :return: SqlAlchemy ORM Table Object.
         """
-
-        self.initialize_schema()
+        if not OPTIMIZATIONS:
+            self.initialize_schema()
 
         if column_name is not None and column_name != "":
             # TODO: I am sure there is an easier way to do this
@@ -398,7 +400,6 @@ class DataAccessLayer(object):
                     return table
         return None
 
-    @functools.cache
     def does_table_have_column(self, table: Table, column_name: str) -> bool:
         """
         Verifies if a column exists in a particular table

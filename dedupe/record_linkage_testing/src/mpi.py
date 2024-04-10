@@ -1,4 +1,3 @@
-import copy
 import datetime
 import logging
 import uuid
@@ -18,8 +17,11 @@ from phdi.linkage.dal import DataAccessLayer
 from phdi.linkage.utils import load_mpi_env_vars_os
 
 
+import os
+from sqlalchemy.dialects.postgresql import array_agg, aggregate_order_by
 from opentelemetry import trace
 TRACER = trace.get_tracer(__name__)
+OPTIMIZATIONS = (os.environ.get("OPTIMIZATIONS", "0").lower() in ["true", "t", "1",])
 
 
 class DIBBsMPIConnectorClient(BaseMPIConnectorClient):
@@ -334,7 +336,11 @@ class DIBBsMPIConnectorClient(BaseMPIConnectorClient):
                     )
                 else:
                     with TRACER.start_as_current_span(f"generate_sub_query"):
-                        fk_info = next(iter(cte_query_table.foreign_keys))
+                        if OPTIMIZATIONS:
+                            fk_info = next(iter(cte_query_table.foreign_keys))
+                        else:
+                            fk_query_table = copy.deepcopy(cte_query_table)
+                            fk_info = fk_query_table.foreign_keys.pop()
                         fk_column = fk_info.column
                         fk_table = fk_info.column.table
                         sub_query = (
@@ -450,40 +456,91 @@ class DIBBsMPIConnectorClient(BaseMPIConnectorClient):
         #     .subquery()
         # )
 
-        query = (
-            select(
-                self.dal.PATIENT_TABLE.c.patient_id,
-                self.dal.PATIENT_TABLE.c.person_id,
-                self.dal.PATIENT_TABLE.c.dob.label("birthdate"),
-                self.dal.PATIENT_TABLE.c.sex,
-                id_sub_query.c.mrn,
-                self.dal.NAME_TABLE.c.last_name,
-                self.dal.GIVEN_NAME_TABLE.c.given_name,
-                self.dal.GIVEN_NAME_TABLE.c.given_name_index,
-                self.dal.GIVEN_NAME_TABLE.c.name_id,
+        if OPTIMIZATIONS:
+            query = (
+                select(
+                    self.dal.PATIENT_TABLE.c.patient_id,
+                    self.dal.PATIENT_TABLE.c.person_id,
+                    self.dal.PATIENT_TABLE.c.dob.label("birthdate"),
+                    self.dal.PATIENT_TABLE.c.sex,
+                    id_sub_query.c.mrn,
+                    self.dal.NAME_TABLE.c.last_name,
+                    array_agg(
+                        aggregate_order_by(
+                            self.dal.GIVEN_NAME_TABLE.c.given_name,
+                            self.dal.GIVEN_NAME_TABLE.c.given_name_index.asc(),
+                        )
+                    ).label("given_name"),
+                    # TODO: keeping this here for the time
+                    # when we decide to add phone numbers into
+                    # the blocking data
+                    #
+                    # phone_sub_query.c.phone_number,
+                    # phone_sub_query.c.phone_type,
+                    self.dal.ADDRESS_TABLE.c.line_1.label("address"),
+                    self.dal.ADDRESS_TABLE.c.zip_code.label("zip"),
+                    self.dal.ADDRESS_TABLE.c.city,
+                    self.dal.ADDRESS_TABLE.c.state,
+                )
+                .outerjoin(
+                    id_sub_query,
+                )
+                .outerjoin(self.dal.NAME_TABLE)
+                .outerjoin(self.dal.GIVEN_NAME_TABLE)
                 # TODO: keeping this here for the time
                 # when we decide to add phone numbers into
                 # the blocking data
                 #
-                # phone_sub_query.c.phone_number,
-                # phone_sub_query.c.phone_type,
-                self.dal.ADDRESS_TABLE.c.line_1.label("address"),
-                self.dal.ADDRESS_TABLE.c.zip_code.label("zip"),
-                self.dal.ADDRESS_TABLE.c.city,
-                self.dal.ADDRESS_TABLE.c.state,
+                # .outerjoin(phone_sub_query)
+                .outerjoin(self.dal.ADDRESS_TABLE)
+                .group_by(
+                    self.dal.PATIENT_TABLE.c.patient_id,
+                    self.dal.PATIENT_TABLE.c.person_id,
+                    "birthdate",
+                    self.dal.PATIENT_TABLE.c.sex,
+                    id_sub_query.c.mrn,
+                    self.dal.NAME_TABLE.c.last_name,
+                    "address",
+                    "zip",
+                    self.dal.ADDRESS_TABLE.c.city,
+                    self.dal.ADDRESS_TABLE.c.state,
+                )
             )
-            .outerjoin(
-                id_sub_query,
+        else:
+            query = (
+                select(
+                    self.dal.PATIENT_TABLE.c.patient_id,
+                    self.dal.PATIENT_TABLE.c.person_id,
+                    self.dal.PATIENT_TABLE.c.dob.label("birthdate"),
+                    self.dal.PATIENT_TABLE.c.sex,
+                    id_sub_query.c.mrn,
+                    self.dal.NAME_TABLE.c.last_name,
+                    self.dal.GIVEN_NAME_TABLE.c.given_name,
+                    self.dal.GIVEN_NAME_TABLE.c.given_name_index,
+                    self.dal.GIVEN_NAME_TABLE.c.name_id,
+                    # TODO: keeping this here for the time
+                    # when we decide to add phone numbers into
+                    # the blocking data
+                    #
+                    # phone_sub_query.c.phone_number,
+                    # phone_sub_query.c.phone_type,
+                    self.dal.ADDRESS_TABLE.c.line_1.label("address"),
+                    self.dal.ADDRESS_TABLE.c.zip_code.label("zip"),
+                    self.dal.ADDRESS_TABLE.c.city,
+                    self.dal.ADDRESS_TABLE.c.state,
+                )
+                .outerjoin(
+                    id_sub_query,
+                )
+                .outerjoin(self.dal.NAME_TABLE)
+                .outerjoin(self.dal.GIVEN_NAME_TABLE)
+                # TODO: keeping this here for the time
+                # when we decide to add phone numbers into
+                # the blocking data
+                #
+                # .outerjoin(phone_sub_query)
+                .outerjoin(self.dal.ADDRESS_TABLE)
             )
-            .outerjoin(self.dal.NAME_TABLE)
-            .outerjoin(self.dal.GIVEN_NAME_TABLE)
-            # TODO: keeping this here for the time
-            # when we decide to add phone numbers into
-            # the blocking data
-            #
-            # .outerjoin(phone_sub_query)
-            .outerjoin(self.dal.ADDRESS_TABLE)
-        )
         return query
 
     def _get_mpi_records(self, patient_resource: dict) -> dict:
