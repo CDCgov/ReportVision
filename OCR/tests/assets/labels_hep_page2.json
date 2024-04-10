@@ -1,0 +1,22 @@
+[
+    {"color": "36,44,84", "label": "Pt._Name"},
+    {"color": "92,18,45", "label": "NBS_PT._ID"},
+    {"color": "255,0,0", "label": "travel_outside_usa_canada_1"},
+    {"color": "255,0,0", "label": "travel_outside_usa_canada_1"},
+    {"color": "0,0,255", "label": "travel_outside_usa_canada_2"},
+    {"color": "0,255,0", "label": "patient_travel_outside_1"},
+    {"color": "21,21,21", "label": "patient_travel_outside_2"},
+    {"color": "255,255,0", "label": "specify_food_item"},
+    {"color": "78,25,25", "label": "food_handler"},
+    {"color": "25,8,83", "label": "last_day_of_work"},
+    {"color": "19,25,0", "label": "healthcare_worker_employment"},
+    {"color": "88,97,60", "label": "healthcare_worker_duties"},
+    {"color": "42,43,40", "label": "last_day_of_work_healthcare_worker"},
+    {"color": "99,77,77", "label": "non_sexual_household_contacts_names"},
+    {"color": "9,2,88", "label": "non_sexual_household_contacts_relation"},
+    {"color": "88,16,2", "label": "non_sexual_household_contacts_age"},
+    {"color": "39,76,23", "label": "non_sexual_household_contacts_haig"},
+    {"color": "16,15,23", "label": "non_sexual_household_contacts_hav_vaccine"},
+    {"color": "48,78,64", "label": "comments"}
+]
+

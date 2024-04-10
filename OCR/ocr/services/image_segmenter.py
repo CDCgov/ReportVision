@@ -18,29 +18,39 @@ class ImageSegmenter:
         if self.segmentation_template is None:
             raise ValueError(f"Failed to open image file: {segmentation_template}")
 
-        self.labels = labels
-        self.segments = {}
+        self.labels = self.read_labels(labels)
 
-    def segment(self) -> dict[str, np.ndarray]:
-        with open(self.labels, "r") as f:
+        self.segments = {}
+    
+    def read_labels(self, labels_path):
+        if not os.path.isfile(labels_path):
+            raise FileNotFoundError(f"Labels file does not exist: {labels_path}")
+        with open(labels_path, 'r') as f:
             labels = json.load(f)
-        # iterate over the labels
-        for color, label in labels.items():
-            color = tuple(map(int, color.split(",")))
-            # find indices of the color in the segmentation template where the color matches the expected colors
-            indices = np.where(np.all(self.segmentation_template == color, axis=-1))
-            # if there are no matching pixels
+        return labels
+
+    def segment(self, tolerance=5) -> dict[str, np.ndarray]:
+        for label_info in self.labels:
+            # Convert the color string to an RGB tuple
+            color = tuple(int(value) for value in label_info["color"].split(","))
+            label = label_info["label"]
+            
+            # Calculate the absolute difference between the template and target colors
+            diff = np.abs(self.segmentation_template.astype(int) - np.array(color).astype(int))
+            
+            # Determine which pixels are within the specified tolerance for all color channels
+            is_close = np.all(diff <= tolerance, axis=-1)
+            
+            # Find the indices where the color is within tolerance
+            indices = np.where(is_close)
+
             if indices[0].size == 0:
-                raise ValueError(
-                    f"No pixels found for color {color} in segmentation template."
-                )
-            # if there are matching pixels
-            if indices[0].size > 0:
-                # Find the x-y coordinates
-                y_min, y_max = indices[0].min(), indices[0].max()
-                x_min, x_max = indices[1].min(), indices[1].max()
-                # crop the area and store the image in the dict
-                self.segments[label] = self.raw_image[
-                    y_min : y_max + 1, x_min : x_max + 1
-                ]
+                print(f"No pixels found for color {color} in segmentation template for label '{label}'.")
+                continue
+
+            y_min, y_max = indices[0].min(), indices[0].max()
+            x_min, x_max = indices[1].min(), indices[1].max()
+            self.segments[label] = self.raw_image[y_min:y_max+1, x_min:x_max+1]
+
         return self.segments
+
