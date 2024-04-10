@@ -18,8 +18,14 @@ fi
 # GENERATE SYNTHETIC DATA
 scripts/generate_synthetic.sh $POPULATION_SIZE $SYNTHEA_OUTPUT_DIR "${STATE}" "${CITY}" $SPLIT_RECORDS
 
+# RESET POSTGRES LOG
+echo "" > $POSTGRES_LOG
+
 # SEND SYNTHETIC DATA TO THE LINKAGE API
 scripts/send_linkage_requests.sh "${SYNTHEA_OUTPUT_DIR}/fhir" $LINKAGE_API_URL $ITERATIONS
+
+# GENERATE PDBADGER REPORT
+pgbadger $POSTGRES_LOG -o $PGBADGER_REPORT
 
 # HANG THE SCRIPT
 # This will keep the script running indefinitely, allowing you to inspect the

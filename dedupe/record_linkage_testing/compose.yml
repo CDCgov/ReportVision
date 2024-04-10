@@ -15,9 +15,12 @@ services:
       - DB_URL=postgres://postgres:pw@db:5432/postgres
       - LINKAGE_API_URL=http://api:8080
       - SYNTHEA_OUTPUT_DIR=results/synthea_output/
+      - POSTGRES_LOG=/code/results/psql/postgresql.log
+      - PGBADGER_REPORT=/code/results/psql/pgbadger.html
     volumes:
       - ./scripts:/code/scripts
       - ./tmp/results:/code/results
+      - ./tmp/data:/code/data
     depends_on:
       api:
         condition: service_healthy
