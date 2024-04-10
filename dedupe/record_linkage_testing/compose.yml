@@ -44,15 +44,16 @@ services:
       - MPI_PERSON_TABLE=person
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+    volumes:
+      - ./scripts:/scripts
     command: ["opentelemetry-instrument", "--service_name", "record-linkage-api",
       "uvicorn", "main:app", "--host=0.0.0.0", "--port=8080", "--log-config=app/log_config.yml"]
     depends_on:
       - db
       - jaeger
     healthcheck:
-      test: ["CMD-SHELL", "curl -sS http://localhost:8080 | grep '\"mpi_connection_status\":\"OK\"' || exit 1"]
-      interval: 5s
-      retries: 5
+      test: ["CMD-SHELL", "/scripts/api_health_check.sh || exit 1"]
+      start_period: 10s
 
   db:
     # The PostgreSQL database that is used to store the patient and person data.
