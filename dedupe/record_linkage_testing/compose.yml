@@ -4,12 +4,20 @@ services:
   runner:
     # The orchestration container of the environment that is used to initialize
     # run the tests. This container will eventually use Synthea to generate
-    # syntehtic data, transform it into FHIR payloads acceptable by the linkage
+    # synthetic data, transform it into FHIR payloads acceptable by the linkage
     # API and then run the tests.
     build:
       context: .
       dockerfile: Dockerfile.runner
-    command: ["bash", "scripts/test.sh"]
+    env_file:
+      - rlpt.env
+    environment:
+      - DB_URL=postgres://postgres:pw@db:5432/postgres
+      - LINKAGE_API_URL=http://api:8080
+      - SYNTHEA_OUTPUT_DIR=results/synthea_output/
+    volumes:
+      - ./scripts:/code/scripts
+      - ./tmp/results:/code/results
     depends_on:
       api:
         condition: service_healthy
@@ -23,6 +31,8 @@ services:
       dockerfile: Dockerfile.api
     ports:
         - "8080:8080"
+    env_file:
+      - rlpt.env
     environment:
       - MPI_DB_TYPE=postgres
       - MPI_DBNAME=postgres

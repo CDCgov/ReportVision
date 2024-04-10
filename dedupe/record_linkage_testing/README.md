@@ -1,6 +1,11 @@
 # Record Linkage Performance Testing
 
-This repository contains a performance testing project aimed at evaluating the scalability and responsiveness of the [record-linkage](https://github.com/CDCgov/phdi/tree/main/containers/record-linkage) API using [OpenTelemetry](https://opentelemetry.io/) for instrumentation. By utilizing Docker Compose, it provides an easy-to-use environment setup for running performance tests against the target API.
+This repository contains a performance testing project aimed at evaluating the scalability
+and responsiveness of the
+[record-linkage](https://github.com/CDCgov/phdi/tree/main/containers/record-linkage) API
+using [OpenTelemetry](https://opentelemetry.io/) for instrumentation. By utilizing Docker
+Compose, it provides an easy-to-use environment setup for running performance tests
+against the target API.
 
 ## Prerequisites
 
@@ -11,27 +16,67 @@ Before getting started, ensure you have the following installed:
 
 ## Setup
 
-1. Build the Docker images and start the environment:
+1. Build the Docker images:
 
     ```bash
-    docker compose up --build -d
+    docker compose build
     ```
 
-    This command will build the necessary Docker images and start the environment in detached mode.
+2. Configure environment variables
 
-2. Once the environment is up and running, you can verify that it worked by checking Jaeger at [http://localhost:16686](http://localhost:16686).
-
-3. Run a "Find Traces" query in the Jaeger UI and verify that at least 1 "record-linkage-api: POST /link-record" trace is present.
+    ```bash
+    edit rlpt.env
+    ```
+    Edit the environment variables in the file to tune the test parameters
 
 ## Running Performance Tests
 
-More to come...
+1. Run the Synthea tests
+
+    ```bash
+    docker compose run --rm runner scripts/test_synthea_data.sh
+    ```
+
+    This will generate a population of synthetic patients using Synthea. Extract
+    the patient resources from the output and send them to the record-linkage API.
+
+2. Analyze the results
+
+    Both Jaeger and the MPI database will be available for analysis after the tests
+    have completed. The Jaeger UI can be accessed at
+    [http://localhost:16686](http://localhost:16686). While the MPI database can be
+    accessed on port 5432, using the Postgres client of your choice.
+
+## Environment Variables
+
+For the compose services, environment variables have been split across two attributes.
+
+1. `env_file`: The attributes that should be tuned for your particular performance test,
+    are located in the `rlpt.env` file.
+2. `environment`: The attributes that should likely remain static for all performance
+    tests, are located directly in the `compose.yml` file.
+
+### Performance Test Parameters
+
+The following environment variables can be tuned in the `rlpt.env` file:
+
+- `POPULATION_SIZE`: The number of synthetic patients to generate using Synthea.
+- `ITERATIONS`: The number of times to run the performance test on the same population,
+    to see how the algorithm performs with multiple patients in a person cluster.
+- `STATE`: The state to use when generating synthetic patients.
+- `CITY`: The city to use when generating synthetic patients.
+- `REDUCE_COMPARES`: Whether to reduce the number of comparisons in the linkage algorithm
+    by combining patients records with the same attributes.
 
 ## Monitoring with OpenTelemetry
 
-The API is instrumented with OpenTelemetry for monitoring and tracing purposes. You can explore the collected metrics and traces using your preferred observability platform compatible with OpenTelemetry, such as Jaeger or Prometheus.
+The API is instrumented with OpenTelemetry for monitoring and tracing purposes. You can
+explore the collected metrics and traces using your preferred observability platform
+compatible with OpenTelemetry, such as Jaeger or Prometheus.
 
-By default, the OpenTelemetry collector is configured to export telemetry data to the local instance of Jaeger, which can be accessed at [http://localhost:16686](http://localhost:16686).
+By default, the OpenTelemetry collector is configured to export telemetry data to the
+local instance of Jaeger, which can be accessed at
+[http://localhost:16686](http://localhost:16686).
 
 ## Cleanup
 
