@@ -22,6 +22,10 @@ Run main, hoping to convert this to a cli at some point
 poetry run main
 ```
 
+To build the OCR service into an executable artifact
+```shell
+poetry run build
+```
 
 Adding new dependencies
 ```shell
