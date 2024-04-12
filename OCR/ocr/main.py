@@ -7,10 +7,7 @@ path = os.path.dirname(__file__)
 
 
 def main():
-
-    segmentation_template = os.path.join(
-        path, "../tests/assets/form_segmention_template.png"
-    )
+    segmentation_template = os.path.join(path, "../tests/assets/form_segmention_template.png")
     raw_image = os.path.join(path, "../tests/assets/form_filled.png")
     labels_path = os.path.join(path, "../tests/assets/labels.json")
 

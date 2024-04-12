@@ -19,9 +19,7 @@ class TestImageSegmenter:
         self.raw_image = raw_image
         self.segmentation_template = segmentation_template
         self.labels_path = labels_path
-        self.segmenter = ImageSegmenter(
-            self.raw_image, self.segmentation_template, self.labels_path
-        )
+        self.segmenter = ImageSegmenter(self.raw_image, self.segmentation_template, self.labels_path)
 
     def test_segment(self):
         segments = self.segmenter.segment()
@@ -41,9 +39,7 @@ class TestImageSegmenter:
     def test_no_matching_pixels(self):
         segmentation_template = np.zeros((10, 10, 3), dtype=np.uint8)
         cv.imwrite("no_matching_colors.png", segmentation_template)
-        segmenter = ImageSegmenter(
-            self.raw_image, "no_matching_colors.png", self.labels_path
-        )
+        segmenter = ImageSegmenter(self.raw_image, "no_matching_colors.png", self.labels_path)
         with pytest.raises(ValueError):
             segmenter.segment()
         os.remove("no_matching_colors.png")
