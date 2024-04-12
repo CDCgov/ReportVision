@@ -33,11 +33,6 @@ class TestImageSegmenter:
             assert isinstance(segment, np.ndarray)
 
     def test_segment_shapes(self):
-        segments = self.segmenter.segment()
-        for segment in segments.values():
-            assert len(segment.shape) == 3
-
-    def test_segment_shapes(self):
         expected_shapes = {"nbs_patient_id": (41, 376, 3), "nbs_cas_id": (57, 366, 3)}
         segments = self.segmenter.segment()
         for label, segment in segments.items():
