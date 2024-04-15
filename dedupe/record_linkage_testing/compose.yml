@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   runner:
     # The orchestration container of the environment that is used to initialize
