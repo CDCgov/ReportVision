@@ -45,7 +45,9 @@ Before getting started, ensure you have the following installed:
     Both Jaeger and the MPI database will be available for analysis after the tests
     have completed. The Jaeger UI can be accessed at
     [http://localhost:16686](http://localhost:16686). While the MPI database can be
-    accessed on port 5432, using the Postgres client of your choice.
+    accessed on port 5432, using the Postgres client of your choice. Additionally, a
+    pgbadger report will be generated in the `tmp/results/psql` directory.
+
 
 ## Environment Variables
 
