@@ -36,11 +36,7 @@ LINKING_FIELDS_TO_FHIRPATHS = {
 }
 
 
-REDUCE_COMPARES = os.environ.get("REDUCE_COMPARES", "0").lower() in [
-    "true",
-    "t",
-    "1",
-]
+REDUCE_COMPARES = (os.environ.get("REDUCE_COMPARES", "0").lower() in ["true", "t", "1",])
 if REDUCE_COMPARES:
     logging.warning("REDUCE COMPARE MODE: Only comparing first record in each cluster.")
 
@@ -86,7 +82,9 @@ def calculate_log_odds(
       do not share an equal key set.
     """
     if m_probs.keys() != u_probs.keys():
-        raise ValueError("m- and u- probability dictionaries must contain the same set of keys")
+        raise ValueError(
+            "m- and u- probability dictionaries must contain the same set of keys"
+        )
     log_odds = {}
     for k in m_probs:
         log_odds[k] = log(m_probs[k]) - log(u_probs[k])
@@ -189,7 +187,11 @@ def calculate_u_probs(
 
     # Want only the pairs of candidates that aren't true matches
     base_pairs = list(combinations(data.index, 2))
-    neg_pairs = [x for x in base_pairs if x[0] not in true_matches or x[1] not in true_matches[x[0]]]
+    neg_pairs = [
+        x
+        for x in base_pairs
+        if x[0] not in true_matches or x[1] not in true_matches[x[0]]
+    ]
 
     if n_samples is not None and n_samples < len(neg_pairs):
         neg_pairs = sample(neg_pairs, n_samples)
@@ -275,7 +277,9 @@ def eval_log_odds_cutoff(feature_comparisons: List, **kwargs) -> bool:
     return sum(feature_comparisons) >= kwargs["true_match_threshold"]
 
 
-def extract_blocking_values_from_record(record: dict, blocking_fields: List[dict]) -> dict:
+def extract_blocking_values_from_record(
+    record: dict, blocking_fields: List[dict]
+) -> dict:
     """
     Extracts values from a given patient record for eventual use in database
     record linkage blocking. A list of fields to block on, as well as a mapping
@@ -312,7 +316,9 @@ def extract_blocking_values_from_record(record: dict, blocking_fields: List[dict
 
     for block_dict in blocking_fields:
         if "value" not in block_dict:
-            raise KeyError(f"Input dictionary for block {block_dict} must contain a 'value' key.")
+            raise KeyError(
+                f"Input dictionary for block {block_dict} must contain a 'value' key."
+            )
 
     block_vals = dict.fromkeys([b.get("value") for b in blocking_fields], "")
     transform_blocks = [b for b in blocking_fields if "transformation" in b]
@@ -336,7 +342,9 @@ def extract_blocking_values_from_record(record: dict, blocking_fields: List[dict
                     try:
                         value = transform_funcs[transformations[block]](value)
                     except KeyError:
-                        raise ValueError(f"Transformation {transformations[block]} is not valid.")
+                        raise ValueError(
+                            f"Transformation {transformations[block]} is not valid."
+                        )
                     block_vals[block] = {
                         "value": value,
                         "transformation": transformations[block],
@@ -638,7 +646,7 @@ def link_record_against_mpi(
             logging.info(
                 f"Done with _group_patient_block_by_person at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
             )
-
+            
             if REDUCE_COMPARES:
                 clusters = _consolidate_person_clusters(clusters)
 
@@ -687,7 +695,9 @@ def link_record_against_mpi(
                         f"belongingness_ratio >= linkage_pass.get('cluster_ratio', 0): {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
                     )
                     if person in linkage_scores:
-                        linkage_scores[person] = max([linkage_scores[person], belongingness_ratio])
+                        linkage_scores[person] = max(
+                            [linkage_scores[person], belongingness_ratio]
+                        )
                     else:
                         linkage_scores[person] = belongingness_ratio
                 logging.info(
@@ -709,7 +719,9 @@ def link_record_against_mpi(
     logging.info(
         f"Starting mpi_client.insert_matched_patient at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
     )
-    person_id = mpi_client.insert_matched_patient(record, person_id=person_id, external_person_id=external_person_id)
+    person_id = mpi_client.insert_matched_patient(
+        record, person_id=person_id, external_person_id=external_person_id
+    )
     logging.info(
         f"Done with mpi_client.insert_matched_patient at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
     )
@@ -738,7 +750,9 @@ def load_json_probs(path: pathlib.Path):
     except FileNotFoundError:
         raise FileNotFoundError(f"The specified file does not exist at {path}.")
     except json.decoder.JSONDecodeError as e:
-        raise json.decoder.JSONDecodeError("The specified file is not valid JSON.", e.doc, e.pos)
+        raise json.decoder.JSONDecodeError(
+            "The specified file is not valid JSON.", e.doc, e.pos
+        )
 
 
 def match_within_block(
@@ -789,7 +803,9 @@ def match_within_block(
         for j in range(i + 1, len(block)):
             record_j = block[j]
             feature_comps = [
-                feature_funcs[feature_col](record_i, record_j, feature_col, col_to_idx, **kwargs)
+                feature_funcs[feature_col](
+                    record_i, record_j, feature_col, col_to_idx, **kwargs
+                )
                 for feature_col in feature_funcs
             ]
 
@@ -897,7 +913,11 @@ def profile_log_odds(
       score for when generating the histogram.
     """
     base_pairs = list(combinations(data.index, 2))
-    neg_pairs = [x for x in base_pairs if x[0] not in true_matches or x[1] not in true_matches[x[0]]]
+    neg_pairs = [
+        x
+        for x in base_pairs
+        if x[0] not in true_matches or x[1] not in true_matches[x[0]]
+    ]
     if neg_samples < len(neg_pairs):
         neg_pairs = sample(neg_pairs, neg_samples)
 
@@ -980,12 +1000,16 @@ def read_linkage_config(config_file: pathlib.Path) -> List[dict]:
             # Need to convert function keys back to column indices, since
             # JSON serializes dict keys as strings
             for rl_pass in algo_config.get("algorithm"):
-                rl_pass["funcs"] = {int(col): f for (col, f) in rl_pass["funcs"].items()}
+                rl_pass["funcs"] = {
+                    int(col): f for (col, f) in rl_pass["funcs"].items()
+                }
             return algo_config.get("algorithm", [])
     except FileNotFoundError:
         raise FileNotFoundError(f"No file exists at path {config_file}.")
     except json.decoder.JSONDecodeError as e:
-        raise json.decoder.JSONDecodeError("The specified file is not valid JSON.", e.doc, e.pos)
+        raise json.decoder.JSONDecodeError(
+            "The specified file is not valid JSON.", e.doc, e.pos
+        )
 
 
 def score_linkage_vs_truth(
@@ -1037,15 +1061,23 @@ def score_linkage_vs_truth(
 
     for root_record in true_matches:
         if root_record in found_matches:
-            true_positives += len(true_matches[root_record].intersection(found_matches[root_record]))
-            false_positives += len(found_matches[root_record].difference(true_matches[root_record]))
-            false_negatives += len(true_matches[root_record].difference(found_matches[root_record]))
+            true_positives += len(
+                true_matches[root_record].intersection(found_matches[root_record])
+            )
+            false_positives += len(
+                found_matches[root_record].difference(true_matches[root_record])
+            )
+            false_negatives += len(
+                true_matches[root_record].difference(found_matches[root_record])
+            )
         else:
             false_negatives += len(true_matches[root_record])
     for record in set(set(found_matches.keys()).difference(true_matches.keys())):
         false_positives += len(found_matches[record])
 
-    true_negatives = total_possible_matches - true_positives - false_positives - false_negatives
+    true_negatives = (
+        total_possible_matches - true_positives - false_positives - false_negatives
+    )
 
     print("True Positives:", true_positives)
     print("False Positives:", false_positives)
@@ -1116,7 +1148,9 @@ def write_linkage_config(linkage_algo: List[dict], file_to_write: pathlib.Path) 
         if rl_pass.get("cluster_ratio", None) is not None:
             pass_json["cluster_ratio"] = rl_pass["cluster_ratio"]
         if rl_pass.get("kwargs", None) is not None:
-            pass_json["kwargs"] = {kwarg: val for (kwarg, val) in rl_pass.get("kwargs", {}).items()}
+            pass_json["kwargs"] = {
+                kwarg: val for (kwarg, val) in rl_pass.get("kwargs", {}).items()
+            }
         algo_json.append(pass_json)
     linkage_json = {"algorithm": algo_json}
     with open(file_to_write, "w") as out:
@@ -1131,9 +1165,9 @@ def _bind_func_names_to_invocations(algo_config: List[dict]):
     for lp in algo_config:
         feature_funcs = lp["funcs"]
         for func in feature_funcs:
-            if isinstance(feature_funcs[func], str):
+            if type(feature_funcs[func]) is str:
                 feature_funcs[func] = globals()[feature_funcs[func]]
-        if isinstance(lp["matching_rule"], str):
+        if type(lp["matching_rule"]) is str:
             lp["matching_rule"] = globals()[lp["matching_rule"]]
     return algo_config
 
@@ -1158,7 +1192,9 @@ def _eval_record_in_cluster(
     for j in cluster:
         record_j = block[j]
         feature_comps = [
-            feature_funcs[feature_col](record_i, record_j, feature_col, col_to_idx, **kwargs)
+            feature_funcs[feature_col](
+                record_i, record_j, feature_col, col_to_idx, **kwargs
+            )
             for feature_col in feature_funcs
         ]
 
@@ -1209,11 +1245,17 @@ def _compare_records_field_helper(
     **kwargs,
 ) -> bool:
     if feature_col == "first_name":
-        return _compare_name_elements(record, mpi_patient, feature_funcs, feature_col, col_to_idx, **kwargs)
+        return _compare_name_elements(
+            record, mpi_patient, feature_funcs, feature_col, col_to_idx, **kwargs
+        )
     elif feature_col in ["address", "city", "state", "zip"]:
-        return _compare_address_elements(record, mpi_patient, feature_funcs, feature_col, col_to_idx, **kwargs)
+        return _compare_address_elements(
+            record, mpi_patient, feature_funcs, feature_col, col_to_idx, **kwargs
+        )
     else:
-        return feature_funcs[feature_col](record, mpi_patient, feature_col, col_to_idx, **kwargs)
+        return feature_funcs[feature_col](
+            record, mpi_patient, feature_col, col_to_idx, **kwargs
+        )
 
 
 def _compare_address_elements(
@@ -1232,7 +1274,9 @@ def _compare_address_elements(
     feature_comp = False
     idx = col_to_idx[feature_col]
     for r in record[idx]:
-        feature_comp = feature_funcs[feature_col]([r], [mpi_patient[idx]], feature_col, {feature_col: 0}, **kwargs)
+        feature_comp = feature_funcs[feature_col](
+            [r], [mpi_patient[idx]], feature_col, {feature_col: 0}, **kwargs
+        )
         if feature_comp:
             break
     return feature_comp
@@ -1277,14 +1321,20 @@ def _condense_extract_address_from_resource(resource: dict, field: str) -> List[
     """
     expanded_address_fhirpath = LINKING_FIELDS_TO_FHIRPATHS[field]
     expanded_address_fhirpath = ".".join(expanded_address_fhirpath.split(".")[:-1])
-    list_of_address_objects = extract_value_with_resource_path(resource, expanded_address_fhirpath, "all") or []
+    list_of_address_objects = (
+        extract_value_with_resource_path(resource, expanded_address_fhirpath, "all")
+        or []
+    )
     if not list_of_address_objects:
         return None
     if field == "address":
         list_of_address_lists = [
-            ao.get(LINKING_FIELDS_TO_FHIRPATHS[field].split(".")[-1], []) for ao in list_of_address_objects
+            ao.get(LINKING_FIELDS_TO_FHIRPATHS[field].split(".")[-1], [])
+            for ao in list_of_address_objects
         ]
-        list_of_usable_address_elements = [" ".join(obj) for obj in list_of_address_lists]
+        list_of_usable_address_elements = [
+            " ".join(obj) for obj in list_of_address_lists
+        ]
     else:
         list_of_usable_address_elements = []
         for address_object in list_of_address_objects:
@@ -1311,7 +1361,9 @@ def _flatten_patient_resource(resource: dict, col_to_idx: dict) -> List:
     elements are the keys of the FHIR dictionary, reformatted and ordered
     according to our "blocking fields extractor" dictionary.
     """
-    flattened_record = [_flatten_patient_field_helper(resource, f) for f in col_to_idx.keys()]
+    flattened_record = [
+        _flatten_patient_field_helper(resource, f) for f in col_to_idx.keys()
+    ]
     flattened_record = [resource["id"], None] + flattened_record
     return flattened_record
 
@@ -1367,7 +1419,7 @@ def _consolidate_person_clusters(clusters: dict[str, List]) -> dict[(str, str), 
     consolidated_clusters = collections.defaultdict(list)
     for person_id, patients in clusters.items():
         for patient in patients:
-            hash_key = "\t".join(str(x).lower().strip() for x in patient[2:])
+            hash_key = '\t'.join(str(x).lower().strip() for x in patient[2:])
             consolidated_clusters[(person_id, hash_key)].append(patient)
     return consolidated_clusters
 
@@ -1501,7 +1553,9 @@ def _write_prob_file(prob_dict: dict, file_to_write: Union[pathlib.Path, None]):
             out.write(json.dumps(prob_dict))
 
 
-def add_person_resource(person_id: str, patient_id: str, bundle: dict = Field(description="A FHIR bundle")) -> dict:
+def add_person_resource(
+    person_id: str, patient_id: str, bundle: dict = Field(description="A FHIR bundle")
+) -> dict:
     """
     Adds a simplified person resource to a bundle if the patient resource in the bundle
     matches an existing record in the Master Patient Index. Returns the bundle with
