@@ -1,1 +1,1 @@
-line-length = 118
+exclude = ['dedupe/*']
