@@ -12,6 +12,7 @@ def install():
         '--onefile',
         '--windowed',
         # SOURCE:DESTINATION
+        '--add-data=ocr/assets/form_filled.png:assets/',
         '--add-data=ocr/assets/form_segmention_template.png:assets/',
         '--add-data=ocr/assets/labels.json:assets/',
         # other pyinstaller options... 

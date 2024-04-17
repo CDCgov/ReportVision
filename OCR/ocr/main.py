@@ -13,11 +13,11 @@ def main():
         path, "assets/form_segmention_template.png"
     )
     # I think this could be an area to enhance later on with a more fleshed out CLI
-    if sys.argv[1] is None:
-        raw_image = os.path.join(path, "assets/form_filled.png")
-    elif sys.argv[1] is not None:
+    if len(sys.argv) > 1:
         raw_image = sys.argv[1]
-
+    else:
+        raw_image = os.path.join(path, "assets/form_filled.png")
+    
     labels_path = os.path.join(path, "assets/labels.json")
 
     segmenter = ImageSegmenter(raw_image, segmentation_template, labels_path)
