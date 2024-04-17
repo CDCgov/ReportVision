@@ -1,11 +1,12 @@
 # Record Linkage Performance Testing
 
-This repository contains a performance testing project aimed at evaluating the scalability
-and responsiveness of the
-[record-linkage](https://github.com/CDCgov/phdi/tree/main/containers/record-linkage) API
-using [OpenTelemetry](https://opentelemetry.io/) for instrumentation. By utilizing Docker
-Compose, it provides an easy-to-use environment setup for running performance tests
-against the target API.
+This repository hosts a performance testing project that focuses on assessing the
+scalability and responsiveness of the
+[record-linkage](https://github.com/CDCgov/phdi/tree/main/containers/record-linkage)
+API. It employs [OpenTelemetry](https://opentelemetry.io) for instrumentation,
+specifically to measure API latency and identify potential service bottlenecks.
+This project does not attempt to evaluate the effectiveness of the underlying 
+linkage algorithm.
 
 ## Prerequisites
 
