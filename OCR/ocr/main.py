@@ -10,7 +10,7 @@ path = os.path.dirname(__file__)
 def main():
 
     segmentation_template = os.path.join(path, "assets/form_segmention_template.png")
-    # I think this could be an area to enhance later on with a more fleshed out CLI
+    
     if len(sys.argv) > 1:
         raw_image = sys.argv[1]
     else:
