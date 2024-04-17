@@ -1,0 +1,21 @@
+name: Lint checks
+on:
+  workflow_call:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - '**'
+  push:
+    branches:
+      - main
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - name: Ruff checks
+        run: pipx run ruff check --output-format=github
+      - name: Ruff format
+        run: pipx run ruff format --check --diff
