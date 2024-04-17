@@ -12,7 +12,6 @@ labels_path = os.path.join(path, "./assets/labels.json")
 
 
 class TestOCR:
-
     def test_ocr_printed(self):
         segmenter = ImageSegmenter(raw_image, segmentation_template, labels_path)
         ocr = ImageOCR()
@@ -23,9 +22,7 @@ class TestOCR:
         assert results["nbs_cas_id"] == "SIENNA HAMPTON"
 
     def test_ocr_handwritten(self):
-        segmenter = ImageSegmenter(
-            raw_image_handwritten, segmentation_template, labels_path
-        )
+        segmenter = ImageSegmenter(raw_image_handwritten, segmentation_template, labels_path)
         ocr = ImageOCR(model="microsoft/trocr-base-handwritten")
 
         results = ocr.image_to_text(segmenter.segment())
