@@ -332,6 +332,7 @@ class DIBBsMPIConnectorClient(BaseMPIConnectorClient):
                 if has_column:
                     cte_query = (
                         select(cte_query_table.c.patient_id.label("patient_id"))
+                        .distinct()
                         .where(text(where_clause))
                         .cte(f"{table_key}_cte")
                     )
@@ -350,7 +351,9 @@ class DIBBsMPIConnectorClient(BaseMPIConnectorClient):
                             .subquery(f"{cte_query_table.name}_cte_subq")
                         )
                         cte_query = (
-                            select(fk_table.c.patient_id).join(
+                            select(fk_table.c.patient_id)
+                            .distinct()
+                            .join(
                                 sub_query,
                                 text(
                                     f"{fk_table.name}.{fk_column.name} = "
