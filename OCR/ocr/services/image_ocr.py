@@ -19,7 +19,9 @@ class ImageOCR:
             ).pixel_values
 
             generated_ids = self.model.generate(pixel_values)
-            generated_text = self.processor.batch_decode(generated_ids, skip_special_tokens=True)
+            generated_text = self.processor.batch_decode(
+                generated_ids, skip_special_tokens=True
+            )
             digitized[label] = generated_text[0]
 
         return digitized
