@@ -54,5 +54,5 @@ def segment_fields(file_path,field_names):
                 break  # Exit the loop after processing the specific fields
 
 
-fields_to_extract = ["Region", "Address","Phys"]
+fields_to_extract = ["Region", "Address"]
 segment_fields(file_path, fields_to_extract)
