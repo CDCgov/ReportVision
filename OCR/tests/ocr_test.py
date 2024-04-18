@@ -1,5 +1,9 @@
 import os
-from ocr.services.image_segmenter import ImageSegmenter
+from ocr.services.image_segmenter import (
+    ImageSegmenter,
+    segment_by_color_bounding_box,
+    segment_by_mask_then_crop,
+)
 from ocr.services.image_ocr import ImageOCR
 
 
@@ -13,7 +17,12 @@ labels_path = os.path.join(path, "./assets/labels.json")
 
 class TestOCR:
     def test_ocr_printed(self):
-        segmenter = ImageSegmenter(raw_image, segmentation_template, labels_path)
+        segmenter = ImageSegmenter(
+            raw_image,
+            segmentation_template,
+            labels_path,
+            segmentation_function=segment_by_color_bounding_box,
+        )
         ocr = ImageOCR()
 
         results = ocr.image_to_text(segmenter.segment())
@@ -22,7 +31,12 @@ class TestOCR:
         assert results["nbs_cas_id"] == "123555"
 
     def test_ocr_handwritten(self):
-        segmenter = ImageSegmenter(raw_image_handwritten, segmentation_template, labels_path)
+        segmenter = ImageSegmenter(
+            raw_image_handwritten,
+            segmentation_template,
+            labels_path,
+            segmentation_function=segment_by_mask_then_crop,
+        )
         ocr = ImageOCR(model="microsoft/trocr-base-handwritten")
 
         results = ocr.image_to_text(segmenter.segment())

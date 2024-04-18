@@ -82,7 +82,7 @@ class ImageSegmenter:
         raw_image,
         segmentation_template,
         labels,
-        segmentation_function=segment_by_color_bounding_box,
+        segmentation_function=segment_by_mask_then_crop,
         debug=False,
     ):
 
