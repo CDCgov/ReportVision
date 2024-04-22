@@ -2,7 +2,7 @@
 name: Engineering SPIKE
 about: 'Start an engineering Spike'
 title: 'SPIKE: '
-labels: 'OCR'
+labels: ''
 assignees: ''
 
 ---
