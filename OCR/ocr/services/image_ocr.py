@@ -10,6 +10,9 @@ class ImageOCR:
     def image_to_text(self, segments: dict[str, np.ndarray]) -> dict[str, str]:
         digitized: dict[str, str] = {}
         for label, image in segments.items():
+            if image is None:
+                continue
+
             pixel_values = self.processor(images=image, return_tensors="pt").pixel_values
 
             generated_ids = self.model.generate(pixel_values)
