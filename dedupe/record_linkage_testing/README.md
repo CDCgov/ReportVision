@@ -1,11 +1,12 @@
 # Record Linkage Performance Testing
 
-This repository contains a performance testing project aimed at evaluating the scalability
-and responsiveness of the
-[record-linkage](https://github.com/CDCgov/phdi/tree/main/containers/record-linkage) API
-using [OpenTelemetry](https://opentelemetry.io/) for instrumentation. By utilizing Docker
-Compose, it provides an easy-to-use environment setup for running performance tests
-against the target API.
+This repository hosts a performance testing project that focuses on assessing the
+scalability and responsiveness of the
+[record-linkage](https://github.com/CDCgov/phdi/tree/main/containers/record-linkage)
+API. It employs [OpenTelemetry](https://opentelemetry.io) for instrumentation,
+specifically to measure API latency and identify potential service bottlenecks.
+This project does not attempt to evaluate the effectiveness of the underlying 
+linkage algorithm.
 
 ## Prerequisites
 
@@ -45,7 +46,9 @@ Before getting started, ensure you have the following installed:
     Both Jaeger and the MPI database will be available for analysis after the tests
     have completed. The Jaeger UI can be accessed at
     [http://localhost:16686](http://localhost:16686). While the MPI database can be
-    accessed on port 5432, using the Postgres client of your choice.
+    accessed on port 5432, using the Postgres client of your choice. Additionally, a
+    pgbadger report will be generated in the `tmp/results/psql` directory.
+
 
 ## Environment Variables
 

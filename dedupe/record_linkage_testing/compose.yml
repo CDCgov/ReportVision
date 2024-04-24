@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   runner:
     # The orchestration container of the environment that is used to initialize
@@ -15,9 +13,12 @@ services:
       - DB_URL=postgres://postgres:pw@db:5432/postgres
       - LINKAGE_API_URL=http://api:8080
       - SYNTHEA_OUTPUT_DIR=results/synthea_output/
+      - POSTGRES_LOG=/code/results/psql/postgresql.log
+      - PGBADGER_REPORT=/code/results/psql/pgbadger.html
     volumes:
       - ./scripts:/code/scripts
       - ./tmp/results:/code/results
+      - ./tmp/data:/code/data
     depends_on:
       api:
         condition: service_healthy
@@ -44,15 +45,16 @@ services:
       - MPI_PERSON_TABLE=person
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+    volumes:
+      - ./scripts:/scripts
     command: ["opentelemetry-instrument", "--service_name", "record-linkage-api",
       "uvicorn", "main:app", "--host=0.0.0.0", "--port=8080", "--log-config=app/log_config.yml"]
     depends_on:
       - db
       - jaeger
     healthcheck:
-      test: ["CMD-SHELL", "curl -sS http://localhost:8080 | grep '\"mpi_connection_status\":\"OK\"' || exit 1"]
-      interval: 5s
-      retries: 5
+      test: ["CMD-SHELL", "/scripts/api_health_check.sh || exit 1"]
+      start_period: 10s
 
   db:
     # The PostgreSQL database that is used to store the patient and person data.
@@ -61,6 +63,11 @@ services:
       - POSTGRES_PASSWORD=pw
     ports:
         - "5432:5432"
+    volumes:
+      - ./conf/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./conf/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./tmp/results/psql/:/var/log/psql/
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
 
