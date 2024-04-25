@@ -6,3 +6,4 @@ file_relative_path = "../tests/assets/fillable.pdf"
 file_absolute_path = os.path.join(current_script_dir, file_relative_path)
 extractor = PDFFieldExtractor(file_absolute_path)
 extractor.initialize_reader()
+extractor.segment_fields("Address")

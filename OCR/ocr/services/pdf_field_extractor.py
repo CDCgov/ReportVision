@@ -1,4 +1,4 @@
-import PyPDF2
+import pypdf
 import os
 
 
@@ -12,7 +12,7 @@ class PDFFieldExtractor:
         if base_path is None:
             base_path = os.path.dirname(__file__)
         full_path = os.path.join(base_path, self.file_path)
-        self.reader = PyPDF2.PdfReader(full_path)
+        self.reader = pypdf.PdfReader(full_path)
 
     def close_reader(self):
         if self.reader is not None:
@@ -28,7 +28,7 @@ class PDFFieldExtractor:
             if "/Annots" in page:
                 annotations = page["/Annots"]
                 for annot in annotations:
-                    if isinstance(annot, PyPDF2.generic.IndirectObject):
+                    if isinstance(annot, pypdf.generic.IndirectObject):
                         annot = annot.get_object()
                         field = annot.get("/T")
                         rect = annot.get("/Rect")
