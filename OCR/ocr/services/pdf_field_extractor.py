@@ -6,20 +6,26 @@ import os
 class PDFFieldExtractor:
     def __init__(self, file_path):
         self.file_path = file_path
+        self.reader = None 
         self.form_fields = []
     
 
-    def initialize_reader(self):
-        path = os.path.dirname(__file__)
-        full_path = os.path.join(path, self.file_path)
-        with open(full_path, 'rb') as file:
-            self.reader = PyPDF2.PdfReader(file)
+    def initialize_reader(self, base_path=None):
+        if base_path is None:
+            base_path = os.path.dirname(__file__)
+        full_path = os.path.join(base_path, self.file_path)
+        self.reader = PyPDF2.PdfReader(full_path)
+    
+    def close_reader(self):
+        if self.reader is not None:
+            self.reader.stream.close()  # Close the stream explicitly
+            self.reader = None
 
     def segment_fields(self, field_names):
-        with open(self.file_path, 'rb') as file:
-            reader = PyPDF2.PdfReader(file)
             # Iterate through each page in the PDF
-            for page in reader.pages:
+            if self.reader is None:
+                raise ValueError("PDF reader is not initialized. Call initialize_reader() first.")
+            for page in self.reader.pages:
                 # Check if there are annotations (textboxes are considered annotations)
                 if '/Annots' in page:
                     annotations = page['/Annots']
@@ -34,6 +40,8 @@ class PDFFieldExtractor:
                                     self.form_fields.append((field_str, rect))
 
     def extract_images(self):
+        if self.reader is None:
+            raise ValueError("PDF reader is not initialized. Call initialize_reader() first.")
         doc = fitz.open(self.file_path)
         page = doc[0]
         page_rect = page.mediabox
@@ -46,10 +54,5 @@ class PDFFieldExtractor:
             pix = page.get_pixmap(clip=fitz.Rect(left, top, right, bottom), dpi=300)
             img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
             img.save(f'extracted_{field_name.replace("/", "_")}.png')
-            break
+        self.close_reader()
 
-
-file_relative_path = "../tests/assets/form_filled_example.pdf"
-extractor = PDFFieldExtractor(file_relative_path)
-extractor.segment_fields(["Region", "Address"])
-extractor.extract_images()
