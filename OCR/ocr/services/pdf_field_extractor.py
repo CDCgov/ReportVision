@@ -1,6 +1,4 @@
 import PyPDF2
-import fitz  # PyMuPDF
-from PIL import Image
 import os
 
 
@@ -36,22 +34,4 @@ class PDFFieldExtractor:
                         rect = annot.get("/Rect")
                         if field and rect:
                             field_str = str(field)
-                            if field_str in field_names:
-                                self.form_fields.append((field_str, rect))
-
-    def extract_images(self):
-        if self.reader is None:
-            raise ValueError("PDF reader is not initialized. Call initialize_reader() first.")
-        doc = fitz.open(self.file_path)
-        page = doc[0]
-        page_rect = page.mediabox
-
-        for field_name, rect in self.form_fields:
-            left, bottom, right, top = [int(coord) for coord in rect]
-            top = page_rect[3] - top
-            bottom = page_rect[3] - bottom
-            # Render the page and crop the image
-            pix = page.get_pixmap(clip=fitz.Rect(left, top, right, bottom), dpi=300)
-            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-            img.save(f'extracted_{field_name.replace("/", "_")}.png')
-        self.close_reader()
+                            self.form_fields.append((field_str, rect))
