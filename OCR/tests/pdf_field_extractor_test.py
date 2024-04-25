@@ -4,7 +4,7 @@ from ocr.services.pdf_field_extractor import PDFFieldExtractor
 import os
 
 
-# Setup a fixture for the PDF extractor
+
 @pytest.fixture
 def pdf_extractor():
     current_script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -17,12 +17,10 @@ def pdf_extractor():
 
 
 def test_initialize_reader(pdf_extractor):
-    # Check if the reader is initialized
     assert pdf_extractor.reader is not None, "The PDF reader should be initialized."
 
 
 def test_close_reader(pdf_extractor):
-    # Close the reader and check if it's closed properly
     pdf_extractor.close_reader()
     assert pdf_extractor.reader is None, "The PDF reader should be closed."
 
@@ -35,7 +33,6 @@ def test_segment_fields(pdf_extractor):
     # Expected coordinates for the "Address" field
     expected_address_rect = [80.08, 611.28, 339.76, 624.151]
 
-    # Find the "Address" field in the form_fields list
     address_field = None
     for field_name, rect in pdf_extractor.form_fields:
         if field_name == "Address":
