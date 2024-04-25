@@ -4,7 +4,6 @@ from ocr.services.pdf_field_extractor import PDFFieldExtractor
 import os
 
 
-
 @pytest.fixture
 def pdf_extractor():
     current_script_dir = os.path.dirname(os.path.abspath(__file__))
