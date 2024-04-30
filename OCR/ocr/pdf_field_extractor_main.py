@@ -8,20 +8,3 @@ extractor = PDFFieldExtractor(file_absolute_path)
 extractor.initialize_reader()
 extractor.segment_fields("Address")
 extractor.mark_rectangles_on_pdf()
-
-
-"""
-extractor.extract_images()
-colored_images = []
-
-
-colored_image = extractor.color_fields_on_page(1)
-
-
-print(colored_image)
-
-plt.imshow(colored_image)
-plt.axis('off')
-plt.show()
-
-"""

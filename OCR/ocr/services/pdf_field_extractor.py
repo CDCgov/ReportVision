@@ -42,7 +42,7 @@ class PDFFieldExtractor:
                             self.form_fields.append((field_str, rect))
 
     def extract_images(self):
-        # extracts the images from the rectangle coordinates of the pdf
+        # extracts the images from the rectangle coordinates
         doc = fitz.open(self.file_path)
         page = doc[0]
         page_rect = page.mediabox
@@ -71,7 +71,7 @@ class PDFFieldExtractor:
         images = convert_from_bytes(self.reader.stream.getvalue(), dpi=300)  # High DPI for better quality
         image_paths = []
 
-        # Save each image to the defined path
+        # Save each image
         for i, image in enumerate(images):
             image_path = os.path.join(output_folder, f"page_{i+1}.png")
             image.save(image_path, "PNG")
@@ -93,11 +93,10 @@ class PDFFieldExtractor:
             width, height = image.size
 
             for field_name, rect in self.form_fields:
-                # PDF coordinates are usually in points (1/72 inch), so convert them based on the image DPI
                 scaling_factor = dpi / 72.0
 
                 # Adjust the rectangle coordinates
-                # PDF y-coordinate starts from the bottom, so you need to invert it for the image
+                # PDF y-coordinate starts from the bottom
                 # rect is expected to be in the format [x1, y1, x2, y2] where (x1, y1) is bottom left and (x2, y2) is top right in PDF coordinates
                 adjusted_rect = [
                     rect[0] * scaling_factor,
@@ -107,7 +106,7 @@ class PDFFieldExtractor:
                 ]
 
                 color = tuple([random.randint(0, 255) for _ in range(3)])
-                draw.rectangle(adjusted_rect, outline=color)  # Fill the rectangle with the random color
+                draw.rectangle(adjusted_rect, outline=color)
                 color_str = f"{color[0]},{color[1]},{color[2]}"
                 labels[color_str] = field_name
 
@@ -118,12 +117,12 @@ class PDFFieldExtractor:
 
         return image_paths, "labels.json"
 
-    # different
+    # different method for added the segments
     def mark_rectangles_on_pdf(self):
         if self.reader is None:
             raise ValueError("PDF reader is not initialized. Call initialize_reader() first.")
 
-        output = pypdf.PdfWriter()  # Prepare to write modified pages
+        output = pypdf.PdfWriter()  # write file
 
         for page in self.reader.pages:
             # Access existing annotations or create a new list if none exist
