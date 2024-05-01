@@ -21,10 +21,11 @@ jobs:
           poetry install --with dev
       - name: Run tests
         run: |
+          cd OCR/tests
           poetry run pytest OCR/tests/bench_test.py -v --benchmark-json output.json
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
           tool: 'pytest'
-          output-file-path: output.json
+          output-file-path: OCR/tests/output.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
