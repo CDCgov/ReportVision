@@ -7,9 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: OCR/tests
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -17,15 +14,18 @@ jobs:
           python-version: "3.10"
       - name: Install dependencies
         run: |
+          cd OCR/tests
           python -m pip install --upgrade pip
           pip install poetry
           pip install pytest pytest-benchmark
           poetry install --with dev
       - name: Run tests
-        run: poetry run pytest bench_test.py -v --benchmark-json output.json
+        run: |
+          cd OCR/tests
+          poetry run pytest bench_test.py -v --benchmark-json output.json
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
           tool: 'pytest'
-          output-file-path: OCR/tests/output.json
+          output-file-path: output.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
