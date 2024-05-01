@@ -28,3 +28,4 @@ jobs:
         with:
           tool: 'pytest'
           output-file-path: OCR/tests/output.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
