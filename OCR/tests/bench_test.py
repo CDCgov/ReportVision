@@ -13,6 +13,7 @@ raw_image = os.path.join(path, "./assets/form_filled.png")
 raw_image_handwritten = os.path.join(path, "./assets/form_hand_filled.png")
 labels_path = os.path.join(path, "./assets/labels.json")
 
+
 class TestOCRBenchmark:
     @pytest.fixture(autouse=True)
     def setup(self):
@@ -28,6 +29,7 @@ class TestOCRBenchmark:
 
     def test_ocr_handwritten_benchmark(self, benchmark):
         benchmark(self.ocr_handwritten.image_to_text, self.segmenter.segment())
+
 
 class TestImageSegmenterBenchmark:
     @pytest.fixture(autouse=True)
