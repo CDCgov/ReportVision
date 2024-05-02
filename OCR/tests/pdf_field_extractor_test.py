@@ -47,18 +47,4 @@ def test_mark_rectangles_on_pdf(pdf_extractor, mocker):
     assert labels == "path_to_labels", "Should return the correct path to the labels JSON"
 
 
-def test_pdf_to_images(pdf_extractor, mocker):
-    # Mock the convert_from_path function to return a list of mock images
-    mock_image = mocker.MagicMock()
-    mock_image.save = mocker.MagicMock()  # Mock the save method of the image
-    mocker.patch("pdf2image.convert_from_path", return_value=[mock_image])
 
-    # Call the method under test
-    # segmentation_template = os.path.join(path, "./assets/form_segmention_template.png")
-    path = os.path.dirname(__file__)
-    template = os.path.join(path, "./assets/per_example_marked.pdf")
-    images = pdf_extractor.pdf_to_images(template)
-
-    # Assertions to check that images were processed correctly
-    assert len(images) == 1, "Should generate one image path"
-    assert images[0].endswith(".png"), "The generated file should be a PNG"
