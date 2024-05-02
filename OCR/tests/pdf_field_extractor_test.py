@@ -45,6 +45,3 @@ def test_mark_rectangles_on_pdf(pdf_extractor, mocker):
     output, labels = pdf_extractor.mark_rectangles_on_pdf()
     assert output == "path_to_pdf", "Should return the correct path to the modified PDF"
     assert labels == "path_to_labels", "Should return the correct path to the labels JSON"
-
-
-
