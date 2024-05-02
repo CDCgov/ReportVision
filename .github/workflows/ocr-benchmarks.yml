@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - OCR-97-benchmark-test-results
-
 jobs:
   build:
     runs-on: ubuntu-latest
