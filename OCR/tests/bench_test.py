@@ -50,6 +50,6 @@ class TestImageSegmenterBenchmark:
         cv.imwrite("no_matching_colors_raw.png", raw_image)
         cv.imwrite("no_matching_colors_seg.png", segmentation_template)
         segmenter = ImageSegmenter("no_matching_colors_raw.png", "no_matching_colors_seg.png", self.labels_path)
-        benchmark(self.segmenter.segment)
+        benchmark(segmenter.segment)
         os.remove("no_matching_colors_raw.png")
         os.remove("no_matching_colors_seg.png")
