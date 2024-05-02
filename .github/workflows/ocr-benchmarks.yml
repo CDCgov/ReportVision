@@ -2,7 +2,10 @@ name: OCR Poetry Tests
 on:
   push:
     branches:
-      - OCR-97-benchmark-test-results
+      - main
+    paths:
+      - .github/workflows/ocr-benchmarks.yml
+      - OCR/**
 jobs:
   build:
     runs-on: ubuntu-latest
