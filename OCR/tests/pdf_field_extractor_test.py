@@ -1,13 +1,13 @@
-from math import isclose
 import pytest
 from ocr.services.pdf_field_extractor import PDFFieldExtractor
 import os
+import pypdf
 
 
 @pytest.fixture
 def pdf_extractor():
     current_script_dir = os.path.dirname(os.path.abspath(__file__))
-    file_relative_path = "./assets/fillable.pdf"
+    file_relative_path = "./assets/per_example.pdf"
     file_absolute_path = os.path.join(current_script_dir, file_relative_path)
     extractor = PDFFieldExtractor(file_absolute_path)
     extractor.initialize_reader()
@@ -24,21 +24,41 @@ def test_close_reader(pdf_extractor):
     assert pdf_extractor.reader is None, "The PDF reader should be closed."
 
 
-def test_segment_fields(pdf_extractor):
-    # Test segmenting the "Address" field
-    field_names = ["Address"]
-    pdf_extractor.segment_fields(field_names)
+def test_generate_random_color(pdf_extractor):
+    color = pdf_extractor.generate_random_color()
+    assert isinstance(color, str), "Output should be a string"
+    parts = color.split(",")
+    assert len(parts) == 3, "Color should have three parts"
+    all(int(part) >= 0 and int(part) <= 255 for part in parts), "All RGB values should be within 0-255"
 
-    # Expected coordinates for the "Address" field
-    expected_address_rect = [80.08, 611.28, 339.76, 624.151]
 
-    address_field = None
-    for field_name, rect in pdf_extractor.form_fields:
-        if field_name == "Address":
-            address_field = rect
-            print(address_field)
-            break
+def test_create_rectangle_annotation(pdf_extractor):
+    rect = [0, 0, 100, 100]
+    color = "255,0,0"
+    annotation = pdf_extractor.create_rectangle_annotation(rect, color)
+    assert isinstance(annotation, pypdf.generic.DictionaryObject), "Should return a DictionaryObject"
+    assert list(map(float, annotation["/C"])) == [1.0, 0.0, 0.0], "Color should be correctly set"
 
-    # Check if the "Address" field is found and its coordinates match the expected values
-    assert address_field is not None, "The 'Address' field should be found."
-    assert all(isclose(a, b) for a, b in zip(expected_address_rect, address_field))
+
+def test_mark_rectangles_on_pdf(pdf_extractor, mocker):
+    mocker.patch.object(pdf_extractor, "update_annotations_and_save", return_value=("path_to_pdf", "path_to_labels"))
+    output, labels = pdf_extractor.mark_rectangles_on_pdf()
+    assert output == "path_to_pdf", "Should return the correct path to the modified PDF"
+    assert labels == "path_to_labels", "Should return the correct path to the labels JSON"
+
+
+def test_pdf_to_images(pdf_extractor, mocker):
+    # Mock the convert_from_path function to return a list of mock images
+    mock_image = mocker.MagicMock()
+    mock_image.save = mocker.MagicMock()  # Mock the save method of the image
+    mocker.patch("pdf2image.convert_from_path", return_value=[mock_image])
+
+    # Call the method under test
+    # segmentation_template = os.path.join(path, "./assets/form_segmention_template.png")
+    path = os.path.dirname(__file__)
+    template = os.path.join(path, "./assets/per_example_marked.pdf")
+    images = pdf_extractor.pdf_to_images(template)
+
+    # Assertions to check that images were processed correctly
+    assert len(images) == 1, "Should generate one image path"
+    assert images[0].endswith(".png"), "The generated file should be a PNG"
