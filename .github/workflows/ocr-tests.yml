@@ -1,4 +1,4 @@
-name: OCR Poetry Tests
+name: OCR Poetry Unit Tests
 on:
   pull_request:
     paths:
