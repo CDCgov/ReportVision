@@ -40,8 +40,6 @@ class OCRPHDCConverter:
 
         builder = PHDCBuilder()
         builder.set_input_data(phdc_input)
-        builder.build_header()
-        builder.build_body()
         phdc = builder.build()
 
         # Output PHDC XML
