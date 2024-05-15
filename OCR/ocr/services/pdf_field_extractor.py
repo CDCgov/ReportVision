@@ -149,7 +149,7 @@ class PDFFieldExtractor:
             raise ValueError("PDF reader is not initialized. Call initialize_reader() first.")
 
         color_label_map = {}
-        count = 0  # Counter to keep track of the first 5 annotations and prints them to verify they are matching
+        count = 0
         for page in self.reader.pages:
             annotations = page.get("/Annots", pypdf.generic.ArrayObject())
 
@@ -163,13 +163,13 @@ class PDFFieldExtractor:
 
                 if field and rect:
                     color = self.generate_random_color()
-                    color_str = ",".join(map(str, color))
+                    color_str = ",".join(map(str, map(int, color.split(','))))
                     color_label_map[color_str] = field
 
                     new_annot = self.create_rectangle_annotation(rect, color)
                     new_annotations.append(new_annot)
 
-                    if count < 5:  # Print colors for the first 5 valid annotations
+                    if count < 5: 
                         pdf_color = new_annot.get("/C").get_object()
                         pdf_color_values = [int(color_val * 255) for color_val in pdf_color]
                         pdf_color_str = ",".join(map(str, pdf_color_values))
