@@ -3,6 +3,8 @@ from ocr.services.pdf_field_extractor import PDFFieldExtractor
 import os
 import pypdf
 import re
+import shutil
+from tempfile import mkdtemp
 
 
 @pytest.fixture
@@ -48,14 +50,27 @@ def test_document_creation(pdf_extractor, mocker):
     assert labels == "path_to_labels", "Should return the correct path to the labels JSON"
 
 
-def test_end_to_end_segment_creation(pdf_extractor, mocker, capsys):
-    mocker.patch.object(pdf_extractor, "update_annotations_and_save", return_value=("path_to_pdf", "path_to_labels"))
-    pdf_extractor.mark_rectangles_on_pdf()
-    captured = capsys.readouterr()
-    color_matches = re.findall(
-        r"Color in labels file: (\d+,\d+,\d+)\nColor in PDF annotation: (\d+,\d+,\d+)", captured.out
-    )
-    for label_color, pdf_color in color_matches:
-        assert (
-            label_color == pdf_color
-        ), f"Expected color in labels file ({label_color}) to match color in PDF annotation ({pdf_color})"
+def test_end_to_end_segment_creation(capsys):
+    # temp dir to matching testing env
+    temp_dir = mkdtemp()
+
+    try:
+        current_script_dir = os.path.dirname(os.path.abspath(__file__))
+        file_relative_path = "../tests/assets/per_example.pdf"
+        file_absolute_path = os.path.join(current_script_dir, file_relative_path)
+        pdf_extractor = PDFFieldExtractor(file_absolute_path)
+        pdf_extractor.initialize_reader()
+        output, labels = pdf_extractor.mark_rectangles_on_pdf()
+        pdf_extractor.pdf_to_images(output)
+        pdf_extractor.close_reader()
+        captured = capsys.readouterr()
+        color_matches = re.findall(
+            r"Color in labels file: (\d+,\d+,\d+)\nColor in PDF annotation: (\d+,\d+,\d+)", captured.out
+        )
+        for label_color, pdf_color in color_matches:
+            assert (
+                label_color == pdf_color
+            ), f"Expected color in labels file ({label_color}) to match color in PDF annotation ({pdf_color})"
+
+    finally:
+        shutil.rmtree(temp_dir)
