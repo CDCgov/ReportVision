@@ -1,4 +1,4 @@
-from services.checkbox_detector import CheckboxDetector
+from ocr.services.checkbox_detector import CheckboxDetector
 
 import os
 
@@ -10,7 +10,7 @@ checkbox_example_filled_20 = os.path.join(path, "../tests/assets/checkbox_filled
 checkbox_example_filled_1 = os.path.join(path, "../tests/assets/checkbox_filled_1percent.png")
 try:
     detector = CheckboxDetector(checkbox_template)
-    result = detector.is_checked(checkbox_example_filled_20)
+    result = detector.is_checked(checkbox_example_filled_1)
     print("Checkbox is checked:", result)
 except FileNotFoundError as e:
     print(e)

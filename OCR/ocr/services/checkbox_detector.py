@@ -22,3 +22,9 @@ class CheckboxDetector:
 
         # Determine if the checkbox is checked based on the threshold
         return diff_sum > threshold
+
+
+#crop the box
+#dimensions need to be the same
+#end to end tests
+#
