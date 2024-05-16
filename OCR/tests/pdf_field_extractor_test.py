@@ -2,6 +2,7 @@ import pytest
 from ocr.services.pdf_field_extractor import PDFFieldExtractor
 import os
 import pypdf
+import re
 
 
 @pytest.fixture
@@ -40,8 +41,21 @@ def test_create_rectangle_annotation(pdf_extractor):
     assert list(map(float, annotation["/C"])) == [1.0, 0.0, 0.0], "Color should be correctly set"
 
 
-def test_mark_rectangles_on_pdf(pdf_extractor, mocker):
+def test_document_creation(pdf_extractor, mocker):
     mocker.patch.object(pdf_extractor, "update_annotations_and_save", return_value=("path_to_pdf", "path_to_labels"))
     output, labels = pdf_extractor.mark_rectangles_on_pdf()
     assert output == "path_to_pdf", "Should return the correct path to the modified PDF"
     assert labels == "path_to_labels", "Should return the correct path to the labels JSON"
+
+
+def test_end_to_end_segment_creation(pdf_extractor, mocker, capsys):
+    mocker.patch.object(pdf_extractor, "update_annotations_and_save", return_value=("path_to_pdf", "path_to_labels"))
+    pdf_extractor.mark_rectangles_on_pdf()
+    captured = capsys.readouterr()
+    color_matches = re.findall(
+        r"Color in labels file: (\d+,\d+,\d+)\nColor in PDF annotation: (\d+,\d+,\d+)", captured.out
+    )
+    for label_color, pdf_color in color_matches:
+        assert (
+            label_color == pdf_color
+        ), f"Expected color in labels file ({label_color}) to match color in PDF annotation ({pdf_color})"
