@@ -1,4 +1,4 @@
-from OCR.ocr.services.pdf_field_extractor import PDFFieldExtractor
+from ocr.services.pdf_field_extractor import PDFFieldExtractor
 import os
 
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
