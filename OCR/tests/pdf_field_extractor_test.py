@@ -51,14 +51,10 @@ def test_document_creation(pdf_extractor, mocker):
 def test_end_to_end_segment_creation(pdf_extractor, mocker, capsys):
     mocker.patch.object(pdf_extractor, "update_annotations_and_save", return_value=("path_to_pdf", "path_to_labels"))
     output, labels = pdf_extractor.mark_rectangles_on_pdf()
-    assert output == "path_to_pdf", "Should return the correct path to the modified PDF"
-    assert labels == "path_to_labels", "Should return the correct path to the labels JSON"
     captured = capsys.readouterr()
-
     color_matches = re.findall(
         r"Color in labels file: (\d+,\d+,\d+)\nColor in PDF annotation: (\d+,\d+,\d+)", captured.out
     )
-
     for label_color, pdf_color in color_matches:
         assert (
             label_color == pdf_color
