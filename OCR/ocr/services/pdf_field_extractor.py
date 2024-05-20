@@ -152,7 +152,6 @@ class PDFFieldExtractor:
 
         color_label_map = {}
         count = 0
-        color_matches = []
         for page in self.reader.pages:
             annotations = page.get("/Annots", pypdf.generic.ArrayObject())
 
