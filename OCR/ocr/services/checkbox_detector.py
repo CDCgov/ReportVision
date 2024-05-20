@@ -8,7 +8,7 @@ class CheckboxDetector:
         if self.template is None:
             raise FileNotFoundError(f"Template image not found at {template_path}")
 
-    def is_checked(self, image_path, threshold=24000):
+    def is_checked(self, image_path, threshold=18000):
         checkbox_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         if checkbox_image is None:
             raise FileNotFoundError(f"Checkbox image not found at {image_path}")
@@ -22,9 +22,3 @@ class CheckboxDetector:
 
         # Determine if the checkbox is checked based on the threshold
         return diff_sum > threshold
-
-
-#crop the box
-#dimensions need to be the same
-#end to end tests
-#
