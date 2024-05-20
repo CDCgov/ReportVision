@@ -1,8 +1,9 @@
-import pytest
-from ocr.services.pdf_field_extractor import PDFFieldExtractor
 import os
+
 import pypdf
-import re
+import pytest
+
+from ocr.services.pdf_field_extractor import PDFFieldExtractor
 
 
 @pytest.fixture
@@ -30,7 +31,7 @@ def test_generate_random_color(pdf_extractor):
     assert isinstance(color, str), "Output should be a string"
     parts = color.split(",")
     assert len(parts) == 3, "Color should have three parts"
-    all(int(part) >= 0 and int(part) <= 255 for part in parts), "All RGB values should be within 0-255"
+    all(0 <= int(part) <= 255 for part in parts), "All RGB values should be within 0-255"
 
 
 def test_create_rectangle_annotation(pdf_extractor):
@@ -48,13 +49,10 @@ def test_document_creation(pdf_extractor, mocker):
     assert labels == "path_to_labels", "Should return the correct path to the labels JSON"
 
 
-def test_end_to_end_segment_creation(pdf_extractor, mocker, capsys):
-    mocker.patch.object(pdf_extractor, "update_annotations_and_save", return_value=("path_to_pdf", "path_to_labels"))
-    output, labels = pdf_extractor.mark_rectangles_on_pdf()
-    captured = capsys.readouterr()
-    color_matches = re.findall(
-        r"Color in labels file: (\d+,\d+,\d+)\nColor in PDF annotation: (\d+,\d+,\d+)", captured.out
-    )
+def test_end_to_end_segment_creation(pdf_extractor):
+    pdf_extractor.initialize_reader()
+    pdf_extractor.mark_rectangles_on_pdf()
+    color_matches = pdf_extractor.get_color_matches()
     for label_color, pdf_color in color_matches:
         assert (
             label_color == pdf_color

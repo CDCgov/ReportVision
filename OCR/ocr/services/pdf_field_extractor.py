@@ -1,8 +1,9 @@
 import json
+import os
 import random
 from typing import Dict, List, Optional, Tuple
+
 import pypdf
-import os
 from pdf2image import convert_from_path
 
 
@@ -17,6 +18,7 @@ class PDFFieldExtractor:
         self.file_path = file_path
         self.reader = None
         self.form_fields = []
+        self.color_matches = []
 
     def initialize_reader(self, base_path: Optional[str] = None) -> None:
         """
@@ -135,7 +137,7 @@ class PDFFieldExtractor:
             json.dump(color_label_map, json_file, indent=4)
         return output_path, labels_path
 
-    def mark_rectangles_on_pdf(self) -> Tuple[str, str]:
+    def mark_rectangles_on_pdf(self):
         """
         Process the PDF to add rectangle annotations and save the document along with a JSON mapping file.
 
@@ -150,6 +152,7 @@ class PDFFieldExtractor:
 
         color_label_map = {}
         count = 0
+        color_matches = []
         for page in self.reader.pages:
             annotations = page.get("/Annots", pypdf.generic.ArrayObject())
 
@@ -168,11 +171,11 @@ class PDFFieldExtractor:
 
                     new_annot = self.create_rectangle_annotation(rect, color)
                     new_annotations.append(new_annot)
-
+                    pdf_color = new_annot.get("/C").get_object()
+                    pdf_color_values = [int(color_val * 255) for color_val in pdf_color]
+                    pdf_color_str = ",".join(map(str, pdf_color_values))
+                    self.color_matches.append((color_str, pdf_color_str))
                     if count < 5:
-                        pdf_color = new_annot.get("/C").get_object()
-                        pdf_color_values = [int(color_val * 255) for color_val in pdf_color]
-                        pdf_color_str = ",".join(map(str, pdf_color_values))
                         print(f"Color in labels file: {color_str}")
                         print(f"Color in PDF annotation: {pdf_color_str}")
                         count += 1
@@ -211,3 +214,12 @@ class PDFFieldExtractor:
             image_paths.append(image_path)
 
         return image_paths
+
+    def get_color_matches(self) -> List[Tuple[str, str]]:
+        """
+        Get the color matches for testing purposes
+
+        Returns:
+            List[Tuple[str, str]]: A list of tuples containing the colors in labels and the colors in the PDF annotations.
+        """
+        return self.color_matches
