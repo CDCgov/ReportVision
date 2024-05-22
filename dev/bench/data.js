@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1714662781837,
+  "lastUpdate": 1716393949534,
   "repoUrl": "https://github.com/CDCgov/IDWA",
   "entries": {
     "Benchmark": [
@@ -285,6 +285,65 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00001532209643040574",
             "extra": "mean: 103.08978335466296 usec\nrounds: 4482"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "50093944+derekadombek@users.noreply.github.com",
+            "name": "Derek A Dombek",
+            "username": "derekadombek"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "01fcdfbe2498bc51656de08c790081e10288bdb8",
+          "message": "[IDWA-OCR-97] Benchmark tests and action (#100)\n\n* try benchmarks in gha\n\n* try benchmarks in gha\n\n* add ./\n\n* add >\n\n* add rel path to with option\n\n* gh-pages branch and secret\n\n* gh-pages branch and secret\n\n* change path\n\n* change path\n\n* change path\n\n* add auto-push\n\n* make change for another test commit for graph\n\n* point to local init fun and not global\n\n* end of line\n\n* lint\n\n* on push main\n\n* update readme\n\n* change names to workflows\n\n* point only to unit tests in workflow\n\n---------\n\nCo-authored-by: Derek Dombek <derek.a.dombek.com>",
+          "timestamp": "2024-05-22T16:01:13Z",
+          "tree_id": "c3a25e18fa6443a85db23c0b95780968a3814cb6",
+          "url": "https://github.com/CDCgov/IDWA/commit/01fcdfbe2498bc51656de08c790081e10288bdb8"
+        },
+        "date": 1716393949079,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/bench_test.py::TestOCRBenchmark::test_ocr_printed_benchmark",
+            "value": 0.2514289325253437,
+            "unit": "iter/sec",
+            "range": "stddev: 0.01612608853114493",
+            "extra": "mean: 3.977267015200016 sec\nrounds: 5"
+          },
+          {
+            "name": "tests/bench_test.py::TestOCRBenchmark::test_ocr_handwritten_benchmark",
+            "value": 0.27741032360781437,
+            "unit": "iter/sec",
+            "range": "stddev: 0.028654053696145498",
+            "extra": "mean: 3.604768514 sec\nrounds: 5"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_segment_benchmark",
+            "value": 17.293074939584823,
+            "unit": "iter/sec",
+            "range": "stddev: 0.005155172489623059",
+            "extra": "mean: 57.826615769237414 msec\nrounds: 13"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_segment_shapes_benchmark",
+            "value": 16114100.684491169,
+            "unit": "iter/sec",
+            "range": "stddev: 5.140288131938997e-9",
+            "extra": "mean: 62.057450153691335 nsec\nrounds: 162049"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_no_matching_pixels_benchmark",
+            "value": 9882.790741339477,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00001428464937007343",
+            "extra": "mean: 101.1859935288343 usec\nrounds: 4482"
           }
         ]
       }
