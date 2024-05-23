@@ -1,4 +1,4 @@
-from ocr.services.checkbox_detector import CheckboxDetector
+from ocr.services.checkbox_detector_subtraction import CheckboxDetector
 
 import os
 

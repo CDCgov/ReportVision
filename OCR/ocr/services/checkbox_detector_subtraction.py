@@ -15,7 +15,7 @@ class CheckboxDetector:
 
         diff = cv2.absdiff(self.template, checkbox_image)
 
-        # Calculate the sum of the absolute differences
+        # Calculate difference
         diff_sum = np.sum(diff)
         print(diff_sum)
         print(threshold)
