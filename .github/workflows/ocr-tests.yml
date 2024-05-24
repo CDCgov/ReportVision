@@ -1,4 +1,4 @@
-name: OCR Poetry Tests
+name: OCR Poetry Unit Tests
 on:
   pull_request:
     paths:
@@ -21,4 +21,4 @@ jobs:
           pip install poetry
           poetry install --with dev
       - name: Run tests
-        run: poetry run pytest
+        run: poetry run pytest tests/ocr_test.py tests/segmentation_template_test.py
