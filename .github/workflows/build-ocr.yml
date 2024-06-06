@@ -23,8 +23,7 @@ jobs:
           pip install poetry
           pip install pyinstaller
           poetry install
-      - name: build executable
-        run: poetry run build
+          poetry run build
       - uses: actions/upload-artifact@v3
         with:
           name: main
