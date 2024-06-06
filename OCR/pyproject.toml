@@ -14,8 +14,9 @@ transformers = {extras = ["torch"], version = "^4.39.3"}
 pillow = "^10.3.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.3.0"
+ruff = "^0.3.7"
 pytest = "^8.1.1"
+pytest-benchmark = "^4.0.0"
 
 [build-system]
 requires = ["poetry-core"]

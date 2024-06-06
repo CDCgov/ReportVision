@@ -21,7 +21,9 @@ def main():
 
     print("{:<20} {:<20}".format("Label", "Segment shape"))
     for label, segment in segments.items():
-        print("{:<20} {:<20}".format(label, f"{segment.shape}"))
+        segment_shape = segment.shape if segment is not None else "INVALID"
+        print("{:<20} {:<20}".format(f"{segment_shape}", label))
+        # cv.imwrite(f"{label}_segment.png", segment)
 
     ocr = ImageOCR()
     values = ocr.image_to_text(segments=segments)

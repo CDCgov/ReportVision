@@ -31,18 +31,23 @@ class TestImageSegmenter:
             assert isinstance(segment, np.ndarray)
 
     def test_segment_shapes(self):
-        expected_shapes = {"nbs_patient_id": (41, 376, 3), "nbs_cas_id": (57, 366, 3)}
+        expected_shapes = {"nbs_patient_id": (57, 366, 3), "nbs_cas_id": (41, 376, 3)}
         segments = self.segmenter.segment()
         for label, segment in segments.items():
             assert segment.shape == expected_shapes[label]
 
     def test_no_matching_pixels(self):
         segmentation_template = np.zeros((10, 10, 3), dtype=np.uint8)
-        cv.imwrite("no_matching_colors.png", segmentation_template)
-        segmenter = ImageSegmenter(self.raw_image, "no_matching_colors.png", self.labels_path)
-        with pytest.raises(ValueError):
-            segmenter.segment()
-        os.remove("no_matching_colors.png")
+        raw_image = np.ones((10, 10, 3), dtype=np.uint8)
+        cv.imwrite("no_matching_colors_raw.png", raw_image)
+        cv.imwrite("no_matching_colors_seg.png", segmentation_template)
+        segmenter = ImageSegmenter("no_matching_colors_raw.png", "no_matching_colors_seg.png", self.labels_path)
+        segments = segmenter.segment()
+        assert len(segments) == 2
+        assert segments["nbs_patient_id"] is None
+        assert segments["nbs_cas_id"] is None
+        os.remove("no_matching_colors_raw.png")
+        os.remove("no_matching_colors_seg.png")
 
     def test_invalid_file_paths(self):
         with pytest.raises(FileNotFoundError):

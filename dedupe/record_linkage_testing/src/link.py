@@ -23,6 +23,11 @@ from phdi.linkage.mpi import BaseMPIConnectorClient
 from phdi.linkage.mpi import DIBBsMPIConnectorClient
 from phdi.linkage.utils import datetime_to_str
 
+
+from opentelemetry import trace
+TRACER = trace.get_tracer(__name__)
+
+
 LINKING_FIELDS_TO_FHIRPATHS = {
     "first_name": "Patient.name.given",
     "last_name": "Patient.name.family",
@@ -36,9 +41,7 @@ LINKING_FIELDS_TO_FHIRPATHS = {
 }
 
 
-REDUCE_COMPARES = (os.environ.get("REDUCE_COMPARES", "0").lower() in ["true", "t", "1",])
-if REDUCE_COMPARES:
-    logging.warning("REDUCE COMPARE MODE: Only comparing first record in each cluster.")
+OPTIMIZATIONS = (os.environ.get("OPTIMIZATIONS", "0").lower() in ["true", "t", "1",])
 
 
 def block_data(data: pd.DataFrame, blocks: List) -> dict:
@@ -575,158 +578,155 @@ def link_record_against_mpi(
       Person entity now associated with the incoming patient (either a
       new Person ID or the ID of an existing matched Person).
     """
-    # Initialize MPI client
-    if mpi_client is None:
-        logging.info("MPI client was None, instatiating new client.")
-        mpi_client = DIBBsMPIConnectorClient()
+    with TRACER.start_as_current_span("link_record_against_mpi"):
+        # Initialize MPI client
+        if mpi_client is None:
+            logging.info("MPI client was None, instatiating new client.")
+            mpi_client = DIBBsMPIConnectorClient()
 
-    # Need to bind function names back to their symbolic invocations
-    # in context of the module--i.e. turn the string of a function
-    # name back into the callable defined in link.py
+        # Need to bind function names back to their symbolic invocations
+        # in context of the module--i.e. turn the string of a function
+        # name back into the callable defined in link.py
 
-    algo_config = copy.deepcopy(algo_config)
-    logging.info(
-        f"Starting _bind_func_names_to_invocations at: {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
-    )
-    algo_config = _bind_func_names_to_invocations(algo_config)
-    logging.info(
-        f"Done with _bind_func_names_to_invocations at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
-    )
-
-    # Membership ratios need to persist across linkage passes so that we can
-    # find the highest scoring match across all trials
-    linkage_scores = {}
-    for linkage_pass in algo_config:
-        blocking_fields = linkage_pass["blocks"]
-
-        # MPI will be able to find patients if *any* of their names or addresses
-        # contains extracted values, so minimally block on the first line
-        # if applicable
+        algo_config = copy.deepcopy(algo_config)
         logging.info(
-            f"Starting extract_blocking_values_from_record at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+            f"Starting _bind_func_names_to_invocations at: {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
         )
-        blocking_criteria = extract_blocking_values_from_record(record, blocking_fields)
+        algo_config = _bind_func_names_to_invocations(algo_config)
         logging.info(
-            f"Done with extract_blocking_values_from_record at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+            f"Done with _bind_func_names_to_invocations at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
         )
 
-        # We don't enforce blocking if an extracted value is empty, so if all
-        # values come back blank, skip the pass because the only alt is comparing
-        # to all found records
-        if len(blocking_criteria) == 0:
-            logging.info("No blocking criteria extracted from incoming record.")
-            continue
-        logging.info(
-            f"Starting get_block_data at: {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
-        )
-        raw_data_block = mpi_client.get_block_data(blocking_criteria)
-        logging.info(
-            f"Done with get_block_data at: {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
-        )
+        # Membership ratios need to persist across linkage passes so that we can
+        # find the highest scoring match across all trials
+        linkage_scores = {}
+        for linkage_pass in algo_config:
+            blocking_fields = linkage_pass["blocks"]
 
-        data_block = aggregate_given_names_for_linkage(raw_data_block)
-
-        # First row of returned block is column headers
-        # Map column name to idx, not including patient/person IDs
-        col_to_idx = {v: k for k, v in enumerate(data_block[0][2:])}
-        if len(data_block[1:]) > 0:  # Check if data_block is empty
-            data_block = data_block[1:]
+            # MPI will be able to find patients if *any* of their names or addresses
+            # contains extracted values, so minimally block on the first line
+            # if applicable
             logging.info(
-                f"Starting _flatten_patient_resource at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                f"Starting extract_blocking_values_from_record at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
             )
-            flattened_record = _flatten_patient_resource(record, col_to_idx)
+            with TRACER.start_as_current_span("extract_blocking_values_from_record"):
+                blocking_criteria = extract_blocking_values_from_record(record, blocking_fields)
             logging.info(
-                f"Done with _flatten_patient_resource at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                f"Done with extract_blocking_values_from_record at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
             )
 
+            # We don't enforce blocking if an extracted value is empty, so if all
+            # values come back blank, skip the pass because the only alt is comparing
+            # to all found records
+            if len(blocking_criteria) == 0:
+                logging.info("No blocking criteria extracted from incoming record.")
+                continue
             logging.info(
-                f"Starting _group_patient_block_by_person at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                f"Starting get_block_data at: {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
             )
-            clusters = _group_patient_block_by_person(data_block)
+            with TRACER.start_as_current_span("get_block_data"):
+                raw_data_block = mpi_client.get_block_data(blocking_criteria)
             logging.info(
-                f"Done with _group_patient_block_by_person at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                f"Done with get_block_data at: {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
             )
-            
-            if REDUCE_COMPARES:
-                clusters = _consolidate_person_clusters(clusters)
 
-            # Check if incoming record should belong to one of the person clusters
-            kwargs = linkage_pass.get("kwargs", {})
-            logging.warning(f"Person Size: {len(clusters)}")
-            for person in clusters:
-                num_matched_in_cluster = 0.0
-                linked_patients = clusters[person]
-                if REDUCE_COMPARES:
-                    count = float(len(linked_patients))
-                    linked_patients = linked_patients[0:1]
-                logging.warning(f"Patient Size: {len(linked_patients)}")
-                for linked_patient in linked_patients:
-                    logging.info(
-                        f"Starting _compare_records at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
-                    )
-                    is_match = _compare_records(
-                        flattened_record,
-                        linked_patient,
-                        linkage_pass["funcs"],
-                        col_to_idx,
-                        linkage_pass["matching_rule"],
-                        **kwargs,
-                    )
-                    logging.info(
-                        f"Done with _compare_records at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
-                    )
+            with TRACER.start_as_current_span("aggregate_given_names_for_linkage"):
+                data_block = aggregate_given_names_for_linkage(raw_data_block)
 
-                    if is_match:
-                        if REDUCE_COMPARES:
-                            num_matched_in_cluster += count
-                        else:
-                            num_matched_in_cluster += 1.0
-
-                # Update membership score for this person cluster so that we can
-                # track best possible link across multiple passes
+            # First row of returned block is column headers
+            # Map column name to idx, not including patient/person IDs
+            col_to_idx = {v: k for k, v in enumerate(data_block[0][2:])}
+            if len(data_block[1:]) > 0:  # Check if data_block is empty
+                data_block = data_block[1:]
                 logging.info(
-                    f"Starting to update membership score at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                    f"Starting _flatten_patient_resource at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
                 )
-                belongingness_ratio = num_matched_in_cluster / len(clusters[person])
-                if REDUCE_COMPARES:
-                    person = person[0]
-                if belongingness_ratio >= linkage_pass.get("cluster_ratio", 0):
-                    logging.info(
-                        f"belongingness_ratio >= linkage_pass.get('cluster_ratio', 0): {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
-                    )
-                    if person in linkage_scores:
-                        linkage_scores[person] = max(
-                            [linkage_scores[person], belongingness_ratio]
+                with TRACER.start_as_current_span("_flatten_patient_resource"):
+                    flattened_record = _flatten_patient_resource(record, col_to_idx)
+                logging.info(
+                    f"Done with _flatten_patient_resource at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                )
+
+                logging.info(
+                    f"Starting _group_patient_block_by_person at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                )
+                clusters = _group_patient_block_by_person(data_block)
+                logging.info(
+                    f"Done with _group_patient_block_by_person at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                )
+                
+                # Check if incoming record should belong to one of the person clusters
+                kwargs = linkage_pass.get("kwargs", {})
+                logging.warning(f"Person Size: {len(clusters)}")
+                with TRACER.start_as_current_span("_compare_records"):
+                    for person in clusters:
+                        num_matched_in_cluster = 0.0
+                        linked_patients = clusters[person]
+                        logging.warning(f"Patient Size: {len(linked_patients)}")
+                        for linked_patient in linked_patients:
+                            logging.info(
+                                f"Starting _compare_records at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                            )
+                            is_match = _compare_records(
+                                flattened_record,
+                                linked_patient,
+                                linkage_pass["funcs"],
+                                col_to_idx,
+                                linkage_pass["matching_rule"],
+                                **kwargs,
+                            )
+                            logging.info(
+                                f"Done with _compare_records at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                            )
+
+                            if is_match:
+                                num_matched_in_cluster += 1.0
+
+                        # Update membership score for this person cluster so that we can
+                        # track best possible link across multiple passes
+                        logging.info(
+                            f"Starting to update membership score at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
                         )
-                    else:
-                        linkage_scores[person] = belongingness_ratio
-                logging.info(
-                    f"Done with updating membership score at: {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
-                )
-    person_id = None
-    matched = False
+                        belongingness_ratio = num_matched_in_cluster / len(clusters[person])
+                        if belongingness_ratio >= linkage_pass.get("cluster_ratio", 0):
+                            logging.info(
+                                f"belongingness_ratio >= linkage_pass.get('cluster_ratio', 0): {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                            )
+                            if person in linkage_scores:
+                                linkage_scores[person] = max(
+                                    [linkage_scores[person], belongingness_ratio]
+                                )
+                            else:
+                                linkage_scores[person] = belongingness_ratio
+                        logging.info(
+                            f"Done with updating membership score at: {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+                        )
+        person_id = None
+        matched = False
 
-    # If we found any matches, find the strongest one
-    if len(linkage_scores) != 0:
+        # If we found any matches, find the strongest one
+        if len(linkage_scores) != 0:
+            logging.info(
+                f"Starting _find_strongest_link at: {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+            )
+            with TRACER.start_as_current_span("_find_strongest_link"):
+                person_id = _find_strongest_link(linkage_scores)
+            matched = True
+            logging.info(
+                f"Done with _find_strongest_link at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+            )
         logging.info(
-            f"Starting _find_strongest_link at: {datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+            f"Starting mpi_client.insert_matched_patient at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
         )
-        person_id = _find_strongest_link(linkage_scores)
-        matched = True
+        with TRACER.start_as_current_span("mpi_client.insert_matched_patient"):
+            person_id = mpi_client.insert_matched_patient(
+                record, person_id=person_id, external_person_id=external_person_id
+            )
         logging.info(
-            f"Done with _find_strongest_link at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
+            f"Done with mpi_client.insert_matched_patient at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
         )
-    logging.info(
-        f"Starting mpi_client.insert_matched_patient at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
-    )
-    person_id = mpi_client.insert_matched_patient(
-        record, person_id=person_id, external_person_id=external_person_id
-    )
-    logging.info(
-        f"Done with mpi_client.insert_matched_patient at:{datetime.datetime.now().strftime('%m-%d-%yT%H:%M:%S.%f')}"  # noqa
-    )
 
-    return (matched, person_id)
+        return (matched, person_id)
 
 
 def load_json_probs(path: pathlib.Path):
@@ -1235,7 +1235,6 @@ def _compare_records(
     is_match = matching_rule(feature_comps, **kwargs)
     return is_match
 
-
 def _compare_records_field_helper(
     record: List,
     mpi_patient: List,
@@ -1256,7 +1255,6 @@ def _compare_records_field_helper(
         return feature_funcs[feature_col](
             record, mpi_patient, feature_col, col_to_idx, **kwargs
         )
-
 
 def _compare_address_elements(
     record: List,
@@ -1354,7 +1352,6 @@ def _find_strongest_link(linkage_scores: dict) -> str:
     best_person = max(linkage_scores, key=linkage_scores.get)
     return best_person
 
-
 def _flatten_patient_resource(resource: dict, col_to_idx: dict) -> List:
     """
     Helper method that flattens an incoming patient resource into a list whose
@@ -1409,19 +1406,6 @@ def _group_patient_block_by_person(data_block: List[list]) -> dict[str, List]:
             clusters[mpi_patient[1]] = []
         clusters[mpi_patient[1]].append(mpi_patient)
     return clusters
-
-
-def _consolidate_person_clusters(clusters: dict[str, List]) -> dict[(str, str), List]:
-    """
-    Helper method that consolidates the clusters into groups of patients based on
-    similar attributes for the patients.
-    """
-    consolidated_clusters = collections.defaultdict(list)
-    for person_id, patients in clusters.items():
-        for patient in patients:
-            hash_key = '\t'.join(str(x).lower().strip() for x in patient[2:])
-            consolidated_clusters[(person_id, hash_key)].append(patient)
-    return consolidated_clusters
 
 
 def _map_matches_to_record_ids(
@@ -1593,6 +1577,21 @@ def aggregate_given_names_for_linkage(data: list[list]):
     :param data: List of lists block data.
     :return: List of lists with aggregated given names.
     """
+    if OPTIMIZATIONS:
+        result = []
+        given_name_idx = -1
+        for idx, row in enumerate(data):
+            if idx == 0:
+                given_name_idx = row.index("given_name")
+                result.append(
+                    row[:given_name_idx] + ["first_name"] + row[given_name_idx + 1:]
+                )
+            else:
+                first_name = " ".join(row[given_name_idx])
+                result.append(
+                    row[:given_name_idx] + [first_name] + row[given_name_idx + 1:]
+                )
+        return result
     # Convert LoL to pandas dataframe
     raw_data = pd.DataFrame(data[1:], columns=data[0])
 
