@@ -20,10 +20,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install poetry
-          pip install pyinstaller
-          poetry install
-          poetry run build
+          pip install -r requirements.txt pyinstaller
+      - name: build executable
+        run: pyinstaller ./OCR/ocr/main.py --add-data=./OCR/ocr/assets/form_filled.png:assets/ --add-data=./OCR/ocr/assets/form_segmention_template.png:assets --add-data=./OCR/ocr/assets/labels.json:assets/
       - uses: actions/upload-artifact@v3
         with:
           name: main
