@@ -23,4 +23,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: main
-          path: dist/main/main
+          path: dist/main
