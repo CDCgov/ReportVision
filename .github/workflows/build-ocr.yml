@@ -20,7 +20,7 @@ jobs:
           pip install -r requirements.txt pyinstaller
       - name: build executable
         run: pyinstaller ./OCR/ocr/main.py -F -w --add-data=./OCR/ocr/assets/form_filled.png:assets/ --add-data=./OCR/ocr/assets/form_segmention_template.png:assets --add-data=./OCR/ocr/assets/labels.json:assets/
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: main
           path: dist/main
