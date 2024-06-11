@@ -1,4 +1,6 @@
 import os
+import sys
+
 from ocr.services.image_segmenter import ImageSegmenter
 from ocr.services.image_ocr import ImageOCR
 
@@ -6,9 +8,13 @@ path = os.path.dirname(__file__)
 
 
 def main():
-    segmentation_template = os.path.join(path, "../tests/assets/form_segmentation_template_hep_page_1.png")
-    raw_image = os.path.join(path, "../tests/assets/form_filled_hep.jpg")
-    labels_path = os.path.join(path, "../tests/assets/labels_hep_page1.json")
+    segmentation_template = os.path.join(path, "assets/form_segmention_template.png")
+    if len(sys.argv) > 1:
+        raw_image = sys.argv[1]
+    else:
+        raw_image = os.path.join(path, "assets/form_filled.png")
+
+    labels_path = os.path.join(path, "assets/labels.json")
 
     segmenter = ImageSegmenter(raw_image, segmentation_template, labels_path)
     segments = segmenter.segment()
