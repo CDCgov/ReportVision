@@ -1,22 +1,22 @@
  [
     {
-      "key": "Phone:",
+      "key": "Phone",
       "value": "(512) 776-7676"
     },
     {
-      "key": "Fax:",
+      "key": "Fax",
       "value": "(512) 776-7616"
     },
     {
-      "key": "Patient's Name:",
+      "key": "Patient's Name",
       "value": "Bueller\nJeanie"
     },
     {
-      "key": "Address:",
+      "key": "Address",
       "value": "12 longhorn way"
     },
     {
-      "key": "City:",
+      "key": "City",
       "value": "Austin"
     },
     {
@@ -28,8 +28,8 @@
       "value": "Katie Bueller"
     },
     {
-      "key": "Phone:",
-      "value": "(\n512) 436-2156"
+      "key": "Phone",
+      "value": "(512) 436-2156"
     },
     {
       "key": "Parent/Guardian:",
@@ -40,7 +40,7 @@
       "value": null
     },
     {
-      "key": "Phone:",
+      "key": " Physician Phone:",
       "value": "(\n512) 544-7111"
     },
     {
@@ -68,7 +68,7 @@
       "value": "73301"
     },
     {
-      "key": "Address:",
+      "key": "Physician Address",
       "value": "919 E 32nd St, Austin, TX 78705"
     },
     {
@@ -92,19 +92,19 @@
       "value": ":unselected:"
     },
     {
-      "key": "White",
+      "key": "Race - White",
       "value": ":selected:"
     },
     {
-      "key": "Black",
+      "key": " Race - Black",
       "value": ":unselected:"
     },
     {
-      "key": "Asian",
+      "key": " Race - Asian",
       "value": ":unselected:"
     },
     {
-      "key": "Native Hawaiian or Other Pac. Islander",
+      "key": "Race - Native Hawaiian or Other Pac. Islander",
       "value": ":unselected:"
     },
     {
@@ -112,7 +112,7 @@
       "value": "Dr. King Schultz"
     },
     {
-      "key": "Agency:",
+      "key": "Reporting Agency:",
       "value": "CDC"
     },
     {
@@ -128,7 +128,7 @@
       "value": "Dr. Sarah Conner"
     },
     {
-      "key": "Agency:",
+      "key": "Investigating Agency:",
       "value": "CDC"
     },
     {
