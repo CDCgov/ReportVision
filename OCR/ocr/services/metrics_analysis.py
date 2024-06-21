@@ -46,6 +46,18 @@ def extract_values_from_json(json_data):
     return extracted_values
 
 
+def precision(ocr_text, ground_truth):
+    tp = sum(1 for o, g in zip(ocr_text, ground_truth) if o == g)
+    fp = len(ocr_text) - tp
+    return tp / (tp + fp) if (tp + fp) > 0 else 0
+
+
+def recall(ocr_text, ground_truth):
+    tp = sum(1 for o, g in zip(ocr_text, ground_truth) if o == g)
+    fn = len(ground_truth) - tp
+    return tp / (tp + fn) if (tp + fn) > 0 else 0
+
+
 def calculate_metrics(ocr_json, ground_truth_json):
     ocr_values = extract_values_from_json(ocr_json)
     ground_truth_values = extract_values_from_json(ground_truth_json)
@@ -54,12 +66,11 @@ def calculate_metrics(ocr_json, ground_truth_json):
     for key in ground_truth_values:
         ocr_text = ocr_values.get(key, "")
         ground_truth = ground_truth_values[key]
-        # print(f"Comparing OCR text: '{ocr_text}' with Ground Truth: '{ground_truth}' for key: '{key}'")
-        # if not ocr_text:
-        # print(f"Warning: No OCR text found for key '{key}'")
         char_acc = character_accuracy(ocr_text, ground_truth)
         word_acc = word_accuracy(ocr_text, ground_truth)
         lev_dist = levenshtein_distance(ocr_text, ground_truth)
+        prec = precision(ocr_text, ground_truth)
+        rec = recall(ocr_text, ground_truth)
         metrics.append(
             {
                 "key": key,
@@ -68,6 +79,8 @@ def calculate_metrics(ocr_json, ground_truth_json):
                 "character_accuracy": char_acc,
                 "word_accuracy": word_acc,
                 "levenshtein_distance": lev_dist,
+                "precision": prec,
+                "recall": rec,
             }
         )
     return metrics
@@ -77,16 +90,22 @@ def total_metrics(metrics):
     char_acc_sum = sum(m["character_accuracy"] for m in metrics)
     word_acc_sum = sum(m["word_accuracy"] for m in metrics)
     lev_dist_sum = sum(m["levenshtein_distance"] for m in metrics)
+    prec_sum = sum(m["precision"] for m in metrics)
+    rec_sum = sum(m["recall"] for m in metrics)
     count = len(metrics)
 
     avg_char_acc = char_acc_sum / count if count else 0
     avg_word_acc = word_acc_sum / count if count else 0
     avg_lev_dist = lev_dist_sum / count if count else 0
+    avg_prec = prec_sum / count if count else 0
+    avg_rec = rec_sum / count if count else 0
 
     return {
         "average_character_accuracy": avg_char_acc,
         "average_word_accuracy": avg_word_acc,
         "average_levenshtein_distance": avg_lev_dist,
+        "average_precision": avg_prec,
+        "average_recall": avg_rec,
     }
 
 
@@ -102,7 +121,7 @@ def main():
     load_dotenv()
     current_script_dir = os.path.dirname(os.path.abspath(__file__))
     file_relative_path_ground_truth = "../../tests/assets/ground_truth.json"
-    file_relative_path_ocr = "../../tests/assets/extracted_elements.json"
+    file_relative_path_ocr = "../../tests/assets/ocr_elements.json"
     ground_truth_json_path = os.path.join(current_script_dir, file_relative_path_ground_truth)
     ocr_json_path = os.path.join(current_script_dir, file_relative_path_ocr)
 
