@@ -54,23 +54,29 @@ def calculate_metrics(ocr_json, ground_truth_json):
     for key in ground_truth_values:
         ocr_text = ocr_values.get(key, "")
         ground_truth = ground_truth_values[key]
-        #print(f"Comparing OCR text: '{ocr_text}' with Ground Truth: '{ground_truth}' for key: '{key}'")
+        # print(f"Comparing OCR text: '{ocr_text}' with Ground Truth: '{ground_truth}' for key: '{key}'")
         # if not ocr_text:
         # print(f"Warning: No OCR text found for key '{key}'")
         char_acc = character_accuracy(ocr_text, ground_truth)
         word_acc = word_accuracy(ocr_text, ground_truth)
         lev_dist = levenshtein_distance(ocr_text, ground_truth)
         metrics.append(
-            {"key": key, "ocr_text": ocr_text, "ground_truth": ground_truth, "character_accuracy": char_acc,
-             "word_accuracy": word_acc, "levenshtein_distance": lev_dist}
+            {
+                "key": key,
+                "ocr_text": ocr_text,
+                "ground_truth": ground_truth,
+                "character_accuracy": char_acc,
+                "word_accuracy": word_acc,
+                "levenshtein_distance": lev_dist,
+            }
         )
     return metrics
 
 
 def total_metrics(metrics):
-    char_acc_sum = sum(m['character_accuracy'] for m in metrics)
-    word_acc_sum = sum(m['word_accuracy'] for m in metrics)
-    lev_dist_sum = sum(m['levenshtein_distance'] for m in metrics)
+    char_acc_sum = sum(m["character_accuracy"] for m in metrics)
+    word_acc_sum = sum(m["word_accuracy"] for m in metrics)
+    lev_dist_sum = sum(m["levenshtein_distance"] for m in metrics)
     count = len(metrics)
 
     avg_char_acc = char_acc_sum / count if count else 0
@@ -80,15 +86,17 @@ def total_metrics(metrics):
     return {
         "average_character_accuracy": avg_char_acc,
         "average_word_accuracy": avg_word_acc,
-        "average_levenshtein_distance": avg_lev_dist
+        "average_levenshtein_distance": avg_lev_dist,
     }
 
+
 def save_metrics_to_csv(metrics, file_path):
-        keys = metrics[0].keys()
-        with open(file_path, 'w', newline='') as output_file:
-            dict_writer = csv.DictWriter(output_file, fieldnames=keys)
-            dict_writer.writeheader()
-            dict_writer.writerows(metrics)
+    keys = metrics[0].keys()
+    with open(file_path, "w", newline="") as output_file:
+        dict_writer = csv.DictWriter(output_file, fieldnames=keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(metrics)
+
 
 def main():
     load_dotenv()
