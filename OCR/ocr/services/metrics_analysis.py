@@ -34,18 +34,6 @@ def levenshtein_distance(ocr_text, ground_truth):
     return SequenceMatcher(None, ocr_text, ground_truth).ratio()
 
 
-def extract_values_from_json(json_data):
-    extracted_values = {}
-    for item in json_data:
-        if isinstance(item, dict) and "key" in item and "value" in item:
-            key = normalize(item["key"])
-            value = normalize(item["value"])
-            extracted_values[key] = value
-        else:
-            raise ValueError("Invalid JSON format")
-    return extracted_values
-
-
 def precision(ocr_text, ground_truth):
     tp = sum(1 for o, g in zip(ocr_text, ground_truth) if o == g)
     fp = len(ocr_text) - tp
@@ -56,6 +44,18 @@ def recall(ocr_text, ground_truth):
     tp = sum(1 for o, g in zip(ocr_text, ground_truth) if o == g)
     fn = len(ground_truth) - tp
     return tp / (tp + fn) if (tp + fn) > 0 else 0
+
+
+def extract_values_from_json(json_data):
+    extracted_values = {}
+    for item in json_data:
+        if isinstance(item, dict) and "key" in item and "value" in item:
+            key = normalize(item["key"])
+            value = normalize(item["value"])
+            extracted_values[key] = value
+        else:
+            raise ValueError("Invalid JSON format")
+    return extracted_values
 
 
 def calculate_metrics(ocr_json, ground_truth_json):
