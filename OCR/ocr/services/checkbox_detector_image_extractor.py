@@ -14,7 +14,6 @@
 # https://github.com/jaswanth04/Checkbox_Detection
 
 
-
 import cv2
 from abc import ABC, abstractmethod
 import json

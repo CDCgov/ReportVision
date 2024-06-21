@@ -14,9 +14,7 @@
 # https://github.com/jaswanth04/Checkbox_Detection
 
 
-
 from PIL import Image
-
 
 
 # Load the image containing the 9 checkboxes
