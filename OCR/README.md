@@ -12,10 +12,17 @@ poetry shell
 poetry install
 ```
 
-Run tests
+Run unit tests
 ```shell
 poetry run pytest
 ```
+
+Run benchmark tests
+```shell
+poetry run pytest bench_test.py -v
+```
+
+poetry run pytest bench_test.py -v  
 
 Run main, hoping to convert this to a cli at some point
 ```shell

@@ -12,11 +12,13 @@ opencv-python = "^4.9.0.80"
 python-dotenv = "^1.0.1"
 transformers = {extras = ["torch"], version = "^4.39.3"}
 pillow = "^10.3.0"
+torchvision = "^0.18.0"
 lxml = "^5.2.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.7"
 pytest = "^8.1.1"
+pytest-benchmark = "^4.0.0"
 
 [build-system]
 requires = ["poetry-core"]
