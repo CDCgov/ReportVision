@@ -1,6 +1,6 @@
 import unittest
 import json
-from ocr.services.phdc_converter.ocr_phdc_converter import OCRPHDCConverter
+from ocr.services.phdc_converter.phdc_converter import PHDCConverter
 import os
 
 
@@ -9,15 +9,15 @@ path = os.path.dirname(__file__)
 
 class TestPHDCGenerator(unittest.TestCase):
     def setUp(self):
-        ocr_path = os.path.join(path, "./assets/ocr_values.json")
+        json_path = os.path.join(path, "./assets/ocr_values.json")
 
-        with open(ocr_path, "r") as f:
-            self.ocr_data = json.load(f)
+        with open(json_path, "r") as f:
+            self.json_data = json.load(f)
 
-        self.generator = OCRPHDCConverter()
+        self.generator = PHDCConverter()
 
     def test_generate_phdc_document(self):
-        phdc_xml = self.generator.generate_phdc_document(self.ocr_data)
+        phdc_xml = self.generator.generate_phdc_document(self.json_data)
 
         self.assertTrue(phdc_xml)
 
