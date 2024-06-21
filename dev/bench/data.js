@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718308876891,
+  "lastUpdate": 1718989082509,
   "repoUrl": "https://github.com/CDCgov/IDWA",
   "entries": {
     "Benchmark": [
@@ -403,6 +403,65 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00001876479506054569",
             "extra": "mean: 102.2746099337253 usec\nrounds: 4530"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "49699333+dependabot[bot]@users.noreply.github.com",
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c99e6cf6c9002c68381615a5e0d3f5a17e43a6cc",
+          "message": "Bump urllib3 from 2.2.1 to 2.2.2 in /OCR (#123)\n\nBumps [urllib3](https://github.com/urllib3/urllib3) from 2.2.1 to 2.2.2.\n- [Release notes](https://github.com/urllib3/urllib3/releases)\n- [Changelog](https://github.com/urllib3/urllib3/blob/main/CHANGES.rst)\n- [Commits](https://github.com/urllib3/urllib3/compare/2.2.1...2.2.2)\n\n---\nupdated-dependencies:\n- dependency-name: urllib3\n  dependency-type: indirect\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>",
+          "timestamp": "2024-06-21T16:54:25Z",
+          "tree_id": "915a9a032527f7625d77937bc9b714e0ded91651",
+          "url": "https://github.com/CDCgov/IDWA/commit/c99e6cf6c9002c68381615a5e0d3f5a17e43a6cc"
+        },
+        "date": 1718989082094,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/bench_test.py::TestOCRBenchmark::test_ocr_printed_benchmark",
+            "value": 0.2517975798379426,
+            "unit": "iter/sec",
+            "range": "stddev: 0.006622793255824939",
+            "extra": "mean: 3.9714440490000014 sec\nrounds: 5"
+          },
+          {
+            "name": "tests/bench_test.py::TestOCRBenchmark::test_ocr_handwritten_benchmark",
+            "value": 0.27797259215103315,
+            "unit": "iter/sec",
+            "range": "stddev: 0.04095683758502647",
+            "extra": "mean: 3.597476975199993 sec\nrounds: 5"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_segment_benchmark",
+            "value": 14.664693169169826,
+            "unit": "iter/sec",
+            "range": "stddev: 0.009769679877462934",
+            "extra": "mean: 68.19099373332543 msec\nrounds: 15"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_segment_shapes_benchmark",
+            "value": 15891292.674853755,
+            "unit": "iter/sec",
+            "range": "stddev: 1.0878049623071224e-8",
+            "extra": "mean: 62.9275428035278 nsec\nrounds: 159975"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_no_matching_pixels_benchmark",
+            "value": 10166.843617200208,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00002035317962542199",
+            "extra": "mean: 98.35894380318841 usec\nrounds: 4680"
           }
         ]
       }
