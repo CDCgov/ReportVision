@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1718989082509,
+  "lastUpdate": 1719244292976,
   "repoUrl": "https://github.com/CDCgov/IDWA",
   "entries": {
     "Benchmark": [
@@ -462,6 +462,65 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00002035317962542199",
             "extra": "mean: 98.35894380318841 usec\nrounds: 4680"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "158501719+arinkulshi-skylight@users.noreply.github.com",
+            "name": "Arin Kulshi",
+            "username": "arinkulshi-skylight"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "f09b511b5d75c8da88702b89f703cdbdc3c8c65b",
+          "message": "[IDWA-OCR-96]Create segmentation template and labels file using PDF metadata (#99)\n\n* initial\n\n* form_asset\n\n* edited script\n\n* initial\n\n* removed redundant files\n\n* edit to file path config\n\n* linting\n\n* file name change\n\n* added new packages removed previous image extract logic\n\n* edited package from pypdf2 to pypdf\n\n* added pdf file for context\n\n* edited imports on test\n\n* edited comments\n\n* linting\n\n* added new functions\n\n* edits to formatting\n\n* added new approach to segment fields\n\n* added tests\n\n* edited tests\n\n* linting\n\n* edited string formatting\n\n* linting\n\n* Update pdf_field_extractor_main.py\n\nedited import dir logic\n\n* added new end to end test\n\n* added new end to end test to verify colors\n\n* edited end to end test\n\n* edited end to end test to only include color check\n\n* move color matches to a list and tested against a list\n\n* linting\n\n* poetry file update\n\n---------\n\nCo-authored-by: Arindam Kulshi <akulshi04@gmail.com>",
+          "timestamp": "2024-06-24T15:47:36Z",
+          "tree_id": "a772273027ec7010472f19b352c92ba2d2d7644a",
+          "url": "https://github.com/CDCgov/IDWA/commit/f09b511b5d75c8da88702b89f703cdbdc3c8c65b"
+        },
+        "date": 1719244292625,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/bench_test.py::TestOCRBenchmark::test_ocr_printed_benchmark",
+            "value": 0.2539707485898856,
+            "unit": "iter/sec",
+            "range": "stddev: 0.024880970643491384",
+            "extra": "mean: 3.9374613239999916 sec\nrounds: 5"
+          },
+          {
+            "name": "tests/bench_test.py::TestOCRBenchmark::test_ocr_handwritten_benchmark",
+            "value": 0.28226143919064567,
+            "unit": "iter/sec",
+            "range": "stddev: 0.036075495063570655",
+            "extra": "mean: 3.542814785000007 sec\nrounds: 5"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_segment_benchmark",
+            "value": 15.246749284692987,
+            "unit": "iter/sec",
+            "range": "stddev: 0.010395492701120753",
+            "extra": "mean: 65.58775128570866 msec\nrounds: 14"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_segment_shapes_benchmark",
+            "value": 15621857.455102451,
+            "unit": "iter/sec",
+            "range": "stddev: 5.435920582196729e-9",
+            "extra": "mean: 64.01287445320949 nsec\nrounds: 155473"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_no_matching_pixels_benchmark",
+            "value": 9967.707744565269,
+            "unit": "iter/sec",
+            "range": "stddev: 0.000018287295628707976",
+            "extra": "mean: 100.32396872242104 usec\nrounds: 4572"
           }
         ]
       }
