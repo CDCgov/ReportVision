@@ -18,7 +18,7 @@ from PIL import Image
 
 
 # Load the image containing the 9 checkboxes
-img_path = "/Users/arindamkulshi/IDWA/IDWA/OCR/ocr/services/1.png"
+img_path = ""
 img = Image.open(img_path)
 
 # Define the dimensions for splitting
