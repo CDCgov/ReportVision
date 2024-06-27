@@ -120,8 +120,8 @@ def save_metrics_to_csv(metrics, file_path):
 def main():
     load_dotenv()
     current_script_dir = os.path.dirname(os.path.abspath(__file__))
-    file_relative_path_ground_truth = "../../tests/assets/ground_truth.json"
-    file_relative_path_ocr = "../../tests/assets/aws_non_fillable_2.json"
+    file_relative_path_ground_truth = "../../tests/assets/ltbi_legacy.json"
+    file_relative_path_ocr = "../../tests/assets/ltbi_legacy_ocr.json"
     ground_truth_json_path = os.path.join(current_script_dir, file_relative_path_ground_truth)
     ocr_json_path = os.path.join(current_script_dir, file_relative_path_ocr)
 
