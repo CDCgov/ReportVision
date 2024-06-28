@@ -4,6 +4,7 @@ import os
 
 from dotenv import load_dotenv
 import csv
+import Levenshtein
 
 
 def load_json_file(file_path):
@@ -18,32 +19,18 @@ def normalize(text):
     return " ".join(text.strip().lower().replace(":", "").replace("#", "").replace(" ", "").split())
 
 
-def character_accuracy(ocr_text, ground_truth):
-    correct_chars = sum(1 for o, g in zip(ocr_text, ground_truth) if o == g)
-    return correct_chars / len(ground_truth) * 100 if len(ground_truth) > 0 else 0
+def raw_distance(ocr_text, ground_truth):
+    return len(ground_truth) - len(ocr_text)
 
 
-def word_accuracy(ocr_text, ground_truth):
-    ocr_words = ocr_text.split()
-    ground_truth_words = ground_truth.split()
-    correct_words = sum(1 for o, g in zip(ocr_words, ground_truth_words) if o == g)
-    return correct_words / len(ground_truth_words) * 100 if len(ground_truth_words) > 0 else 0
+def hamming_distance(ocr_text, ground_truth):
+    if len(ocr_text) != len(ground_truth):
+        raise ValueError("Strings must be of the same length to calculate Hamming distance.")
+    return Levenshtein.hamming(ocr_text, ground_truth)
 
 
 def levenshtein_distance(ocr_text, ground_truth):
     return SequenceMatcher(None, ocr_text, ground_truth).ratio()
-
-
-def precision(ocr_text, ground_truth):
-    tp = sum(1 for o, g in zip(ocr_text, ground_truth) if o == g)
-    fp = len(ocr_text) - tp
-    return tp / (tp + fp) if (tp + fp) > 0 else 0
-
-
-def recall(ocr_text, ground_truth):
-    tp = sum(1 for o, g in zip(ocr_text, ground_truth) if o == g)
-    fn = len(ground_truth) - tp
-    return tp / (tp + fn) if (tp + fn) > 0 else 0
 
 
 def extract_values_from_json(json_data):
@@ -66,46 +53,42 @@ def calculate_metrics(ocr_json, ground_truth_json):
     for key in ground_truth_values:
         ocr_text = ocr_values.get(key, "")
         ground_truth = ground_truth_values[key]
-        char_acc = character_accuracy(ocr_text, ground_truth)
-        word_acc = word_accuracy(ocr_text, ground_truth)
+        raw_dist = raw_distance(ocr_text, ground_truth)
+        try:
+            ham_dist = hamming_distance(ocr_text, ground_truth)
+        except ValueError as e:
+            ham_dist = str(e)
         lev_dist = levenshtein_distance(ocr_text, ground_truth)
-        prec = precision(ocr_text, ground_truth)
-        rec = recall(ocr_text, ground_truth)
         metrics.append(
             {
                 "key": key,
                 "ocr_text": ocr_text,
                 "ground_truth": ground_truth,
-                "character_accuracy": char_acc,
-                "word_accuracy": word_acc,
+                "raw_distance": raw_dist,
+                "hamming_distance": ham_dist,
                 "levenshtein_distance": lev_dist,
-                "precision": prec,
-                "recall": rec,
             }
         )
     return metrics
 
 
 def total_metrics(metrics):
-    char_acc_sum = sum(m["character_accuracy"] for m in metrics)
-    word_acc_sum = sum(m["word_accuracy"] for m in metrics)
+    raw_dist_sum = sum(m["raw_distance"] for m in metrics if isinstance(m["raw_distance"], int))
+    ham_dist_sum = sum(m["hamming_distance"] for m in metrics if isinstance(m["hamming_distance"], int))
     lev_dist_sum = sum(m["levenshtein_distance"] for m in metrics)
-    prec_sum = sum(m["precision"] for m in metrics)
-    rec_sum = sum(m["recall"] for m in metrics)
-    count = len(metrics)
 
-    avg_char_acc = char_acc_sum / count if count else 0
-    avg_word_acc = word_acc_sum / count if count else 0
-    avg_lev_dist = lev_dist_sum / count if count else 0
-    avg_prec = prec_sum / count if count else 0
-    avg_rec = rec_sum / count if count else 0
+    count_raw = sum(1 for m in metrics if isinstance(m["raw_distance"], int))
+    count_ham = sum(1 for m in metrics if isinstance(m["hamming_distance"], int))
+    count_lev = len(metrics)
+
+    avg_raw_dist = raw_dist_sum / count_raw if count_raw else 0
+    avg_ham_dist = ham_dist_sum / count_ham if count_ham else 0
+    avg_lev_dist = lev_dist_sum / count_lev if count_lev else 0
 
     return {
-        "average_character_accuracy": avg_char_acc,
-        "average_word_accuracy": avg_word_acc,
+        "average_raw_distance": avg_raw_dist,
+        "average_hamming_distance": avg_ham_dist,
         "average_levenshtein_distance": avg_lev_dist,
-        "average_precision": avg_prec,
-        "average_recall": avg_rec,
     }
 
 

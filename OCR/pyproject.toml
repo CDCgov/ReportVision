@@ -13,6 +13,8 @@ python-dotenv = "^1.0.1"
 transformers = {extras = ["torch"], version = "^4.39.3"}
 pillow = "^10.3.0"
 
+levenshtein = "^0.25.1"
+cdifflib = "^1.2.6"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.7"
 pytest = "^8.1.1"
