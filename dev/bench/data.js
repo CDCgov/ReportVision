@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1719244292976,
+  "lastUpdate": 1719600322025,
   "repoUrl": "https://github.com/CDCgov/IDWA",
   "entries": {
     "Benchmark": [
@@ -521,6 +521,65 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.000018287295628707976",
             "extra": "mean: 100.32396872242104 usec\nrounds: 4572"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "158501719+arinkulshi-skylight@users.noreply.github.com",
+            "name": "Arin Kulshi",
+            "username": "arinkulshi-skylight"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "60288d744b352d679536d4d32d0e7f801cd25c8c",
+          "message": "[IDWA-OCR-95] ocr to phdc conversion logic for patient (#107)\n\n* added ocr to phdc conversion logic for patient\n\n* edited function calls\n\n* edited lock file\n\n* remove ocr as name\n\n* Regenerated poetry.lock after resolving merge conflicts\n\n---------\n\nCo-authored-by: Arindam Kulshi <akulshi04@gmail.com>",
+          "timestamp": "2024-06-28T18:41:57Z",
+          "tree_id": "cb5cb1032a2bb78a67141d3fa233e4fc3bca5774",
+          "url": "https://github.com/CDCgov/IDWA/commit/60288d744b352d679536d4d32d0e7f801cd25c8c"
+        },
+        "date": 1719600321121,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/bench_test.py::TestOCRBenchmark::test_ocr_printed_benchmark",
+            "value": 0.2539708686652669,
+            "unit": "iter/sec",
+            "range": "stddev: 0.0162205660243738",
+            "extra": "mean: 3.937459462399988 sec\nrounds: 5"
+          },
+          {
+            "name": "tests/bench_test.py::TestOCRBenchmark::test_ocr_handwritten_benchmark",
+            "value": 0.2855235017004225,
+            "unit": "iter/sec",
+            "range": "stddev: 0.02730124921324038",
+            "extra": "mean: 3.5023386657999938 sec\nrounds: 5"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_segment_benchmark",
+            "value": 16.029212714414225,
+            "unit": "iter/sec",
+            "range": "stddev: 0.006452000110089815",
+            "extra": "mean: 62.38609579999851 msec\nrounds: 15"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_segment_shapes_benchmark",
+            "value": 15041991.189358937,
+            "unit": "iter/sec",
+            "range": "stddev: 4.892157421535553e-9",
+            "extra": "mean: 66.48056014736007 nsec\nrounds: 154727"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_no_matching_pixels_benchmark",
+            "value": 9989.278150227377,
+            "unit": "iter/sec",
+            "range": "stddev: 0.00001863655711385777",
+            "extra": "mean: 100.10733357917736 usec\nrounds: 4065"
           }
         ]
       }
