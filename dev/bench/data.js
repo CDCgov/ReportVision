@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1719600322025,
+  "lastUpdate": 1719868096361,
   "repoUrl": "https://github.com/CDCgov/IDWA",
   "entries": {
     "Benchmark": [
@@ -580,6 +580,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00001863655711385777",
             "extra": "mean: 100.10733357917736 usec\nrounds: 4065"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zedd@skylight.digital",
+            "name": "Zedd Shmais",
+            "username": "zdeveloper"
+          },
+          "committer": {
+            "email": "zedd@skylight.digital",
+            "name": "Zedd Shmais",
+            "username": "zdeveloper"
+          },
+          "distinct": true,
+          "id": "d100b0607cc0a0f4cdb4bea2894db7e25e9870c8",
+          "message": "remove output.json",
+          "timestamp": "2024-07-01T16:04:53-05:00",
+          "tree_id": "b780f5702a55a116c2a478c96bfc25ea748b63e6",
+          "url": "https://github.com/CDCgov/IDWA/commit/d100b0607cc0a0f4cdb4bea2894db7e25e9870c8"
+        },
+        "date": 1719868096064,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[single word sentences-segments0]",
+            "value": 0.13718051585027324,
+            "unit": "iter/sec",
+            "range": "stddev: 0.06654354795050832",
+            "extra": "mean: 7.289664962999979 sec\nrounds: 2"
           }
         ]
       }
