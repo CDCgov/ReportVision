@@ -10,25 +10,32 @@ class OCRMetrics:
 
     """
 
-    def __init__(self, ocr_json_path, ground_truth_json_path):
+    def __init__(
+        self, ocr_json_path=None, ground_truth_json_path=None, ocr_json=None, ground_truth_json=None, testMode=False
+    ):
         """
         Parameters:
         ocr_json (dict): The JSON data extracted from OCR.
         ground_truth_json (dict): The JSON data containing ground truth.
         """
-        self.ocr_json = self.load_json_file(ocr_json_path)
-        self.ground_truth_json = self.load_json_file(ground_truth_json_path)
+        if testMode:
+            self.ocr_json = ocr_json
+            self.ground_truth_json = ground_truth_json
+        else:
+            self.ocr_json = self.load_json_file(ocr_json_path)
+            self.ground_truth_json = self.load_json_file(ground_truth_json_path)
 
     def load_json_file(self, file_path):
-        with open(file_path, "r") as file:
-            data = json.load(file)
-        return data
+        if file_path:
+            with open(file_path, "r") as file:
+                data = json.load(file)
+            return data
 
     @staticmethod
     def normalize(text):
         if text is None:
             return ""
-        return " ".join(text.strip().lower().replace(":", "").replace("#", "").replace(" ", "").split())
+        return " ".join(text.strip().lower().split())
 
     @staticmethod
     def raw_distance(ocr_text, ground_truth):
@@ -81,32 +88,35 @@ class OCRMetrics:
             )
         return metrics
 
-    def total_metrics(self, metrics):
-        raw_dist_sum = sum(m["raw_distance"] for m in metrics if isinstance(m["raw_distance"], int))
-        ham_dist_sum = sum(m["hamming_distance"] for m in metrics if isinstance(m["hamming_distance"], int))
-        lev_dist_sum = sum(m["levenshtein_distance"] for m in metrics)
+    @staticmethod
+    def total_metrics(metrics):
+        total_raw_distance = sum(item["raw_distance"] for item in metrics if isinstance(item["raw_distance"], int))
+        total_levenshtein_distance = sum(
+            item["levenshtein_distance"] for item in metrics if isinstance(item["levenshtein_distance"], int)
+        )
 
-        count_raw = sum(1 for m in metrics if isinstance(m["raw_distance"], int))
-        count_ham = sum(1 for m in metrics if isinstance(m["hamming_distance"], int))
-        count_lev = len(metrics)
+        try:
+            total_hamming_distance = sum(
+                item["hamming_distance"] for item in metrics if isinstance(item["hamming_distance"], int)
+            )
+        except ValueError:
+            total_hamming_distance = "N/A due to length mismatch"
 
-        avg_raw_dist = raw_dist_sum / count_raw if count_raw else 0
-        avg_ham_dist = ham_dist_sum / count_ham if count_ham else 0
-        avg_lev_dist = lev_dist_sum / count_lev if count_lev else 0
+        ground_truth_length = sum(len(item["ground_truth"]) for item in metrics)
+        normalized_levenshtein_distance = (
+            total_levenshtein_distance / ground_truth_length if ground_truth_length else 0
+        )
+        accuracy = (1 - normalized_levenshtein_distance) * 100
 
         return {
-            "average_raw_distance": avg_raw_dist,
-            "average_hamming_distance": avg_ham_dist,
-            "average_levenshtein_distance": avg_lev_dist,
+            "total_raw_distance": total_raw_distance,
+            "total_hamming_distance": total_hamming_distance,
+            "total_levenshtein_distance": total_levenshtein_distance,
+            "levenshtein_accuracy": f"{accuracy:.2f}%",
         }
 
     @staticmethod
     def save_metrics_to_csv(metrics, file_path):
-        """
-        Parameters:
-        metrics (list): A list of dictionaries containing individual metrics.
-        file_path (str): The path to the CSV file
-        """
         keys = metrics[0].keys()
         with open(file_path, "w", newline="") as output_file:
             dict_writer = csv.DictWriter(output_file, fieldnames=keys)
