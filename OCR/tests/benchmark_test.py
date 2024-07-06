@@ -78,10 +78,12 @@ def generate_random_segments(string_choices=string.ascii_uppercase, show_images=
     return segments
 
 
-def generate_exact_segments(show_images=True) -> dict[str, np.ndarray]:
+def generate_exact_segments(
+    space=string.ascii_uppercase + string.ascii_lowercase + string.digits, show_images=True
+) -> dict[str, np.ndarray]:
     segments: dict[str, np.ndarray] = {}
-    for letter in list(string.ascii_uppercase + string.ascii_lowercase + string.digits):
-        text, image = generate_image_from_exact_text(letter + letter)
+    for letter in list(space):
+        text, image = generate_image_from_exact_text(letter)
         segments[text] = image
         # show for debugging purposes
         if show_images:
@@ -92,32 +94,25 @@ def generate_exact_segments(show_images=True) -> dict[str, np.ndarray]:
 
 class TestBenchmark:
     ocr = ImageOCR()
-    sentence_size = 2
+    sample_size = 10
 
     test_cases = [
-        ("single word sentences", generate_sentence_segments(sentence_size, sentence_length=1, show_images=False)),
-        # ("two word sentences", generate_sentence_segments(sentence_size, sentence_length=2, show_images=False)),
-        # ("three word sentences", generate_sentence_segments(sentence_size, sentence_length=3, show_images=False)),
-        # ("four word sentences", generate_sentence_segments(sentence_size, sentence_length=4, show_images=False)),
-        # ("five word sentences", generate_sentence_segments(sentence_size, sentence_length=5, show_images=False)),
-        # ("six word sentences", generate_sentence_segments(sentence_size, sentence_length=6, show_images=False)),
-        # ("seven word sentences", generate_sentence_segments(sentence_size, sentence_length=7, show_images=False)),
-        # ("eight word sentences", generate_sentence_segments(sentence_size, sentence_length=8, show_images=False)),
-        # ("nine word sentences", generate_sentence_segments(sentence_size, sentence_length=9, show_images=False)),
-        # ("ten word sentences", generate_sentence_segments(sentence_size, sentence_length=10, show_images=False)),
-        # ("printed upper case", generate_random_segments(string.ascii_uppercase, show_images=False)),
-        # ("printed lower case", generate_random_segments(string.ascii_lowercase, show_images=False)),
-        # ("printed numbers", generate_random_segments(string.digits, show_images=False)),
-        # ("printed letter space", generate_exact_segments(show_images=False)),
-        # (
-        #     "printed letters and numbers",
-        #     generate_random_segments(
-        #         string.digits + string.ascii_uppercase + string.ascii_lowercase, show_images=False
-        #     ),
-        # ),
+        ("single word sentences", generate_sentence_segments(sample_size, sentence_length=1, show_images=False)),
+        ("two word sentences", generate_sentence_segments(sample_size, sentence_length=2, show_images=False)),
+        ("three word sentences", generate_sentence_segments(sample_size, sentence_length=3, show_images=False)),
+        ("four word sentences", generate_sentence_segments(sample_size, sentence_length=4, show_images=False)),
+        ("five word sentences", generate_sentence_segments(sample_size, sentence_length=5, show_images=False)),
+        ("six word sentences", generate_sentence_segments(sample_size, sentence_length=6, show_images=False)),
+        ("seven word sentences", generate_sentence_segments(sample_size, sentence_length=7, show_images=False)),
+        ("eight word sentences", generate_sentence_segments(sample_size, sentence_length=8, show_images=False)),
+        ("nine word sentences", generate_sentence_segments(sample_size, sentence_length=9, show_images=False)),
+        ("ten word sentences", generate_sentence_segments(sample_size, sentence_length=10, show_images=False)),
+        ("printed uppercase letter space", generate_exact_segments(space=string.ascii_uppercase, show_images=False)),
+        ("printed lowercase letter space", generate_exact_segments(space=string.ascii_lowercase, show_images=False)),
+        ("printed number space", generate_exact_segments(space=string.digits, show_images=False)),
     ]
 
-    @pytest.mark.benchmark(group="OCR Model Performance", min_rounds=2)
+    @pytest.mark.benchmark(group="OCR Model Performance", min_rounds=1)
     @pytest.mark.parametrize("name,segments", test_cases)
     def test_ocr_english_sentences(self, name, segments, benchmark):
         print("============== hello")
