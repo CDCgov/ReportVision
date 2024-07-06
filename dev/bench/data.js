@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1719868096361,
+  "lastUpdate": 1720293111768,
   "repoUrl": "https://github.com/CDCgov/IDWA",
   "entries": {
     "Benchmark": [
@@ -611,6 +611,121 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.06654354795050832",
             "extra": "mean: 7.289664962999979 sec\nrounds: 2"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zedd@skylight.digital",
+            "name": "Zedd Shmais",
+            "username": "zdeveloper"
+          },
+          "committer": {
+            "email": "zedd@skylight.digital",
+            "name": "Zedd Shmais",
+            "username": "zdeveloper"
+          },
+          "distinct": true,
+          "id": "98450e3df9c71ffa80597f962a8bbf3be0b1ea5f",
+          "message": "minor updates",
+          "timestamp": "2024-07-06T13:30:41-05:00",
+          "tree_id": "8f32146b7bc00359663aa62f54241dce6bc6a4bd",
+          "url": "https://github.com/CDCgov/IDWA/commit/98450e3df9c71ffa80597f962a8bbf3be0b1ea5f"
+        },
+        "date": 1720293111411,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[single word sentences-segments0]",
+            "value": 0.02995087312468456,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 33.388008283999966 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[two word sentences-segments1]",
+            "value": 0.02785783453155606,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 35.89654460999998 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[three word sentences-segments2]",
+            "value": 0.020900944237242525,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 47.844728384000064 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[four word sentences-segments3]",
+            "value": 0.01933986050315622,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 51.70668112299995 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[five word sentences-segments4]",
+            "value": 0.016590195463560727,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 60.27656528800003 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[six word sentences-segments5]",
+            "value": 0.014711757751287628,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 67.97284300799993 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[seven word sentences-segments6]",
+            "value": 0.014295114098846316,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 69.95397120200005 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[eight word sentences-segments7]",
+            "value": 0.013042792989010057,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 76.6706947539999 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[nine word sentences-segments8]",
+            "value": 0.01368024396405884,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 73.09811160000004 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[ten word sentences-segments9]",
+            "value": 0.013173542588974345,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 75.909725364 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[printed uppercase letter space-segments10]",
+            "value": 0.012703491297744025,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 78.71851733999983 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[printed lowercase letter space-segments11]",
+            "value": 0.012905236632983435,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 77.48792435500036 sec\nrounds: 1"
+          },
+          {
+            "name": "tests/benchmark_test.py::TestBenchmark::test_ocr_english_sentences[printed number space-segments12]",
+            "value": 0.033686544719337734,
+            "unit": "iter/sec",
+            "range": "stddev: 0",
+            "extra": "mean: 29.685442906999924 sec\nrounds: 1"
           }
         ]
       }
