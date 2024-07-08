@@ -2,7 +2,7 @@ name: OCR Poetry Benchmark Tests
 on:
   push:
     branches:
-      - main
+      - edit-benchmark-output-gh_pages
     paths:
       - .github/workflows/ocr-benchmarks.yml
       - OCR/**
@@ -32,3 +32,8 @@ jobs:
           output-file-path: OCR/tests/output.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
+      - name: Fetch data.js from gh-pages
+        run: |
+          git fetch
+          git checkout gh-pages
+          cat ./dev/bench/data.js
