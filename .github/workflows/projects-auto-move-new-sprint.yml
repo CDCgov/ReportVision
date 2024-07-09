@@ -1,0 +1,21 @@
+name: Automatically Move Iteration Forward
+on:
+  schedule:
+    # Runs "at 05:00, only on Thursday" (see https://crontab.guru)
+    - cron: '0 5 * * 4'
+
+jobs:
+  move-to-next-iteration:
+    name: Move to next iteration
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: blombard/move-to-next-iteration@master
+      with:
+        owner: CDCgov
+        number: 33
+        token: ${{ secrets.PROJECTS_MOVE_TO_NEXT_ITERATION }}
+        iteration-field: Iteration
+        iteration: last
+        new-iteration: current
+        excluded-statuses: "Done"
