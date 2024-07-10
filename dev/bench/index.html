@@ -81,9 +81,10 @@
       }
       .benchmark-chart {
         max-width: 1000px;
+        padding: 50px;
       }
     </style>
-    <title>Benchmarks</title>
+    <title>IDWA MDE OCR Benchmark Test Results</title>
   </head>
 
   <body>
@@ -101,7 +102,6 @@
     <footer>
       <button id="dl-button">Download data as JSON</button>
       <div class="spacer"></div>
-      <div class="small">Powered by <a rel="noopener" href="https://github.com/marketplace/actions/continuous-benchmark">github-action-benchmark</a></div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.2/dist/Chart.min.js"></script>
@@ -193,7 +193,7 @@
                   {
                     scaleLabel: {
                       display: true,
-                      labelString: 'commit',
+                      labelString: 'Commit to Main',
                     },
                   }
                 ],
@@ -201,7 +201,7 @@
                   {
                     scaleLabel: {
                       display: true,
-                      labelString: dataset.length > 0 ? dataset[0].bench.unit : '',
+                      labelString: 'Iteration in Seconds',
                     },
                     ticks: {
                       beginAtZero: true,
@@ -256,7 +256,7 @@
 
             const nameElem = document.createElement('h1');
             nameElem.className = 'benchmark-title';
-            nameElem.textContent = name;
+            nameElem.textContent = "IDWA MDE OCR Benchmark Test Results";
             setElem.appendChild(nameElem);
 
             const graphsElem = document.createElement('div');
@@ -264,7 +264,10 @@
             setElem.appendChild(graphsElem);
 
             for (const [benchName, benches] of benchSet.entries()) {
-              renderGraph(graphsElem, benchName, benches)
+              var benchSplit = benchName.split('::')[2]
+              var benchSpaces = benchSplit.replace(/_/g, ' ')
+              var benchUpper = benchSpaces.toLowerCase().replace(/(?<!\p{L})\p{L}(?=\p{L}{2})/gu, m => m.toUpperCase());
+              renderGraph(graphsElem, benchUpper, benches)
             }
           }
 
