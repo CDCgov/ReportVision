@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720457952297,
+  "lastUpdate": 1720631338381,
   "repoUrl": "https://github.com/CDCgov/IDWA",
   "entries": {
     "Benchmark": [
@@ -783,6 +783,63 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.000020377568375948488",
             "extra": "mean: 102.59159027061067 usec\nrounds: 4625"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "derek.a.dombek.com",
+            "name": "Derek Dombek"
+          },
+          "committer": {
+            "email": "derek.a.dombek.com",
+            "name": "Derek Dombek"
+          },
+          "distinct": true,
+          "id": "2d41b673321ed5c6a0341b63edcd54436d9b00d1",
+          "message": "try updating template from here",
+          "timestamp": "2024-07-10T11:00:23-06:00",
+          "tree_id": "7a97218c569fce85137d164610969185eb472572",
+          "url": "https://github.com/CDCgov/IDWA/commit/2d41b673321ed5c6a0341b63edcd54436d9b00d1"
+        },
+        "date": 1720631338036,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests/bench_test.py::TestOCRBenchmark::test_ocr_printed_benchmark",
+            "value": 0.2495287350653343,
+            "unit": "iter/sec",
+            "range": "stddev: 0.03691644016183921",
+            "extra": "mean: 4.007554479599992 sec\nrounds: 5"
+          },
+          {
+            "name": "tests/bench_test.py::TestOCRBenchmark::test_ocr_handwritten_benchmark",
+            "value": 0.28008347208291046,
+            "unit": "iter/sec",
+            "range": "stddev: 0.02588950250772681",
+            "extra": "mean: 3.5703641937999806 sec\nrounds: 5"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_segment_benchmark",
+            "value": 15.313962209485371,
+            "unit": "iter/sec",
+            "range": "stddev: 0.008691484771134404",
+            "extra": "mean: 65.29988688235147 msec\nrounds: 17"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_segment_shapes_benchmark",
+            "value": 15595602.314297184,
+            "unit": "iter/sec",
+            "range": "stddev: 4.56416187620992e-9",
+            "extra": "mean: 64.12063989879513 nsec\nrounds: 157431"
+          },
+          {
+            "name": "tests/bench_test.py::TestImageSegmenterBenchmark::test_no_matching_pixels_benchmark",
+            "value": 9890.66955881402,
+            "unit": "iter/sec",
+            "range": "stddev: 0.000021493629136052966",
+            "extra": "mean: 101.10538968606582 usec\nrounds: 4460"
           }
         ]
       }
