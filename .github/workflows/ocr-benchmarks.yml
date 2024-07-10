@@ -34,6 +34,8 @@ jobs:
           auto-push: true
       - name: Fetch data.js from gh-pages
         run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
           git fetch
           git checkout gh-pages
           rm ./dev/bench/index.html
