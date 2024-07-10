@@ -36,4 +36,5 @@ jobs:
         run: |
           git fetch
           git checkout gh-pages
-          cat ./dev/bench/data.js
+          rm ./dev/bench/index.html
+          cp ./dev/bench/index-template.html ./dev/bench/index.html
