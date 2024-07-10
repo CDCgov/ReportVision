@@ -38,3 +38,6 @@ jobs:
           git checkout gh-pages
           rm ./dev/bench/index.html
           cp ./dev/bench/index-template.html ./dev/bench/index.html
+          git add .
+          git commit -m "template to index"
+          git push origin gh-pages
