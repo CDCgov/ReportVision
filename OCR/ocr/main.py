@@ -1,14 +1,32 @@
+usage = """
+
+Manual Data Entry's OCR CLI
+
+usage: 
+    main.py (--segment-template) (SEGMENT-TEMPLATE-PATH) (--input-image) (INPUT-IMAGE-PATH) (--labels) (LABELS-PATH)
+
+Arguments:
+   SEGMENT-IMAGE       An image template that's already segmented
+   INPUT-IMAGE         The working image that needs data extracted from
+   LABELS              The json file that coordinates each segment
+
+"""
+
 import os
+import sys
+
 from ocr.services.image_segmenter import ImageSegmenter
 from ocr.services.image_ocr import ImageOCR
+from docopt import docopt
 
 path = os.path.dirname(__file__)
 
 
 def main():
-    segmentation_template = os.path.join(path, "../tests/assets/form_segmentation_template_hep_page_1.png")
-    raw_image = os.path.join(path, "../tests/assets/form_filled_hep.jpg")
-    labels_path = os.path.join(path, "../tests/assets/labels_hep_page1.json")
+    args = docopt(usage)
+    segmentation_template = args['SEGMENT-TEMPLATE-PATH']
+    raw_image = args['INPUT-IMAGE-PATH']
+    labels_path = args['LABELS-PATH']
 
     segmenter = ImageSegmenter(raw_image, segmentation_template, labels_path)
     segments = segmenter.segment()
