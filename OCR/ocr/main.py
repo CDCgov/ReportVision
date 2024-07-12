@@ -13,7 +13,6 @@ Arguments:
 """
 
 import os
-import sys
 
 from ocr.services.image_segmenter import ImageSegmenter
 from ocr.services.image_ocr import ImageOCR
