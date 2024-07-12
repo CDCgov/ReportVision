@@ -1,3 +1,9 @@
+import os
+
+from ocr.services.image_segmenter import ImageSegmenter
+from ocr.services.image_ocr import ImageOCR
+from docopt import docopt
+
 usage = """
 
 Manual Data Entry's OCR CLI
@@ -12,20 +18,14 @@ Arguments:
 
 """
 
-import os
-
-from ocr.services.image_segmenter import ImageSegmenter
-from ocr.services.image_ocr import ImageOCR
-from docopt import docopt
-
 path = os.path.dirname(__file__)
 
 
 def main():
     args = docopt(usage)
-    segmentation_template = args['SEGMENT-TEMPLATE-PATH']
-    raw_image = args['INPUT-IMAGE-PATH']
-    labels_path = args['LABELS-PATH']
+    segmentation_template = args["SEGMENT-TEMPLATE-PATH"]
+    raw_image = args["INPUT-IMAGE-PATH"]
+    labels_path = args["LABELS-PATH"]
 
     segmenter = ImageSegmenter(raw_image, segmentation_template, labels_path)
     segments = segmenter.segment()
