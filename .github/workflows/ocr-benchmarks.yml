@@ -2,7 +2,7 @@ name: OCR Poetry Benchmark Tests
 on:
   push:
     branches:
-      - edit-benchmark-output-gh_pages
+      - main
     paths:
       - .github/workflows/ocr-benchmarks.yml
       - OCR/**
