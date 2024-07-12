@@ -43,10 +43,7 @@ class PDFFieldExtractor:
 
     def list_annotations(self):
         """
-        Generates a list of annotations in the PDF. This method is mostly used for debugging purposes.
-
-        Returns:
-            str: A string list of the type of annotations, the name of the fields, its coordinates on the page, and the specific widget type (checkbox or text box).
+        Prints a list of annotations in the PDF to the console. This method is used for debugging purposes only.
         """
         for page_number, page in enumerate(self.reader.pages, start=1):
             print(f"Page {page_number}:")
@@ -59,12 +56,14 @@ class PDFFieldExtractor:
                     annot = annot.get_object()
                 field_name = annot.get("/T")
                 rect = annot.get("/Rect")
-                field_type = annot.get("/FT")
                 widget_type = "Unknown"
-                if field_type == pypdf.generic.NameObject("/Btn"):
-                    widget_type = "Checkbox"
-                elif field_type == pypdf.generic.NameObject("/Tx"):
-                    widget_type = "Text Box"
+                match annot.get("/FT"):
+                    case pypdf.generic.NameObject("/Btn"):
+                        widget_type = "Checkbox"
+                    case pypdf.generic.NameObject("/Tx"):
+                        widget_type = "Text Box"
+                    case _:
+                        widget_type = "Unknown"
                 print(f"Annotation - Field Name: {field_name}, Coordinates: {rect}, Widget Type: {widget_type}")
 
     def generate_random_color(self) -> str:
