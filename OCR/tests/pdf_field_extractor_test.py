@@ -2,7 +2,7 @@ import os
 
 import pypdf
 import pytest
-
+import json
 from ocr.services.pdf_field_extractor import PDFFieldExtractor
 
 
@@ -57,3 +57,15 @@ def test_end_to_end_segment_creation(pdf_extractor):
         assert (
             label_color == pdf_color
         ), f"Expected color in labels file ({label_color}) to match color in PDF annotation ({pdf_color})"
+
+
+def test_labels_json_structure(pdf_extractor, mocker):
+    _, labels_path = pdf_extractor.mark_rectangles_on_pdf()
+    with open(labels_path, "r") as file:
+        labels = json.load(file)
+    expected_keys = {"label": str, "type": str, "color": str}
+    for item in labels:
+        assert isinstance(item, dict), "Each label should be a dictionary"
+        for key, value_type in expected_keys.items():
+            assert key in item, f"Missing key: {key}"
+            assert isinstance(item[key], value_type), f"Key {key} should be of type {value_type.__name__}"
