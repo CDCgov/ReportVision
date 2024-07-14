@@ -17,9 +17,9 @@ pymupdf = "^1.24.2"
 pytest = "^8.1.1"
 pdf2image = "^1.17.0"
 pytest-mock = "^3.14.0"
-torchvision = "^0.18.0"
-lxml = "^5.2.1"
 
+levenshtein = "^0.25.1"
+cdifflib = "^1.2.6"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.7"
 pytest = "^8.1.1"
