@@ -16,6 +16,7 @@ Arguments:
 
 """
 
+
 def main():
     args = docopt(usage)
     segmentation_template = args["SEGMENT-TEMPLATE-PATH"]
