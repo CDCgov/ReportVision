@@ -15,7 +15,7 @@ jobs:
         owner: CDCgov
         number: 33
         token: ${{ secrets.PROJECTS_MOVE_TO_NEXT_ITERATION }}
-        iteration-field: Iteration
+        iteration-field: Current Sprint
         iteration: last
         new-iteration: current
         excluded-statuses: "Done"
