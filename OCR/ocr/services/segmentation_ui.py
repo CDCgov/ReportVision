@@ -34,11 +34,11 @@ class ImageViewer(QGraphicsView):
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
         self.setResizeAnchor(QGraphicsView.AnchorUnderMouse)
 
-        # Always show scrollbars
+
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        # Set viewport update mode for smoother scrolling
+
         self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
 
     def setImage(self, pixmap):
@@ -49,7 +49,7 @@ class ImageViewer(QGraphicsView):
         self.fitInView(self.sceneRect(), Qt.KeepAspectRatio)
 
     def wheelEvent(self, event):
-        # Implement zooming with Ctrl + Scroll
+        #zooming with Ctrl + Scroll
         if event.modifiers() & Qt.ControlModifier:
             zoom_factor = 1.15
             if event.angleDelta().y() > 0:
@@ -60,7 +60,7 @@ class ImageViewer(QGraphicsView):
             super().wheelEvent(event)
 
     def keyPressEvent(self, event: QKeyEvent):
-        # Implement hotkeys for zooming and scrolling
+        #hotkeys for zooming and scrolling
         if event.modifiers() & Qt.ControlModifier:
             if event.key() == Qt.Key_Plus:
                 self.scale(1.15, 1.15)
@@ -145,7 +145,7 @@ class MainWindow(QMainWindow):
         save_button.clicked.connect(self.save)
         button_layout.addWidget(save_button)
 
-        # Add a label with hotkey instructions
+
         instructions = QLabel("Hotkeys: Ctrl++ (Zoom In), Ctrl+- (Zoom Out), Arrow Keys (Scroll)")
         layout.addWidget(instructions)
 
