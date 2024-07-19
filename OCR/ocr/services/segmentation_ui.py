@@ -20,6 +20,27 @@ from PyQt5.QtCore import Qt, QRectF
 
 
 class ImageViewer(QGraphicsView):
+    """
+    This class provides functions for loading images, zooming, panning,
+    and drawing colored boxes on the image. It's designed for
+    segmenting images for OCR.
+
+    Variables:
+        scene (QGraphicsScene): Holds image and relevant actions
+        pixmap_item (QGraphicsPixmapItem): The item that displays the loaded image.
+        boxes (list): A list of dictionaries containing information about the boxes
+        current_rect (QGraphicsRectItem): The box being drawn
+        start_pos (QPointF): The starting position of the current box being drawn.
+
+    Methods:
+        setImage(pixmap): Set a new image to be displayed.
+        wheelEvent(event): Handle mouse wheel events for zooming.
+        mousePressEvent(event): Handle mouse press events for drawing boxes.
+        mouseMoveEvent(event): Handle mouse move events for drawing boxes.
+        mouseReleaseEvent(event): Handle mouse release events for finalizing boxes.
+        keyPressEvent(event): Handle key press events for navigation and zooming.
+    """
+
     def __init__(self):
         super().__init__()
         self.scene = QGraphicsScene(self)
@@ -58,22 +79,22 @@ class ImageViewer(QGraphicsView):
             super().wheelEvent(event)
 
     def keyPressEvent(self, event: QKeyEvent):
-        # hotkeys for zooming and scrolling
-        if event.modifiers() & Qt.ControlModifier:
-            if event.key() == Qt.Key_Plus:
+        """Handle key press events for navigation and zooming."""
+        match event.key():
+            case Qt.Key_Plus if event.modifiers() & Qt.ControlModifier:
                 self.scale(1.15, 1.15)
-            elif event.key() == Qt.Key_Minus:
+            case Qt.Key_Minus if event.modifiers() & Qt.ControlModifier:
                 self.scale(1 / 1.15, 1 / 1.15)
-        elif event.key() == Qt.Key_Up:
-            self.verticalScrollBar().setValue(self.verticalScrollBar().value() - 20)
-        elif event.key() == Qt.Key_Down:
-            self.verticalScrollBar().setValue(self.verticalScrollBar().value() + 20)
-        elif event.key() == Qt.Key_Left:
-            self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - 20)
-        elif event.key() == Qt.Key_Right:
-            self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() + 20)
-        else:
-            super().keyPressEvent(event)
+            case Qt.Key_Up:
+                self.verticalScrollBar().setValue(self.verticalScrollBar().value() - 20)
+            case Qt.Key_Down:
+                self.verticalScrollBar().setValue(self.verticalScrollBar().value() + 20)
+            case Qt.Key_Left:
+                self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - 20)
+            case Qt.Key_Right:
+                self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() + 20)
+            case _:
+                super().keyPressEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -115,6 +136,19 @@ class ImageViewer(QGraphicsView):
 
 
 class MainWindow(QMainWindow):
+    """
+    This class sets up the UI, including the image viewer
+    and control buttons.
+
+    Variables:
+        image_viewer (ImageViewer): The custom image viewer widget.
+
+    Methods:
+        initUI(): create UI components.
+        openImage(): Open an image file and display it in the image viewer.
+        save(): Save the segmented image and labels to files.
+    """
+
     def __init__(self):
         super().__init__()
         self.initUI()
