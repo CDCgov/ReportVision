@@ -115,7 +115,6 @@ class TestBenchmark:
     @pytest.mark.benchmark(group="OCR Model Performance", min_rounds=1)
     @pytest.mark.parametrize("name,segments", test_cases)
     def test_ocr_english_sentences(self, name, segments, benchmark):
-        print("============== hello")
         print("\n", name)
         results = benchmark(self.ocr.image_to_text, segments)
 
