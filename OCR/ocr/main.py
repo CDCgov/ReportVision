@@ -1,6 +1,3 @@
-import os
-import sys
-
 from ocr.services.image_segmenter import ImageSegmenter
 from ocr.services.image_ocr import ImageOCR
 from docopt import docopt
@@ -19,16 +16,14 @@ Arguments:
 
 """
 
-path = os.path.dirname(__file__)
-
 
 def main():
     args = docopt(usage)
     segmentation_template = args["SEGMENT-TEMPLATE-PATH"]
-    raw_image = args["INPUT-IMAGE-PATH"]
+    input_image = args["INPUT-IMAGE-PATH"]
     labels_path = args["LABELS-PATH"]
 
-    segmenter = ImageSegmenter(raw_image, segmentation_template, labels_path)
+    segmenter = ImageSegmenter(input_image, segmentation_template, labels_path)
     segments = segmenter.segment()
 
     print("{:<20} {:<20}".format("Label", "Segment shape"))

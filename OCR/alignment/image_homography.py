@@ -27,8 +27,8 @@ class ImageHomography:
         matcher = cv.DescriptorMatcher_create(cv.DescriptorMatcher_FLANNBASED)
         return matcher.knnMatch(descriptor_template, descriptor_query, 2)
 
-    def transform_homography(self, other):
-        """Run the image homography pipeline against a query image."""
+    def estimate_transform_matrix(self, other):
+        "Estimate the transformation matrix based on homography."
         # find the keypoints and descriptors with SIFT
         kp1, descriptors1 = self.compute_descriptors(self.template)
         kp2, descriptors2 = self.compute_descriptors(other)
@@ -46,5 +46,11 @@ class ImageHomography:
         dst_pts = np.float32([kp2[m.trainIdx].pt for m in good_matches]).reshape(-1, 1, 2)
 
         M, _ = cv.findHomography(dst_pts, src_pts, cv.RANSAC, 5.0)
+        return M
 
-        return cv.warpPerspective(other, M, (self.template.shape[1], self.template.shape[0]))
+    def transform_homography(self, other, matrix=None):
+        """Run the image homography pipeline against a query image."""
+        if matrix is None:
+            matrix = self.estimate_transform_matrix(other)
+
+        return cv.warpPerspective(other, matrix, (self.template.shape[1], self.template.shape[0]))
