@@ -25,7 +25,7 @@ jobs:
           - os: ubuntu-latest
             name: ubuntu
             cmd: >
-              pyinstaller -F -w -n main ./OCR/ocr/main.py
+              pyinstaller -F -w -n main ./OCR/ocr/main.py &&
               cd dist/ &&
               gzexe main
             out_file: main
