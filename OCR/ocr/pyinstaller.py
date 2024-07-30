@@ -6,7 +6,7 @@ path_to_main = str(HERE / "main.py")
 
 
 # This function installs/packages the main OCR function as an executable
-# while also including the needed assets ie. the mapping labels and segmentation template
+# If you need to add asset paths, follow the example below
 def install():
     PyInstaller.__main__.run(
         [
