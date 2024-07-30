@@ -11,13 +11,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        inlude:
-          - name: ubuntu
-            os: ubuntu-latest
-          - name: windows
-            os: windows-latest
-          - name: macos
-            os: macos-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -33,5 +26,5 @@ jobs:
         run: pyinstaller ./OCR/ocr/main.py -F -w
       - uses: actions/upload-artifact@v4
         with:
-          name: main-${{ matrix.name }}
+          name: main-${{ matrix.os }}
           path: dist/main
