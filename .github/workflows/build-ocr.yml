@@ -2,7 +2,7 @@ name: Build OCR exec
 on:
     push:
         branches:
-          - main
+          - idwa-ocr-ci-for-executable
         paths:
           - .github/workflows/build-ocr.yml
           - OCR/**
