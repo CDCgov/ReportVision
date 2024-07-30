@@ -1,4 +1,4 @@
-name: Build OCR exec
+name: Release OCR artifacts
 on:
     push:
         branches:
@@ -6,6 +6,8 @@ on:
         paths:
           - .github/workflows/build-ocr.yml
           - OCR/**
+        tags:
+            - 'v*'
 jobs:
   create-release:
     name: Create Release
