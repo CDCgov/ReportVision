@@ -4,6 +4,7 @@ on:
         branches:
           - idwa-ocr-ci-for-executable
         paths:
+          - .github/workflows/release-ocr.yml
           - .github/workflows/build-ocr.yml
           - OCR/**
         tags:
