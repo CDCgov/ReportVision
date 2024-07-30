@@ -11,10 +11,12 @@ on:
 jobs:
   create-release:
     name: Create Release
+    
     runs-on: [ubuntu-latest]
     permissions:
         contents: write
     steps:
+    - uses: actions/checkout@v4
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1.1.4
