@@ -10,7 +10,27 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: macos-latest
+            name: macos
+            cmd: >
+              pyinstaller ./OCR/ocr/main.py -F -w
+              cd dist/ &&
+              zip -r9 main main
+            out_file: main.zip 
+          - os: windows-latest
+            name: windows
+            cmd: pyinstaller ./OCR/ocr/main.py -F -w
+            out_file: main.exe
+          - os: ubuntu-latest
+            name: ubuntu
+            cmd: >
+              pyinstaller ./OCR/ocr/main.py -F -w
+              cd dist/ &&
+              zip -r9 main main
+            out_file: main.zip
+
+
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -23,8 +43,8 @@ jobs:
           pip install -r requirements.txt pyinstaller
           pip install docopt
       - name: build executable
-        run: pyinstaller ./OCR/ocr/main.py -F -w
+        run: ${{ matrix.cmd }}
       - uses: actions/upload-artifact@v4
         with:
-          name: main-${{ matrix.os }}
+          name: main-${{ matrix.name }}
           path: dist/main
