@@ -17,16 +17,16 @@ jobs:
         contents: write
     steps:
     - uses: actions/checkout@v4
-    - name: Create Release
+    - name: Create release
       id: create_release
-      uses: actions/create-release@v1.1.4
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+        tag: ${{ github.ref_name }}
+      run: |
+        gh release create "$tag" \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+            --generate-notes
     - name: Output Release URL File
       run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
     - name: Save Release URL File for publish
@@ -51,11 +51,7 @@ jobs:
             echo ::set-output name=upload_url::$value
         - name: Upload Release Asset
           id: upload-release-asset
-          uses: actions/upload-release-asset@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          uses: softprops/action-gh-release@v2
           with:
-            upload_url: ${{ steps.get_release_info.outputs.upload_url }}
-            asset_path: ./dist/${{ matrix.out_file}}
-            asset_name: ${{ matrix.out_file}}
+            files: ./dist/${{ matrix.out_file}}
 
