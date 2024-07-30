@@ -12,7 +12,13 @@ jobs:
   create-release:
     name: Create Release
     runs-on: [ubuntu-latest]
+    permissions:
+        contents: write
     steps:
+    - name: Set up Git user
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1.1.4
