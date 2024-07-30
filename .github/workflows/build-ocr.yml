@@ -26,9 +26,9 @@ jobs:
             name: ubuntu
             cmd: >
               pyinstaller -F -w -n main ./OCR/ocr/main.py
-              # cd dist/ &&
-              # zip -r9 main main
-            out_file: main.zip
+              cd dist/ &&
+              gzexe main
+            out_file: main
 
 
     runs-on: ${{ matrix.os }}
@@ -44,9 +44,7 @@ jobs:
           pip install docopt
       - name: build executable
         run: ${{ matrix.cmd }}
-      - name: read dist dir
-        run: cd dist/ && ls
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: main-${{ matrix.name }}
-      #     path: ./dist/${{ matrix.out_file}}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: main-${{ matrix.name }}
+          path: ./dist/${{ matrix.out_file}}
