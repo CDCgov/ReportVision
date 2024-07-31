@@ -21,4 +21,4 @@ jobs:
           pip install poetry
           poetry install --with dev
       - name: Run tests
-        run: poetry run pytest tests/ocr_test.py tests/segmentation_template_test.py
+        run: poetry run pytest tests/ocr_test.py tests/segmentation_template_test.py tests/alignment_test.py

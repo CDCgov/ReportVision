@@ -1,7 +1,7 @@
 import json
 import os
 import random
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 import pypdf
 from pdf2image import convert_from_path
@@ -43,10 +43,7 @@ class PDFFieldExtractor:
 
     def list_annotations(self):
         """
-         Generates a list of annotations in the pdf provided this method is mostly used for debugging purposes
-
-        Returns:
-            str: A string list of the type of annotations the name of the fields and its coordinates on the page
+        Prints a list of annotations in the PDF to the console. This method is used for debugging purposes only.
         """
         for page_number, page in enumerate(self.reader.pages, start=1):
             print(f"Page {page_number}:")
@@ -59,8 +56,15 @@ class PDFFieldExtractor:
                     annot = annot.get_object()
                 field_name = annot.get("/T")
                 rect = annot.get("/Rect")
-                subtype = annot.get("/Subtype")
-                print(f"Annotation - Type: {subtype}, Field Name: {field_name}, Coordinates: {rect}")
+                widget_type = "Unknown"
+                match annot.get("/FT"):
+                    case pypdf.generic.NameObject("/Btn"):
+                        widget_type = "Checkbox"
+                    case pypdf.generic.NameObject("/Tx"):
+                        widget_type = "Text Box"
+                    case _:
+                        widget_type = "Unknown"
+                print(f"Annotation - Field Name: {field_name}, Coordinates: {rect}, Widget Type: {widget_type}")
 
     def generate_random_color(self) -> str:
         """
@@ -111,9 +115,7 @@ class PDFFieldExtractor:
             }
         )
 
-    def update_annotations_and_save(
-        self, output_path: str, pages, color_label_map: Dict[str, str]
-    ) -> Tuple[str, str]:
+    def update_annotations_and_save(self, output_path: str, pages, color_label_map: list) -> Tuple[str, str]:
         """
         Write modified pages to a new PDF and save the color-to-field mappings to a JSON file.
 
@@ -150,7 +152,7 @@ class PDFFieldExtractor:
         if self.reader is None:
             raise ValueError("PDF reader is not initialized. Call initialize_reader() first.")
 
-        color_label_map = {}
+        color_label_map = []
         count = 0
         for page in self.reader.pages:
             annotations = page.get("/Annots", pypdf.generic.ArrayObject())
@@ -162,11 +164,17 @@ class PDFFieldExtractor:
 
                 field = annot.get("/T") if annot.get("/T") else f"invalid_string_{random.random()}"
                 rect = annot.get("/Rect")
+                field_type = annot.get("/FT")
+                widget_type = "Unknown"
+                if field_type == pypdf.generic.NameObject("/Btn"):
+                    widget_type = "button"
+                elif field_type == pypdf.generic.NameObject("/Tx"):
+                    widget_type = "text"
 
                 if field and rect:
                     color = self.generate_random_color()
                     color_str = ",".join(map(str, map(int, color.split(","))))
-                    color_label_map[color_str] = field
+                    color_label_map.append({"label": field, "type": widget_type, "color": color_str})
 
                     new_annot = self.create_rectangle_annotation(rect, color)
                     new_annotations.append(new_annot)
