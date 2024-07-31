@@ -29,7 +29,7 @@ jobs:
         uses: benchmark-action/github-action-benchmark@v1
         with:
           tool: 'pytest'
-          output-file-path: OCR/tests/output.json
+          output-file-path: output.json
           auto-push: false
       - name: Push benchmark result
         run: git push 'https://CDCgov:${{ secrets.GITHUB_TOKEN }}@github.com/CDCgov/IDWA.git' gh-pages:gh-pages
