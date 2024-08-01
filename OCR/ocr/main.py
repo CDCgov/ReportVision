@@ -35,9 +35,9 @@ def main():
     ocr = ImageOCR()
     values = ocr.image_to_text(segments=segments)
 
-    print("{:<20} {:<20}".format("Label", "Text"))
-    for label, text in values.items():
-        print("{:<20} {:<20}".format(label, text))
+    print("{:<20} {:<20} {:<20}".format("Label", "Text", "Confidence"))
+    for label, (text, confidence) in values.items():
+        print("{:<20} {:<20} {:<20.2f}".format(label, text, confidence))
 
 
 if __name__ == "__main__":
