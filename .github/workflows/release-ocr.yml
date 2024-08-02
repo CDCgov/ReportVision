@@ -39,9 +39,6 @@ jobs:
     uses: ./.github/workflows/build-ocr.yml
   upload-release-asset:
     needs: build-release
-    strategy:
-        matrix:
-            os: [main-macos,main-windows,main-ubuntu]
     runs-on: ubuntu-latest
     steps:
         - name: Download All Artifacts
