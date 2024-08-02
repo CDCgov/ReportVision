@@ -38,7 +38,7 @@ jobs:
             out_file: main.zip
     runs-on: ${{ matrix.os }}
     outputs:
-      output_artifacts: ${{ steps.artifacts.outputs.* }}
+      output_artifacts: ${{ steps.artifacts.outputs }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
