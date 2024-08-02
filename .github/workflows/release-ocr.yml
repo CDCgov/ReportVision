@@ -74,9 +74,8 @@ jobs:
         #   with:
         #     files: ${{ needs.build-release.outputs.* }}
         - name: upload release assets
-          working-directory: ./artifacts/
           run: |
-            for i in .
+            for i in ./artifacts/*
             do 
                 gh release upload ${{ github.ref_name }} $i --repo="$GITHUB_REPOSITORY"
             done
