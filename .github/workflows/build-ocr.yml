@@ -1,12 +1,18 @@
 name: Build OCR exec
 on:
-    push:
-        branches:
-          - idwa-ocr-ci-for-executable
-        paths:
-          - .github/workflows/release-ocr.yml
-          - .github/workflows/build-ocr.yml
-          - OCR/**
+  workflow_call:
+    outputs:
+      firstword:
+        description: "The first output string"
+        value: ${{ jobs.build.outputs.output_artifacts }}
+    # push:
+    #     branches:
+    #       - idwa-ocr-ci-for-executable
+    #     paths:
+    #       - .github/workflows/release-ocr.yml
+    #       - .github/workflows/build-ocr.yml
+    #       - OCR/**
+      
 jobs:
   build:
     strategy:
@@ -31,6 +37,8 @@ jobs:
               zip -r9 main main
             out_file: main.zip
     runs-on: ${{ matrix.os }}
+    outputs:
+      output_artifacts: ${{ steps.artifacts.outputs.matrix.out_file }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -44,6 +52,7 @@ jobs:
       - name: build executable
         run: ${{ matrix.cmd }}
       - uses: actions/upload-artifact@v4
+        id: artifacts
         with:
           name: main-${{ matrix.name }}
           path: ./dist/${{ matrix.out_file}}

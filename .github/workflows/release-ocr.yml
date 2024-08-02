@@ -36,11 +36,11 @@ jobs:
         name: release_url
         path: release_url.txt
   build-release:
-    needs: create-release
+    uses: ./.github/workflows/build-ocr.yml
+  upload-release-asset:
+    needs: build-release
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v4
-        - uses: ./.github/workflows/build-ocr.yml
         - name: Load Release URL File from release job
           uses: actions/download-artifact@v1
           with:
@@ -55,5 +55,5 @@ jobs:
           id: upload-release-asset
           uses: softprops/action-gh-release@v2
           with:
-            files: ./dist/${{ matrix.out_file}}
+            files: ${{ needs.build-release.outputs.matrix.out_file }}
 
