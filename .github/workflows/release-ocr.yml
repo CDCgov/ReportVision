@@ -68,7 +68,7 @@ jobs:
           run: |
             for i in ./artifacts/*
             do 
-                gh release upload v0.1.10 $i
+                gh release upload ${{ github.ref_name }} $i
             done
           env:
             GH_TOKEN: ${{ github.token }}
