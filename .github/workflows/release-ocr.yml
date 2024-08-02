@@ -35,20 +35,29 @@ jobs:
       with:
         name: release_url
         path: release_url.txt
-  build-release:
-    uses: ./.github/workflows/build-ocr.yml
+#   build-release:
+#     uses: ./.github/workflows/build-ocr.yml
   upload-release-asset:
     needs: build-release
     runs-on: ubuntu-latest
     steps:
-        - name: Download All Artifacts
-          uses: actions/download-artifact@v4
-          with:
-            path: artifacts
-            pattern: main-*
-            merge-multiple: true
+        # - uses: actions/checkout@v4
+        # - name: Download All Artifacts
+        #   uses: actions/download-artifact@v4
+        #   with:
+        #     path: artifacts
+        #     pattern: main-*
+        #     merge-multiple: true
+        - name: manually create files
+          run: |
+            mkdir artifacts
+            cd ./artifacts
+            touch main-macos.txt
+            touch main-windows.txt
+            touch main-ubuntu.txt
+            
         - name: ls
-          run: ls  -R
+          run: ls -R artifacts
         - name: Load Release URL File from release job
           uses: actions/download-artifact@v1
           with:
@@ -66,7 +75,7 @@ jobs:
         #     files: ${{ needs.build-release.outputs.* }}
         - name: upload release assets
           run: |
-            for i in ./artifacts/*
+            for i in ${GITHUB_WORKSPACE}./artifacts/*
             do 
                 gh release upload ${{ github.ref_name }} $i
             done
