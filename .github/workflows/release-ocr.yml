@@ -51,8 +51,10 @@ jobs:
           run: |
             value=`cat release_url/release_url.txt`
             echo ::set-output name=upload_url::$value
-        - name: Upload Release Asset
-          id: upload-release-asset
-          uses: softprops/action-gh-release@v2
-          with:
-            files: ${{ needs.build-release.outputs.matrix.out_file }}
+        # - name: Upload Release Asset
+        #   id: upload-release-asset
+        #   uses: softprops/action-gh-release@v2
+        #   with:
+        #     files: ${{ needs.build-release.outputs.* }}
+        - name: upload release assets
+          run: gh release upload ${{ github.ref_name }} ${{ needs.build-release.outputs.* }}
