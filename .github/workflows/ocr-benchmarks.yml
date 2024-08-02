@@ -24,24 +24,23 @@ jobs:
       - name: Run tests
         run: |
           cd OCR/tests
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
           poetry run pytest bench_test.py -v --benchmark-json output.json
-      - name: Store benchmark result
-        uses: benchmark-action/github-action-benchmark@v1
-        with:
-          tool: 'pytest'
-          output-file-path: OCR/tests/output.json
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          auto-push: true
-      - name: Fetch data.js from gh-pages
-        run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
-          git fetch
-          git checkout gh-pages
-          rm ./dev/bench/index.html
-          cp ./dev/bench/index-template.html ./dev/bench/index.html
-          git add .
-          git commit -m "template to index"
-          git push origin gh-pages
+      # - name: Store benchmark result
+      #   uses: benchmark-action/github-action-benchmark@v1
+      #   with:
+      #     tool: 'pytest'
+      #     output-file-path: OCR/tests/output.json
+      #     auto-push: false
+      # - name: Push benchmark result
+      #   run: git push 'https://CDCgov:${{ secrets.GITHUB_TOKEN }}@github.com/CDCgov/IDWA.git' gh-pages:gh-pages
+      # - name: Fetch data.js from gh-pages
+      #   run: |
+      #     git config --global user.name 'GitHub Action'
+      #     git config --global user.email 'action@github.com'
+      #     git fetch
+      #     git checkout gh-pages
+      #     rm ./dev/bench/index.html
+      #     cp ./dev/bench/index-template.html ./dev/bench/index.html
+      #     git add .
+      #     git commit -m "template to index"
+      #     git push origin gh-pages
