@@ -78,7 +78,7 @@ jobs:
           run: |
             for i in .
             do 
-                gh release upload ${{ github.ref_name }} $i
+                gh release upload ${{ github.ref_name }} $i --repo="$GITHUB_REPOSITORY"
             done
           env:
             GH_TOKEN: ${{ github.token }}
