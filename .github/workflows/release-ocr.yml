@@ -50,6 +50,8 @@ jobs:
             path: .
             pattern: main-*
             merge-multiple: true
+        - name: ls
+          run: ls  -R
         - name: Load Release URL File from release job
           uses: actions/download-artifact@v1
           with:
@@ -67,3 +69,5 @@ jobs:
         #     files: ${{ needs.build-release.outputs.* }}
         - name: upload release assets
           run: gh release upload ${{ github.ref_name }} ${{ matrix.os }}
+          env:
+            GH_TOKEN: ${{ github.token }}
