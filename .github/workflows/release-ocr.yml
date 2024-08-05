@@ -42,7 +42,7 @@ jobs:
       run: |
         gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
-            --title="MDE-OCR ${tag#v}" \
+            --title="MDE-OCR ${tag}" \
             --generate-notes
     - name: Output Release URL File
       run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
