@@ -1,4 +1,4 @@
-name: Release OCR artifacts
+name: Release MDE-OCR artifacts
 on:
     push:
         branches:

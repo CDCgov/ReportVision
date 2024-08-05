@@ -1,8 +1,8 @@
-name: Build OCR exec
+name: Build & Upload OCR Binaries
 on:
   workflow_call:
     outputs:
-      firstword:
+      output-file:
         description: "The first output string"
         value: ${{ jobs.build.outputs.output_artifacts }}
     # push:
@@ -49,7 +49,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller
           pip install docopt
-      - name: build executable
+      - name: build binaries for all OS's
         run: ${{ matrix.cmd }}
       - uses: actions/upload-artifact@v4
         id: artifacts
