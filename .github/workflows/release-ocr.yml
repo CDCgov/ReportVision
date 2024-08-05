@@ -55,9 +55,10 @@ jobs:
           run: |
             mkdir artifacts
             cd ./artifacts
-            touch main-macos
-            touch main-windows
-            touch main-ubuntu
+            touch main-macos.txt && echo -e "hello\nworld" >> main-macos.txt
+            touch main-windows.txt && echo -e "hello\nworld" >> main-windows.txt
+            touch main-ubuntu.txt && echo -e "hello\nworld" >> main-ubuntu.txt
+            cat main-macos.txt
             
         - name: ls
           run: ls -R artifacts
