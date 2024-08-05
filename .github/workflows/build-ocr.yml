@@ -5,13 +5,7 @@ on:
       output-file:
         description: "The first output string"
         value: ${{ jobs.build.outputs.output_artifacts }}
-    # push:
-    #     branches:
-    #       - idwa-ocr-ci-for-executable
-    #     paths:
-    #       - .github/workflows/release-ocr.yml
-    #       - .github/workflows/build-ocr.yml
-    #       - OCR/**
+  workflow_dispatch:
       
 jobs:
   build:

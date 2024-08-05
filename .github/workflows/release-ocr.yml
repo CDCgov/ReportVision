@@ -1,5 +1,11 @@
 name: Release MDE-OCR artifacts
+run-name: Release MDE-OCR artifacts - by @${{ github.actor }}
 on:
+    # workflow_dispatch:
+    #     inputs:
+    #         tag:
+    #             description: 'target environment'
+    #             required: true
     push:
         branches:
           - idwa-ocr-ci-for-executable
@@ -16,12 +22,10 @@ jobs:
     runs-on: [ubuntu-latest]
     permissions:
         contents: write
+    env:
+        GITHUB_REF: v1.0.0
     steps:
-    - name:
-      run: git tag v0.1.0
     - uses: actions/checkout@v4
-      with:
-        ref: v0.1.0
     - name: Create release
       id: create_release
       env:
