@@ -49,9 +49,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller
           pip install docopt
-      - name: build binaries for all OS's
+      - name: Build binaries for all OS's
         run: ${{ matrix.cmd }}
-      - uses: actions/upload-artifact@v4
+      - name: Upload Artifacts To Workflow
+        uses: actions/upload-artifact@v4
         id: artifacts
         with:
           name: main-${{ matrix.name }}
