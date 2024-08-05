@@ -63,7 +63,6 @@ jobs:
         - name: ls
           run: |
             ls -R artifacts
-            ls -R artifacts/release_url
         # - name: Get Release File Name & Upload URL
         #   id: get_release_info
         #   shell: bash
@@ -84,4 +83,4 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ github.token }}
           with:
-            asset_paths: '["./artifacts/*", "./artifacts/release_url/*"]'
+            asset_paths: '["./artifacts/*"]'
