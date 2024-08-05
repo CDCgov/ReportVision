@@ -14,10 +14,20 @@ jobs:
     name: Create Release
     
     runs-on: [ubuntu-latest]
+    strategy:
+        matrix:
+            value: [main-macos.txt,main-windows.txt,main-ubuntu.txt]
     permissions:
         contents: write
     steps:
     - uses: actions/checkout@v4
+    - name: manually create files
+      run: |
+        mkdir artifacts
+        cd ./artifacts
+        touch main-macos.txt
+        touch main-windows.txt
+        touch main-ubuntu.txt
     - name: Create release
       id: create_release
       env:
@@ -27,7 +37,8 @@ jobs:
         gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
             --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
-            --generate-notes
+            --generate-notes \
+            ./artifacts/${{ matrix.value }}
     - name: Output Release URL File
       run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
     - name: Save Release URL File for publish
@@ -37,46 +48,46 @@ jobs:
         path: release_url.txt
 #   build-release:
 #     uses: ./.github/workflows/build-ocr.yml
-  upload-release-asset:
-    needs: create-release
-    runs-on: ubuntu-latest
-    strategy:
-        matrix:
-            value: [main-macos,main-windows,main-ubuntu]
-    steps:
-        # - uses: actions/checkout@v4
-        # - name: Download All Artifacts
-        #   uses: actions/download-artifact@v4
-        #   with:
-        #     path: artifacts
-        #     pattern: main-*
-        #     merge-multiple: true
-        - name: manually create files
-          run: |
-            mkdir artifacts
-            cd ./artifacts
-            touch main-macos
-            touch main-windows
-            touch main-ubuntu
+#   upload-release-asset:
+#     needs: create-release
+#     runs-on: ubuntu-latest
+#     strategy:
+#         matrix:
+#             value: [main-macos,main-windows,main-ubuntu]
+#     steps:
+#         # - uses: actions/checkout@v4
+#         # - name: Download All Artifacts
+#         #   uses: actions/download-artifact@v4
+#         #   with:
+#         #     path: artifacts
+#         #     pattern: main-*
+#         #     merge-multiple: true
+#         - name: manually create files
+#           run: |
+#             mkdir artifacts
+#             cd ./artifacts
+#             touch main-macos
+#             touch main-windows
+#             touch main-ubuntu
             
-        - name: ls
-          run: ls -R artifacts
-        - name: Load Release URL File from release job
-          uses: actions/download-artifact@v1
-          with:
-            name: release_url
-        - name: Get Release File Name & Upload URL
-          id: get_release_info
-          shell: bash
-          run: |
-            value=`cat release_url/release_url.txt`
-            echo ::set-output name=upload_url::$value
-        # - name: Upload Release Asset
-        #   id: upload-release-asset
-        #   uses: softprops/action-gh-release@v2
-        #   with:
-        #     files: ${{ needs.build-release.outputs.* }}
-        - name: upload release assets
-          run: gh release upload ${{ github.ref_name }} ./artifacts/${{ matrix.value }} --repo=https://github.com/${{github.repository}}
-          env:
-            GH_TOKEN: ${{ github.token }}
+#         - name: ls
+#           run: ls -R artifacts
+#         - name: Load Release URL File from release job
+#           uses: actions/download-artifact@v1
+#           with:
+#             name: release_url
+#         - name: Get Release File Name & Upload URL
+#           id: get_release_info
+#           shell: bash
+#           run: |
+#             value=`cat release_url/release_url.txt`
+#             echo ::set-output name=upload_url::$value
+#         # - name: Upload Release Asset
+#         #   id: upload-release-asset
+#         #   uses: softprops/action-gh-release@v2
+#         #   with:
+#         #     files: ${{ needs.build-release.outputs.* }}
+#         - name: upload release assets
+#           run: gh release upload ${{ github.ref_name }} ./artifacts/${{ matrix.value }} --repo=https://github.com/${{github.repository}}
+#           env:
+#             GH_TOKEN: ${{ github.token }}
