@@ -1,0 +1,62 @@
+name: Release MDE-OCR artifacts
+on:
+    # workflow_dispatch:
+    #     inputs:
+    #         tag:
+    #             description: 'target environment'
+    #             required: true
+    push:
+        branches:
+          - idwa-ocr-ci-for-executable
+        paths:
+          - .github/workflows/release-ocr.yml
+          - .github/workflows/build-ocr.yml
+          - OCR/**
+        # tags:
+        #     - 'v*'
+jobs:
+  create-release:
+    name: Create Release
+    
+    runs-on: [ubuntu-latest]
+    permissions:
+        contents: write
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: 1.0.0
+    - name: Create release
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref_name }}
+      run: |
+        gh release create "$tag" \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="MDE-OCR ${tag#v}" \
+            --generate-notes
+    - name: Output Release URL File
+      run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
+    - name: Upload Artifacts To Workflow
+      uses: actions/upload-artifact@v4
+      with:
+        name: release_url
+        path: release_url.txt
+  build-release:
+    uses: ./.github/workflows/build-ocr.yml
+  upload-release-asset:
+    needs: build-release
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4
+        - name: Download Artifacts To Job
+          uses: actions/download-artifact@v4
+          with:
+            path: artifacts
+            merge-multiple: true
+        - name: Upload release binaries
+          uses: alexellis/upload-assets@0.4.1
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+          with:
+            asset_paths: '["./artifacts/*"]'
