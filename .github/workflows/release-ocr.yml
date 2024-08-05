@@ -1,10 +1,10 @@
 name: Release MDE-OCR artifacts
 on:
-    # workflow_dispatch:
-    #     inputs:
-    #         tag:
-    #             description: 'target environment'
-    #             required: true
+    workflow_dispatch:
+        inputs:
+            tag:
+                description: 'target environment'
+                required: true
     push:
         branches:
           - idwa-ocr-ci-for-executable
@@ -12,8 +12,8 @@ on:
           - .github/workflows/release-ocr.yml
           - .github/workflows/build-ocr.yml
           - OCR/**
-        # tags:
-        #     - 'v*'
+        tags:
+            - 'v*'
 jobs:
   create-release:
     name: Create Release
@@ -23,8 +23,16 @@ jobs:
         contents: write
     steps:
     - uses: actions/checkout@v4
+    - name: Create tag
+      uses: actions/github-script@v5
       with:
-        ref: 1.0.0
+        script: |
+            github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'refs/tags/${{ github.event.inputs.tag }}',
+                sha: context.sha
+            })
     - name: Create release
       id: create_release
       env:
