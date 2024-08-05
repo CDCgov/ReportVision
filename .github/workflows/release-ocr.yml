@@ -17,19 +17,11 @@ jobs:
     permissions:
         contents: write
     steps:
-    - name: Create tag
-      uses: actions/github-script@v5
-      with:
-          script: |
-            github.rest.git.createRef({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                ref: 'refs/tags/v1.0.0',
-                sha: context.sha
-            })
+    - name:
+      run: git tag v0.1.0
     - uses: actions/checkout@v4
       with:
-        ref: v1.0.0
+        ref: v0.1.0
     - name: Create release
       id: create_release
       env:
