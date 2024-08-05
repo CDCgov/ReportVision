@@ -63,11 +63,13 @@ jobs:
             mkdir artifacts &&
             cd ./artifacts
             touch main-macos.txt && echo "hello\\world > main-macos.txt"
-        - name: Download Artifacts To Job
-          uses: actions/download-artifact@v4
-          with:
-            path: artifacts
-            merge-multiple: true
+        - name: ls
+          run: ls
+        # - name: Download Artifacts To Job
+        #   uses: actions/download-artifact@v4
+        #   with:
+        #     path: artifacts
+        #     merge-multiple: true
         - name: Upload release binaries
           uses: alexellis/upload-assets@0.4.1
           env:
