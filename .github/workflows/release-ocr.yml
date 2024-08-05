@@ -82,7 +82,7 @@ jobs:
         #   env:
         #     GH_TOKEN: ${{ github.token }}
         - name: Upload release binaries
-          uses: alexellis/upload-assets@0.4.0
+          uses: alexellis/upload-assets@0.4.1
           env:
             GITHUB_TOKEN: ${{ github.token }}
           with:
