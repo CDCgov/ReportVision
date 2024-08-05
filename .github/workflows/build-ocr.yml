@@ -22,20 +22,18 @@ jobs:
             name: macos
             cmd: >
               pyinstaller -F -w -n main ./OCR/ocr/main.py &&
-              cd dist/ &&
-              zip -r9 main main
-            out_file: main.zip 
+              cd dist/
+            out_file: main-macos
           - os: windows-latest
             name: windows
             cmd: pyinstaller -F -w -n main ./OCR/ocr/main.py
-            out_file: main.exe
+            out_file: main-windows
           - os: ubuntu-latest
             name: ubuntu
             cmd: >
               pyinstaller -F -w -n main ./OCR/ocr/main.py &&
-              cd dist/ &&
-              zip -r9 main main
-            out_file: main.zip
+              cd dist/
+            out_file: main-ubuntu
     runs-on: ${{ matrix.os }}
     outputs:
       output_artifacts: ${{ steps.artifacts.outputs.matrix.out_file }}
