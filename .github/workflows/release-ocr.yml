@@ -77,7 +77,7 @@ jobs:
           run: |
             for i in ./artifacts/*
             do 
-                gh release upload ${{ github.ref_name }} $i --repo=${{ github.repository }}
+                gh release upload ${{ github.ref_name }} $i --repo=https://github.com/${{github.repository}}
             done
           env:
             GH_TOKEN: ${{ github.token }}
