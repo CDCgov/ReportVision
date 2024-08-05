@@ -77,10 +77,6 @@ jobs:
         #   with:
         #     files: ${{ needs.build-release.outputs.* }}
         - name: upload release assets
-          run: |
-            for i in ./artifacts/*
-            do 
-                gh release upload ${{ github.ref_name }} ${{ matrix.value }} --repo=https://github.com/${{github.repository}}
-            done
+          run: ls
           env:
             GH_TOKEN: ${{ github.token }}
