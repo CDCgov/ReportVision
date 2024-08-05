@@ -67,12 +67,12 @@ jobs:
           with:
             path: artifacts
         - name: ls
-          run: ls -R artifacts
+          run: ls -R artifacts/release_url
         - name: Get Release File Name & Upload URL
           id: get_release_info
           shell: bash
           run: |
-            value=`cat ./artifacts/release_url.txt`
+            value=`cat ./artifacts/release_url/release_url.txt`
             echo "upload_url=$value" >> "$GITHUB_OUTPUT"
         # - name: Upload Release Asset
         #   id: upload-release-asset
