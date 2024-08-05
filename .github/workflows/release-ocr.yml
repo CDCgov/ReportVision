@@ -25,20 +25,20 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Create tag
-      uses: actions/github-script@v5
+      uses: actions/github-script@v7
       with:
         script: |
             github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: 'refs/tags/v0.1.7',
+                ref: 'refs/tags/v0.1.8',
                 sha: context.sha
             })
     - name: Create release
       id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        tag: v0.1.7
+        tag: v0.1.8
       run: |
         gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
@@ -51,33 +51,20 @@ jobs:
       with:
         name: release_url
         path: release_url.txt
-#   build-release:
-#     uses: ./.github/workflows/build-ocr.yml
+  build-release:
+    uses: ./.github/workflows/build-ocr.yml
   upload-release-asset:
-    needs: create-release
+    needs: build-release
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v4
-        - name:
-          run: |
-            mkdir artifacts &&
-            cd ./artifacts
-            touch main-macos.txt && echo -e "hello\nworld" >> main-macos.txt
-        - name: ls
-          run: ls -R ./artifacts
-        # - name: Download Artifacts To Job
-        #   uses: actions/download-artifact@v4
-        #   with:
-        #     path: artifacts
-        #     merge-multiple: true
-        # - name: Upload release binaries
-        #   uses: alexellis/upload-assets@0.4.1
-        #   env:
-        #     GITHUB_TOKEN: ${{ github.token }}
-        #   with:
-        #     asset_paths: '["./artifacts/*"]'
+        - name: Download Artifacts To Job
+          uses: actions/download-artifact@v4
+          with:
+            path: artifacts
+            merge-multiple: true
         - name: Release Upload Assets
           uses: jaywcjlove/github-action-upload-assets@main
           with:
-            tag: v0.1.7
+            tag: v0.1.8
             asset-path: '["./artifacts/*"]'
