@@ -66,6 +66,8 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             path: artifacts
+        - name: ls
+          run: ls -R artifacts
         - name: Get Release File Name & Upload URL
           id: get_release_info
           shell: bash
