@@ -24,21 +24,21 @@ jobs:
         contents: write
     steps:
     - uses: actions/checkout@v4
-    # - name: Create tag
-    #   uses: actions/github-script@v5
-    #   with:
-    #     script: |
-    #         github.rest.git.createRef({
-    #             owner: context.repo.owner,
-    #             repo: context.repo.repo,
-    #             ref: 'refs/tags/v0.1.6',
-    #             sha: context.sha
-    #         })
+    - name: Create tag
+      uses: actions/github-script@v5
+      with:
+        script: |
+            github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'refs/tags/v0.1.7',
+                sha: context.sha
+            })
     - name: Create release
       id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        tag: v0.1.6
+        tag: v0.1.7
       run: |
         gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
@@ -79,5 +79,5 @@ jobs:
         - name: Release Upload Assets
           uses: jaywcjlove/github-action-upload-assets@main
           with:
-            tag: v0.1.6
+            tag: v0.1.7
             asset-path: '["./artifacts/*"]'
