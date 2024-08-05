@@ -27,8 +27,11 @@ class TestOCR:
 
         results = ocr.image_to_text(segmenter.segment())
 
-        assert results["nbs_patient_id"] == "SIENNA HAMPTON"
-        assert results["nbs_cas_id"] == "123555"
+        patient_id, patient_confidence = results["nbs_patient_id"]
+        cas_id, cas_confidence = results["nbs_cas_id"]
+
+        assert patient_id == "SIENNA HAMPTON"
+        assert cas_id == "123555"
 
     def test_ocr_handwritten(self):
         segmenter = ImageSegmenter(
@@ -41,5 +44,27 @@ class TestOCR:
 
         results = ocr.image_to_text(segmenter.segment())
 
-        assert results["nbs_patient_id"] == "Harry Potter"
-        assert results["nbs_cas_id"] == "123695"
+        patient_id, patient_confidence = results["nbs_patient_id"]
+        cas_id, cas_confidence = results["nbs_cas_id"]
+
+        assert patient_id == "Harry Potter"
+        assert cas_id == "123695"
+
+    def test_confidence_values_returned(self):
+        segmenter = ImageSegmenter(
+            raw_image,
+            segmentation_template,
+            labels_path,
+            segmentation_function=segment_by_color_bounding_box,
+        )
+        ocr = ImageOCR()
+
+        results = ocr.image_to_text(segmenter.segment())
+
+        patient_id, patient_confidence = results["nbs_patient_id"]
+        cas_id, cas_confidence = results["nbs_cas_id"]
+
+        assert isinstance(patient_confidence, float)
+        assert isinstance(cas_confidence, float)
+        assert patient_confidence > 0
+        assert cas_confidence > 0
