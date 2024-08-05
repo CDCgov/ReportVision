@@ -1,24 +1,14 @@
 name: Release MDE-OCR artifacts
 run-name: Release MDE-OCR artifacts - by @${{ github.actor }}
 on:
-    # workflow_dispatch:
-    #     inputs:
-    #         tag:
-    #             description: 'target environment'
-    #             required: true
-    push:
-        branches:
-          - idwa-ocr-ci-for-executable
-        paths:
-          - .github/workflows/release-ocr.yml
-          - .github/workflows/build-ocr.yml
-          - OCR/**
-        # tags:
-        #     - 'v*'
+    workflow_dispatch:
+        inputs:
+            tag:
+                description: 'Version tag for new release'
+                required: true
 jobs:
   create-release:
     name: Create Release
-    
     runs-on: [ubuntu-latest]
     permissions:
         contents: write
@@ -31,14 +21,14 @@ jobs:
             github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: 'refs/tags/v0.1.9',
+                ref: 'refs/tags/${{ github.event.inputs.tag }}',
                 sha: context.sha
             })
     - name: Create release
       id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        tag: v0.1.9
+        tag: ${{ github.event.inputs.tag }}
       run: |
         gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
@@ -66,5 +56,5 @@ jobs:
         - name: Release Upload Assets
           uses: jaywcjlove/github-action-upload-assets@main
           with:
-            tag: v0.1.9
+            tag: ${{ github.event.inputs.tag }}
             asset-path: '["./artifacts/*"]'
