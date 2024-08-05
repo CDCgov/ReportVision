@@ -62,7 +62,7 @@ jobs:
           run: |
             mkdir artifacts &&
             cd ./artifacts
-            touch main-macos.txt && echo "hello\\world > main-macos.txt"
+            touch main-macos.txt && echo -e "hello\nworld" >> main-macos.txt
         - name: ls
           run: ls -R ./artifacts
         # - name: Download Artifacts To Job
