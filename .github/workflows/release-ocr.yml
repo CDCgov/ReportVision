@@ -38,7 +38,7 @@ jobs:
   build-release:
     uses: ./.github/workflows/build-ocr.yml
   upload-release-asset:
-    needs: create-release
+    needs: build-release
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v4
