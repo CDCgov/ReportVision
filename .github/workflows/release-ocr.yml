@@ -40,9 +40,9 @@ jobs:
   upload-release-asset:
     needs: create-release
     runs-on: ubuntu-latest
-    strategy:
-        matrix:
-            value: [main-macos,main-windows,main-ubuntu]
+    # strategy:
+    #     matrix:
+    #         value: [main-macos,main-windows,main-ubuntu]
     steps:
         # - uses: actions/checkout@v4
         # - name: Download All Artifacts
@@ -85,4 +85,4 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ github.token }}
           with:
-            asset_paths: ./artifacts/${{ matrix.value }}
+            asset_paths: '["./artifacts/*"]'
