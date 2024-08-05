@@ -14,11 +14,7 @@ jobs:
     name: Create Release
     
     runs-on: [ubuntu-latest]
-    strategy:
-        matrix:
-            value: [main-macos.txt,main-windows.txt,main-ubuntu.txt]
-    permissions:
-        contents: write
+    permissions: write-all
     steps:
     - uses: actions/checkout@v4
     - name: manually create files
