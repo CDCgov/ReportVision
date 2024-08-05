@@ -51,13 +51,18 @@ jobs:
       with:
         name: release_url
         path: release_url.txt
-  build-release:
-    uses: ./.github/workflows/build-ocr.yml
+#   build-release:
+#     uses: ./.github/workflows/build-ocr.yml
   upload-release-asset:
-    needs: build-release
+    needs: create-release
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v4
+        - name:
+          run: |
+            mkdir artifacts &&
+            cd ./artifacts
+            touch main-macos.txt && echo "hello\\world > main-macos.txt.txt
         - name: Download Artifacts To Job
           uses: actions/download-artifact@v4
           with:
