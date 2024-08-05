@@ -31,14 +31,14 @@ jobs:
             github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: 'refs/tags/v0.1.0',
+                ref: 'refs/tags/v0.1.1',
                 sha: context.sha
             })
     - name: Create release
       id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        tag: v0.1.0
+        tag: v0.1.1
       run: |
         gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
@@ -62,7 +62,7 @@ jobs:
           run: |
             mkdir artifacts &&
             cd ./artifacts
-            touch main-macos.txt && echo "hello\\world > main-macos.txt.txt
+            touch main-macos.txt && echo "hello\\world > main-macos.txt
         - name: Download Artifacts To Job
           uses: actions/download-artifact@v4
           with:
