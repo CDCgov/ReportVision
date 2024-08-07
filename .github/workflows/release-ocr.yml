@@ -1,47 +1,38 @@
 name: Release MDE-OCR artifacts
+run-name: Release MDE-OCR artifacts - by @${{ github.actor }}
 on:
-    # workflow_dispatch:
-    #     inputs:
-    #         tag:
-    #             description: 'target environment'
-    #             required: true
-    push:
-        branches:
-          - idwa-ocr-ci-for-executable
-        paths:
-          - .github/workflows/release-ocr.yml
-          - .github/workflows/build-ocr.yml
-          - OCR/**
-        # tags:
-        #     - 'v*'
+    workflow_dispatch:
+        inputs:
+            tag:
+                description: 'Version tag for new release'
+                required: true
 jobs:
   create-release:
     name: Create Release
-    
     runs-on: [ubuntu-latest]
     permissions:
         contents: write
     steps:
     - uses: actions/checkout@v4
     - name: Create tag
-      uses: actions/github-script@v5
+      uses: actions/github-script@v7
       with:
         script: |
             github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: 'refs/tags/1.0.0',
+                ref: 'refs/tags/${{ github.event.inputs.tag }}',
                 sha: context.sha
             })
     - name: Create release
       id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ github.ref_name }}
+        tag: ${{ github.event.inputs.tag }}
       run: |
         gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
-            --title="MDE-OCR ${tag#v}" \
+            --title="MDE-OCR ${tag}" \
             --generate-notes
     - name: Output Release URL File
       run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
@@ -62,9 +53,8 @@ jobs:
           with:
             path: artifacts
             merge-multiple: true
-        - name: Upload release binaries
-          uses: alexellis/upload-assets@0.4.1
-          env:
-            GITHUB_TOKEN: ${{ github.token }}
+        - name: Release Upload Assets
+          uses: jaywcjlove/github-action-upload-assets@main
           with:
-            asset_paths: '["./artifacts/*"]'
+            tag: ${{ github.event.inputs.tag }}
+            asset-path: '["./artifacts/*"]'
