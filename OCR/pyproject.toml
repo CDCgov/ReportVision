@@ -23,7 +23,7 @@ levenshtein = "^0.25.1"
 lxml = "^5.2.1"
 docopt = "^0.6.2"
 cdifflib = "^1.2.6"
-pyinstaller = "^
+pyinstaller = "^6.9.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.7"
