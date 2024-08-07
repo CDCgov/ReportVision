@@ -28,8 +28,7 @@ jobs:
             cmd: >
               cd OCR/ &&
               poetry run build &&
-              cd dist/ &&
-              7z a main-windows main.exe
+              7z a main-windows.zip dist\
             out_file: main-windows.zip
           - os: ubuntu-latest
             name: ubuntu
