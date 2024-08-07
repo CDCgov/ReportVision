@@ -18,20 +18,25 @@ jobs:
           - os: macos-latest
             name: macos
             cmd: >
-              pyinstaller -F -w -n main-macos ./OCR/ocr/main.py &&
+              cd OCR/ &&
+              poetry run build &&
               cd dist/ &&
-              zip -r9 main-macos main-macos
+              zip -r9 main main-macos
             out_file: main-macos.zip
           - os: windows-latest
             name: windows
-            cmd: pyinstaller -F -w -n main-windows ./OCR/ocr/main.py
-            out_file: main-windows.exe
+            cmd: >
+              cd OCR/ &&
+              poetry run build &&
+              zip -r9 main.exe main-windows
+            out_file: main-windows.zip
           - os: ubuntu-latest
             name: ubuntu
             cmd: >
-              pyinstaller -F -w -n main-ubuntu ./OCR/ocr/main.py &&
+              cd OCR/ &&
+              poetry run build &&
               cd dist/ &&
-              zip -r9 main-ubuntu main-ubuntu
+              zip -r9 main main-ubuntu
             out_file: main-ubuntu.zip
     runs-on: ${{ matrix.os }}
     outputs:
@@ -44,8 +49,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller
-          pip install docopt
+          pip install poetry
+          poetry install --with dev
+        # python -m pip install --upgrade pip
+        # pip install pyinstaller
+        # pip install docopt
       - name: Build binaries for all OS's
         run: ${{ matrix.cmd }}
       - name: Upload Artifacts To Workflow
@@ -53,4 +61,4 @@ jobs:
         id: artifacts
         with:
           name: main-${{ matrix.name }}
-          path: ./dist/${{ matrix.out_file}}
+          path: ./OCR/dist/${{ matrix.out_file}}
