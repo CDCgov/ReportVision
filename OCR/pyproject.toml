@@ -6,7 +6,7 @@ description = "Digitize scanned PDFs"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.10,<3.13"
 numpy = "^1.26.4"
 opencv-python = "^4.9.0.80"
 python-dotenv = "^1.0.1"
@@ -23,12 +23,12 @@ levenshtein = "^0.25.1"
 lxml = "^5.2.1"
 docopt = "^0.6.2"
 cdifflib = "^1.2.6"
-pyinstaller = "^6.9.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.7"
 pytest = "^8.1.1"
 pytest-benchmark = "^4.0.0"
+pyinstaller = "^6.9.0"
 
 [build-system]
 requires = ["poetry-core"]
