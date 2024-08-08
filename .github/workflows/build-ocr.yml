@@ -15,29 +15,29 @@ jobs:
     strategy:
       matrix:
         include:
-          # - os: macos-latest
-          #   name: macos
-          #   cmd: >
-          #     cd OCR/ &&
-          #     poetry run build &&
-          #     cd dist/ &&
-          #     zip -r9 main-macos main
-          #   out_file: main-macos.zip
-          # - os: windows-latest
-          #   name: windows
-          #   cmd: >
-          #     cd OCR/ &&
-          #     poetry run build &&
-          #     7z a dist\main-windows.zip dist\
-          #   out_file: main-windows.zip
+          - os: macos-latest
+            name: macos
+            cmd: >
+              cd OCR/ &&
+              poetry run build &&
+              cd dist/ &&
+              zip -r9 main-macos main
+            out_file: main-macos.zip
+          - os: windows-latest
+            name: windows
+            cmd: >
+              cd OCR/ &&
+              poetry run build &&
+              7z a dist\main-windows.zip dist\
+            out_file: main-windows.zip
           - os: ubuntu-latest
             name: ubuntu
             cmd: >
               cd OCR/ &&
               poetry run build &&
               cd dist/ &&
-              zip -r9 main-ubuntu.zip main
-            out_file: main-ubuntu.zip
+              zip -r9 main-ubuntu main
+            out_file: main-ubuntu
     runs-on: ${{ matrix.os }}
     outputs:
       output_artifacts: ${{ steps.artifacts.outputs.matrix.out_file }}
