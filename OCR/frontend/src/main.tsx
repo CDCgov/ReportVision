@@ -6,6 +6,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import { UploadTemplate } from './pages/UploadTemplate.tsx';
 
 const router = createBrowserRouter([
   {
@@ -13,8 +14,8 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/hello",
-    element: <div>Hello world!</div>,
+    path: "/new-template/upload",
+    element: <UploadTemplate />,
   },
 ]);
 
