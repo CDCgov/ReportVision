@@ -12,6 +12,42 @@ to the the app in dev mode
 npm run dev
 ```
 
+
+# E2E common commands
+
+Inside that directory, you can run several commands:
+
+  Runs the end-to-end tests.
+  ```shell
+  npx playwright test
+  ```
+
+  Starts the interactive UI mode. 
+  ```shell
+  npx playwright test --ui
+  ```
+
+  Runs the tests only on Desktop Chrome.
+  ```shell
+  npx playwright test --project=chromium
+  ```
+
+  Runs the tests in a specific file.
+  ```shell
+  npx playwright test example
+  ```
+
+  Runs the tests in debug mode.
+  ```shell
+    npx playwright test --debug
+  ```
+
+  Auto generate tests with Codegen.
+  ```shell
+  npx playwright codegen
+  ```
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
