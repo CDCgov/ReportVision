@@ -9,4 +9,12 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './tests/setup.js',
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        includePaths: ["./node_modules/@uswds/uswds/packages"],
+        quietDeps: true
+      },
+    },
+  }
 })
