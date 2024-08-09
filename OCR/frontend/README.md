@@ -6,6 +6,11 @@ to run unit tests via Vitest
 npm run test
 ```
 
+to the the app in dev mode
+
+```shell
+npm run dev
+```
 
 # React + TypeScript + Vite
 
