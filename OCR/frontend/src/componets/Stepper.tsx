@@ -2,7 +2,7 @@ import { StepIndicator, StepIndicatorStep } from "@trussworks/react-uswds"
 
 export const Stepper = () => {
     return (
-        <StepIndicator  headingLevel="h5" headingProps={{  style: { display: 'none' }}}>
+        <StepIndicator data-testid='step-indicator'  headingLevel="h5" headingProps={{  style: { display: 'none' }}}>
             <StepIndicatorStep
                 label="Upload New Segment"
                 status="current"

@@ -1,8 +1,32 @@
-import { FileInput, Icon } from "@trussworks/react-uswds"
-import { useId } from "react"
+import { Icon } from "@trussworks/react-uswds"
+import { ChangeEvent, useId } from "react"
+import { FileInput } from "./FileInput"
+import { useFiles } from "../contexts/FilesContext"
+import { useNavigate } from "react-router-dom"
+
+interface IFilesObj {
+    files: File[]
+}
 
 export const Uploadfile = () => {
     const id = useId()
+    const {addFile} = useFiles()
+    const navigate = useNavigate()
+
+    async function handleChange(event: ChangeEvent<HTMLInputElement>) {
+        if (event.target.files && event.target?.files?.length > 0) {
+            const fileList = event.target.files
+            const filesObj: IFilesObj = {files: []}
+            for (let i = 0; i < fileList.length; i++) {
+                const file = fileList[i];
+                filesObj['files'].push(file)
+            }
+            localStorage.setItem('files', JSON.stringify(filesObj))
+            addFile(event.target?.files[0])
+            navigate('/new-template/annotate')
+        }
+    }
+
     return (
         <div className="display-flex flex-column flex-align-center flex-justify-start height-full width-full padding-2 bg-primary-lighter">
             <div style={{ width: '70%', textAlign: 'left' }}>
@@ -14,7 +38,7 @@ export const Uploadfile = () => {
                 <div className="display-flex flex-column flex-align-center margin-bottom-1" style={{ width: '60%' }}>
                     <h3 style={{ fontWeight: 'bold'}}>Drag and drop file here</h3>
                     <p>or</p>
-                    <FileInput id={`file-input-${id}`} className="padding-bottom-2" style={{ border: '1px dashed #005ea2' }} name="file-input-single" chooseText="Browse Files" dragText="  " />
+                    <FileInput onChange={handleChange} id={`file-input-${id}`} className="padding-bottom-2" style={{ border: '1px dashed #005ea2' }} name="file-input-single" chooseText="Browse Files" dragText="  " />
                 </div>
             </div>
         </div>

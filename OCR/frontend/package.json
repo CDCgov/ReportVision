@@ -8,14 +8,16 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest run --coverage.all",
     "test:update": "vitest --update",
     "e2e": "npx playwright test --project=chromium",
     "e2e:ui": "npx playwright test --ui"
   },
   "dependencies": {
+    "@testing-library/react-hooks": "^8.0.1",
     "@trussworks/react-uswds": "^9.0.0",
     "@uswds/uswds": "^3.8.1",
+    "classnames": "^2.5.1",
     "focus-trap-react": "^10.2.3",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",

@@ -2,10 +2,15 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
 import { Uploadfile } from '../UploadFile';
+import { Wrapper } from '../../utils/tests';
 
 describe('Uploadfile component', () => {
+
+    
+
+
   it('renders the header with correct text', () => {
-    render(<Uploadfile />);
+    render(<Uploadfile />, {wrapper: Wrapper});
 
     // Check for the main heading
     const mainHeading = screen.getByRole('heading', { name: /upload new form to segment/i });
@@ -19,7 +24,7 @@ describe('Uploadfile component', () => {
   });
 
   it('renders the upload area with correct structure', () => {
-    render(<Uploadfile />);
+    render(<Uploadfile />, {wrapper: Wrapper});
 
     // Check for the dashed border container
     const dashedContainer = screen.getByTestId('dashed-container');
