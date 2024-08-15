@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {UploadHeader} from "../componets/Header.tsx";
-import {Divider} from "../componets/Divider.tsx";
-import {Stepper} from "../componets/Stepper.tsx";
-import {AnnotateStep} from "../utils/constants.ts";
-import {useFiles} from "../contexts/FilesContext.tsx";
-import  * as pdfjsLib from "pdfjs-dist";
+import React, { useEffect, useState } from 'react';
+import { UploadHeader } from "../componets/Header.tsx";
+import { Divider } from "../componets/Divider.tsx";
+import { Stepper } from "../componets/Stepper.tsx";
+import { AnnotateStep } from "../utils/constants.ts";
+import { useFiles } from "../contexts/FilesContext.tsx";
+import * as pdfjsLib from "pdfjs-dist";
 import Sidebar from '../componets/Sidebar';
 import { LABELS } from '../constants/labels';
 
@@ -13,7 +13,7 @@ const AnnotateTemplate: React.FC = () => {
 
   const [images, setImages] = useState<string[]>([]);
 
-  const {files} = useFiles();
+  const { files } = useFiles();
   const pdfFile = files[0];
   if (pdfFile === undefined) {
     // navigate back to upload
@@ -21,18 +21,18 @@ const AnnotateTemplate: React.FC = () => {
 
 
   useEffect(() => {
-   
+
     if (!(pdfFile instanceof File)) {
       console.error("pdfFile is not a valid File object");
       return;
     }
-    
+
 
     //CDN works, todo investigate a way to circumvent this issue
     pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
     const convertPdfToImages = async (file: File) => {
-      const images: Array<string>= [];
+      const images: Array<string> = [];
       const data = URL.createObjectURL(file)
       const pdf = await pdfjsLib.getDocument(data).promise;
       const canvas = document.createElement("canvas");
@@ -60,7 +60,7 @@ const AnnotateTemplate: React.FC = () => {
   console.log(images)
 
   return (
-    <div className="display-flex flex-column height-full">
+    <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <UploadHeader />
       <Divider margin="0px" />
       <div className="display-flex flex-justify-center padding-top-4">
@@ -70,7 +70,7 @@ const AnnotateTemplate: React.FC = () => {
       <div className="display-flex flex-row flex-1 overflow-hidden">
         <Sidebar labels={LABELS} />
         <div className="flex-1 padding-2">
-          <div className="text-left margin-bottom-2">
+          <div className="text-left">
             <h2>Segment and label</h2>
             <p className="text-base">Annotate by segmenting and labeling your new template.</p>
           </div>
