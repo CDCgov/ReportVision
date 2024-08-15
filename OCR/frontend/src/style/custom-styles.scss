@@ -1,1 +1,47 @@
 @use 'uswds-core' as *;
+
+
+.usa-layout-docs__sidenav {
+    background-color:white;
+    padding: 1rem;
+    width: 300px;
+  }
+  
+  .usa-accordion__button {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+    padding: 0.5rem 0;
+    text-align: left;
+    width: 100%;
+  }
+  
+ 
+  
+  .usa-accordion__content {
+    padding-left: 0;
+  }
+  
+  .label-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .label-tag {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  .label-name {
+    flex-grow: 1;
+  }
