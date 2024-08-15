@@ -1,7 +1,8 @@
-import { Divider } from "../componets/Divider"
-import { UploadHeader } from "../componets/Header"
-import { Stepper } from "../componets/Stepper"
-import { Uploadfile } from "../componets/UploadFile"
+import {Divider} from "../componets/Divider"
+import {UploadHeader} from "../componets/Header"
+import {Stepper} from "../componets/Stepper"
+import {Uploadfile} from "../componets/UploadFile"
+import {AnnotateStep} from "../utils/constants.ts";
 
 export const UploadTemplate = () => {
     return (
@@ -9,7 +10,7 @@ export const UploadTemplate = () => {
             <UploadHeader />
             <Divider margin="0px" />
             <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '32px'}}>
-                <Stepper />
+                <Stepper currentStep={AnnotateStep.Upload}/>
             </div>
             <Divider margin="0px" />
             <Uploadfile />

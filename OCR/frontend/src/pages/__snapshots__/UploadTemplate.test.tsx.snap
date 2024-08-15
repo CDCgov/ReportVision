@@ -109,7 +109,7 @@ exports[`UploadTemplate component > matches the snapshot 1`] = `
             <span
               class="usa-step-indicator__segment-label"
             >
-              Save Templete 
+              Save Template 
               <span
                 class="usa-sr-only"
               >
