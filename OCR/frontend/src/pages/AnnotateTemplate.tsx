@@ -5,6 +5,8 @@ import {Stepper} from "../componets/Stepper.tsx";
 import {AnnotateStep} from "../utils/constants.ts";
 import {useFiles} from "../contexts/FilesContext.tsx";
 import  * as pdfjsLib from "pdfjs-dist";
+import Sidebar from '../componets/Sidebar';
+import { LABELS } from '../constants/labels';
 
 const AnnotateTemplate: React.FC = () => {
 
@@ -19,6 +21,12 @@ const AnnotateTemplate: React.FC = () => {
 
 
   useEffect(() => {
+   
+    if (!(pdfFile instanceof File)) {
+      console.error("pdfFile is not a valid File object");
+      return;
+    }
+    
 
     //CDN works, todo investigate a way to circumvent this issue
     pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
@@ -38,6 +46,7 @@ const AnnotateTemplate: React.FC = () => {
         images.push(canvas.toDataURL());
       }
       canvas.remove();
+      URL.revokeObjectURL(data);
       return images;
     }
 
@@ -51,27 +60,32 @@ const AnnotateTemplate: React.FC = () => {
   console.log(images)
 
   return (
-    <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
-      <UploadHeader/>
-      <Divider margin="0px"/>
+    <div className="display-flex flex-column height-full">
+      <UploadHeader />
+      <Divider margin="0px" />
       <div className="display-flex flex-justify-center padding-top-4">
-        <Stepper currentStep={AnnotateStep.Annotate}/>
+        <Stepper currentStep={AnnotateStep.Annotate} />
       </div>
-      <Divider margin="0px"/>
-
-      <div className="grid-row height-full">
-        <div className="grid-col flex-3">
-          <div className="text-left">
+      <Divider margin="0px" />
+      <div className="display-flex flex-row flex-1 overflow-hidden">
+        <Sidebar labels={LABELS} />
+        <div className="flex-1 padding-2">
+          <div className="text-left margin-bottom-2">
             <h2>Segment and label</h2>
-            <p className="text-base">Annotate by segmenting and labeling your new template.</p></div>
-            <Divider margin="0px"/>
-        </div>
-        <div className="grid-col flex-7">
-          <iframe className="height-full width-full" src={URL.createObjectURL(files[0])}></iframe>
+            <p className="text-base">Annotate by segmenting and labeling your new template.</p>
+          </div>
+          <Divider margin="0px" />
+          <div className="height-full">
+            {pdfFile instanceof File ? (
+              <iframe className="width-full height-full" src={URL.createObjectURL(pdfFile)}></iframe>
+            ) : (
+              <div>No PDF file available</div>
+            )}
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default AnnotateTemplate;
