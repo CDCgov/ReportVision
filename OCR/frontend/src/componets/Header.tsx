@@ -1,6 +1,13 @@
 import { Button, Header, Icon } from "@trussworks/react-uswds"
+import { useNavigate } from "react-router-dom";
 
-export const UploadHeader = () => {
+interface UploadHeaderProps {
+    onBack: () => void;
+    onSubmit: () => void;
+}
+
+export const UploadHeader = ({onBack, onSubmit}: UploadHeaderProps) => {
+
     return (
         <Header style={{ height: '50px', padding: '8px' }}>
         <div className="display-flex height-full flex-align-center" style={{ justifyContent: 'space-between' }}>
@@ -11,8 +18,8 @@ export const UploadHeader = () => {
                 <h1>Annotate new template</h1>
             </div>
             <div className="display-flex flex-jusitfy-start height-full flex-align-center">
-                <Button type="reset" outline style={{ height: '40px', boxShadow: 'inset 0 0 0 2px  #adadad', color: '#adadad'}} >Back</Button>
-                <Button type="submit" base style={{ height: '40px' }}>Submit</Button>
+                <Button onClick={onBack} type="reset" outline style={{ height: '40px', boxShadow: 'inset 0 0 0 2px  #adadad', color: '#adadad'}} >Back</Button>
+                <Button onClick={onSubmit} type="submit" base style={{ height: '40px' }}>Submit</Button>
             </div>
         </div>
     </Header>
