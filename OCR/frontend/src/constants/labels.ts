@@ -11,7 +11,6 @@ export const LABELS = {
       {
         name: "Address",
         required: false,
-        color: "#2e8540",
       },
     ],
   },
