@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { UploadHeader } from "../componets/Header.tsx";
 import { Divider } from "../componets/Divider.tsx";
 import { Stepper } from "../componets/Stepper.tsx";
 import { AnnotateStep } from "../utils/constants.ts";
 import { useFiles } from "../contexts/FilesContext.tsx";
 import * as pdfjsLib from "pdfjs-dist";
-import { Accordion, AccordionItemProps } from '@trussworks/react-uswds';
-import { LABELS } from '../constants/labels';
+import { Accordion, AccordionItemProps } from "@trussworks/react-uswds";
+import { LABELS } from "../constants/labels";
+import "./AnnotateTemplate.scss";
 
 interface LabelItem {
   name: string;
@@ -36,6 +37,7 @@ const AnnotateTemplate: React.FC = () => {
     const convertPdfToImages = async (file: File) => {
       const images: Array<string> = [];
       const data = URL.createObjectURL(file);
+
       const pdf = await pdfjsLib.getDocument(data).promise;
       const canvas = document.createElement("canvas");
       for (let i = 0; i < pdf.numPages; i++) {
@@ -44,7 +46,8 @@ const AnnotateTemplate: React.FC = () => {
         const context = canvas.getContext("2d")!;
         canvas.height = viewport.height;
         canvas.width = viewport.width;
-        await page.render({ canvasContext: context, viewport: viewport }).promise;
+        await page.render({ canvasContext: context, viewport: viewport })
+          .promise;
         images.push(canvas.toDataURL());
       }
       canvas.remove();
@@ -60,12 +63,43 @@ const AnnotateTemplate: React.FC = () => {
   const renderLabelContent = (category: LabelCategory): JSX.Element => (
     <ul className="usa-list usa-list--unstyled">
       {category.items.map((item) => (
-        <li key={item.name}>
-            {item.name} {!item.required && <span>Not found</span>}
+        <li
+          key={item.name}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "8px 0",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <span
+              style={{
+                fontWeight: "normal",
+                marginLeft: "8px",
+              }}
+            >
+              {item.name}
+            </span>
+          </div>
+          {!item.required && (
+            <span
+              style={{
+                color: "#6c757d",
+                textAlign: "right",
+                marginLeft: "auto",
+              }}
+            >
+              Not found
+            </span>
+          )}
           {item.subItems && (
-            <ul className="usa-list usa-list--unstyled margin-left-4">
+            <ul
+              className="usa-list usa-list--unstyled"
+              style={{ marginLeft: "24px", marginTop: "4px" }}
+            >
               {item.subItems.map((subItem) => (
-                <li>
+                <li key={subItem.name}>
                   <span>{subItem.name}</span>
                 </li>
               ))}
@@ -76,15 +110,15 @@ const AnnotateTemplate: React.FC = () => {
     </ul>
   );
 
-  const accordionItems: AccordionItemProps[] = Object.entries(LABELS).map(([key, category]) => ({
-    title: category.title,
-    content: renderLabelContent(category),
-    expanded: false,
-    id: key,
-    headingLevel: 'h3'
-  }));
-
-  
+  const accordionItems: AccordionItemProps[] = Object.entries(LABELS).map(
+    ([key, category]) => ({
+      title: category.title,
+      content: renderLabelContent(category),
+      expanded: false,
+      id: key,
+      headingLevel: "h3",
+    })
+  );
 
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
@@ -97,14 +131,19 @@ const AnnotateTemplate: React.FC = () => {
       <div className="grid-row height-full">
         <div className="grid-col flex-3">
           <h2>Segment and label</h2>
-          <p className="text-base">Annotate by segmenting and labeling your new template.</p>
+          <p className="text-base">
+            Annotate by segmenting and labeling your new template.
+          </p>
           <Divider margin="0px" />
           <Accordion items={accordionItems} />
         </div>
         <div className="grid-col flex-7">
           <div className="height-full">
             {pdfFile instanceof File ? (
-              <iframe className="width-full height-full" src={URL.createObjectURL(pdfFile)}></iframe>
+              <iframe
+                className="width-full height-full"
+                src={URL.createObjectURL(pdfFile)}
+              ></iframe>
             ) : (
               <div>No PDF file available</div>
             )}
