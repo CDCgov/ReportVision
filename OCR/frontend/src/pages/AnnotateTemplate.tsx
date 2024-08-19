@@ -66,50 +66,26 @@ const AnnotateTemplate: React.FC = () => {
       {category.items.map((item) => (
         <li
           key={item.name}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "8px 0",
-          }}
+          className="display-flex flex-justify space-between flex-align-center padding-y-1"
         >
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="display-flex flex-align-center">
             <div
-              style={{
-                backgroundColor: item.color || "#007BFF",
-                padding: "1px",
-                borderRadius: "2px",
-                display: "flex",
-                alignItems: "center",
-              }}
+              className="display-flex flex-align-center bg-primary padding-1px radius-md"
+              style={{ backgroundColor: item.color || "#007BFF" }}
             >
               <Icon.TextFields color="white" />
             </div>
-            <span
-              style={{
-                fontWeight: "normal",
-                marginLeft: "8px",
-              }}
-            >
+            <span className="margin-left-1 text-normal">
               {item.name}
             </span>
           </div>
           {!item.required && (
-            <span
-              style={{
-                color: "#6c757d",
-                textAlign: "right",
-                marginLeft: "auto",
-              }}
-            >
+            <span className="text-secondary text-right margin-left-auto">
               Not found
             </span>
           )}
           {item.subItems && (
-            <ul
-              className="usa-list usa-list--unstyled"
-              style={{ marginLeft: "24px", marginTop: "4px" }}
-            >
+            <ul className="usa-list usa-list--unstyled margin-left-6 margin-top-1">
               {item.subItems.map((subItem) => (
                 <li key={subItem.name}>
                   <span>{subItem.name}</span>
