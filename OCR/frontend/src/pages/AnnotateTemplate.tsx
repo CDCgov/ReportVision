@@ -124,7 +124,7 @@ const AnnotateTemplate: React.FC = () => {
           <Divider margin="0px" />
           <Accordion items={accordionItems} />
         </div>
-        <div className="grid-col-9 height-full overflow-y-auto bg-base-lightest">
+        <div className="grid-col-9 height-full overflow-y-auto bg-base-lightest display-flex flex-justify-center">
           {pdfFile instanceof File ? (
             <MultiImageAnnotator images={images} categories={[]} />
           ) : (
