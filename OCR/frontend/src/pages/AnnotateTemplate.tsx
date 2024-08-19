@@ -74,7 +74,7 @@ const AnnotateTemplate: React.FC = () => {
         >
           <div className="display-flex flex-align-center">
             <div
-              className="display-flex flex-align-center bg-primary padding-1px radius-md"
+              className="display-flex flex-align-center bg-primary padding-1px"
               style={{ backgroundColor: item.color || "#007BFF" }}
             >
               <Icon.TextFields color="white" />
@@ -115,8 +115,8 @@ const AnnotateTemplate: React.FC = () => {
         <Stepper currentStep={AnnotateStep.Annotate} />
       </div>
       <Divider margin="0px" />
-      <div className="grid-row height-full">
-        <div className="grid-col flex-3 height-full">
+      <div className="grid-row  flex-1 overflow-hidden">
+        <div className="grid-col-3 flex-3 height-full overflow-y-auto">
           <h2>Segment and label</h2>
           <p className="text-base">
             Annotate by segmenting and labeling your new template.
@@ -124,11 +124,13 @@ const AnnotateTemplate: React.FC = () => {
           <Divider margin="0px" />
           <Accordion items={accordionItems} />
         </div>
-        <div className="grid-col flex-7 bg-accent-cool-lighter display-flex flex-justify-center">
+        <div className="grid-col-9 height-full overflow-y-auto bg-base-lightest">
           {pdfFile instanceof File ? (
             <MultiImageAnnotator images={images} categories={[]} />
           ) : (
-            <div>PDF Not Found</div>
+            <div className="display-flex flex-justify-center flex-align-center height-full">
+              No PDF File available
+            </div>
           )}
         </div>
       </div>
