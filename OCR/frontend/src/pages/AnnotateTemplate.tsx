@@ -75,9 +75,7 @@ const AnnotateTemplate: React.FC = () => {
             >
               <Icon.TextFields color="white" />
             </div>
-            <span className="margin-left-1 text-normal">
-              {item.name}
-            </span>
+            <span className="margin-left-1 text-normal">{item.name}</span>
           </div>
           {!item.required && (
             <span className="text-secondary text-right margin-left-auto">
@@ -97,7 +95,6 @@ const AnnotateTemplate: React.FC = () => {
       ))}
     </ul>
   );
-  
 
   const accordionItems: AccordionItemProps[] = Object.entries(LABELS).map(
     ([key, category]) => ({
