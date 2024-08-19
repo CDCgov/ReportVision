@@ -75,12 +75,13 @@ const AnnotateTemplate: React.FC = () => {
             >
               <Icon.TextFields color="white" />
             </div>
-            <span className="margin-left-1 text-normal">
-              {item.name}
-            </span>
+            <span className="margin-left-1 text-normal">{item.name}</span>
           </div>
           {!item.required && (
-            <span style={{ color: "#6c757d" }} className="text-right margin-left-auto">
+            <span
+              style={{ color: "#6c757d" }}
+              className="text-right margin-left-auto"
+            >
               Not found
             </span>
           )}
@@ -88,7 +89,6 @@ const AnnotateTemplate: React.FC = () => {
       ))}
     </ul>
   );
-  
 
   const accordionItems: AccordionItemProps[] = Object.entries(LABELS).map(
     ([key, category]) => ({
