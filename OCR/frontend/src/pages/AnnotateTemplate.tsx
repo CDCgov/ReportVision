@@ -5,8 +5,8 @@ import { AnnotateStep } from "../utils/constants.ts";
 import { useFiles } from "../contexts/FilesContext.tsx";
 import * as pdfjsLib from "pdfjs-dist";
 import { Accordion, AccordionItemProps } from "@trussworks/react-uswds";
-import { MultiImageAnnotator } from '../componets/ImageAnnotator.tsx';
-import { useNavigate } from 'react-router-dom';
+import { MultiImageAnnotator } from "../componets/ImageAnnotator.tsx";
+import { useNavigate } from "react-router-dom";
 import { LABELS } from "../constants/labels";
 import "./AnnotateTemplate.scss";
 import { Icon } from "@trussworks/react-uswds";
@@ -28,7 +28,7 @@ const AnnotateTemplate: React.FC = () => {
   const [images, setImages] = useState<string[]>([]);
   const navigate = useNavigate();
 
-  const {files} = useFiles();
+  const { files } = useFiles();
   const pdfFile = files[0];
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const AnnotateTemplate: React.FC = () => {
               style={{ color: "#6c757d" }}
               className="text-right margin-left-auto"
             >
-              Not found
+              PDF Not found
             </span>
           )}
         </li>
@@ -106,8 +106,11 @@ const AnnotateTemplate: React.FC = () => {
 
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
-      <UploadHeader onBack={() => navigate('/new-template/upload')} onSubmit={() => console.log('SUBMITTING')}/>
-      <Divider margin="0px"/>
+      <UploadHeader
+        onBack={() => navigate("/new-template/upload")}
+        onSubmit={() => console.log("SUBMITTING")}
+      />
+      <Divider margin="0px" />
       <div className="display-flex flex-justify-center padding-top-4">
         <Stepper currentStep={AnnotateStep.Annotate} />
       </div>
@@ -121,23 +124,14 @@ const AnnotateTemplate: React.FC = () => {
           <Divider margin="0px" />
           <Accordion items={accordionItems} />
         </div>
-        <div className="grid-col flex-7">
-          <div className="height-full">
-            {pdfFile instanceof File ? (
-              <iframe
-                className="width-full height-full"
-                src={URL.createObjectURL(pdfFile)}
-              ></iframe>
-            ) : (
-              <div>No PDF file available</div>
-            )}
-          </div>
-       
         <div className="grid-col flex-7 bg-accent-cool-lighter display-flex flex-justify-center">
-          <MultiImageAnnotator images={images} categories={[]} />
+          {pdfFile instanceof File ? (
+            <MultiImageAnnotator images={images} categories={[]} />
+          ) : (
+            <div>No PDF file available</div>
+          )}
         </div>
       </div>
-    </div>
     </div>
   );
 };
