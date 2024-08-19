@@ -86,7 +86,7 @@ const AnnotateTemplate: React.FC = () => {
               style={{ color: "#6c757d" }}
               className="text-right margin-left-auto"
             >
-              PDF Not found
+              Not found
             </span>
           )}
         </li>
@@ -128,7 +128,7 @@ const AnnotateTemplate: React.FC = () => {
           {pdfFile instanceof File ? (
             <MultiImageAnnotator images={images} categories={[]} />
           ) : (
-            <div>Not Found</div>
+            <div>PDF Not Found</div>
           )}
         </div>
       </div>
