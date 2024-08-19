@@ -8,6 +8,7 @@ import * as pdfjsLib from "pdfjs-dist";
 import { Accordion, AccordionItemProps } from "@trussworks/react-uswds";
 import { LABELS } from "../constants/labels";
 import "./AnnotateTemplate.scss";
+import { Icon } from "@trussworks/react-uswds";
 
 interface LabelItem {
   name: string;
@@ -73,6 +74,18 @@ const AnnotateTemplate: React.FC = () => {
           }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                backgroundColor: item.color || "#007BFF",
+                padding: "8px",
+                borderRadius: "4px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Icon.TextFields size={1} color="white" /> 
+            </div>
             <span
               style={{
                 fontWeight: "normal",
