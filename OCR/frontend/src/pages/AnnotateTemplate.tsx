@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { UploadHeader } from "../componets/Header.tsx";
 import { Divider } from "../componets/Divider.tsx";
 import { Stepper } from "../componets/Stepper.tsx";
@@ -6,9 +5,12 @@ import { AnnotateStep } from "../utils/constants.ts";
 import { useFiles } from "../contexts/FilesContext.tsx";
 import * as pdfjsLib from "pdfjs-dist";
 import { Accordion, AccordionItemProps } from "@trussworks/react-uswds";
+import { MultiImageAnnotator } from '../componets/ImageAnnotator.tsx';
+import { useNavigate } from 'react-router-dom';
 import { LABELS } from "../constants/labels";
 import "./AnnotateTemplate.scss";
 import { Icon } from "@trussworks/react-uswds";
+import { useEffect, useState } from "react";
 
 interface LabelItem {
   name: string;
@@ -24,7 +26,9 @@ interface LabelCategory {
 
 const AnnotateTemplate: React.FC = () => {
   const [images, setImages] = useState<string[]>([]);
-  const { files } = useFiles();
+  const navigate = useNavigate();
+
+  const {files} = useFiles();
   const pdfFile = files[0];
 
   useEffect(() => {
@@ -102,8 +106,8 @@ const AnnotateTemplate: React.FC = () => {
 
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
-      <UploadHeader />
-      <Divider margin="0px" />
+      <UploadHeader onBack={() => navigate('/new-template/upload')} onSubmit={() => console.log('SUBMITTING')}/>
+      <Divider margin="0px"/>
       <div className="display-flex flex-justify-center padding-top-4">
         <Stepper currentStep={AnnotateStep.Annotate} />
       </div>
@@ -128,8 +132,12 @@ const AnnotateTemplate: React.FC = () => {
               <div>No PDF file available</div>
             )}
           </div>
+       
+        <div className="grid-col flex-7 bg-accent-cool-lighter display-flex flex-justify-center">
+          <MultiImageAnnotator images={images} categories={[]} />
         </div>
       </div>
+    </div>
     </div>
   );
 };

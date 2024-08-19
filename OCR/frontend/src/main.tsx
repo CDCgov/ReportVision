@@ -9,6 +9,7 @@ import {
 import { UploadTemplate } from './pages/UploadTemplate.tsx';
 import { FilesProvider } from './contexts/FilesContext.tsx';
 import AnnotateTemplate from './pages/AnnotateTemplate.tsx';
+import './App.scss';
 
 const router = createBrowserRouter([
   {
