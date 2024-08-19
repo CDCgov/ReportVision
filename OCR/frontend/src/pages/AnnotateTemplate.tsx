@@ -77,14 +77,13 @@ const AnnotateTemplate: React.FC = () => {
             <div
               style={{
                 backgroundColor: item.color || "#007BFF",
-                padding: "8px",
-                borderRadius: "4px",
+                padding: "1px",
+                borderRadius: "2px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
               }}
             >
-              <Icon.TextFields size={1} color="white" /> 
+              <Icon.TextFields color="white" />
             </div>
             <span
               style={{
