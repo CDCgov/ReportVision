@@ -70,31 +70,25 @@ const AnnotateTemplate: React.FC = () => {
         >
           <div className="display-flex flex-align-center">
             <div
-              className="display-flex flex-align-center bg-primary padding-1px"
+              className="display-flex flex-align-center bg-primary padding-1px radius-md"
               style={{ backgroundColor: item.color || "#007BFF" }}
             >
               <Icon.TextFields color="white" />
             </div>
-            <span className="margin-left-1 text-normal">{item.name}</span>
+            <span className="margin-left-1 text-normal">
+              {item.name}
+            </span>
           </div>
           {!item.required && (
-            <span className="text-secondary text-right margin-left-auto">
+            <span style={{ color: "#6c757d" }} className="text-right margin-left-auto">
               Not found
             </span>
-          )}
-          {item.subItems && (
-            <ul className="usa-list usa-list--unstyled margin-left-6 margin-top-1">
-              {item.subItems.map((subItem) => (
-                <li key={subItem.name}>
-                  <span>{subItem.name}</span>
-                </li>
-              ))}
-            </ul>
           )}
         </li>
       ))}
     </ul>
   );
+  
 
   const accordionItems: AccordionItemProps[] = Object.entries(LABELS).map(
     ([key, category]) => ({
