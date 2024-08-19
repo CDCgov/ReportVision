@@ -5,11 +5,12 @@ import {Stepper} from "../componets/Stepper.tsx";
 import {AnnotateStep} from "../utils/constants.ts";
 import {useFiles} from "../contexts/FilesContext.tsx";
 import  * as pdfjsLib from "pdfjs-dist";
+import { MultiImageAnnotator } from '../componets/ImageAnnotator.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const AnnotateTemplate: React.FC = () => {
-
-
   const [images, setImages] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const {files} = useFiles();
   const pdfFile = files[0];
@@ -52,7 +53,7 @@ const AnnotateTemplate: React.FC = () => {
 
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
-      <UploadHeader/>
+      <UploadHeader onBack={() => navigate('/new-template/upload')} onSubmit={() => console.log('SUBMITTING')}/>
       <Divider margin="0px"/>
       <div className="display-flex flex-justify-center padding-top-4">
         <Stepper currentStep={AnnotateStep.Annotate}/>
@@ -60,14 +61,14 @@ const AnnotateTemplate: React.FC = () => {
       <Divider margin="0px"/>
 
       <div className="grid-row height-full">
-        <div className="grid-col flex-3">
+        <div className="grid-col flex-3 bg-white width-fill">
           <div className="text-left">
             <h2>Segment and label</h2>
             <p className="text-base">Annotate by segmenting and labeling your new template.</p></div>
             <Divider margin="0px"/>
         </div>
-        <div className="grid-col flex-7">
-          <iframe className="height-full width-full" src={URL.createObjectURL(files[0])}></iframe>
+        <div className="grid-col flex-7 bg-accent-cool-lighter display-flex flex-justify-center">
+          <MultiImageAnnotator images={images} categories={[]} />
         </div>
       </div>
     </div>
