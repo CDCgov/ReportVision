@@ -116,7 +116,7 @@ const AnnotateTemplate: React.FC = () => {
       </div>
       <Divider margin="0px" />
       <div className="grid-row height-full">
-        <div className="grid-col flex-3">
+        <div className="grid-col flex-3 height-full">
           <h2>Segment and label</h2>
           <p className="text-base">
             Annotate by segmenting and labeling your new template.
@@ -128,7 +128,7 @@ const AnnotateTemplate: React.FC = () => {
           {pdfFile instanceof File ? (
             <MultiImageAnnotator images={images} categories={[]} />
           ) : (
-            <div>No PDF file available</div>
+            <div>Not Found</div>
           )}
         </div>
       </div>
