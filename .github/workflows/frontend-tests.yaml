@@ -6,7 +6,27 @@ on:
       - frontend-tests-GHA
 
 jobs:
-  test:
+#   vitests:
+#     runs-on: ubuntu-latest
+#     defaults:
+#         run:
+#           working-directory: OCR/frontend
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '18'
+
+#       - name: Install dependencies
+#         run: npm install @rollup/rollup-linux-x64-gnu --save-optional
+
+#       - name: Run Jest tests
+#         run: npx playwright test
+
+  playwright-tests:
     runs-on: ubuntu-latest
     defaults:
         run:
@@ -21,7 +41,7 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install @rollup/rollup-linux-x64-gnu --save-optional
+        run: npx playwright install
 
       - name: Run Jest tests
-        run: npm run test
+        run: npx playwright test
