@@ -25,7 +25,7 @@ jobs:
 
       - name: Run Jest tests
         run: |
-            CI=true npm run test
+            npm run test
 
 #   playwright-tests:
 #     runs-on: ubuntu-latest
