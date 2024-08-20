@@ -20,6 +20,8 @@ jobs:
         with:
           node-version: '18'
       - uses: bahmutov/npm-install@v1
+        with:
+            working-directory: OCR/frontend
 
       - name: Run Jest tests
         run: |
