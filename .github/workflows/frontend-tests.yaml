@@ -41,7 +41,9 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npx playwright install
+        run: |
+            npm install
+            npx playwright install
 
       - name: Run Jest tests
         run: npx playwright test
