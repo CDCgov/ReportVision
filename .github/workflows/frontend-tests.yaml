@@ -42,7 +42,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-            npm install @rollup/rollup-linux-x64-gnu --save-optional
+            npm ci
             npx playwright install --with-deps
 
       - name: Run Jest tests
