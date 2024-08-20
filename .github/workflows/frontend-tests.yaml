@@ -19,9 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
-      - name: Install dependencies
-        run: npm install @rollup/rollup-linux-x64-gnu --save-optional
+      - uses: bahmutov/npm-install@v1
 
       - name: Run Jest tests
         run: |
