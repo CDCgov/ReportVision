@@ -13,15 +13,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
       - name: Install dependencies
         run: npm install @rollup/rollup-linux-x64-gnu --save-optional
-
       - name: Run Jest tests
         run: |
             npm run test
@@ -33,16 +30,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
       - name: Install dependencies
         run: |
             npm ci
             npx playwright install --with-deps
-
       - name: Run playwright tests
         run: npx playwright test
