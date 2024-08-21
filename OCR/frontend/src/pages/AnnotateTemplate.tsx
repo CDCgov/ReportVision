@@ -8,7 +8,6 @@ import { Accordion, AccordionItemProps } from "@trussworks/react-uswds";
 import { MultiImageAnnotator } from "../componets/ImageAnnotator.tsx";
 import { useNavigate } from "react-router-dom";
 import { LABELS } from "../constants/labels";
-import "./AnnotateTemplate.scss";
 import { Icon } from "@trussworks/react-uswds";
 import { useEffect, useState } from "react";
 
