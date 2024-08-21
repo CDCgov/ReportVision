@@ -11,7 +11,7 @@ on:
     
 jobs:
   vitests:
-    runs-on: maco-latest
+    runs-on: macos-latest
     defaults:
         run:
           working-directory: OCR/frontend
