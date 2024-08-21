@@ -11,7 +11,7 @@ on:
     
 jobs:
   vitests:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     defaults:
         run:
           working-directory: OCR/frontend
