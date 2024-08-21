@@ -1,13 +1,10 @@
 name: Run Tests
 
 on:
-    push:
-        branches:
-            - frontend-tests-GHA
-    # pull_request:
-    #     paths:
-    #     - .github/workflows/frontend-tests.yml
-    #     - OCR/frontend/**
+    pull_request:
+        paths:
+        - .github/workflows/frontend-tests.yml
+        - OCR/frontend/**
     
 jobs:
   vitests:
