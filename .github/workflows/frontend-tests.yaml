@@ -1,6 +1,12 @@
 name: Run Tests
 
 on:
+    push:
+        branches:
+          - main
+        paths:
+        - .github/workflows/frontend-tests.yml
+        - OCR/frontend/**
     pull_request:
         paths:
         - .github/workflows/frontend-tests.yml
