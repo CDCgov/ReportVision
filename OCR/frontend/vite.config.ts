@@ -5,7 +5,6 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   test: {
-    exclude: ['./e2e', './e2e-examples', './playwright.config.ts'],
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setup.js',
