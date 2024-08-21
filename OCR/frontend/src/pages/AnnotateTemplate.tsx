@@ -85,7 +85,7 @@ const AnnotateTemplate: React.FC = () => {
               style={{ color: "#6c757d" }}
               className="text-right margin-left-auto"
             >
-              Not found
+              Not Found
             </span>
           )}
         </li>
