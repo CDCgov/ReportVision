@@ -1,0 +1,10 @@
+@import '../../node_modules/@uswds/uswds/src/stylesheets/uswds.scss';
+
+.label-container {
+    &:hover {
+        cursor: pointer;
+        @include u-shadow(2);
+        outline: 1px solid #dadada;
+        outline-offset: 4px;
+    }
+}

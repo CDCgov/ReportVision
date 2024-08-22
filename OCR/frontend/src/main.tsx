@@ -10,6 +10,7 @@ import { UploadTemplate } from './pages/UploadTemplate.tsx';
 import { FilesProvider } from './contexts/FilesContext.tsx';
 import AnnotateTemplate from './pages/AnnotateTemplate.tsx';
 import './App.scss';
+import { AnnotationProvider } from './contexts/AnnotationContext.tsx';
 
 const router = createBrowserRouter([
   {
@@ -28,8 +29,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <AnnotationProvider>
     <FilesProvider>
       <RouterProvider router={router} />
     </FilesProvider>
+    </AnnotationProvider>
   </StrictMode>,
 )

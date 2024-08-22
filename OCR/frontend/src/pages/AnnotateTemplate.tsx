@@ -9,7 +9,10 @@ import { MultiImageAnnotator } from "../componets/ImageAnnotator.tsx";
 import { useNavigate } from "react-router-dom";
 import { LABELS } from "../constants/labels";
 import { Icon } from "@trussworks/react-uswds";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useId } from "react";
+
+import "./AnnotateTemplate.scss";
+import { useAnnotationContext } from "../contexts/AnnotationContext.tsx";
 
 interface LabelItem {
   name: string;
@@ -28,7 +31,9 @@ const AnnotateTemplate: React.FC = () => {
   const navigate = useNavigate();
 
   const { files } = useFiles();
+  const { setSelectedField, annotator, shapes, setFields, fields } = useAnnotationContext();
   const pdfFile = files[0];
+  const id = useId();
 
   useEffect(() => {
     if (!(pdfFile instanceof File)) {
@@ -61,15 +66,41 @@ const AnnotateTemplate: React.FC = () => {
 
     convertPdfToImages(pdfFile).then((imgs) => {
       setImages(imgs);
+      localStorage.setItem('images', JSON.stringify(imgs));
     });
-  }, [files]);
-
+  }, [files, pdfFile]);
+  useEffect(() => {
+    const getImage = async () => {
+        const localImages = await JSON.parse(localStorage.getItem('images') || '[]')
+        if (localImages.length > 0) {
+            setImages(localImages)
+        }
+    }
+    getImage();
+  }, [])
   const renderLabelContent = (category: LabelCategory): JSX.Element => (
     <ul className="usa-list usa-list--unstyled">
-      {category.items.map((item) => (
+      {category.items.map((item, idx) => (
         <li
           key={item.name}
-          className="display-flex flex-justify space-between flex-align-center padding-y-1"
+          className="display-flex flex-justify space-between flex-align-center padding-y-1 label-container margin-0"
+          onClick={() => {
+            setSelectedField({
+                name: item.name,
+                id: String(idx + 1),
+                color: item.color,
+            });
+            
+            if (!fields.has(item.name)){
+                // const localSet = new Set([...fields]);
+
+                annotator!.drawRectangle();
+                fields.add(item.name);
+                setFields(fields)
+            }else {
+                annotator!.edit(idx + 1);
+            }
+          }}
         >
           <div className="display-flex flex-align-center">
             <div
@@ -124,11 +155,11 @@ const AnnotateTemplate: React.FC = () => {
           <Accordion items={accordionItems} />
         </div>
         <div className="grid-col-9 height-full overflow-y-auto bg-base-lightest display-flex flex-justify-center">
-          {pdfFile instanceof File ? (
+          {images.length > 0 ? (
             <MultiImageAnnotator images={images} categories={[]} />
           ) : (
             <div className="display-flex flex-justify-center flex-align-center height-full">
-              No PDF File available
+              No image File available
             </div>
           )}
         </div>
