@@ -11,7 +11,8 @@ interface MultiImageAnnotatorProps {
 export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, categories, initialShapes = [] }) => {
     const { setHandles, annotator } = useImageAnnotator();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [shapes, setShapes] = useState<Shape[][]>(initialShapes);
+    const localSttorageShapes: Shape[][] = JSON.parse(localStorage.getItem('shapes') || '[]');
+    const [shapes, setShapes] = useState<Shape[][]>(localSttorageShapes.length > 0 ? localSttorageShapes : initialShapes);
     const [dialog, setDialog] = useState<{ show: boolean, shape: Shape | undefined }>({ show: false, shape: undefined });
 
     const selectedCategoriesChanged = (items: string[]) => {
@@ -35,7 +36,7 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
         const updatedShapes = [...shapes];
         updatedShapes[currentImageIndex] = [...(updatedShapes[currentImageIndex] || []), shape];
         setShapes(updatedShapes);
-        console.log(shape);
+        localStorage.setItem('shapes', JSON.stringify(updatedShapes));
         setDialog({ show: true, shape });
     };
 
@@ -46,7 +47,6 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
     const handleShapeSelection = (shape: Shape) => {
         setDialog({ show: true, shape });
     };
-    console.log(dialog)
     return (
         <div>
             <div className='padding-1'>
@@ -93,7 +93,6 @@ const Dialog = ({ items=['item1', 'item2', 'item3'], itemsChanged, onClose, onEd
         selected.sort((c1, c2) => categories.indexOf(c1) - categories.indexOf(c2));
         itemsChanged(selected);
     };
-    console.log(offset)
     return (
         <div className='bg-accent-warm' onClick={onClose}>
             <div  onClick={e => e.stopPropagation()}
