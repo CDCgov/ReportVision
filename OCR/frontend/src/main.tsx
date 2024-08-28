@@ -9,6 +9,7 @@ import {
 import { UploadTemplate } from './pages/UploadTemplate.tsx';
 import { FilesProvider } from './contexts/FilesContext.tsx';
 import AnnotateTemplate from './pages/AnnotateTemplate.tsx';
+import ExtractUpload from './pages/ExtractUpload.tsx';
 import './App.scss';
 
 const router = createBrowserRouter([
@@ -23,7 +24,14 @@ const router = createBrowserRouter([
   {
     path: "/new-template/annotate",
     element: <AnnotateTemplate />,
+  },
+  {
+    path: "/extract/upload",
+    element: <ExtractUpload />,
+
   }
+  
+
 ]);
 
 createRoot(document.getElementById('root')!).render(
