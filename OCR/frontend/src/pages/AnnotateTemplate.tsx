@@ -96,7 +96,13 @@ const AnnotateTemplate: React.FC = () => {
   const accordionItems: AccordionItemProps[] = Object.entries(LABELS).map(
     ([key, category]) => ({
       title: category.title,
-      content: renderLabelContent(category),
+      content: renderLabelContent({
+        ...category,
+        items: category.items.map((item) => ({
+          ...item,
+          color: "#007BFF",
+        })),
+      }),
       expanded: false,
       id: key,
       headingLevel: "h3",

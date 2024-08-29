@@ -1,16 +1,14 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './style/index.scss'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import { UploadTemplate } from './pages/UploadTemplate.tsx';
-import { FilesProvider } from './contexts/FilesContext.tsx';
-import AnnotateTemplate from './pages/AnnotateTemplate.tsx';
-import ExtractUpload from './pages/ExtractUpload.tsx';
-import './App.scss';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
+import "./style/index.scss";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { UploadTemplate } from "./pages/UploadTemplate.tsx";
+import { FilesProvider } from "./contexts/FilesContext.tsx";
+import AnnotateTemplate from "./pages/AnnotateTemplate.tsx";
+import ExtractUpload from "./pages/ExtractUpload.tsx";
+import ExtractProcess from "./pages/ExtractProcess.tsx";
+import "./App.scss";
 
 const router = createBrowserRouter([
   {
@@ -28,16 +26,17 @@ const router = createBrowserRouter([
   {
     path: "/extract/upload",
     element: <ExtractUpload />,
-
-  }
-  
-
+  },
+  {
+    path: "/extract/process",
+    element: <ExtractProcess />,
+  },
 ]);
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <FilesProvider>
       <RouterProvider router={router} />
     </FilesProvider>
-  </StrictMode>,
-)
+  </StrictMode>
+);
