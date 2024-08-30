@@ -59,3 +59,8 @@ To format your files using ruff
 ```shell
 ruff format
 ```
+
+To run the API
+```shell
+fastapi dev ocr/api.py
+```
