@@ -20,11 +20,7 @@ async def hello_world():
 
 
 @app.post("/image_to_text/")
-async def image_to_text(
-        source_image: UploadFile,
-        segmentation_template: UploadFile,
-        labels: str = Form()):
-
+async def image_to_text(source_image: UploadFile, segmentation_template: UploadFile, labels: str = Form()):
     source_image_np = np.fromstring(await source_image.read(), np.uint8)
     source_image_img = cv.imdecode(source_image_np, cv.IMREAD_COLOR)
 

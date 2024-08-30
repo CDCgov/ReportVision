@@ -22,11 +22,13 @@ class TestOCR:
         )
         ocr = ImageOCR()
 
-        results = ocr.image_to_text(segmenter.load_and_segment(
-            raw_image_path,
-            segmentation_template_path,
-            labels_path,
-        ))
+        results = ocr.image_to_text(
+            segmenter.load_and_segment(
+                raw_image_path,
+                segmentation_template_path,
+                labels_path,
+            )
+        )
 
         patient_id, patient_confidence = results["nbs_patient_id"]
         cas_id, cas_confidence = results["nbs_cas_id"]
@@ -40,11 +42,13 @@ class TestOCR:
         )
         ocr = ImageOCR(model="microsoft/trocr-base-handwritten")
 
-        results = ocr.image_to_text(segmenter.load_and_segment(
-            raw_image_handwritten_path,
-            segmentation_template_path,
-            labels_path,
-        ))
+        results = ocr.image_to_text(
+            segmenter.load_and_segment(
+                raw_image_handwritten_path,
+                segmentation_template_path,
+                labels_path,
+            )
+        )
 
         patient_id, patient_confidence = results["nbs_patient_id"]
         cas_id, cas_confidence = results["nbs_cas_id"]
@@ -58,11 +62,13 @@ class TestOCR:
         )
         ocr = ImageOCR()
 
-        results = ocr.image_to_text(segmenter.load_and_segment(
-            raw_image_path,
-            segmentation_template_path,
-            labels_path,
-        ))
+        results = ocr.image_to_text(
+            segmenter.load_and_segment(
+                raw_image_path,
+                segmentation_template_path,
+                labels_path,
+            )
+        )
 
         patient_id, patient_confidence = results["nbs_patient_id"]
         cas_id, cas_confidence = results["nbs_cas_id"]
