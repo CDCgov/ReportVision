@@ -20,7 +20,7 @@ poetry run pytest
 Run benchmark tests
 ```shell
 cd tests
-poetry run pytest bench_test.py -v
+poetry run pytest benchmark_test.py -v
 ```
 
 poetry run pytest bench_test.py -v  

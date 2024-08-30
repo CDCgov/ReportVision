@@ -129,4 +129,4 @@ class ImageSegmenter:
             print(f"raw_image shape: {raw_image.shape}")
             print(f"segmentation_template shape: {segmentation_template.shape}")
 
-        self.segment(raw_image, segmentation_template, labels)
+        return self.segment(raw_image, segmentation_template, labels)
