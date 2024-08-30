@@ -46,7 +46,9 @@ class TestImageSegmenter:
         cv.imwrite("no_matching_colors_raw.png", raw_image)
         cv.imwrite("no_matching_colors_seg.png", segmentation_template)
         segmenter = ImageSegmenter()
-        segments = segmenter.load_and_segment("no_matching_colors_raw.png", "no_matching_colors_seg.png", self.labels_path)
+        segments = segmenter.load_and_segment(
+            "no_matching_colors_raw.png", "no_matching_colors_seg.png", self.labels_path
+        )
         assert len(segments) == 2
         assert segments["nbs_patient_id"] is None
         assert segments["nbs_cas_id"] is None
@@ -69,3 +71,4 @@ class TestImageSegmenter:
             segmenter.load_and_segment("empty_file1", "empty_file2", "empty_file3")
         os.remove("empty_file1")
         os.remove("empty_file2")
+        os.remove("empty_file3")
