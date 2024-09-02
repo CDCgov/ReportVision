@@ -6,13 +6,13 @@ interface ExtractUploadFileProps {
   onUploadComplete: (isComplete: boolean) => void;
 }
 
+interface IFilesObj {
+  files: File[];
+}
+
 export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   onUploadComplete,
 }) => {
-  interface IFilesObj {
-    files: File[];
-  }
-
   const id = useId();
   const { addFile } = useFiles();
   const [template, setTemplate] = useState<string>("");
