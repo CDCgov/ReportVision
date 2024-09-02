@@ -6,9 +6,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { UploadTemplate } from "./pages/UploadTemplate.tsx";
 import { FilesProvider } from "./contexts/FilesContext.tsx";
 import AnnotateTemplate from "./pages/AnnotateTemplate.tsx";
+import "./App.scss";
+import { AnnotationProvider } from "./contexts/AnnotationContext.tsx";
 import ExtractUpload from "./pages/ExtractUpload.tsx";
 import ExtractProcess from "./pages/ExtractProcess.tsx";
-import "./App.scss";
 
 const router = createBrowserRouter([
   {
@@ -35,8 +36,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <FilesProvider>
-      <RouterProvider router={router} />
-    </FilesProvider>
+    <AnnotationProvider>
+      <FilesProvider>
+        <RouterProvider router={router} />
+      </FilesProvider>
+    </AnnotationProvider>
   </StrictMode>
 );

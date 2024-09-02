@@ -1,6 +1,8 @@
 import { Button } from '@trussworks/react-uswds';
-import { FC, useState } from 'react';
-import { ImageAnnotator, useImageAnnotator, Shape } from 'react-image-label';
+import { FC, useEffect, useState } from 'react';
+import { ImageAnnotator, Shape } from 'react-image-label';
+import { useAnnotationContext } from '../contexts/AnnotationContext';
+import { LABELS } from '../constants/labels';
 
 interface MultiImageAnnotatorProps {
     images: string[];
@@ -8,18 +10,15 @@ interface MultiImageAnnotatorProps {
     initialShapes?: Shape[][];
 }
 
-export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, categories, initialShapes = [] }) => {
-    const { setHandles, annotator } = useImageAnnotator();
+export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, categories, initialShapes = [[]] }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const localSttorageShapes: Shape[][] = JSON.parse(localStorage.getItem('shapes') || '[]');
-    const [shapes, setShapes] = useState<Shape[][]>(localSttorageShapes.length > 0 ? localSttorageShapes : initialShapes);
+    const {selectedField, setHandles, annotator, shapes, setShapes } = useAnnotationContext();
     const [dialog, setDialog] = useState<{ show: boolean, shape: Shape | undefined }>({ show: false, shape: undefined });
 
     const selectedCategoriesChanged = (items: string[]) => {
         dialog.shape!.categories = items;
         setDialog({ ...dialog });
     };
-
     const hideDialog = () => setDialog({ show: false, shape: undefined });
     const hideAndUpdateCategories = () => {
         if (dialog.show) {
@@ -33,37 +32,39 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
     };
 
     const handleShapeAddition = (shape: Shape) => {
+        const fields = [...LABELS.patientInformation.items, ...LABELS.organizationInformation.items];
+        const field = fields.find(field => field.name === selectedField?.name);
         const updatedShapes = [...shapes];
-        updatedShapes[currentImageIndex] = [...(updatedShapes[currentImageIndex] || []), shape];
+        // todo fix typing but for now this is fine
+        updatedShapes[currentImageIndex] = [...(updatedShapes[currentImageIndex] || []), {...shape, field: selectedField?.name as string, color: field?.color}];
         setShapes(updatedShapes);
-        localStorage.setItem('shapes', JSON.stringify(updatedShapes));
-        setDialog({ show: true, shape });
+        annotator?.updateCategories(shape.id, [], field?.color);
+        annotator!.stop();
     };
 
     const handleShapeContextMenu = (shape: Shape) => {
-        setDialog({ show: true, shape });
+        setDialog({ show: false, shape });
+        setShapes(shapes)
     };
 
     const handleShapeSelection = (shape: Shape) => {
-        setDialog({ show: true, shape });
+        annotator?.edit(shape.id);
+        setDialog({ show: false, shape });
     };
+
+    useEffect(() => {
+        setShapes(initialShapes);
+    }, [])
     return (
         <div>
-            <div className='padding-1'>
-                {images.map((_, index) => (
-                    <Button key={index} onClick={() => handleImageChange(index)} type='button'>
-                        Image {index + 1}
-                    </Button>
-                ))}
-                <Button type='button' onClick={() => { annotator!.drawRectangle() }} title='draw-rectrangle'>Draw Rectangle</Button>
-                <Button type='button' onClick={() => { annotator!.stop() }}>Stop Draw/Edit</Button>
-            </div>
             {dialog.show &&
                 <Dialog
                     items={dialog.shape!.categories}
                     itemsChanged={selectedCategoriesChanged}
                     onEdit={() => { annotator!.edit(dialog.shape!.id); hideDialog(); }}
-                    onDelete={() => { annotator!.delete(dialog.shape!.id); hideDialog(); }}
+                    onDelete={() => {console.log(dialog);
+                         setShapes(shapes.map((shape) => shape.filter(s => s.id !== dialog.shape!.id)));
+                         annotator!.delete(dialog.shape!.id); hideDialog(); }}
                     onClose={hideAndUpdateCategories}
                     offset={dialog.shape!.getCenterWithOffset()}
                     categories={categories}
@@ -73,7 +74,7 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
                 setHandles={setHandles}
                 naturalSize={true}
                 imageUrl={images[currentImageIndex]}
-                shapes={shapes[currentImageIndex] || []}
+                shapes={shapes[currentImageIndex] || [[]]}
                 onAdded={handleShapeAddition}
                 onContextMenu={handleShapeContextMenu}
                 onSelected={handleShapeSelection}
