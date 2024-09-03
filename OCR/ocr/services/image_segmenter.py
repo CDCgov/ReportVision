@@ -21,15 +21,13 @@ def crop_zeros(image):
     ]  # inclusive
 
 
-def segment_by_mask_then_crop(self) -> dict[str, np.ndarray]:
+def segment_by_mask_then_crop(raw_image, segmentation_template, labels, debug) -> dict[str, np.ndarray]:
     segments = {}
 
-    with open(self.labels, "r") as f:
-        labels = json.load(f)
     # iterate over the labels
     for color, label in labels.items():
-        raw_image = np.array(self.raw_image, copy=True)
-        segmentation_template = np.array(self.segmentation_template, copy=True)
+        raw_image = np.array(raw_image, copy=True)
+        segmentation_template = np.array(segmentation_template, copy=True)
         color = tuple(map(int, reversed(color.split(","))))
         # create a mask for that color
         mask = np.all(segmentation_template == color, axis=2).astype(int)
@@ -40,7 +38,7 @@ def segment_by_mask_then_crop(self) -> dict[str, np.ndarray]:
         # multiply the original image with the mask then crop it
         segments[label] = crop_zeros(raw_image * mask)
 
-        if self.debug is True:
+        if debug is True:
             print(f"label: {label}")
             print(f"color {color}")
             print("mask.shape", mask.shape)
@@ -54,23 +52,22 @@ def segment_by_mask_then_crop(self) -> dict[str, np.ndarray]:
     return segments
 
 
-def segment_by_color_bounding_box(self) -> dict[str, np.ndarray]:
+def segment_by_color_bounding_box(raw_image, segmentation_template, labels, debug) -> dict[str, np.ndarray]:
     segments = {}
-    with open(self.labels, "r") as f:
-        labels = json.load(f)
+
     # iterate over the labels
     for color, label in labels.items():
         # we are reversing from RGB in the label to BGR used by the openCV
         color = tuple(map(int, reversed(color.split(","))))
         # find indices of the color in the segmentation template where the color matches the expected colors
-        indices = np.where(np.all(self.segmentation_template == color, axis=-1))
+        indices = np.where(np.all(segmentation_template == color, axis=-1))
         # if there are matching pixels
         if indices[0].size > 0:
             # Find the x-y coordinates
             y_min, y_max = indices[0].min(), indices[0].max()
             x_min, x_max = indices[1].min(), indices[1].max()
             # crop the area and store the image in the dict
-            segments[label] = self.raw_image[y_min : y_max + 1, x_min : x_max + 1]
+            segments[label] = raw_image[y_min : y_max + 1, x_min : x_max + 1]
         else:
             segments[label] = None
     return segments
@@ -79,33 +76,42 @@ def segment_by_color_bounding_box(self) -> dict[str, np.ndarray]:
 class ImageSegmenter:
     def __init__(
         self,
-        raw_image,
-        segmentation_template,
-        labels,
         segmentation_function=segment_by_mask_then_crop,
         debug=False,
     ):
-        self.debug = debug
         self.segmentation_function = segmentation_function
+        self.debug = debug
 
-        if not os.path.isfile(raw_image) or not os.path.isfile(segmentation_template):
+    def segment(
+        self,
+        raw_image,
+        segmentation_template,
+        labels,
+    ) -> dict[str, np.ndarray]:
+        return self.segmentation_function(raw_image, segmentation_template, labels, self.debug)
+
+    def load_and_segment(self, raw_image_path, segmentation_template_path, labels_path):
+        if (
+            not os.path.isfile(raw_image_path)
+            or not os.path.isfile(segmentation_template_path)
+            or not os.path.isfile(labels_path)
+        ):
             raise FileNotFoundError("One or more input files do not exist.")
 
-        self.raw_image = cv.imread(raw_image)
-        if self.raw_image is None:
-            raise ValueError(f"Failed to open image file: {raw_image}")
+        raw_image = cv.imread(raw_image_path)
+        if raw_image is None:
+            raise ValueError(f"Failed to open image file: {raw_image_path}")
 
-        self.segmentation_template = cv.imread(segmentation_template)
-        if self.segmentation_template is None:
-            raise ValueError(f"Failed to open image file: {segmentation_template}")
+        segmentation_template = cv.imread(segmentation_template_path)
+        if segmentation_template is None:
+            raise ValueError(f"Failed to open image file: {segmentation_template_path}")
 
-        self.labels = labels
+        labels = json.load(open(labels_path, "r"))
 
         if self.debug is True:
             self.debug_folder = "debug_segments"
             os.makedirs(self.debug_folder, exist_ok=True)
-            print(f"raw_image shape: {self.raw_image.shape}")
-            print(f"segmentation_template shape: {self.segmentation_template.shape}")
+            print(f"raw_image shape: {raw_image.shape}")
+            print(f"segmentation_template shape: {segmentation_template.shape}")
 
-    def segment(self) -> dict[str, np.ndarray]:
-        return self.segmentation_function(self)
+        return self.segment(raw_image, segmentation_template, labels)

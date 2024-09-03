@@ -23,8 +23,8 @@ def main():
     input_image = args["INPUT-IMAGE-PATH"]
     labels_path = args["LABELS-PATH"]
 
-    segmenter = ImageSegmenter(input_image, segmentation_template, labels_path)
-    segments = segmenter.segment()
+    segmenter = ImageSegmenter()
+    segments = segmenter.load_and_segment(input_image, segmentation_template, labels_path)
 
     print("{:<20} {:<20}".format("Label", "Segment shape"))
     for label, segment in segments.items():

@@ -9,23 +9,26 @@ from ocr.services.image_ocr import ImageOCR
 
 path = os.path.dirname(__file__)
 
-segmentation_template = os.path.join(path, "./assets/form_segmention_template.png")
-raw_image = os.path.join(path, "./assets/form_filled.png")
-raw_image_handwritten = os.path.join(path, "./assets/form_hand_filled.png")
+segmentation_template_path = os.path.join(path, "./assets/form_segmention_template.png")
+raw_image_path = os.path.join(path, "./assets/form_filled.png")
+raw_image_handwritten_path = os.path.join(path, "./assets/form_hand_filled.png")
 labels_path = os.path.join(path, "./assets/labels.json")
 
 
 class TestOCR:
     def test_ocr_printed(self):
         segmenter = ImageSegmenter(
-            raw_image,
-            segmentation_template,
-            labels_path,
             segmentation_function=segment_by_color_bounding_box,
         )
         ocr = ImageOCR()
 
-        results = ocr.image_to_text(segmenter.segment())
+        results = ocr.image_to_text(
+            segmenter.load_and_segment(
+                raw_image_path,
+                segmentation_template_path,
+                labels_path,
+            )
+        )
 
         patient_id, patient_confidence = results["nbs_patient_id"]
         cas_id, cas_confidence = results["nbs_cas_id"]
@@ -35,14 +38,17 @@ class TestOCR:
 
     def test_ocr_handwritten(self):
         segmenter = ImageSegmenter(
-            raw_image_handwritten,
-            segmentation_template,
-            labels_path,
             segmentation_function=segment_by_mask_then_crop,
         )
         ocr = ImageOCR(model="microsoft/trocr-base-handwritten")
 
-        results = ocr.image_to_text(segmenter.segment())
+        results = ocr.image_to_text(
+            segmenter.load_and_segment(
+                raw_image_handwritten_path,
+                segmentation_template_path,
+                labels_path,
+            )
+        )
 
         patient_id, patient_confidence = results["nbs_patient_id"]
         cas_id, cas_confidence = results["nbs_cas_id"]
@@ -52,14 +58,17 @@ class TestOCR:
 
     def test_confidence_values_returned(self):
         segmenter = ImageSegmenter(
-            raw_image,
-            segmentation_template,
-            labels_path,
             segmentation_function=segment_by_color_bounding_box,
         )
         ocr = ImageOCR()
 
-        results = ocr.image_to_text(segmenter.segment())
+        results = ocr.image_to_text(
+            segmenter.load_and_segment(
+                raw_image_path,
+                segmentation_template_path,
+                labels_path,
+            )
+        )
 
         patient_id, patient_confidence = results["nbs_patient_id"]
         cas_id, cas_confidence = results["nbs_cas_id"]

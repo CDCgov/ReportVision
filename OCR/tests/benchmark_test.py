@@ -15,11 +15,12 @@ segmentation_template = os.path.join(path, "./assets/form_segmention_template.pn
 raw_image = os.path.join(path, "./assets/form_filled.png")
 raw_image_handwritten = os.path.join(path, "./assets/form_hand_filled.png")
 labels_path = os.path.join(path, "./assets/labels.json")
+declaration_of_independence_path = os.path.join(path, "./assets/declarationOfIndependence.txt")
 
 
 def generate_sentence_segments(size=2, sentence_length=1, show_images=True) -> dict[str, np.ndarray]:
     def text_file_to_word_list():
-        f = open("./assets/declarationOfIndependence.txt", "r")
+        f = open(declaration_of_independence_path, "r")
         return (f.read()).split()
 
     def randomly_select_paragraphs():

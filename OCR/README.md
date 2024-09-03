@@ -20,7 +20,7 @@ poetry run pytest
 Run benchmark tests
 ```shell
 cd tests
-poetry run pytest bench_test.py -v
+poetry run pytest benchmark_test.py -v
 ```
 
 poetry run pytest bench_test.py -v  
@@ -58,4 +58,9 @@ ruff check --fix
 To format your files using ruff 
 ```shell
 ruff format
+```
+
+To run the API
+```shell
+fastapi dev ocr/api.py
 ```
