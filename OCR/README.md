@@ -60,7 +60,12 @@ To format your files using ruff
 ruff format
 ```
 
-To run the API
+To run the API in dev mode with reload
 ```shell
 fastapi dev ocr/api.py
+```
+
+To run the API in prod mode
+```shell
+poetry run api
 ```
