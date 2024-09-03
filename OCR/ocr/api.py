@@ -15,7 +15,6 @@ segmenter = ImageSegmenter(
 ocr = ImageOCR()
 
 
-
 @app.get("/")
 async def health_check():
     return {"status": "UP"}
