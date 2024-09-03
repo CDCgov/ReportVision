@@ -13,7 +13,7 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
   const [files, setFiles] = useState<File[]>([]);
 
   const addFile = (file: File) => {
-    setFiles((prevFiles) => [...prevFiles, file]);
+    setFiles(() => [file]);
   };
 
   const removeFile = (fileName: string) => {
