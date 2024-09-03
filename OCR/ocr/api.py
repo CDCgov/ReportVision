@@ -15,8 +15,8 @@ ocr = ImageOCR()
 
 
 @app.get("/")
-async def hello_world():
-    return {"message": "Hello World"}
+async def health_check():
+    return {"status": "UP"}
 
 
 @app.post("/image_to_text/")

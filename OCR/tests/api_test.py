@@ -15,10 +15,10 @@ labels_path = os.path.join(path, "./assets/labels.json")
 
 
 class TestAPI:
-    def test_hello_world(self):
+    def test_health_check(self):
         response = client.get("/")
         assert response.status_code == 200
-        assert response.json() == {"message": "Hello World"}
+        assert response.json() == {"status": "UP"}
 
     def test_ocr(self):
         # load the files
