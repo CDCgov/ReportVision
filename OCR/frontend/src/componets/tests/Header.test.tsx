@@ -2,10 +2,11 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
 import { UploadHeader } from '../Header';
+import { BrowserRouter } from 'react-router-dom';
 
 describe('UploadHeader component', () => {
   it('renders the header with correct structure', () => {
-    render(<UploadHeader />);
+    render(<UploadHeader title='annotate new template' onBack={vi.fn()} onSubmit={vi.fn()} />, { wrapper: BrowserRouter });
 
     // Check for the main header element
     const header = screen.getByRole('banner');
@@ -37,7 +38,7 @@ describe('UploadHeader component', () => {
   });
 
   it('renders all buttons with correct text', () => {
-    render(<UploadHeader />);
+    render(<UploadHeader title={'header'} onBack={vi.fn() } onSubmit={vi.fn()} />, {wrapper: BrowserRouter});
 
     const backButton = screen.getByRole('button', { name: /back/i });
     const submitButton = screen.getByRole('button', { name: /submit/i });
