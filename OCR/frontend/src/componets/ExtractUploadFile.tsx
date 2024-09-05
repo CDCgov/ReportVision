@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useId, useState } from "react";
+import React, { ChangeEvent, useEffect, useId, useState } from "react";
 import { Icon, FileInput, Select } from "@trussworks/react-uswds";
 import { useFiles } from "../contexts/FilesContext";
 
@@ -10,6 +10,15 @@ interface IFilesObj {
   files: File[];
 }
 
+interface Template {
+  name: string;
+  description: string;
+  pages: {
+    image: string;
+    fieldNames: string[];
+  }[];
+}
+
 export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   onUploadComplete,
 }) => {
@@ -17,7 +26,53 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   const { addFile } = useFiles();
   const [template, setTemplate] = useState<string>("");
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [templates, setTemplates] = useState<Template[]>([]);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const loadTemplatesFromLocalStorage = () => {
+    const storedTemplates = localStorage.getItem("templates");
+    if (storedTemplates) {
+      const parsedTemplates = JSON.parse(storedTemplates);
+      setTemplates(parsedTemplates);
+    } else {
+      setTemplates([]);
+    }
+  };
+
+  const loadTemplatesFromLocalStorageTestData = () => {
+    // Sample for testing
+    const sampleTemplates: Template[] = [
+      {
+        name: "Template COVID",
+        description: "This is the first sample template.",
+        pages: [
+          {
+            image: "base64encodedimage1",
+            fieldNames: ["patient_name", "patient_dob"],
+          },
+        ],
+      },
+      {
+        name: "Template Syph",
+        description: "This is the second sample template.",
+        pages: [
+          {
+            image: "base64encodedimage2",
+            fieldNames: ["patient_name", "address"],
+          },
+        ],
+      },
+    ];
+
+    // Setting the state with the sample data
+    setTemplates(sampleTemplates);
+  };
+
+  useEffect(() => {
+    // Load templates on component mount
+    loadTemplatesFromLocalStorageTestData();
+  }, []);
 
   const simulateFileUpload = (file: File) => {
     let progress = 0;
@@ -74,8 +129,15 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
           onChange={handleTemplateChange}
           style={{ alignSelf: "flex-start", width: "100%", maxWidth: "300px" }}
         >
-          <option value="">Select Template</option>
-          <option value="COVID Quest V1">COVID Quest V1</option>
+          {templates.length === 0 ? (
+            <option value="">No templates available</option>
+          ) : (
+            templates.map((tpl, index) => (
+              <option key={index} value={tpl.name}>
+                {tpl.name}
+              </option>
+            ))
+          )}
         </Select>
       </div>
 
