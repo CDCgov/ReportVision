@@ -10,21 +10,21 @@ resource "azurerm_public_ip" "lb-pip" {
 
 # since these variables are re-used - a locals block makes this more maintainable
 locals {
-  backend_address_pool_name_static      = "${var.vnet-name}-beap-static"
-  backend_address_pool_name_api      = "${var.vnet-name}-beap-api"
-  frontend_port_name_api             = "${var.vnet-name}-feport-api"
-  frontend_port_name_static             = "${var.vnet-name}-feport-static"
-  frontend_ip_configuration_name = "${var.vnet-name}-feip"
-  http_setting_name_static              = "${var.vnet-name}-be-htst-static"
-  http_setting_name_api              = "${var.vnet-name}-be-htst-api"
-  listener_name_static                  = "${var.vnet-name}-httplstn-static"
-  listener_name_api                  = "${var.vnet-name}-httplstn-api"
-  request_routing_rule_name_api      = "${var.vnet-name}-rqrt-api"
-  request_routing_rule_name_static      = "${var.vnet-name}-rqrt-static"
-  redirect_configuration_name    = "${var.vnet-name}-rdrcfg"
-  static_probe_name_app                 = "${var.vnet-name}-be-probe-app-static"
-  api_probe_name_app                 = "${var.vnet-name}-be-probe-app-api"
-  redirect_rule                   = "${var.vnet-name}-redirect"
+  backend_address_pool_name_static = "${var.vnet-name}-beap-static"
+  backend_address_pool_name_api    = "${var.vnet-name}-beap-api"
+  frontend_port_name_api           = "${var.vnet-name}-feport-api"
+  frontend_port_name_static        = "${var.vnet-name}-feport-static"
+  frontend_ip_configuration_name   = "${var.vnet-name}-feip"
+  http_setting_name_static         = "${var.vnet-name}-be-htst-static"
+  http_setting_name_api            = "${var.vnet-name}-be-htst-api"
+  listener_name_static             = "${var.vnet-name}-httplstn-static"
+  listener_name_api                = "${var.vnet-name}-httplstn-api"
+  request_routing_rule_name_api    = "${var.vnet-name}-rqrt-api"
+  request_routing_rule_name_static = "${var.vnet-name}-rqrt-static"
+  redirect_configuration_name      = "${var.vnet-name}-rdrcfg"
+  static_probe_name_app            = "${var.vnet-name}-be-probe-app-static"
+  api_probe_name_app               = "${var.vnet-name}-be-probe-app-api"
+  redirect_rule                    = "${var.vnet-name}-redirect"
 }
 
 resource "azurerm_application_gateway" "load_balancer" {
@@ -50,14 +50,14 @@ resource "azurerm_application_gateway" "load_balancer" {
   }
 
   backend_http_settings {
-    name                  = local.http_setting_name_static
-    cookie_based_affinity = "Disabled"
-    port                  = 80
-    protocol              = "Http"
-    request_timeout       = 60
-    path                  = "/"
+    name                                = local.http_setting_name_static
+    cookie_based_affinity               = "Disabled"
+    port                                = 80
+    protocol                            = "Http"
+    request_timeout                     = 60
+    path                                = "/"
     pick_host_name_from_backend_address = true
-    probe_name            = local.static_probe_name_app
+    probe_name                          = local.static_probe_name_app
   }
 
   probe {
@@ -73,20 +73,20 @@ resource "azurerm_application_gateway" "load_balancer" {
 
   # ------- OCR API -------------------------
   backend_address_pool {
-    name  = local.backend_address_pool_name_api
-    fqdns = [var.fqdns]
+    name         = local.backend_address_pool_name_api
+    fqdns        = [var.fqdns]
     ip_addresses = var.ip_addresses
   }
 
   backend_http_settings {
-    name                  = local.http_setting_name_api
-    cookie_based_affinity = "Disabled"
-    port                  = 80
-    protocol              = "Http"
-    request_timeout       = 120
-    path                  = "/api"
+    name                                = local.http_setting_name_api
+    cookie_based_affinity               = "Disabled"
+    port                                = 80
+    protocol                            = "Http"
+    request_timeout                     = 120
+    path                                = "/api"
     pick_host_name_from_backend_address = true
-    probe_name            = local.api_probe_name_app
+    probe_name                          = local.api_probe_name_app
   }
 
   probe {
@@ -122,7 +122,7 @@ resource "azurerm_application_gateway" "load_balancer" {
     frontend_ip_configuration_name = local.frontend_ip_configuration_name
     frontend_port_name             = local.frontend_port_name_static
     protocol                       = "Http"
-    host_names = [ var.fqdns ]
+    host_names                     = [var.fqdns]
   }
 
   http_listener {
@@ -130,7 +130,7 @@ resource "azurerm_application_gateway" "load_balancer" {
     frontend_ip_configuration_name = local.frontend_ip_configuration_name
     frontend_port_name             = local.frontend_port_name_static
     protocol                       = "Http"
-    host_names = [ var.blob_endpoint ]
+    host_names                     = [var.blob_endpoint]
   }
 
   # ------- Routing -------------------------
@@ -169,7 +169,7 @@ resource "azurerm_application_gateway" "load_balancer" {
       rewrite_rule_set_name = "mde-routing"
     }
   }
-    rewrite_rule_set {
+  rewrite_rule_set {
     name = "mde-routing"
 
     rewrite_rule {

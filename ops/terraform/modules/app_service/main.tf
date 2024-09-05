@@ -7,11 +7,11 @@ resource "azurerm_service_plan" "asp" {
 }
 
 resource "azurerm_linux_web_app" "linux_webapp" {
-  name                      = "${var.name}-${var.environment}"
-  https_only                = var.https_only
-  location                  = var.location
-  resource_group_name       = var.resource_group
-  service_plan_id           = azurerm_service_plan.asp.id
+  name                          = "${var.name}-${var.environment}"
+  https_only                    = var.https_only
+  location                      = var.location
+  resource_group_name           = var.resource_group
+  service_plan_id               = azurerm_service_plan.asp.id
   public_network_access_enabled = true
 
   identity {
@@ -28,7 +28,7 @@ resource "azurerm_linux_web_app" "linux_webapp" {
     vnet_route_all_enabled            = false
 
     application_stack {
-      docker_image_name = "abhimanyubajaj98/flask-demo:latest"
+      docker_image_name   = "abhimanyubajaj98/flask-demo:latest"
       docker_registry_url = "https://index.docker.io"
     }
 
@@ -40,9 +40,9 @@ resource "azurerm_linux_web_app" "linux_webapp" {
 }
 
 output "service_plan_id" {
-    value = azurerm_service_plan.asp.id
+  value = azurerm_service_plan.asp.id
 }
 
 output "webapp_name" {
-    value = azurerm_linux_web_app.linux_webapp.name
+  value = azurerm_linux_web_app.linux_webapp.name
 }

@@ -42,8 +42,8 @@ module "app_gateway" {
   web-subnet    = module.networking.lbsubnet_id
   tags          = local.management_tags
 
-  fqdns = module.ocr_api.app_hostname
-  depends_on = [ module.networking, module.ocr_api ]
+  fqdns      = module.ocr_api.app_hostname
+  depends_on = [module.networking, module.ocr_api]
 }
 
 ##########
@@ -65,12 +65,12 @@ module "storage" {
 ##########
 
 module "ocr_api" {
-  source = "../../modules/app_service"
-  location = data.azurerm_resource_group.test.location
+  source         = "../../modules/app_service"
+  location       = data.azurerm_resource_group.test.location
   resource_group = data.azurerm_resource_group.test.name
-  app_subnet_id = module.networking.lbsubnet_id
-  environment = local.environment
-  vnet = module.networking.network_name
+  app_subnet_id  = module.networking.lbsubnet_id
+  environment    = local.environment
+  vnet           = module.networking.network_name
 }
 
 # module "compute" {
