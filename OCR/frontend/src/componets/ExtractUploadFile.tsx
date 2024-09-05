@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useId, useState } from "react";
-import { Icon, FileInput } from "@trussworks/react-uswds";
+import { Icon, FileInput, Select } from "@trussworks/react-uswds";
 import { useFiles } from "../contexts/FilesContext";
 
 interface ExtractUploadFileProps {
@@ -67,16 +67,16 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
         >
           Choose segmentation template
         </label>
-        <select
+        <Select
           id="template-select"
+          name="template"
           value={template}
           onChange={handleTemplateChange}
-          className="usa-select"
           style={{ alignSelf: "flex-start", width: "100%", maxWidth: "300px" }}
         >
           <option value="">Select Template</option>
           <option value="COVID Quest V1">COVID Quest V1</option>
-        </select>
+        </Select>
       </div>
 
       <div style={{ width: "70%", textAlign: "left" }}>
