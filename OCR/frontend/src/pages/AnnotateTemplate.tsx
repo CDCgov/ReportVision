@@ -137,8 +137,9 @@ const AnnotateTemplate: React.FC = () => {
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <UploadHeader
+        title="Annotate new template"
         onBack={() => navigate("/new-template/upload")}
-        onSubmit={() => console.log("SUBMITTING")}
+        onSubmit={() => navigate("/new-template/save")}
       />
       <Divider margin="0px" />
       <div className="display-flex flex-justify-center padding-top-4">

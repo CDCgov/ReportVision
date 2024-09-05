@@ -1,16 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './style/index.scss'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import { UploadTemplate } from './pages/UploadTemplate.tsx';
-import { FilesProvider } from './contexts/FilesContext.tsx';
-import AnnotateTemplate from './pages/AnnotateTemplate.tsx';
-import './App.scss';
-import { AnnotationProvider } from './contexts/AnnotationContext.tsx';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
+import "./style/index.scss";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { UploadTemplate } from "./pages/UploadTemplate.tsx";
+import { FilesProvider } from "./contexts/FilesContext.tsx";
+import AnnotateTemplate from "./pages/AnnotateTemplate.tsx";
+import "./App.scss";
+import { AnnotationProvider } from "./contexts/AnnotationContext.tsx";
+import ExtractUpload from "./pages/ExtractUpload.tsx";
+import ExtractProcess from "./pages/ExtractProcess.tsx";
+import { SaveTemplate } from './pages/SaveTemplate.tsx';
+
 
 const router = createBrowserRouter([
   {
@@ -24,15 +25,27 @@ const router = createBrowserRouter([
   {
     path: "/new-template/annotate",
     element: <AnnotateTemplate />,
+  },
+  {
+    path: "/extract/upload",
+    element: <ExtractUpload />,
+  },
+  {
+    path: "/extract/process",
+    element: <ExtractProcess />,
+  },
+ {
+    path: "/new-template/save",
+    element: <SaveTemplate />,
   }
 ]);
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AnnotationProvider>
-    <FilesProvider>
-      <RouterProvider router={router} />
-    </FilesProvider>
+      <FilesProvider>
+        <RouterProvider router={router} />
+      </FilesProvider>
     </AnnotationProvider>
-  </StrictMode>,
-)
+  </StrictMode>
+);
