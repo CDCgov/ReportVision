@@ -1,3 +1,4 @@
+import uvicorn
 import json
 import cv2 as cv
 import numpy as np
@@ -32,3 +33,8 @@ async def image_to_text(source_image: UploadFile, segmentation_template: UploadF
     results = ocr.image_to_text(segments)
 
     return results
+
+
+def start():
+    """Launched with `poetry run start` at root level"""
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=False)
