@@ -19,6 +19,7 @@
     "@uswds/uswds": "^3.8.1",
     "classnames": "^2.5.1",
     "focus-trap-react": "^10.2.3",
+    "html2canvas": "^1.4.1",
     "pdfjs-dist": "^4.5.136",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
