@@ -65,12 +65,10 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
       },
     ];
 
-    // Setting the state with the sample data
     setTemplates(sampleTemplates);
   };
 
   useEffect(() => {
-    // Load templates on component mount
     loadTemplatesFromLocalStorageTestData();
   }, []);
 
