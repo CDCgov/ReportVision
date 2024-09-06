@@ -69,3 +69,22 @@ To run the API in prod mode
 ```shell
 poetry run api
 ```
+
+### Dockerized Development
+
+It is also possible to run the entire project in a collection of docker containers. This is useful for development and testing purposes as it doesn't require any additional dependencies to be installed on your local machine.
+
+To start the containers, run the following command:
+
+```shell
+docker compose -f dev-env.yaml up 
+```
+
+This will start the following containers:
+
+- ocr: The OCR service container
+- frontend: The frontend container
+
+The frontend container will automatically reload when changes are made to the frontend code. To access the frontend, navigate to http://localhost:5173 in your browser.
+
+The OCR service container will restart automatically when changes are made to the OCR code. To access the API, navigate to http://localhost:8000/ in your browser.
