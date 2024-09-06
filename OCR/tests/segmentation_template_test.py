@@ -28,7 +28,8 @@ class TestImageSegmenter:
         assert isinstance(segments, dict)
         with open(self.labels_path, "r") as f:
             labels = json.load(f)
-        assert set(segments.keys()) == set(labels.values())
+            
+        assert set(segments.keys()) == set(map(lambda item: item['label'], labels))
         for segment in segments.values():
             assert isinstance(segment, np.ndarray)
 

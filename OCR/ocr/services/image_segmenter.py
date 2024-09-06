@@ -16,16 +16,17 @@ def crop_zeros(image):
     # take the largest points and use them as the bottom right of your crop
     bottom_right = true_points.max(axis=0)
     return image[
-        top_left[0] : bottom_right[0] + 1,  # plus 1 because slice isn't
-        top_left[1] : bottom_right[1] + 1,
-    ]  # inclusive
+           top_left[0]: bottom_right[0] + 1,  # plus 1 because slice isn't
+           top_left[1]: bottom_right[1] + 1,
+           ]  # inclusive
 
 
 def segment_by_mask_then_crop(raw_image, segmentation_template, labels, debug) -> dict[str, np.ndarray]:
     segments = {}
 
     # iterate over the labels
-    for color, label in labels.items():
+    for item in labels:
+        label, color = item['label'], item['color']
         raw_image = np.array(raw_image, copy=True)
         segmentation_template = np.array(segmentation_template, copy=True)
         color = tuple(map(int, reversed(color.split(","))))
@@ -56,7 +57,8 @@ def segment_by_color_bounding_box(raw_image, segmentation_template, labels, debu
     segments = {}
 
     # iterate over the labels
-    for color, label in labels.items():
+    for item in labels:
+        label, color = item['label'], item['color']
         # we are reversing from RGB in the label to BGR used by the openCV
         color = tuple(map(int, reversed(color.split(","))))
         # find indices of the color in the segmentation template where the color matches the expected colors
@@ -67,7 +69,7 @@ def segment_by_color_bounding_box(raw_image, segmentation_template, labels, debu
             y_min, y_max = indices[0].min(), indices[0].max()
             x_min, x_max = indices[1].min(), indices[1].max()
             # crop the area and store the image in the dict
-            segments[label] = raw_image[y_min : y_max + 1, x_min : x_max + 1]
+            segments[label] = raw_image[y_min: y_max + 1, x_min: x_max + 1]
         else:
             segments[label] = None
     return segments
@@ -75,26 +77,26 @@ def segment_by_color_bounding_box(raw_image, segmentation_template, labels, debu
 
 class ImageSegmenter:
     def __init__(
-        self,
-        segmentation_function=segment_by_mask_then_crop,
-        debug=False,
+            self,
+            segmentation_function=segment_by_mask_then_crop,
+            debug=False,
     ):
         self.segmentation_function = segmentation_function
         self.debug = debug
 
     def segment(
-        self,
-        raw_image,
-        segmentation_template,
-        labels,
+            self,
+            raw_image,
+            segmentation_template,
+            labels,
     ) -> dict[str, np.ndarray]:
         return self.segmentation_function(raw_image, segmentation_template, labels, self.debug)
 
     def load_and_segment(self, raw_image_path, segmentation_template_path, labels_path):
         if (
-            not os.path.isfile(raw_image_path)
-            or not os.path.isfile(segmentation_template_path)
-            or not os.path.isfile(labels_path)
+                not os.path.isfile(raw_image_path)
+                or not os.path.isfile(segmentation_template_path)
+                or not os.path.isfile(labels_path)
         ):
             raise FileNotFoundError("One or more input files do not exist.")
 

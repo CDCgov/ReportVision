@@ -1,4 +1,10 @@
-{
-  "255,0,0": "nbs_patient_id",
-  "0,0,255": "nbs_cas_id"
-}
+[
+  {
+    "color": "255,0,0",
+    "label": "nbs_patient_id"
+  },
+  {
+    "color": "0,0,255",
+    "label": "nbs_cas_id"
+  }
+]
