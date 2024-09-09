@@ -1,4 +1,16 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
+
+export interface Page {
+    // base 64 encoded image
+    image: string ;
+    fieldNames: string[];
+}
+
+export interface File {
+    name: string;
+    description: string;
+    pages: Page[];
+}
 
 interface FileContextType {
   files: File[];
