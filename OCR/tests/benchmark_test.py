@@ -120,7 +120,7 @@ class TestBenchmark:
         results = benchmark(self.ocr.image_to_text, segments)
 
         actual_labels = [x.lower() for x in list(results.keys())]
-        predicted_labels = [x.lower() for x in list(results.values())]
+        predicted_labels = [x[0].lower() for x in list(results.values())]
         print("actual_labels", actual_labels)
         print("predicted_labels", predicted_labels)
         print("distance:", distance(actual_labels, predicted_labels))

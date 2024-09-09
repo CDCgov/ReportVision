@@ -1,52 +1,247 @@
-{
-  "255,0,0": "nbs_patient_id",
-  "0,0,255": "nbs_investigation_id",
-  "74,74,149": "patient_first_name",
-  "0,255,0": "patient_last_name",
-  "74,107,232": "patient_address",
-  "255,255,0": "patient_city",
-  "128,128,0": "patient_country",
-  "28,120,112": "patient_zip",
-  "69,33,158": "patient_region",
-  "74,158,33": "patient_phone",
-  "33,158,105": "patient_parent",
-  "10,61,105": "physician_name",
-  "224,18,66": "physician_phone",
-  "18,140,224": "physician_address",
-  "13,92,28": "reported_by_name",
-  "84,128,18": "reporter_agency",
-  "33,120,102":"reporter_agency_phone",
-  "33,138,20": "reporter_agency_date_reported",
-  "18,82,79": "investigator_name",
-  "18,133,31": "investigator_agency_name",
-  "46,71,163": "investigator_agency_phone_number",
-  "13,77,13": "investigator_agency_email",
-  "31,54,18": "investigation_agency_start_date",
-  "20,87,54": "investigation_agency_completion_date",
-  "74,46,26": "patient_dob",
-  "133,82,54": "patient_age",
-  "56,48,143": "patient_place_of_birth_other",
-  "107,59,56": "patient_race_other",
-  "196,207,255":"patient__date_location_delivery",
-  "48,59,115": "obstetrician's_name,_address,_and_phone_#",
-  "255,194,59": "patient_hospitalized_at",
-  "255,166,59": "patient_admitted",
-  "255,166,252": "discharged",
-  "255,115,252": "duration_Of_Stay",
-  "214,227,201": "diagnosis_date",
-  "191,196,176": "symptomatic_onset_date",
-  "163,163,138": "symptomatic_end_date",
-  "156,133,133": "date_of_bilirubin_test",
-  "158,110,125": "hepatitis_date_of_death",
-  "171,79,97": "date_of_lab_test",
-  "156,38,87": "testing_facility",
-  "138,26,82": "alt_sgpt_result",
-  "125,18,59": "alt_upper_limit_normal",
-  "122,13,56": "ast_sgpt_result",
-  "130,10,41": "ast_upper_limit_normal",
-  "97,8,36": "date_of_alt_result",
-  "135,217,120": "date_of_ast_result",
-  "41,107,201": "vaccination_history_year",
-  "145,66,176": "earliest_date_public_health_control_initiated"
-}
-
+[
+  {
+    "color": "255,0,0",
+    "label": "nbs_patient_id",
+    "type": "text"
+  },
+  {
+    "color": "0,0,255",
+    "label": "nbs_investigation_id",
+    "type": "text"
+  },
+  {
+    "color": "74,74,149",
+    "label": "patient_first_name",
+    "type": "text"
+  },
+  {
+    "color": "0,255,0",
+    "label": "patient_last_name",
+    "type": "text"
+  },
+  {
+    "color": "74,107,232",
+    "label": "patient_address",
+    "type": "text"
+  },
+  {
+    "color": "255,255,0",
+    "label": "patient_city",
+    "type": "text"
+  },
+  {
+    "color": "128,128,0",
+    "label": "patient_country",
+    "type": "text"
+  },
+  {
+    "color": "28,120,112",
+    "label": "patient_zip",
+    "type": "text"
+  },
+  {
+    "color": "69,33,158",
+    "label": "patient_region",
+    "type": "text"
+  },
+  {
+    "color": "74,158,33",
+    "label": "patient_phone",
+    "type": "text"
+  },
+  {
+    "color": "33,158,105",
+    "label": "patient_parent",
+    "type": "text"
+  },
+  {
+    "color": "10,61,105",
+    "label": "physician_name",
+    "type": "text"
+  },
+  {
+    "color": "224,18,66",
+    "label": "physician_phone",
+    "type": "text"
+  },
+  {
+    "color": "18,140,224",
+    "label": "physician_address",
+    "type": "text"
+  },
+  {
+    "color": "13,92,28",
+    "label": "reported_by_name",
+    "type": "text"
+  },
+  {
+    "color": "84,128,18",
+    "label": "reporter_agency",
+    "type": "text"
+  },
+  {
+    "color": "33,120,102",
+    "label": "reporter_agency_phone",
+    "type": "text"
+  },
+  {
+    "color": "33,138,20",
+    "label": "reporter_agency_date_reported",
+    "type": "text"
+  },
+  {
+    "color": "18,82,79",
+    "label": "investigator_name",
+    "type": "text"
+  },
+  {
+    "color": "18,133,31",
+    "label": "investigator_agency_name",
+    "type": "text"
+  },
+  {
+    "color": "46,71,163",
+    "label": "investigator_agency_phone_number",
+    "type": "text"
+  },
+  {
+    "color": "13,77,13",
+    "label": "investigator_agency_email",
+    "type": "text"
+  },
+  {
+    "color": "31,54,18",
+    "label": "investigation_agency_start_date",
+    "type": "text"
+  },
+  {
+    "color": "20,87,54",
+    "label": "investigation_agency_completion_date",
+    "type": "text"
+  },
+  {
+    "color": "74,46,26",
+    "label": "patient_dob",
+    "type": "text"
+  },
+  {
+    "color": "133,82,54",
+    "label": "patient_age",
+    "type": "text"
+  },
+  {
+    "color": "56,48,143",
+    "label": "patient_place_of_birth_other",
+    "type": "text"
+  },
+  {
+    "color": "107,59,56",
+    "label": "patient_race_other",
+    "type": "text"
+  },
+  {
+    "color": "196,207,255",
+    "label": "patient__date_location_delivery",
+    "type": "text"
+  },
+  {
+    "color": "48,59,115",
+    "label": "obstetrician's_name,_address,_and_phone_#",
+    "type": "text"
+  },
+  {
+    "color": "255,194,59",
+    "label": "patient_hospitalized_at",
+    "type": "text"
+  },
+  {
+    "color": "255,166,59",
+    "label": "patient_admitted",
+    "type": "text"
+  },
+  {
+    "color": "255,166,252",
+    "label": "discharged",
+    "type": "text"
+  },
+  {
+    "color": "255,115,252",
+    "label": "duration_Of_Stay",
+    "type": "text"
+  },
+  {
+    "color": "214,227,201",
+    "label": "diagnosis_date",
+    "type": "text"
+  },
+  {
+    "color": "191,196,176",
+    "label": "symptomatic_onset_date",
+    "type": "text"
+  },
+  {
+    "color": "163,163,138",
+    "label": "symptomatic_end_date",
+    "type": "text"
+  },
+  {
+    "color": "156,133,133",
+    "label": "date_of_bilirubin_test",
+    "type": "text"
+  },
+  {
+    "color": "158,110,125",
+    "label": "hepatitis_date_of_death",
+    "type": "text"
+  },
+  {
+    "color": "171,79,97",
+    "label": "date_of_lab_test",
+    "type": "text"
+  },
+  {
+    "color": "156,38,87",
+    "label": "testing_facility",
+    "type": "text"
+  },
+  {
+    "color": "138,26,82",
+    "label": "alt_sgpt_result",
+    "type": "text"
+  },
+  {
+    "color": "125,18,59",
+    "label": "alt_upper_limit_normal",
+    "type": "text"
+  },
+  {
+    "color": "122,13,56",
+    "label": "ast_sgpt_result",
+    "type": "text"
+  },
+  {
+    "color": "130,10,41",
+    "label": "ast_upper_limit_normal",
+    "type": "text"
+  },
+  {
+    "color": "97,8,36",
+    "label": "date_of_alt_result",
+    "type": "text"
+  },
+  {
+    "color": "135,217,120",
+    "label": "date_of_ast_result",
+    "type": "text"
+  },
+  {
+    "color": "41,107,201",
+    "label": "vaccination_history_year",
+    "type": "text"
+  },
+  {
+    "color": "145,66,176",
+    "label": "earliest_date_public_health_control_initiated",
+    "type": "text"
+  }
+]

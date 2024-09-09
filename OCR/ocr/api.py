@@ -22,10 +22,10 @@ async def health_check():
 
 @app.post("/image_to_text/")
 async def image_to_text(source_image: UploadFile, segmentation_template: UploadFile, labels: str = Form()):
-    source_image_np = np.fromstring(await source_image.read(), np.uint8)
+    source_image_np = np.frombuffer(await source_image.read(), np.uint8)
     source_image_img = cv.imdecode(source_image_np, cv.IMREAD_COLOR)
 
-    segmentation_template_np = np.fromstring(await segmentation_template.read(), np.uint8)
+    segmentation_template_np = np.frombuffer(await segmentation_template.read(), np.uint8)
     segmentation_template_img = cv.imdecode(segmentation_template_np, cv.IMREAD_COLOR)
 
     loaded_json = json.loads(labels)
