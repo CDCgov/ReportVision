@@ -1,10 +1,12 @@
 [
   {
     "color": "255,0,0",
-    "label": "nbs_patient_id"
+    "label": "nbs_patient_id",
+    "type": "text"
   },
   {
     "color": "0,0,255",
-    "label": "nbs_cas_id"
+    "label": "nbs_cas_id",
+    "type": "text"
   }
 ]
