@@ -29,22 +29,21 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   const [templates, setTemplates] = useState<Template[]>([]);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // Load templates from local storage, and if none are found, load test data
   const loadTemplatesFromLocalStorage = () => {
     const storedTemplates = localStorage.getItem("templates");
     if (storedTemplates) {
       const parsedTemplates = JSON.parse(storedTemplates);
       setTemplates(parsedTemplates);
     } else {
-      setTemplates([]);
+      loadTemplatesFromLocalStorageTestData();
     }
   };
 
   const loadTemplatesFromLocalStorageTestData = () => {
-    // Sample for testing
     const sampleTemplates: Template[] = [
       {
-        name: "Template COVID",
+        name: "Test Template COVID",
         description: "This is the first sample template.",
         pages: [
           {
@@ -54,7 +53,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
         ],
       },
       {
-        name: "Template Syph",
+        name: "Test Template Syph",
         description: "This is the second sample template.",
         pages: [
           {
@@ -69,7 +68,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   };
 
   useEffect(() => {
-    loadTemplatesFromLocalStorageTestData();
+    loadTemplatesFromLocalStorage();
   }, []);
 
   const simulateFileUpload = (file: File) => {
