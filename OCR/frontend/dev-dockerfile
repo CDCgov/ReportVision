@@ -8,6 +8,5 @@ COPY . /app
 WORKDIR /app
 RUN npm install 
 
-
-# CMD npm run dev -- --host
-CMD vite
+EXPOSE 5173
+CMD npm run dev -- --host
