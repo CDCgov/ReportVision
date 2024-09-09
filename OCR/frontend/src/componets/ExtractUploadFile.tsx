@@ -36,11 +36,11 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
       const parsedTemplates = JSON.parse(storedTemplates);
       setTemplates(parsedTemplates);
     } else {
-      loadTemplatesFromLocalStorageTestData();
+      loadTemplatesTestData();
     }
   };
 
-  const loadTemplatesFromLocalStorageTestData = () => {
+  const loadTemplatesTestData = () => {
     const sampleTemplates: Template[] = [
       {
         name: "Test Template COVID",
