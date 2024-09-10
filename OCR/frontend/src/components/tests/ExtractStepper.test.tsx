@@ -7,7 +7,6 @@ describe("ExtractStepper component", () => {
   it("renders the StepIndicator component", () => {
     render(<ExtractStepper currentStep={ExtractStep.Upload} />);
 
-    // Check that the StepIndicator is rendered
     const stepIndicator = screen.getByTestId("step-indicator");
     expect(stepIndicator).toBeInTheDocument();
   });
