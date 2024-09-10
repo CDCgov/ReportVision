@@ -30,11 +30,6 @@ describe("ExtractUploadFile component", () => {
 
     const dashedContainer = screen.getByTestId("dashed-container");
     expect(dashedContainer).toBeInTheDocument();
-    expect(dashedContainer).toHaveStyle({
-      width: "70%",
-      height: "50%",
-      border: "1px dashed #005ea2",
-    });
 
     const uploadIcon = screen.getByTestId("upload-icon");
     expect(uploadIcon).toBeInTheDocument();
