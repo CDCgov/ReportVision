@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom"
-import { Divider } from "../componets/Divider"
-import { UploadHeader } from "../componets/Header"
-import { Stepper } from "../componets/Stepper"
-import { Uploadfile } from "../componets/UploadFile"
+import { Divider } from "../components/Divider"
+import { UploadHeader } from "../components/Header"
+import { Stepper } from "../components/Stepper"
+import { Uploadfile } from "../components/UploadFile"
 import { AnnotateStep } from "../utils/constants"
 
 export const UploadTemplate = () => {

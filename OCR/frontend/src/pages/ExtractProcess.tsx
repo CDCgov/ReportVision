@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import ExtractDataHeader from "../componets/ExtractDataHeader";
-import { Divider } from "../componets/Divider";
-import { ExtractStepper } from "../componets/ExtractStepper";
+import ExtractDataHeader from "../components/ExtractDataHeader";
+import { Divider } from "../components/Divider";
+import { ExtractStepper } from "../components/ExtractStepper";
 import { ExtractStep } from "../utils/constants";
 
 const ExtractProcess = () => {
