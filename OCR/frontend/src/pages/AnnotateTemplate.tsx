@@ -1,11 +1,11 @@
-import { UploadHeader } from "../componets/Header.tsx";
-import { Divider } from "../componets/Divider.tsx";
-import { Stepper } from "../componets/Stepper.tsx";
+import { UploadHeader } from "../components/Header.tsx";
+import { Divider } from "../components/Divider.tsx";
+import { Stepper } from "../components/Stepper.tsx";
 import { AnnotateStep } from "../utils/constants.ts";
 import { useFiles } from "../contexts/FilesContext.tsx";
 import * as pdfjsLib from "pdfjs-dist";
 import { Accordion, AccordionItemProps } from "@trussworks/react-uswds";
-import { MultiImageAnnotator } from "../componets/ImageAnnotator.tsx";
+import { MultiImageAnnotator } from "../components/ImageAnnotator.tsx";
 import { useNavigate } from "react-router-dom";
 import { LABELS } from "../constants/labels";
 import { Icon } from "@trussworks/react-uswds";

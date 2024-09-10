@@ -1,7 +1,7 @@
 import { Label, TextInput } from "@trussworks/react-uswds";
-import { Divider } from "../componets/Divider";
-import { UploadHeader } from "../componets/Header";
-import { Stepper } from "../componets/Stepper";
+import { Divider } from "../components/Divider";
+import { UploadHeader } from "../components/Header";
+import { Stepper } from "../components/Stepper";
 import { AnnotateStep } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { useAnnotationContext } from "../contexts/AnnotationContext";
