@@ -22,20 +22,8 @@ function App() {
                 <AppHeader jurisdiction={`Demo STLT`}/>
                 <div className="display-flex flex-row height-full">
                     <div
-                        className="flex-3 padding-top-1 padding-left-1 padding-right-4 minw-15 usa-dark-background bg-primary-dark text-base-lightest display-flex flex-column"
-                        style={{gap: "1rem", maxWidth: "30rem"}}>
-                        {/*TODO: Move this adhoc style into a css class*/}
-                        {/*<div className="flex-row flex-no-wrap display-flex " style={{gap: "0.5rem"}}>*/}
-                        {/*    <img*/}
-                        {/*        className='width-3'*/}
-                        {/*        src={dataLinkLogo}*/}
-                        {/*        alt={`IDWA`}*/}
-                        {/*    />*/}
-                        {/*    <div className='text-bold font-ui-md'>*/}
-                        {/*        Datalink*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-                        {/*TODO: Move this adhoc style into a css class*/}
+                        className="flex-3 padding-top-1 padding-left-1 padding-right-4 minw-15 usa-dark-background bg-primary-dark text-base-lightest display-flex flex-column flex-gap-1 maxw-30"
+                        >
                         <div className='display-flex flex-column flex-align-start padding-top-2'>
                             {navLinks.map((i, idx) => {
                                 return <Link key={idx} href={i.url}
@@ -45,8 +33,7 @@ function App() {
                     </div>
                     <div className="flex-10 display-flex flex-column">
                         <h2 className="padding-left-2">Annotate and Extract</h2>
-                        {/*TODO: Move this adhoc style into a css class*/}
-                        <div className=" flex-1 padding-left-2  padding-right-2" style={{backgroundColor: "#f5fbff"}}>
+                        <div className=" flex-1 padding-left-2  padding-right-2 bg-idwa-light" >
                             <p><span className="text-bold">Welcome Blake, </span></p>
                             <p>Extract data from any PDFs, or images to send to your surveillance systems using data from your saved templates or create new segmentations.</p>
                             <img className="display-block margin-left-auto margin-right-auto padding-top-8"  src={extractImage} alt="Extract From Documents"/>

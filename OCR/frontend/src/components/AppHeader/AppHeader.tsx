@@ -1,7 +1,7 @@
-import {FC, useState} from "react";
-import {Button, Icon, Header, GridContainer, Grid, NavMenuButton, PrimaryNav} from "@trussworks/react-uswds";
+import {FC} from "react";
+import {Button, Icon, Header} from "@trussworks/react-uswds";
 
-import * as styles from './AppHeader.module.scss';
+import './AppHeader.scss'
 import dataLinkLogo from '../../assets/datalink_placeholder_logo.svg';
 import {useNavigate} from "react-router-dom";
 
@@ -13,10 +13,8 @@ export const AppHeader: FC<IndexHeaderProps> = ({jurisdiction}: IndexHeaderProps
     const navigate = useNavigate()
     return (
         <>
-            {/*TODO: Move this adhoc style into a css class*/}
             <Header basic={true} role={`banner`}
-                    className='header width-full display-flex flex-row flex-justify-start bg-primary-darker padding-1 padding-left-4 padding-right-4 text-base-lightest'
-                    style={{gap: '.5rem'}}
+                    className='header width-full display-flex flex-row flex-justify-start bg-primary-darker padding-1 padding-left-4 padding-right-4 text-base-lightest flex-gap-half'
             >
                 <div className="display-flex flex-justify-center">
                     <Button unstyled type="button" onClick={() => navigate("/")}>
