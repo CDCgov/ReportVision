@@ -1,12 +1,9 @@
-FROM node:20.17.0-alpine3.20
-
-RUN apk add --update nodejs npm
-
-
+FROM node:20.17.0
 COPY . /app
 
 WORKDIR /app
 RUN npm install 
+RUN npx playwright install --with-deps
 
-EXPOSE 5173
+EXPOSE 5173 8080
 CMD npm run dev -- --host
