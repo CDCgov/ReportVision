@@ -1,9 +1,7 @@
-@import 'src/style/index.scss';
-
 .label-container {
     &:hover {
         cursor: pointer;
-        @include u-shadow(2);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
         outline: 1px solid #dadada;
         outline-offset: 4px;
     }
