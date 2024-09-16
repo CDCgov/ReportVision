@@ -4,12 +4,14 @@ import { Button, Icon, Header } from "@trussworks/react-uswds";
 interface ExtractDataHeaderProps {
   onBack: () => void;
   onSubmit: () => void;
+  onExit: () => void;
   isUploadComplete: boolean;
 }
 
 export const ExtractDataHeader: React.FC<ExtractDataHeaderProps> = ({
   onBack,
   onSubmit,
+  onExit,
   isUploadComplete,
 }) => {
   return (
@@ -27,7 +29,7 @@ export const ExtractDataHeader: React.FC<ExtractDataHeaderProps> = ({
             unstyled
             type="button"
             style={{ paddingRight: "8px" }}
-            onClick={onBack}
+            onClick={onExit}
           >
             <Icon.Close size={3} color="black" />
           </Button>
@@ -36,7 +38,6 @@ export const ExtractDataHeader: React.FC<ExtractDataHeaderProps> = ({
         <div className="display-flex flex-align-center">
           <Button
             onClick={onBack}
-            disabled={true}
             type="reset"
             outline
             style={{

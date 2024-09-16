@@ -12,6 +12,7 @@ import ExtractUpload from "./pages/ExtractUpload.tsx";
 import ExtractProcess from "./pages/ExtractProcess.tsx";
 import { SaveTemplate } from "./pages/SaveTemplate.tsx";
 import ReviewTemplate from "./pages/ReviewTemplate.tsx";
+import SubmissionTemplate from "./pages/SubmissionTemplate.tsx";
 
 const router = createBrowserRouter([
   {
@@ -39,8 +40,12 @@ const router = createBrowserRouter([
     element: <SaveTemplate />,
   },
   {
-    path: "/extract/submit",
+    path: "/extract/review",
     element: <ReviewTemplate />,
+  },
+  {
+    path: "/extract/submit",
+    element: <SubmissionTemplate />,
   },
 ]);
 
