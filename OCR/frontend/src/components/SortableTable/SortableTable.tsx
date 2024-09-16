@@ -96,9 +96,12 @@ const SortableTableHeader: FC<SortableTableHeaderProps> = ({
 
     const isSortedBy = sortBy === column
     return <>
-        <th
-            onClick={() => onClick(column)}>{name}
+        <th onClick={() => onClick(column)}>
+            <div className="display-flex flex-row">
+                <div>{name}</div>
+                <div className="flex-1"></div>
             {isSortedBy ? <SortOrderIcon isDescending={isDescending}/> : <SortIcon/>}
+            </div>
         </th>
     </>
 }
