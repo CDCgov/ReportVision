@@ -122,6 +122,12 @@ export const TemplatesIndex: FC<TemplateIndexProps> = ({}) => {
                 setTemplates(JSON.parse(oldTemplates))
             }
         }
+        return () => {
+            delete window.LoadNiceTemplates
+            delete window.SaveTemplates
+            delete window.ClearTemplates
+            delete window.LoadSavedTemplates
+        }
     }, []);
 
     if (!templates || templates.length === 0) {
