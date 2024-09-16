@@ -70,7 +70,7 @@ const ReviewTemplate: React.FC = () => {
 
   //fallback if no valid template is available can edit if needed
   if (!submissionData) {
-    return <div>Loading...</div>;
+    return <div>No submission Data</div>;
   }
 
   const { file_image, results } = submissionData;
