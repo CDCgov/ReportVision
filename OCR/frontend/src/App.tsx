@@ -1,21 +1,22 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import './App.scss'
-import {Button, Link, SideNav} from "@trussworks/react-uswds";
-import {useLocation, useNavigate, useNavigation} from "react-router-dom";
+import {Button, Link} from "@trussworks/react-uswds";
+import {useLocation, useNavigate} from "react-router-dom";
 
 import {AppHeader} from "./components/AppHeader/AppHeader.tsx";
-import dataLinkLogo from "./assets/datalink_placeholder_logo.svg";
-import extractImage from "./assets/extract_image.svg"
+
+import {SortableTable} from './components/SortableTable/SortableTable.tsx'
+import {TemplatesIndex} from "./components/TemplatesIndex/TemplatesIndex.tsx";
 function App() {
     const {pathname} = useLocation()
     const navigate = useNavigate()
     const navLinks = [
-        {text: "Annotate and Extract", url: "/annotate"},
+        {text: "Annotate and Extract", url: "/"},
         {text: "Label Management", url: "/labels"},
-        {text: "Dashboard", url: "/"}
+        {text: "Dashboard", url: "/dashboard"}
     ]
 
-
+    const displayTemplates = true
     return (
         <>
             <div className='display-flex flex-column width-full height-full'>
@@ -31,14 +32,14 @@ function App() {
                             })}
                         </div>
                     </div>
+
                     <div className="flex-10 display-flex flex-column">
                         <h2 className="padding-left-2">Annotate and Extract</h2>
-                        <div className=" flex-1 padding-left-2  padding-right-2 bg-idwa-light" >
+                        <div className=" flex-1 padding-left-2  padding-right-2 bg-idwa-light">
                             <p><span className="text-bold">Welcome Blake, </span></p>
-                            <p>Extract data from any PDFs, or images to send to your surveillance systems using data from your saved templates or create new segmentations.</p>
-                            <img className="display-block margin-left-auto margin-right-auto padding-top-8"  src={extractImage} alt="Extract From Documents"/>
-                            <p className="text-bold text-center">You have no segmentation templates set up yet. The templates will be used to extract data for your lab forms.</p>
-                            <Button type="button" className="usa-button display-flex flex-align-center margin-left-auto margin-right-auto" onClick={() => navigate("/new-template/upload")}>+ New Template</Button>
+                            <p>Extract data from any PDFs, or images to send to your surveillance systems using data
+                                from your saved templates or create new segmentations.</p>
+                            <TemplatesIndex/>
                         </div>
                     </div>
                 </div>
