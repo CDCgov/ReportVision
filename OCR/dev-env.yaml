@@ -15,8 +15,9 @@ services:
       dockerfile: dev-dockerfile
     ports:
       - "5173:5173"
+      - "8080:8080"
     volumes:
       - ./frontend:/app
     restart: no
-    command: "/bin/sh -c 'npm install && npm run dev -- --host'" 
+    command: "/bin/sh -c 'npm install && npx playwright install && npx playwright test --ui-port=8080 --ui-host=0.0.0.0 & npm run dev -- --host'" 
     
