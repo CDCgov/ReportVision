@@ -1,7 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
+
+import '@trussworks/react-uswds/lib/uswds.css'
+import '@trussworks/react-uswds/lib/index.css'
+
 import "./style/index.scss";
+
+import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { UploadTemplate } from "./pages/UploadTemplate.tsx";
 import { FilesProvider } from "./contexts/FilesContext.tsx";
