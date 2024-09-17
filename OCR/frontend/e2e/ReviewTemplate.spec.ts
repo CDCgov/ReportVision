@@ -39,13 +39,11 @@ test.describe("ReviewTemplate Page", () => {
   test("Displays extracted data with overall confidence score", async ({
     page,
   }) => {
-    // Check for the presence of the Extracted Data header
     const extractedDataHeader = await page.getByRole("heading", {
       name: "Extracted Data",
     });
     await expect(extractedDataHeader).toBeVisible();
 
-    // Verify the presence of the "Review and edit errors" message
     await expect(page.locator("p.font-sans")).toHaveText(
       "Review and edit errors before you submit."
     );
