@@ -52,7 +52,7 @@ test.describe('when templates exist', async () => {
             localStorage.setItem('templates', JSON.stringify(templates))
         })
     })
-    test('displays list of templates if they exist and sorting functions', async ({page, baseURL}) => {
+    test('displays list of templates if they exist and sorting functions', async ({page}) => {
         await page.goto('/')
         await expect(page.getByRole('heading', { name: 'Saved Templates' })).toBeVisible()
         await expect(page.locator('tbody').getByRole('row')).toHaveCount(4)
