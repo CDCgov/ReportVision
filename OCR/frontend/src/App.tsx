@@ -1,22 +1,18 @@
-import {useEffect, useState} from 'react'
 import './App.scss'
-import {Button, Link} from "@trussworks/react-uswds";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Link} from "@trussworks/react-uswds";
+import {useLocation} from "react-router-dom";
 
 import {AppHeader} from "./components/AppHeader/AppHeader.tsx";
 
-import {SortableTable} from './components/SortableTable/SortableTable.tsx'
 import {TemplatesIndex} from "./components/TemplatesIndex/TemplatesIndex.tsx";
 function App() {
     const {pathname} = useLocation()
-    const navigate = useNavigate()
     const navLinks = [
         {text: "Annotate and Extract", url: "/"},
         {text: "Label Management", url: "/labels"},
         {text: "Dashboard", url: "/dashboard"}
     ]
 
-    const displayTemplates = true
     return (
         <>
             <div className='display-flex flex-column width-full height-full'>
