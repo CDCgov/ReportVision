@@ -14,7 +14,7 @@ test.describe("ReviewTemplate Page", () => {
     await scrollContainer.evaluate((el) => el.scrollBy(0, 100));
     const afterScroll = await scrollContainer.evaluate((el) => el.scrollTop);
 
-    await expect(afterScroll).toBeGreaterThan(beforeScroll);
+    expect(afterScroll).toBeGreaterThan(beforeScroll);
   });
 
   // Test the Back button functionality
@@ -39,7 +39,7 @@ test.describe("ReviewTemplate Page", () => {
   test("Displays extracted data with overall confidence score", async ({
     page,
   }) => {
-    const extractedDataHeader = await page.getByRole("heading", {
+    const extractedDataHeader = page.getByRole("heading", {
       name: "Extracted Data",
     });
     await expect(extractedDataHeader).toBeVisible();
