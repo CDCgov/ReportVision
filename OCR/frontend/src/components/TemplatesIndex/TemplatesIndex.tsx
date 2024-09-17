@@ -62,28 +62,28 @@ export const TemplatesIndex: FC<TemplateIndexProps> = ({}) => {
             lab: "Quest",
             createdBy: "J.Smith",
             status: "Completed",
-            lastUpdated: new Date(Date.parse("2025-03-24 12:00:00:00 GMT-0500"))
+            lastUpdated: new Date(Date.parse("2025-03-24T12:00:00.000-05:00"))
         },
         {
             name: "LBTIRadar",
             lab: "Radar",
             createdBy: "C.Alex",
             status: "Completed",
-            lastUpdated: new Date(Date.parse("2025-05-30 12:00:00:00 GMT-0500"))
+            lastUpdated: new Date(Date.parse("2025-05-30T12:00:00.000-05:00"))
         },
         {
             name: "COVIDBaylor1",
             lab: "Emory",
             createdBy: "A.Bryant",
             status: "Completed",
-            lastUpdated: new Date(Date.parse("2025-06-21 12:00:00:00 GMT-0500"))
+            lastUpdated: new Date(Date.parse("2025-06-21T12:00:00.000-05:00"))
         },
         {
             name: "COVIDEMory",
             lab: "Baylor",
             createdBy: "D.Smith",
             status: "Completed",
-            lastUpdated: new Date(Date.parse("2024-06-21 12:00:00:00 GMT-0500"))
+            lastUpdated: new Date(Date.parse("2024-06-21T12:00:00.000-05:00"))
         },
     ];
 
