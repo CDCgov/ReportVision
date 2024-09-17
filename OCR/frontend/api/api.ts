@@ -13,6 +13,9 @@ export const AddFormData = async (args: Page): Promise<ImageToTextResponse | nul
     try {
         const response = await fetch("http://localhost:8000/image_to_text/", {
             "method": "POST",
+            "headers": {
+              "Content-Type": "multipart/form-data",
+            },
             body: form
           })
           return  await response.json() as ImageToTextResponse;

@@ -7,6 +7,12 @@ export interface Field {
     type: string;
 }
 
+export interface Field {
+    color: string;
+    label: string;
+    type: string;
+}
+
 export interface Page {
     // base 64 encoded image
     sourceImage: string;
