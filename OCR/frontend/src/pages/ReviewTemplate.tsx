@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ExtractDataHeader from "../components/ExtractDataHeader";
 import React from "react";
 import { ExtractStepper } from "../components/ExtractStepper";
-import { Table } from "@trussworks/react-uswds";
+import { Table, Icon } from "@trussworks/react-uswds";
 import { Divider } from "../components/Divider";
 import documentImage from "./SyphForm.png";
 
@@ -90,12 +90,36 @@ const ReviewTemplate: React.FC = () => {
 
       <div className="display-flex flex-justify-between padding-top-4">
         <div className="width-50">
+          <div className="margin-top-2 margin-bottom-1">
+            <div className="display-flex flex-align-center">
+              <h3>Extracted Data</h3>
+            </div>
+            <div className="display-flex flex-align-center">
+              <Icon.Star
+                aria-hidden={true}
+                className="text-primary margin-right-1"
+              />
+              <span className="font-sans-md font-weight-semibold">
+                Overall confidence score (CS):
+                <span className="text-green margin-left-05">96%</span>
+              </span>
+              <Icon.Help aria-hidden={true} className="margin-left-1" />
+            </div>
+            <p className="font-sans">
+              Review and edit errors before you submit.
+            </p>
+            <div className="display-flex flex-align-center text-error">
+              <span className="font-sans-sm margin-right-1">Errors: 1</span>
+              <Icon.Warning className="text-error" />
+            </div>
+          </div>
+
           <Table fullWidth striped>
             <thead>
               <tr>
                 <th>Label</th>
                 <th>Value</th>
-                <th>Label CS</th>
+                <th>Confidence</th>
               </tr>
             </thead>
             <tbody>
@@ -110,7 +134,22 @@ const ReviewTemplate: React.FC = () => {
           </Table>
         </div>
         <div className="width-50">
-          <img src={file_image} alt="Document" style={{ width: "100%" }} />
+          <div
+            style={{
+              maxHeight: "500px",
+              overflowY: "auto",
+            }}
+          >
+            <img
+              src={documentImage}
+              alt={file_image}
+              style={{
+                width: "90",
+                transform: "scale(0.95)",
+                transformOrigin: "top left",
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
