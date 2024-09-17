@@ -155,7 +155,7 @@ export const TemplatesIndex: FC<TemplateIndexProps> = ({}) => {
                     <div className='padding-left-1'>
                         <Button type="button"
                                 className="usa-button display-flex flex-align-center margin-left-auto margin-right-auto"
-                                onClick={() => navigate("/extract/upload")}>Run Data Extration</Button>
+                                onClick={() => navigate("/extract/upload")}>Run Data Extraction</Button>
                     </div>
                     <div className='padding-left-1'>
                         <Button type="button" outline
