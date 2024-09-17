@@ -26,12 +26,11 @@ export const SortableTable: FC<SortableTableProps> = ({
                                                           sortableBy,
                                                           defaultSort,
                                                           defaultDescending = false,
-                                                          columns, formatters = {},
+                                                          columns = Object.keys(data[0]),
+                                                          formatters = {},
                                                           columnNames = {},
                                                       }: SortableTableProps) => {
-    if (!columns) {
-        columns = Object.keys(data[0])
-    }
+
     const [sortBy, setSortBy] = useState(defaultSort || columns?.[0])
     const [isDescending, setIsDescending] = useState(defaultDescending)
 
@@ -54,7 +53,6 @@ export const SortableTable: FC<SortableTableProps> = ({
 
 
     return (
-        <>
             <Table fullWidth striped>
                 <thead>
                 <tr>
@@ -75,7 +73,6 @@ export const SortableTable: FC<SortableTableProps> = ({
                 })}
                 </tbody>
             </Table>
-        </>
     )
 }
 
@@ -95,7 +92,7 @@ const SortableTableHeader: FC<SortableTableHeaderProps> = ({
                                                            }: SortableTableHeaderProps) => {
 
     const isSortedBy = sortBy === column
-    return <>
+    return (
         <th onClick={() => onClick(column)}>
             <div className="display-flex flex-row">
                 <div>{name}</div>
@@ -103,7 +100,7 @@ const SortableTableHeader: FC<SortableTableHeaderProps> = ({
             {isSortedBy ? <SortOrderIcon isDescending={isDescending}/> : <SortIcon/>}
             </div>
         </th>
-    </>
+    )
 }
 
 interface SortIconProps {
@@ -111,14 +108,12 @@ interface SortIconProps {
 }
 
 const SortOrderIcon: FC<SortIconProps> = ({isDescending = false}) => {
-    return <>
+    return (
         <img className={`margin-left-1 height-2 ${isDescending ? '' : 'sort-arrow-up'}`} src={SortArrow}
              alt={`Sorting ${isDescending ? 'descending' : 'ascending'}`}/>
-    </>
+    )
 }
 
 const SortIcon: FC = () => {
-    return <>
-        <img className={`margin-left-1 height-2 `} src={SortableIcon} alt="Sort by"/>
-    </>
+    return <img className={`margin-left-1 height-2 `} src={SortableIcon} alt="Sort by"/>
 }
