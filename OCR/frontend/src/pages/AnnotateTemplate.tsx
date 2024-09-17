@@ -97,9 +97,10 @@ const AnnotateTemplate: React.FC = () => {
           className="display-flex flex-justify space-between flex-align-center padding-y-1 label-container margin-0"
           onClick={() => {
             setSelectedField({
-              name: item.name,
-              id: String(idx + 1),
-              color: item.color,
+
+                name: item.name,
+                id: String(idx + 1),
+                color: item.color.slice(0, 7),
             });
             let tempFields = [...fields];
             if (fields.length === 0) {

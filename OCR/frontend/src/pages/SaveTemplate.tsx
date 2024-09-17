@@ -1,31 +1,46 @@
-import {Label, TextInput} from "@trussworks/react-uswds";
-import {Divider} from "../components/Divider";
-import {UploadHeader} from "../components/Header";
-import {Stepper} from "../components/Stepper";
-import {AnnotateStep} from "../utils/constants";
-import {useNavigate} from "react-router-dom";
-import {useAnnotationContext} from "../contexts/AnnotationContext";
-import {useFiles, File, Page} from "../contexts/FilesContext";
+import { Label, TextInput } from "@trussworks/react-uswds";
+import { Divider } from "../components/Divider";
+import { UploadHeader } from "../components/Header";
+import { Stepper } from "../components/Stepper";
+import { AnnotateStep } from "../utils/constants";
+import { useNavigate } from "react-router-dom";
+import { useAnnotationContext } from "../contexts/AnnotationContext";
+import { useFiles, FileType, Page } from "../contexts/FilesContext";
+import hexRgb from "hex-rgb";
+
+
 
 export const SaveTemplate = () => {
     const navigate = useNavigate();
-    const {fields, setDescription, setName, name, description, annotatedImages} = useAnnotationContext()
-    const {addFile} = useFiles();
-
+    const { fields, setDescription, setName, name, description, annotatedImages, shapes} = useAnnotationContext()
+    const { addFile } = useFiles();
+    
     const handleSubmit = () => {
-        const pages: Page[] = fields.map((field, index) => {
-            return {
-                fieldNames: [...field.keys()],
-                image: annotatedImages[index]
+        const images: string[] = localStorage.getItem('images') ? JSON.parse(localStorage.getItem('images') as string) : [];
+        let pages: Page[] = [];
+        if (images.length > 0) {
+            pages = fields.map((_, index) => {
+                const shape = shapes[index]
+                return {
+                    fieldNames: shape.map(s => {
+                        const { red, green, blue } = hexRgb(s.color as string);
+                        return {
+                            type: 'text',
+                            color: `${red},${green},${blue}`,
+                            label: s.field
+                        }
+                    }),
+                    sourceImage: images[index],
+                    templateImage: annotatedImages[index]
+                }
+            });
+            const tempFile: FileType = {
+                name,
+                description,
+                pages: pages
+    
             }
-        });
-        const tempFile: File = {
-            name,
-            description,
-            pages: pages
 
-        }
-        addFile(tempFile)
         let existingTemplates = []
         try {
             const data = localStorage.getItem('templates');
@@ -37,6 +52,8 @@ export const SaveTemplate = () => {
             console.error("Invalid information found in templates, it will be overwritten")
         }
         localStorage.setItem('templates', JSON.stringify([...existingTemplates, tempFile]))
+        addFile(tempFile)
+        }
         navigate('/')
     }
     return (
