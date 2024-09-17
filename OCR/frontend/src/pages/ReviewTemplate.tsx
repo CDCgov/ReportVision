@@ -6,7 +6,7 @@ import React from "react";
 import { ExtractStepper } from "../components/ExtractStepper";
 import { Table, Icon } from "@trussworks/react-uswds";
 import { Divider } from "../components/Divider";
-import documentImage from "./SyphForm.png";
+import documentImage from "./SyphForm.png"; //Please enter your file of choice here
 
 interface Result {
   text: string;
@@ -119,7 +119,7 @@ const ReviewTemplate: React.FC = () => {
               <tr>
                 <th>Label</th>
                 <th>Value</th>
-                <th>Confidence</th>
+                <th>Label Confidence</th>
               </tr>
             </thead>
             <tbody>
