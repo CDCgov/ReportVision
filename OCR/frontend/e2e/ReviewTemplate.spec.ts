@@ -53,6 +53,6 @@ test.describe("ReviewTemplate Page", () => {
     const headers = page.locator("th");
     await expect(headers.nth(0)).toHaveText("Label"); // First header
     await expect(headers.nth(1)).toHaveText("Value"); // Second header
-    await expect(headers.nth(2)).toHaveText("Label Confidence"); // Third header
+    await expect(headers.nth(3)).toHaveText("Label Confidence"); // Third header
   });
 });
