@@ -18,6 +18,7 @@ const ExtractUpload = () => {
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <ExtractDataHeader
         onBack={() => navigate("/")}
+        onExit={() => navigate("/")}
         onSubmit={() => navigate("/extract/process")}
         isUploadComplete={isUploadComplete}
       />
