@@ -43,6 +43,10 @@ const ReviewTemplate: React.FC = () => {
         text: "5",
         confidence: 97.1,
       },
+      DateOfService: {
+        text: "/20/2024",
+        confidence: 45.2
+      }
     },
   };
 
@@ -74,7 +78,8 @@ const ReviewTemplate: React.FC = () => {
   }
 
   const { file_image, results } = submissionData;
-
+  const errorCount = Object.values(results).filter(r => r.confidence <= 75.0).length
+  const hasErrors = errorCount > 0
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <ExtractDataHeader
@@ -109,27 +114,32 @@ const ReviewTemplate: React.FC = () => {
               Review and edit errors before you submit.
             </p>
             <div className="display-flex flex-align-center text-error">
-              <span className="font-sans-sm margin-right-1">Errors: 1</span>
-              <Icon.Warning className="text-error" />
+              {hasErrors && <><span className="font-sans-sm margin-right-1">Errors: {errorCount}</span>
+                <Icon.Warning className="text-error"/></>}
             </div>
           </div>
 
           <Table fullWidth striped>
             <thead>
-              <tr>
+            <tr>
                 <th>Label</th>
                 <th>Value</th>
+              <th></th>
                 <th>Label Confidence</th>
               </tr>
             </thead>
             <tbody>
-              {Object.entries(results).map(([key, value]) => (
-                <tr key={key}>
-                  <td>{key}</td>
-                  <td>{value.text}</td>
-                  <td>{value.confidence}%</td>
-                </tr>
-              ))}
+            {Object.entries(results).map(([key, value]) => {
+              const isError = value.confidence <= 75.0
+              return (
+                  <tr key={key}>
+                    <td>{key}</td>
+                    <td className={`${isError ? 'text-error' : ''}`}>{value.text}</td>
+                    <td>{isError && <Icon.Warning className="text-error"/>}</td>
+                    <td className={`${isError ? 'text-error' : ''}`}>{value.confidence}%</td>
+                  </tr>
+              )
+            })}
             </tbody>
           </Table>
         </div>
