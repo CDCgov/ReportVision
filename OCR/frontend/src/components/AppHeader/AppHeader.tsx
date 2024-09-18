@@ -2,7 +2,7 @@ import {FC} from "react";
 import {Button, Icon, Header} from "@trussworks/react-uswds";
 
 import './AppHeader.scss'
-import dataLinkLogo from '../../assets/datalink_placeholder_logo.svg';
+import reportVisionLogo from '../../assets/datalink_placeholder_logo.svg';
 import {useNavigate} from "react-router-dom";
 
 interface IndexHeaderProps {
@@ -20,13 +20,13 @@ export const AppHeader: FC<IndexHeaderProps> = ({jurisdiction}: IndexHeaderProps
                     <Button unstyled type="button" onClick={() => navigate("/")}>
                         <img
                             className='width-3'
-                            src={dataLinkLogo}
+                            src={reportVisionLogo}
                             alt={`IDWA`}
                         />
                     </Button>
                 </div>
                 <div className='text-bold font-ui-md  display-flex flex-align-center'>
-                    Datalink
+                    ReportVision
                 </div>
                 <div className='padding-left-1 display-flex flex-align-center'>{jurisdiction}</div>
                 <div className='flex-align-end flex-justify-end flex-1'></div>
