@@ -1,0 +1,9 @@
+.usa-table--striped tbody tr:nth-child(odd) td.usa-input--error {
+  color: #d54309;
+  background-color: #f0f0f0;
+}
+
+.usa-table--striped tbody tr:nth-child(even) td.usa-input--error {
+  color: #d54309;
+  background-color: inherit;
+}
