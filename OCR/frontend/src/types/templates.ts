@@ -1,4 +1,4 @@
-interface Template  {
+interface Template {
     name: string;
     lastUpdated: Date | undefined;
     createdBy: string | undefined;
