@@ -4,10 +4,9 @@ import {SortableTable} from "../SortableTable/SortableTable.tsx";
 import {useNavigate} from "react-router-dom";
 import extractImage from "../../assets/extract_image.svg";
 
-interface TemplateIndexProps {
-}
+type TemplateIndexProps = unknown
 
-export const TemplatesIndex: FC<TemplateIndexProps> = ({}) => {
+export const TemplatesIndex: FC<TemplateIndexProps> = () => {
     const [templates, setTemplates] = useState([])
     const navigate = useNavigate()
     useEffect(() => {
@@ -128,7 +127,7 @@ export const TemplatesIndex: FC<TemplateIndexProps> = ({}) => {
             delete window.ClearTemplates
             delete window.LoadSavedTemplates
         }
-    }, []);
+    });
 
     if (!templates || templates.length === 0) {
         return (
@@ -168,7 +167,8 @@ export const TemplatesIndex: FC<TemplateIndexProps> = ({}) => {
                     <h2>Saved Templates</h2>
                     <SortableTable columns={templateColumns} data={templates}
                                    formatters={templateColumnFormatters}
-                                   columnNames={templateColumnNames}/>
+                                   columnNames={templateColumnNames}
+                    />
                 </div>
             </div>
         </>)
