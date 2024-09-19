@@ -39,7 +39,7 @@ const ReviewTemplate: React.FC = () => {
       },
       Patient_ID: {
         text: "12090546",
-        confidence: 91,
+        confidence: 98,
       },
       DrawLocation: {
         text: "BH_1Diamondd_LAB",
@@ -113,12 +113,12 @@ const ReviewTemplate: React.FC = () => {
               <h3>Extracted Data</h3>
             </div>
             <div className="display-flex flex-align-center">
-              <Icon.Star
+              <Icon.Info
                 aria-hidden={true}
                 className="text-primary margin-right-1"
               />
               <span className="font-sans-md font-weight-semibold">
-                Overall confidence score (CS):{" "}
+                <b> Overall confidence score (CS): </b>
                 <span
                   className={`text-black margin-left-05 ${
                     Number(overallConfidence) < Number(confidenceVal)
@@ -133,8 +133,6 @@ const ReviewTemplate: React.FC = () => {
                 label="Overall Confidence Score is the average of all Individual Confidence Scores."
                 style={{
                   padding: "4px",
-                  fontSize: "12px",
-                  maxWidth: "150px",
                 }}
               >
                 <Icon.Help aria-hidden={true} />

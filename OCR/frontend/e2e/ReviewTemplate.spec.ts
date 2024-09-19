@@ -61,7 +61,7 @@ test.describe("ReviewTemplate Page", () => {
   }) => {
     // Check that the overall confidence score is calculated correctly
     const overallConfidence = await page.locator("span.text-black");
-    await expect(overallConfidence).toContainText("81.33%");
+    await expect(overallConfidence).toContainText("83.67%");
   });
 
   test("should correctly identify and count errors (below threshold)", async ({
