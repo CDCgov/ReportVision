@@ -75,7 +75,6 @@ test.describe("ReviewTemplate Page", () => {
   test("should apply error styling when confidence is below threshold", async ({
     page,
   }) => {
-    // Ensure that the 'DateOfService' or any other low confidence field is marked with error styling
     const DrawLocation = page.locator("td >> text=BH_1Diamondd_LAB");
     await expect(DrawLocation).toHaveClass(/usa-input--error/);
   });

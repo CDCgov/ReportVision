@@ -130,7 +130,7 @@ const ReviewTemplate: React.FC = () => {
                 </span>
               </span>
               <Tooltip
-                label="Overall Confidence Score is the average of all Individual Confidence Scores. Edited fields are counted as 100%."
+                label="Overall Confidence Score is the average of all Individual Confidence Scores."
                 style={{
                   padding: "4px",
                   fontSize: "12px",
