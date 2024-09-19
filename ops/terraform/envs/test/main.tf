@@ -66,7 +66,7 @@ module "storage" {
 
 module "ocr_api" {
   source         = "../../modules/app_service"
-  location       = data.azurerm_resource_group.test.location
+  location       = local.init.location
   resource_group = data.azurerm_resource_group.test.name
   app_subnet_id  = module.networking.lbsubnet_id
   environment    = local.environment

@@ -1,3 +1,3 @@
 data "azurerm_resource_group" "test" {
-  name = "idwa-${local.environment}-rg"
+  name = "idwa-rv-${local.environment}-rg"
 }

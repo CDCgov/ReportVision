@@ -1,8 +1,8 @@
 locals {
-  environment = "test"
+  environment = "dev"
   init = {
     environment         = local.environment
-    resource_group_name = "idwa-test-rg"
+    resource_group_name = "idwa-rv-dev-rg"
     location            = "westus2"
   }
   network = {
