@@ -35,15 +35,15 @@ const ReviewTemplate: React.FC = () => {
     results: {
       Name: {
         text: "TESTPATIENT,13",
-        confidence: 98,
+        confidence: 97,
       },
       Patient_ID: {
         text: "12090546",
-        confidence: 56,
+        confidence: 91,
       },
       DrawLocation: {
         text: "BH_1Diamondd_LAB",
-        confidence: 98,
+        confidence: 56,
       },
     },
   };
@@ -77,16 +77,6 @@ const ReviewTemplate: React.FC = () => {
       return sum + (result.edited ? 100 : result.confidence);
     }, 0);
     return (totalConfidence / results.length).toFixed(2);
-  };
-
-  const handleEditField = (key: string) => {
-    if (!submissionData) return;
-    setSubmissionData((prevData) => {
-      if (!prevData) return prevData;
-      const updatedResults = { ...prevData.results };
-      updatedResults[key] = { ...updatedResults[key], edited: true };
-      return { ...prevData, results: updatedResults };
-    });
   };
 
   //fallback if no valid template is available can edit if needed
@@ -129,7 +119,13 @@ const ReviewTemplate: React.FC = () => {
               />
               <span className="font-sans-md font-weight-semibold">
                 Overall confidence score (CS):{" "}
-                <span className="text-green margin-left-05">
+                <span
+                  className={`text-black margin-left-05 ${
+                    Number(overallConfidence) < Number(confidenceVal)
+                      ? "text-error"
+                      : "text-success"
+                  }`}
+                >
                   {overallConfidence}%
                 </span>
               </span>
@@ -174,17 +170,14 @@ const ReviewTemplate: React.FC = () => {
                 return (
                   <tr key={key}>
                     <td>{key}</td>
-                    <td
-                      className={`${isError ? "usa-input--error" : ""}`}
-                      onClick={() => handleEditField(key)}
-                    >
+                    <td className={`${isError ? "usa-input--error" : ""}`}>
                       {value.text}
                     </td>
                     <td>
                       {isError && <Icon.Warning className="text-error" />}
                     </td>
                     <td className={`${isError ? "usa-input--error" : ""}`}>
-                      {value.edited ? "100%" : `${value.confidence}%`}
+                      {`${value.confidence}%`}
                     </td>
                   </tr>
                 );
