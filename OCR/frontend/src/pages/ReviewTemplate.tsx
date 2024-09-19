@@ -8,6 +8,7 @@ import { Table, Icon, Tooltip } from "@trussworks/react-uswds";
 import { Divider } from "../components/Divider";
 import documentImage from "./SyphForm.png"; //Please enter your file of choice here
 import "./ReviewTemplate.scss";
+import aiIconUrl from "../assets/ai_icon.svg";
 
 interface Result {
   text: string;
@@ -113,10 +114,7 @@ const ReviewTemplate: React.FC = () => {
               <h3>Extracted Data</h3>
             </div>
             <div className="display-flex flex-align-center">
-              <Icon.Info
-                aria-hidden={true}
-                className="text-primary margin-right-1"
-              />
+              <img src={aiIconUrl} alt="AI Icon" aria-hidden={true} />
               <span className="font-sans-md font-weight-semibold">
                 <b> Overall confidence score (CS): </b>
                 <span
