@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ExtractDataHeader from "../components/ExtractDataHeader";
 import React from "react";
 import { ExtractStepper } from "../components/ExtractStepper";
-import { Table, Icon, Tooltip } from "@trussworks/react-uswds";
+import { Table, Icon } from "@trussworks/react-uswds";
 import { Divider } from "../components/Divider";
 import documentImage from "./SyphForm.png"; //Please enter your file of choice here
 import "./ReviewTemplate.scss";
@@ -127,14 +127,14 @@ const ReviewTemplate: React.FC = () => {
                   {overallConfidence}%
                 </span>
               </span>
-              <Tooltip
-                label="Overall Confidence Score is the average of all Individual Confidence Scores."
-                style={{
-                  padding: "4px",
-                }}
-              >
+
+              <div className="custom-tooltip-container">
                 <Icon.Help aria-hidden={true} />
-              </Tooltip>
+                <span className="custom-tooltip-text">
+                  Overall Confidence Score is the average of all Individual
+                  Confidence Scores.
+                </span>
+              </div>
             </div>
             <p className="font-sans">
               Review and edit errors before you submit.
