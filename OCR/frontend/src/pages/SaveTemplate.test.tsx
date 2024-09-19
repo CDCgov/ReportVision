@@ -15,22 +15,47 @@ vi.mock('react-router-dom', async (importOriginal) => {
   };
 });
 
-const wrapper = ({ children }: { children: React.ReactNode }) =>  {
-    return  (
-    <BrowserRouter>
-      <AnnotationProvider>
-        <FilesProvider>
-            {children}
-        </FilesProvider>
-        </AnnotationProvider>
-    </BrowserRouter>
-);
-}
-
 describe('SaveTemplate Component', () => {
+  beforeEach(() => {
+    // Mock localStorage
+    const localStorageMock = (() => {
+      let store: Record<string, string> = {};
+
+      return {
+        getItem(key: string) {
+          return store[key] || null;
+        },
+        setItem(key: string, value: string) {
+          store[key] = value;
+        },
+        clear() {
+          store = {};
+        },
+        removeItem(key: string) {
+          delete store[key];
+        },
+      };
+    })();
+
+    Object.defineProperty(window, "localStorage", {
+      value: localStorageMock,
+      writable: true,
+    });
+  });
+
+  afterEach(() => {
+    window.localStorage.clear();
+    vi.clearAllMocks();
+  });
   it('should render the SaveTemplate page with all elements', () => {
     render(
-        <SaveTemplate />, { wrapper }
+        <BrowserRouter>
+        <FilesProvider>
+            <AnnotationProvider>
+                <SaveTemplate />
+            </AnnotationProvider>
+        </FilesProvider>
+      </BrowserRouter>
     );
 
     expect(screen.getByTestId('save-template-title')).toBeInTheDocument();
@@ -42,7 +67,13 @@ describe('SaveTemplate Component', () => {
 
   it('should navigate back when the back button is clicked', () => {
     render(
-      <SaveTemplate />, { wrapper }
+        <BrowserRouter>
+        <FilesProvider>
+            <AnnotationProvider>
+                <SaveTemplate />
+            </AnnotationProvider>
+        </FilesProvider>
+      </BrowserRouter>
     );
 
     fireEvent.click(screen.getByText(/back/i));
@@ -52,7 +83,13 @@ describe('SaveTemplate Component', () => {
 
   it('should navigate to the home page when the form is submitted', () => {
     render(
-      <SaveTemplate />, { wrapper }
+        <BrowserRouter>
+        <FilesProvider>
+            <AnnotationProvider>
+                <SaveTemplate />
+            </AnnotationProvider>
+        </FilesProvider>
+      </BrowserRouter>
     );
 
     fireEvent.click(screen.getByText(/submit/i));
