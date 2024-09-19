@@ -32,10 +32,6 @@ ocr = ImageOCR()
 async def health_check():
     return {"status": "UP"}
 
-@app.get("/test")
-async def read_root():
-    return {"message": "Hello CORS enabled API!"}
-
 
 @app.post("/image_to_text/")
 async def image_to_text(source_image: UploadFile, segmentation_template: UploadFile, labels: str = Form()):
