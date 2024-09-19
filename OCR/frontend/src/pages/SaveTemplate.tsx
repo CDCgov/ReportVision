@@ -31,7 +31,8 @@ export const SaveTemplate = () => {
                         }
                     }),
                     sourceImage: images[index],
-                    templateImage: annotatedImages[index]
+                    templateImage: annotatedImages[index],
+                    shapes: shape
                 }
             });
             const tempFile: FileType = {

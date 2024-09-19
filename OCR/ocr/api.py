@@ -4,11 +4,24 @@ import cv2 as cv
 import numpy as np
 
 from fastapi import FastAPI, UploadFile, Form
+from fastapi.middleware.cors import CORSMiddleware
 
 from ocr.services.image_ocr import ImageOCR
 from ocr.services.image_segmenter import ImageSegmenter, segment_by_color_bounding_box
 
 app = FastAPI()
+origins = [
+    "http://localhost:8000",  # Allow requests from this origin
+    "http://localhost:5173",  # Add your front-end domain here
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # You can allow specific origins or ["*"] for all
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 segmenter = ImageSegmenter(
     segmentation_function=segment_by_color_bounding_box,
 )
@@ -18,6 +31,10 @@ ocr = ImageOCR()
 @app.get("/")
 async def health_check():
     return {"status": "UP"}
+
+@app.get("/test")
+async def read_root():
+    return {"message": "Hello CORS enabled API!"}
 
 
 @app.post("/image_to_text/")

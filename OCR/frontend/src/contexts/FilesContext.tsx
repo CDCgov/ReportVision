@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
+import { Shape } from './AnnotationContext';
 
 export interface Field {
     color: string;
@@ -11,6 +12,7 @@ export interface Page {
     sourceImage: string;
     templateImage: string;
     fieldNames: Field[];
+    shapes: Shape[];
 }
 
 export interface FileType {

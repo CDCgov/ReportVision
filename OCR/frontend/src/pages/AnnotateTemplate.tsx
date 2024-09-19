@@ -38,7 +38,6 @@ const AnnotateTemplate: React.FC = () => {
     setFields,
     fields,
     setAnnotatedImages,
-    annotatedImages,
     index,
     setIndex,
   } = useAnnotationContext();
@@ -144,6 +143,7 @@ const AnnotateTemplate: React.FC = () => {
   );
 
   const handleSubmit = async () => {
+    annotator!.stop();
     const delay = (ms: number) =>
       new Promise((resolve) => setTimeout(resolve, ms));
 
