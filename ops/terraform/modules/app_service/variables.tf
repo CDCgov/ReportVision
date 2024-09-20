@@ -18,3 +18,8 @@ variable "https_only" {
   default = false
 }
 variable "vnet" {}
+variable "app_settings" {
+  type        = map(string)
+  default     = {}
+  description = "App Settings or environment variables to apply."
+}

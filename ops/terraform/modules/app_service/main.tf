@@ -1,3 +1,7 @@
+locals {
+  app_settings = merge(var.app_settings, { WEBSITES_PORT = "8000" })
+}
+
 resource "azurerm_service_plan" "asp" {
   name                = "${var.az_account}-appserviceplan-${var.environment}"
   location            = var.location
@@ -14,6 +18,8 @@ resource "azurerm_linux_web_app" "linux_webapp" {
   service_plan_id               = azurerm_service_plan.asp.id
   public_network_access_enabled = true
 
+  # app_settings = local.app_settings
+
   identity {
     type = "SystemAssigned"
   }
@@ -28,8 +34,8 @@ resource "azurerm_linux_web_app" "linux_webapp" {
     vnet_route_all_enabled            = false
 
     application_stack {
-      docker_image_name   = "abhimanyubajaj98/flask-demo:latest"
-      docker_registry_url = "https://index.docker.io"
+      docker_image_name   = "cdcgov/idwa:GHA-build-docker-image-and-publish"
+      docker_registry_url = "https://ghcr.io"
     }
 
     ip_restriction {
