@@ -9,6 +9,7 @@ import { Divider } from "../components/Divider";
 import documentImage from "./SyphForm.png"; //Please enter your file of choice here
 import "./ReviewTemplate.scss";
 import aiIconUrl from "../assets/ai_icon.svg";
+import {SortableTable} from "../components/SortableTable/SortableTable.tsx";
 
 interface Result {
   text: string;
@@ -94,6 +95,26 @@ const ReviewTemplate: React.FC = () => {
   const hasErrors = errorCount > 0;
   const overallConfidence = calculateOverallConfidence();
 
+  const resultsTable = Object.entries(results).map(([k, v], idx) => {
+    return {
+      index: idx,
+      name: k,
+      value: v.text,
+      confidence: v.confidence,
+      isError: v.confidence <= confidenceVal,
+      isEdited: false,
+      isEditing: false
+    }
+  });
+
+  const isErrorFormatter = (d) => {
+    return d ? <Icon.Warning className="text-error" /> : "";
+  }
+
+  const redTextOnErrorFormatter = (d, _idx, row) => {
+    return row.isError ? <span className="usa-input--error">{d}</span> : d;
+  }
+
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <ExtractDataHeader
@@ -151,35 +172,14 @@ const ReviewTemplate: React.FC = () => {
             </div>
           </div>
 
-          <Table fullWidth striped>
-            <thead>
-              <tr>
-                <th>Label</th>
-                <th>Value</th>
-                <th></th>
-                <th>Label Confidence</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(results).map(([key, value]) => {
-                const isError = value.confidence <= confidenceVal;
-                return (
-                  <tr key={key}>
-                    <td>{key}</td>
-                    <td className={`${isError ? "usa-input--error" : ""}`}>
-                      {value.text}
-                    </td>
-                    <td>
-                      {isError && <Icon.Warning className="text-error" />}
-                    </td>
-                    <td className={`${isError ? "usa-input--error" : ""}`}>
-                      {`${value.confidence}%`}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+          <SortableTable
+              columns={["name", "value", "isError", "confidence"]}
+              data={resultsTable}
+              sortableBy={["name", "confidence", "value"]}
+              columnNames={{name: "Label", value: "Value", isError: " ", confidence: "Label Confidence"}}
+              formatters={{isError: isErrorFormatter, confidence: redTextOnErrorFormatter, value: redTextOnErrorFormatter}}
+            />
+
         </div>
         <div className="width-50">
           <div

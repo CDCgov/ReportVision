@@ -11,7 +11,7 @@ interface SortableTableProps {
     defaultDescending: boolean | undefined,
     columns: Array<string> | undefined,
     columnNames: Map<string, string> | undefined,
-    formatters: Map<string, (any) => object> | undefined
+    formatters: Map<string, (any, number, any ) => object> | undefined
 }
 
 const SORTS = {
@@ -70,7 +70,7 @@ export const SortableTable: FC<SortableTableProps> = ({
                     return (<tr key={idx}>
                         {columns?.map((col, colIdx) => {
                             return <td
-                                key={colIdx}>{formatters?.[col] ? formatters?.[col](t[col]) : t[col]?.toString()}</td>
+                                key={colIdx}>{formatters?.[col] ? formatters?.[col](t[col], colIdx, t) : t[col]?.toString()}</td>
                         })}
                     </tr>)
                 })}
