@@ -1,3 +1,5 @@
+import base64
+
 import uvicorn
 import json
 import cv2 as cv
@@ -33,12 +35,29 @@ async def health_check():
     return {"status": "UP"}
 
 
-@app.post("/image_to_text/")
-async def image_to_text(source_image: UploadFile, segmentation_template: UploadFile, labels: str = Form()):
+@app.post("/image_file_to_text/")
+async def image_file_to_text(source_image: UploadFile, segmentation_template: UploadFile, labels: str = Form()):
     source_image_np = np.frombuffer(await source_image.read(), np.uint8)
     source_image_img = cv.imdecode(source_image_np, cv.IMREAD_COLOR)
 
     segmentation_template_np = np.frombuffer(await segmentation_template.read(), np.uint8)
+    segmentation_template_img = cv.imdecode(segmentation_template_np, cv.IMREAD_COLOR)
+
+    loaded_json = json.loads(labels)
+    segments = segmenter.segment(source_image_img, segmentation_template_img, loaded_json)
+    results = ocr.image_to_text(segments)
+
+    return results
+
+
+@app.post("/image_to_text/")
+async def image_to_text(source_image: str = Form(), segmentation_template: str = Form(), labels: str = Form()):
+    source_image_stripped = source_image.replace("data:image/png;base64,", "", 1)
+    source_image_np = np.frombuffer(base64.b64decode(source_image_stripped), np.uint8)
+    source_image_img = cv.imdecode(source_image_np, cv.IMREAD_COLOR)
+
+    segmentation_template_stripped = segmentation_template.replace("data:image/png;base64,", "", 1)
+    segmentation_template_np = np.frombuffer(base64.b64decode(segmentation_template_stripped), np.uint8)
     segmentation_template_img = cv.imdecode(segmentation_template_np, cv.IMREAD_COLOR)
 
     loaded_json = json.loads(labels)
