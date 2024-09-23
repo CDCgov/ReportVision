@@ -36,8 +36,9 @@ class TestAPI:
             ]
 
             # call ocr api
-            response = client.post(url="/image_file_to_text", files=files_to_send,
-                                   data={"labels": json.dumps(label_data)})
+            response = client.post(
+                url="/image_file_to_text", files=files_to_send, data={"labels": json.dumps(label_data)}
+            )
 
             assert response.status_code == 200
 
@@ -63,9 +64,9 @@ class TestAPI:
                 data={
                     "labels": json.dumps(label_data),
                     "source_image": str(source_image_base64),
-                    "segmentation_template": str(segmentation_template_base64)
+                    "segmentation_template": str(segmentation_template_base64),
                 },
-                headers={'Content-Type': 'application/x-www-form-urlencoded'}
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
             )
 
             assert response.status_code == 200
@@ -91,10 +92,10 @@ class TestAPI:
                 url="/image_to_text",
                 data={
                     "labels": json.dumps(label_data),
-                    "source_image": f'data:image/png;base64,{str(source_image_base64)}',
-                    "segmentation_template": f'data:image/png;base64,{str(segmentation_template_base64)}'
+                    "source_image": f"data:image/png;base64,{str(source_image_base64)}",
+                    "segmentation_template": f"data:image/png;base64,{str(segmentation_template_base64)}",
                 },
-                headers={'Content-Type': 'application/x-www-form-urlencoded'}
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
             )
 
             assert response.status_code == 200
