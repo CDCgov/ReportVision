@@ -63,7 +63,7 @@ async def image_to_text(source_image: str = Form(), segmentation_template: str =
     loaded_json = json.loads(labels)
     segments = segmenter.segment(source_image_img, segmentation_template_img, loaded_json)
     results = ocr.image_to_text(segments)
-
+    
     return results
 
 
