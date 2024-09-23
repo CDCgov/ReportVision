@@ -17,7 +17,7 @@ interface Template {
     createdBy: User;
     updatedBy: User | undefined;
     createdAt: Date;
-    lastUpdated: Date | undefined;
+    updatedAt: Date | undefined;
     organization: Organization;
 }
 
@@ -36,8 +36,8 @@ interface Label {
 
 interface Page {
     id: string;
-    baseImage: Base64<"png"|"jpg"|"jpeg">;
-    segmentationTemplate: Base64<"png"|"jpg"|"jpeg">;
+    baseImage: Base64<"png">;
+    segmentationTemplate: Base64<"png">;
     labels: Label[];
     shapes: Shape[];
     createdAt: Date;
@@ -59,7 +59,7 @@ interface User {
 interface Upload {
     id: string;
     createdBy: User;
-    editedBy: User | undefined;
+    updatedBy: User | undefined;
     createdAt: Date;
     updatedAt: Date | undefined;
     extractions: Extraction[];
@@ -68,7 +68,7 @@ interface Upload {
 interface Extraction {
     status: ExtractionStatus;
     segmentationTemplate: Template;
-    pages: Base64<"png"|"jpg"|"jpeg">[];
+    pages: Base64<"png">[];
     fields: ExtractedField[];
     corrections: ExtractedField[]; // Human corrections
     createdAt: Date;
@@ -102,7 +102,7 @@ interface Notification {
     organization: Organization;
     content: string;
     createdBy: User;
-    editedBy: User | undefined;
+    updatedBy: User | undefined;
     createdAt: Date;
     updatedAt: Date | undefined;
 }
@@ -116,5 +116,6 @@ interface FeatureFlag {
     enabled: boolean;
     createdAt: Date;
     updatedAt: Date | undefined;
+    organization: Organization;
     // Intentionally not including createdBy and updatedBy, users aren't creating feature flags
 }
