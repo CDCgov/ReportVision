@@ -99,7 +99,7 @@ resource "azurerm_application_gateway" "load_balancer" {
     path                                      = "/"
     pick_host_name_from_backend_http_settings = true
     match {
-      body        = "Hello Universe!"
+      body        = "UP"
       status_code = [200]
     }
   }

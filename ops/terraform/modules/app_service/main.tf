@@ -18,7 +18,7 @@ resource "azurerm_linux_web_app" "linux_webapp" {
   service_plan_id               = azurerm_service_plan.asp.id
   public_network_access_enabled = true
 
-  # app_settings = local.app_settings
+  app_settings = local.app_settings
 
   identity {
     type = "SystemAssigned"
