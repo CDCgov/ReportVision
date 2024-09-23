@@ -15,8 +15,9 @@ import "./App.scss";
 import { AnnotationProvider } from "./contexts/AnnotationContext.tsx";
 import ExtractUpload from "./pages/ExtractUpload.tsx";
 import ExtractProcess from "./pages/ExtractProcess.tsx";
-import { SaveTemplate } from './pages/SaveTemplate.tsx';
-
+import { SaveTemplate } from "./pages/SaveTemplate.tsx";
+import ReviewTemplate from "./pages/ReviewTemplate.tsx";
+import SubmissionTemplate from "./pages/SubmissionTemplate.tsx";
 
 const router = createBrowserRouter([
   {
@@ -39,10 +40,18 @@ const router = createBrowserRouter([
     path: "/extract/process",
     element: <ExtractProcess />,
   },
- {
+  {
     path: "/new-template/save",
     element: <SaveTemplate />,
-  }
+  },
+  {
+    path: "/extract/review",
+    element: <ReviewTemplate />,
+  },
+  {
+    path: "/extract/submit",
+    element: <SubmissionTemplate />,
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(

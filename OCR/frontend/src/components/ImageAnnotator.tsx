@@ -34,8 +34,8 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
         const fields = [...LABELS.patientInformation.items, ...LABELS.organizationInformation.items];
         const field = fields.find(field => field.name === selectedField?.name);
         const updatedShapes = [...shapes];
-        // todo fix typing but for now this is fine
-        updatedShapes[index] = [...(updatedShapes[index] || []), {...shape, field: selectedField?.name as string, color: field?.color}];
+        // for field?.color.slice(0,7) to remove the alpha channel from the hexcode 
+        updatedShapes[index] = [...(updatedShapes[index] || []), {...shape, field: selectedField?.name as string, color: field?.color.slice(0,7)}];
         setShapes(updatedShapes);
         localStorage.setItem('shapes', JSON.stringify(updatedShapes));
         annotator?.updateCategories(shape.id, [], field?.color);

@@ -1,8 +1,15 @@
 import { createContext, useState, useContext, ReactNode } from 'react';
-import { Shape, useImageAnnotator } from 'react-image-label';
+import { useImageAnnotator } from 'react-image-label';
 
-interface CustomShape extends Shape { 
-    field: string;
+export interface Shape {
+  categories: string[];
+  phi: number;
+  color?: string | undefined;
+  id: number;
+}
+
+export interface CustomShape extends Shape { 
+  field: string;
 }
 
 interface Field {

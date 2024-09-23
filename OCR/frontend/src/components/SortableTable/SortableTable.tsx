@@ -1,17 +1,17 @@
 import {FC, useState} from 'react';
-import {Icon, Table} from "@trussworks/react-uswds";
+import {Table} from "@trussworks/react-uswds";
 import SortArrow from './sort-direction-arrow.svg'
 import SortableIcon from './sortable-icon.svg'
 import './SortableTable.scss'
 
 interface SortableTableProps {
-    data: Array<Map<string, any>>,
+    data: Array<Map<string, object>>,
     sortableBy: Array<string> | undefined,
     defaultSort: string | undefined,
     defaultDescending: boolean | undefined,
     columns: Array<string> | undefined,
     columnNames: Map<string, string> | undefined,
-    formatters: Map<string, (any) => any> | undefined
+    formatters: Map<string, (any) => object> | undefined
 }
 
 const SORTS = {
@@ -23,17 +23,18 @@ const SORTS = {
 
 export const SortableTable: FC<SortableTableProps> = ({
                                                           data,
-                                                          sortableBy,
-                                                          defaultSort,
-                                                          defaultDescending = false,
                                                           columns = Object.keys(data[0]),
+                                                          sortableBy = columns,
+                                                          defaultSort = columns?.[0],
+                                                          defaultDescending = false,
+
                                                           formatters = {},
                                                           columnNames = {},
                                                       }: SortableTableProps) => {
 
-    const [sortBy, setSortBy] = useState(defaultSort || columns?.[0])
+    const [sortBy, setSortBy] = useState(defaultSort)
     const [isDescending, setIsDescending] = useState(defaultDescending)
-
+    const sortableSet = new Set(sortableBy || [])
     const updateSort = (column: string) => {
         if (column === sortBy) {
             setIsDescending(!isDescending)
@@ -45,6 +46,7 @@ export const SortableTable: FC<SortableTableProps> = ({
     const columnData = data?.[0]?.[sortBy]
     const columnType = Object.prototype.toString.call(columnData)
     const sortFunc = SORTS[columnType] || new Intl.Collator(navigator.language).compare
+
     const sortedData = data?.toSorted((a, b) => sortFunc(a[sortBy], b[sortBy])) || []
 
     if (isDescending) {
@@ -57,7 +59,8 @@ export const SortableTable: FC<SortableTableProps> = ({
                 <thead>
                 <tr>
                     {columns.map((c, idx) => {
-                        return <SortableTableHeader key={String(idx)} sortBy={sortBy as string} column={c} name={columnNames?.[c] || c}
+                        return <SortableTableHeader key={String(idx)} disabled={!sortableSet.has(c)}
+                                                    sortBy={sortBy as string} column={c} name={columnNames?.[c] || c}
                                                     isDescending={isDescending || false} onClick={updateSort}/>
                     })}
                 </tr>
@@ -82,22 +85,24 @@ interface SortableTableHeaderProps {
     column: string,
     isDescending: boolean,
     onClick: (string) => void,
-    key: string
+    key: string,
+    disabled: boolean
 }
 
 const SortableTableHeader: FC<SortableTableHeaderProps> = ({
                                                                sortBy,
                                                                name, column, isDescending,
-                                                               onClick
+                                                               onClick,
+                                                               disabled = false
                                                            }: SortableTableHeaderProps) => {
 
     const isSortedBy = sortBy === column
     return (
-        <th onClick={() => onClick(column)}>
+        <th onClick={disabled?() => {}:() => onClick(column)}>
             <div className="display-flex flex-row">
                 <div>{name}</div>
                 <div className="flex-1"></div>
-            {isSortedBy ? <SortOrderIcon isDescending={isDescending}/> : <SortIcon/>}
+            {!disabled && (isSortedBy ? <SortOrderIcon isDescending={isDescending}/> : <SortIcon/>)}
             </div>
         </th>
     )
