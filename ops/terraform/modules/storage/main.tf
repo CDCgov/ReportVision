@@ -4,7 +4,7 @@ resource "azurerm_storage_account" "frontend" {
   account_kind               = "StorageV2"
   location                   = var.location
   resource_group_name        = var.resource_group
-  name                       = "reportvision-${var.env}-frontend"
+  name                       = "reportvisionfrontend${var.env}"
   https_traffic_only_enabled = false
 
   static_website {
