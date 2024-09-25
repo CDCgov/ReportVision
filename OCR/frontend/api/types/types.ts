@@ -1,3 +1,5 @@
+import { Field } from "../../src/contexts/FilesContext";
+
 export interface Label {
     color: string;
     label: string;
@@ -5,12 +7,6 @@ export interface Label {
 }
 
 export type Labels = Label[];
-
-export interface ImageToTextArgs {
-    fieldNames: Labels;
-    sourceImage: string;
-    templateImage: string;
-}
 
 export type ImageToTextResponse = {
     [key: string]: [string, number];
@@ -30,3 +26,10 @@ export interface ResultItem {
       [key: string]: ResultItem; // Allows any key with a ResultItem value
     };
   }
+
+  export interface ImageToTextArgs {
+    // base 64 encoded image
+    sourceImage: string;
+    templateImage: string;
+    fieldNames: Field[];
+}

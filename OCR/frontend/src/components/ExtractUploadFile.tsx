@@ -23,7 +23,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   onUploadComplete,
 }) => {
   const id = useId();
-  const { addFile } = useFiles();
+  const { addFile, files } = useFiles();
   const [template, setTemplate] = useState<string>("");
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -83,7 +83,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
       }
     }, 200);
   };
-
+  console.log(files)
   const handleTemplateChange = (event: {
     target: { value: React.SetStateAction<string> };
   }) => {

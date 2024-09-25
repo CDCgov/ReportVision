@@ -10,10 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { LABELS } from "../constants/labels";
 import { Icon } from "@trussworks/react-uswds";
 import { useEffect, useState } from "react";
-import html2canvas from "html2canvas";
 
 import "./AnnotateTemplate.scss";
 import { useAnnotationContext } from "../contexts/AnnotationContext.tsx";
+import { convertBase64SvgToBase64Png } from "../utils/utils.ts";
 
 interface LabelItem {
   name: string;
@@ -38,6 +38,7 @@ const AnnotateTemplate: React.FC = () => {
     setFields,
     fields,
     setAnnotatedImages,
+    annotatedImages,
     index,
     setIndex,
   } = useAnnotationContext();
@@ -131,7 +132,6 @@ const AnnotateTemplate: React.FC = () => {
       ))}
     </ul>
   );
-
   const accordionItems: AccordionItemProps[] = Object.entries(LABELS).map(
     ([key, category]) => ({
       title: category.title,
@@ -146,19 +146,19 @@ const AnnotateTemplate: React.FC = () => {
     annotator!.stop();
     const delay = (ms: number) =>
       new Promise((resolve) => setTimeout(resolve, ms));
-
     try {
       const tempImages: string[] = [];
       // Use a for loop to handle asynchronous behavior in sequence
       for (let idx = 0; idx < images.length; idx++) {
-        await delay(1000); // Wait for 1 second before moving to the next index
         setIndex(idx);
+        const svg = document.getElementsByTagName('svg')[document.getElementsByTagName('svg').length - 1]
+        const svgStr = new XMLSerializer().serializeToString(svg);
 
-        const canvas = await html2canvas(
-          document.getElementById("img-annotator-container") as HTMLElement
-        );
-        const imageData = canvas.toDataURL("image/png"); // Convert the canvas to Base64
-        tempImages.unshift(imageData);
+        const base64 = window.btoa(svgStr) // Convert the canvas to Base64
+
+        const png = await convertBase64SvgToBase64Png(base64, Number(svg.getAttribute('width')) || 0, Number(svg.getAttribute('height')) || 0);
+        tempImages.unshift(`data:image/png;base64,${png}`);
+        await delay(1500); // Wait for 1 second before moving to the next index
       }
       // Update state, save the images, or navigate, as required
       setAnnotatedImages([...tempImages]);
