@@ -70,7 +70,7 @@ export const SortableTable: FC<SortableTableProps> = ({
                     return (<tr key={idx}>
                         {columns?.map((col, colIdx) => {
                             return <td
-                                key={colIdx}>{formatters?.[col] ? formatters?.[col](t[col], colIdx, t) : t[col]?.toString()}</td>
+                                key={colIdx}>{formatters?.[col] ? formatters?.[col](t[col], idx, t) : t[col]?.toString()}</td>
                         })}
                     </tr>)
                 })}

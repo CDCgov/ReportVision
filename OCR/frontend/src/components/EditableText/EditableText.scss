@@ -1,0 +1,19 @@
+.hover-display-icon {
+  svg {
+    opacity: 0;
+    @media (prefers-reduced-motion: no-preference) {
+      transition: opacity 0.2s ease-in-out;
+    }
+  }
+}
+
+.hover-display-icon:hover {
+
+  svg {
+    opacity: 1;
+    @media (prefers-reduced-motion: no-preference) {
+      transition: opacity 0.2s ease-in-out;
+    }
+  }
+}
+
