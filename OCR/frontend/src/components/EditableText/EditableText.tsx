@@ -1,6 +1,5 @@
-import React, {FC, ReactNode, useEffect, useRef} from 'react';
-import {Icon} from "@trussworks/react-uswds";
-import {useState} from "react";
+import React, {FC, ReactNode, useEffect, useRef, useState} from 'react';
+import {Icon, TextInput} from "@trussworks/react-uswds";
 
 import './EditableText.scss'
 
@@ -15,17 +14,20 @@ interface EditableTextProps {
     errorMessage: string,
     onValidate: (text: string) => boolean | string[]
     textFormatter: (text: string) => ReactNode | string
+    dataTestId?: string
 }
 
 export const EditableText: FC<EditableTextProps> = ({
-                                                        text, onChange = () => {
-    }, onEdit = () => {
-    }, onSave = () => {
-    }, textFormatter = (text) => text
+                                                        text, dataTestId,
+                                                        onChange = () => {
+                                                        },
+                                                        onSave = () => {
+                                                        },
+                                                        textFormatter = (text) => text
                                                     }: EditableTextProps) => {
     const [isEditing, setIsEditing] = useState(false)
     const [value, setValue] = useState(text)
-    const inputRef = useRef<HTMLInputElement>(null)
+    const inputRef = useRef<HTMLInputElement | null>(null)
     useEffect(() => {
         if (isEditing) {
             inputRef.current?.focus()
@@ -66,16 +68,16 @@ export const EditableText: FC<EditableTextProps> = ({
 
     return (<>
         {isEditing ?
-            <input ref={inputRef} className="margin-0 padding-0" type="text" value={value} onChange={_onChange}
-                   onBlur={_onSave} onKeyDown={_onKeyDown}/> :
-            <div className="display-flex flex-align-center hover-display-icon" onClick={_onEdit}>
+            <TextInput inputRef={inputRef} className="margin-0 padding-0" type="text" value={value} onChange={_onChange}
+                       onBlur={_onSave} onKeyDown={_onKeyDown} id={value}/> :
+            <div data-testid={dataTestId} className="display-flex flex-align-center hover-display-icon"
+                 onClick={_onEdit}>
                 <div className="font-sans-md font-weight-semibold">{textFormatter(value)}</div>
                 <div className="flex-1"></div>
                 <div className="padding-left-1 padding-right-1 custom-tooltip-container display-flex flex-align-end">
                     <Icon.Edit aria-hidden={true}/>
                 </div>
-            </div>
-        }
+            </div>}
 
     </>)
 }

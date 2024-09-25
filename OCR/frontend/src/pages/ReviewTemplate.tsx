@@ -124,14 +124,13 @@ const ReviewTemplate: React.FC = () => {
   }
 
   const redTextOnErrorFormatter = (d, _idx, row) => {
-    return row.isError ? <span className="text-red">{d}</span> : d;
+    return row.isError ? <span className="text-error">{d}</span> : d;
   }
 
   const editCellFormatter = (d, _idx, row) => {
-    return <EditableText text={d} onSave={(value) => {
-
+    return <EditableText dataTestId={`${row.isError ? 'edit-fix-error' : null}`} text={d} onSave={(value) => {
       setEditedValues({...editedValues, [row.name]: value})
-    }} textFormatter={(s) => row.isError ? <span className="text-red">{s}</span> : s}/>
+    }} textFormatter={(s) => row.isError ? <span className="text-error">{s}</span> : s}/>
   }
 
   return (
