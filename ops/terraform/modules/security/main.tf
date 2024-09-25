@@ -1,5 +1,5 @@
 resource "azurerm_network_security_group" "web-nsg" {
-  name                = "web-nsg"
+  name                = "reportvision-web-nsg-${var.env}"
   location            = var.location
   resource_group_name = var.resource_group
 

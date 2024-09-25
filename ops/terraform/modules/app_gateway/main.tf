@@ -1,5 +1,5 @@
 resource "azurerm_public_ip" "lb-pip" {
-  name                = "pip-idwa-lb"
+  name                = "reportvision-pip-lb-${var.env}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   allocation_method   = "Static"
@@ -28,7 +28,7 @@ locals {
 }
 
 resource "azurerm_application_gateway" "load_balancer" {
-  name                = "idwa-appgateway"
+  name                = "reportvision-appgateway-${var.env}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
 
@@ -39,7 +39,7 @@ resource "azurerm_application_gateway" "load_balancer" {
   }
 
   gateway_ip_configuration {
-    name      = "idwa-gateway-ip-configuration"
+    name      = "reportvision-gateway-ip-configuration"
     subnet_id = var.web-subnet
   }
 

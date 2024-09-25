@@ -1,8 +1,8 @@
-variable "environment" {}
+variable "env" {}
 variable "resource_group" {}
 variable "location" {}
-variable "name" {
-  default = "idwa-app"
+variable "name_ocr" {
+  default = "reportvision-ocr-api"
 }
 variable "app_subnet_id" {}
 variable "sku_name" {
@@ -10,7 +10,7 @@ variable "sku_name" {
 }
 
 variable "az_account" {
-  default = "idwa"
+  default = "reportvision"
 }
 
 variable "https_only" {

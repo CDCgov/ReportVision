@@ -1,5 +1,5 @@
 resource "azurerm_container_group" "example" {
-  name                = "idwa-mde-ocr"
+  name                = "reportvision-ocr"
   location            = var.location
   resource_group_name = var.resource_group
   ip_address_type     = "Private"

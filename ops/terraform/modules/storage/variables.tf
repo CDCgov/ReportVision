@@ -1,5 +1,5 @@
 variable "resource_group" {}
-variable "environment" {}
+variable "env" {}
 variable "location" {}
 variable "management_tags" {}
 variable "web_subnet_id" {}

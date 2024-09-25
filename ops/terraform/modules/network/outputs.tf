@@ -1,5 +1,5 @@
 output "network_name" {
-  value       = azurerm_virtual_network.vnet1.name
+  value       = azurerm_virtual_network.vnet.name
   description = "Name of the Virtual network"
 }
 

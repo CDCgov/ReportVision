@@ -1,6 +1,6 @@
 terraform {
   backend "azurerm" {
-    resource_group_name  = "idwa-rv-dev-rg"
+    resource_group_name  = "reportvision-dev-rg"
     storage_account_name = "tfstatervdev1540"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"

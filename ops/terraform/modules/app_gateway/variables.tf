@@ -1,6 +1,6 @@
 variable "vnet-name" {
   type    = string
-  default = "idwa-test"
+  default = "reportvision-dev"
 }
 variable "resource_group_name" {}
 variable "resource_group_location" {}
@@ -20,3 +20,4 @@ variable "ip_addresses" {
   type    = list(string)
   default = []
 }
+variable "env" {}

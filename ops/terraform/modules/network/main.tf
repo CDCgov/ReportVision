@@ -1,22 +1,22 @@
-resource "azurerm_virtual_network" "vnet1" {
-  name                = "vnet01"
+resource "azurerm_virtual_network" "vnet" {
+  name                = "reportvision-vnet-${var.env}"
   resource_group_name = var.resource_group
   location            = var.location
   address_space       = [var.vnetcidr]
 }
 
 resource "azurerm_subnet" "web-subnet" {
-  name                 = "web-subnet"
-  virtual_network_name = azurerm_virtual_network.vnet1.name
+  name                 = "reportvision-web-subnet-${var.env}"
+  virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
   address_prefixes     = [var.websubnetcidr]
   service_endpoints    = ["Microsoft.Storage"]
-  depends_on           = [azurerm_virtual_network.vnet1]
+  depends_on           = [azurerm_virtual_network.vnet]
 }
 
 resource "azurerm_subnet" "app-subnet" {
-  name                 = "app-subnet"
-  virtual_network_name = azurerm_virtual_network.vnet1.name
+  name                 = "reportvision-app-subnet-${var.env}"
+  virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
   address_prefixes     = [var.appsubnetcidr]
 
@@ -31,16 +31,16 @@ resource "azurerm_subnet" "app-subnet" {
 }
 
 resource "azurerm_subnet" "lb-subnet" {
-  name                 = "lb-subnet"
-  virtual_network_name = azurerm_virtual_network.vnet1.name
+  name                 = "reportvision-lb-subnet-${var.env}"
+  virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
   address_prefixes     = [var.lbsubnetcidr]
-  depends_on           = [azurerm_virtual_network.vnet1]
+  depends_on           = [azurerm_virtual_network.vnet]
 }
 
 resource "azurerm_subnet" "db-subnet" {
-  name                 = "db-subnet"
-  virtual_network_name = azurerm_virtual_network.vnet1.name
+  name                 = "reportvision-db-subnet-${var.env}"
+  virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
   address_prefixes     = [var.dbsubnetcidr]
 }

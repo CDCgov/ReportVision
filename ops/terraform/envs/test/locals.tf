@@ -2,7 +2,7 @@ locals {
   environment = "dev"
   init = {
     environment         = local.environment
-    resource_group_name = "idwa-rv-dev-rg"
+    resource_group_name = "reportvision-dev-rg"
     location            = "westus2"
   }
   network = {

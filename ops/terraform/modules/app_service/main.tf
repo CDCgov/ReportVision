@@ -3,7 +3,7 @@ locals {
 }
 
 resource "azurerm_service_plan" "asp" {
-  name                = "${var.az_account}-appserviceplan-${var.environment}"
+  name                = "${var.name_ocr}-appserviceplan-${var.env}"
   location            = var.location
   os_type             = "Linux"
   resource_group_name = var.resource_group
@@ -11,7 +11,7 @@ resource "azurerm_service_plan" "asp" {
 }
 
 resource "azurerm_linux_web_app" "linux_webapp" {
-  name                          = "${var.name}-${var.environment}"
+  name                          = "${var.name_ocr}-${var.env}"
   https_only                    = var.https_only
   location                      = var.location
   resource_group_name           = var.resource_group
@@ -43,12 +43,4 @@ resource "azurerm_linux_web_app" "linux_webapp" {
       action                    = "Allow"
     }
   }
-}
-
-output "service_plan_id" {
-  value = azurerm_service_plan.asp.id
-}
-
-output "webapp_name" {
-  value = azurerm_linux_web_app.linux_webapp.name
 }
