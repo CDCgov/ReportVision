@@ -44,7 +44,7 @@ jobs:
         shell: bash
         run: |
           echo "::group::Create application archive"
-          tar -C ./OCR/frontend/dist/ -czf ./client.tgz .
+          tar -C ./dist/ -czf ./client.tgz .
           echo "::endgroup::"
 
       - name: Upload production-ready build files
