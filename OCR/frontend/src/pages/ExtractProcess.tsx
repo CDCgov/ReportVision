@@ -37,6 +37,7 @@ const ExtractProcess = () => {
     }
     
     try {
+      setIsLoading(true);
       // Map through each template and page to create a promise for each query
       const queries = templates.map(template => 
         template.pages.map((page) =>  ({

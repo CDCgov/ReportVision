@@ -10,7 +10,7 @@ export const ImageToText = async (args: ImageToTextArgs): Promise<ImageToTextRes
       });
       
     try {
-        const response = await fetch("http://localhost:8000/image_to_text/", {
+        const response = await fetch(`${import.meta.env.API_URL}image_to_text/`, {
             "method": "POST",
             "headers": {
               "Content-Type": "application/x-www-form-urlencoded"
