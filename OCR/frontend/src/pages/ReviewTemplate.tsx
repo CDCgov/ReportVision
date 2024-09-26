@@ -9,6 +9,8 @@ import { Divider } from "../components/Divider";
 import documentImage from "./SyphForm.png"; //Please enter your file of choice here
 import "./ReviewTemplate.scss";
 import aiIconUrl from "../assets/ai_icon.svg";
+import {SortableTable} from "../components/SortableTable/SortableTable.tsx";
+import {EditableText} from "../components/EditableText/EditableText.tsx";
 
 interface Result {
   text: string;
@@ -59,6 +61,9 @@ const ReviewTemplate: React.FC = () => {
     }
   }, []);
 
+  const [editedValues, setEditedValues] = useState<Map<string, string>>(new Map());
+
+
   const handleBack = () => {
     navigate("/extract/upload");
   };
@@ -71,14 +76,7 @@ const ReviewTemplate: React.FC = () => {
     navigate("/");
   };
 
-  const calculateOverallConfidence = () => {
-    if (!submissionData) return 0;
-    const results = Object.values(submissionData.results);
-    const totalConfidence = results.reduce((sum, result) => {
-      return sum + (result.edited ? 100 : result.confidence);
-    }, 0);
-    return (totalConfidence / results.length).toFixed(2);
-  };
+
 
   //fallback if no valid template is available can edit if needed
   if (!submissionData) {
@@ -88,19 +86,60 @@ const ReviewTemplate: React.FC = () => {
   const { file_image, results } = submissionData;
   const confidenceVal = 75;
 
-  const errorCount = Object.values(results).filter(
-    (r) => r.confidence <= confidenceVal
+  const resultsTable = Object.entries(results).map(([k, v], idx) => {
+    const overrideValue = editedValues[k]
+    return {
+      index: idx,
+      name: k,
+      value: overrideValue || v.text,
+      confidence: overrideValue ? 100 : v.confidence,
+      isError: overrideValue ? false : v.confidence <= confidenceVal,
+      isEdited: !!overrideValue
+    }
+  });
+
+  const calculateOverallConfidence = () => {
+    if (!submissionData) return 0;
+    const results = resultsTable;
+    const totalConfidence = results.reduce((sum, result) => {
+      return sum + result.confidence;
+    }, 0);
+    return (totalConfidence / results.length).toFixed(2);
+  };
+
+  const errorCount = resultsTable.filter(
+      (r) => r.isError
   ).length;
   const hasErrors = errorCount > 0;
   const overallConfidence = calculateOverallConfidence();
 
+
+
+  const isErrorFormatter = (d) => {
+    return d ? <Icon.Warning className="text-error" /> : "";
+  }
+
+  const labelConfidenceFormatter = (d, _idx, row) => {
+    return row.isEdited ? "Edited" : redTextOnErrorFormatter(d, row.index, row)
+  }
+
+  const redTextOnErrorFormatter = (d, _idx, row) => {
+    return row.isError ? <span className="text-error">{d}</span> : d;
+  }
+
+  const editCellFormatter = (d, _idx, row) => {
+    return <EditableText dataTestId={`${row.isError ? 'edit-fix-error' : null}`} text={d} onSave={(value) => {
+      setEditedValues({...editedValues, [row.name]: value})
+    }} textFormatter={(s) => row.isError ? <span className="text-error">{s}</span> : s}/>
+  }
+
   return (
-    <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
+      <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <ExtractDataHeader
         onSubmit={handleSubmit}
         onExit={handleClose}
         onBack={handleBack}
-        isUploadComplete={true}
+        isUploadComplete={!hasErrors}
       />
       <Divider margin="0px" />
       <div className="display-flex flex-justify-center padding-top-4">
@@ -151,35 +190,15 @@ const ReviewTemplate: React.FC = () => {
             </div>
           </div>
 
-          <Table fullWidth striped>
-            <thead>
-              <tr>
-                <th>Label</th>
-                <th>Value</th>
-                <th></th>
-                <th>Label Confidence</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(results).map(([key, value]) => {
-                const isError = value.confidence <= confidenceVal;
-                return (
-                  <tr key={key}>
-                    <td>{key}</td>
-                    <td className={`${isError ? "usa-input--error" : ""}`}>
-                      {value.text}
-                    </td>
-                    <td>
-                      {isError && <Icon.Warning className="text-error" />}
-                    </td>
-                    <td className={`${isError ? "usa-input--error" : ""}`}>
-                      {`${value.confidence}%`}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+          <SortableTable
+              columns={["name", "value", "isError", "confidence"]}
+              data={resultsTable}
+              sortableBy={["name", "confidence", "value"]}
+              defaultSort={"confidence"}
+              columnNames={{name: "Label", value: "Value", isError: " ", confidence: "Label Confidence"}}
+              formatters={{isError: isErrorFormatter, confidence: labelConfidenceFormatter, value: editCellFormatter}}
+            />
+
         </div>
         <div className="width-50">
           <div

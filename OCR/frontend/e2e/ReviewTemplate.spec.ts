@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("ReviewTemplate Page", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the ReviewTemplate page
-    await page.goto("http://localhost:5173/extract/review");
+    await page.goto("/extract/review");
   });
 
   test("Document image scrollable", async ({ page }) => {
@@ -30,6 +30,12 @@ test.describe("ReviewTemplate Page", () => {
   test("Submit button navigates correctly", async ({ page }) => {
     const submitButton = page.getByRole("button", { name: "Submit" });
     await expect(submitButton).toBeVisible();
+    await expect(submitButton).toBeDisabled();
+    const errorRows = await page.locator("tr *[data-testid='edit-fix-error']");
+    for (const row of await errorRows.elementHandles()) {
+      await row.click();
+      await page.keyboard.press('Enter');
+    }
 
     await submitButton.click();
     await expect(page).toHaveURL("/extract/submit");
@@ -67,7 +73,7 @@ test.describe("ReviewTemplate Page", () => {
   test("should correctly identify and count errors (below threshold)", async ({
     page,
   }) => {
-    const errorCount = await page.locator("tr .usa-input--error").count();
+    const errorCount = await page.locator("tr .text-error").count();
 
     await expect(errorCount).toBeGreaterThan(0);
   });
@@ -76,6 +82,6 @@ test.describe("ReviewTemplate Page", () => {
     page,
   }) => {
     const DrawLocation = page.locator("td >> text=BH_1Diamondd_LAB");
-    await expect(DrawLocation).toHaveClass(/usa-input--error/);
+    await expect(DrawLocation).toHaveClass(/text-error/);
   });
 });
