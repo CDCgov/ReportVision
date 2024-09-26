@@ -63,16 +63,20 @@ def home():
     )
 
 
+genericQuestions = [
+    "what is the patient's name?", "what is the patient's date of birth?", "what is the patient's gender?",
+    "what is the patient's phone number?", "what is the patient's email address?"
+]
+
 questionDict = {
-    "covid": ["What is the patient's age?", "What is the patient's gender?",
-              "Is the test result positive or negative?", "what is the patient's postal code?"],
+    "covid": ["Is the test result positive or negative?", "what  type of test was this?"],
     "pertussis": ["Who is the physician?", "What is the patient's date of birth?"]
 }
 
 
 @app.get("/questions")
 def questions(form_type: str = None):
-    _questions = questionDict[form_type]
+    _questions = genericQuestions + questionDict[form_type]
     return Form(*map(lambda q: Input(type="hidden", name="question", value=q, disabled=False), _questions),
                 Ul(*map(lambda q: Li(q), _questions)),
                 Label("Upload a report image", Input(type="file", name="file")), Button("Submit"),
@@ -83,7 +87,7 @@ def questions(form_type: str = None):
 @app.post("/extract")
 async def extract(file: UploadFile, question: List[str]):
     # source_image_np = np.frombuffer(await file.read(), np.uint8)
-    input_img = Image.open(io.BytesIO(file.file.read()))
+    input_img = Image.open(io.BytesIO(file.file.read())).convert("RGB")
     buffered = BytesIO()
     input_img.save(buffered, format="JPEG")
     image_base64 = base64.b64encode(buffered.getvalue()).decode("ascii")
@@ -94,11 +98,15 @@ async def extract(file: UploadFile, question: List[str]):
     for q in question:
         answer = answerQuestion(pixel_values, q)
         answers.append(answer)
+    # answers =[{"question": "foo", "answer": "bar"},{"question": "foo", "answer": "bar"},{"question": "foo", "answer": "bar"},{"question": "foo", "answer": "bar"}]
 
     return Div(
-        H1("Extract Information From Image"),
-        Img(src=f"data:image/png;base64,{image_base64}", height="50%"),
-        *map(lambda answer: P(f"{answer['question']}: {answer['answer']}"), answers)
+        H1("Extracted Information From Image"),
+        Div(
+        Div(*map(lambda answer: P(Strong(answer["question"]), ":", Span(answer["answer"])), answers)),
+            Img(src=f"data:image/png;base64,{image_base64}"),
+            cls="grid"
+        )
     )
 
 
