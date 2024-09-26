@@ -3,7 +3,7 @@ name: Build Frontend
 on:
   push:
     branches:
-      - GHA-react-build-to-blob
+      - main
 
 permissions:
   id-token: write
