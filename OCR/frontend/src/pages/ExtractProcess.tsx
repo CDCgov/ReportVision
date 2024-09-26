@@ -4,7 +4,7 @@ import { Divider } from "../components/Divider";
 import { ExtractStepper } from "../components/ExtractStepper";
 import { ExtractStep } from "../utils/constants";
 import LoadingWrapper from "../components/LoadingWrapper";
-import { AddFormData } from "../../api/api"
+import { ImageToText } from "../../api/api"
 import { useEffect, useState } from "react";
 import { FileType, useFiles } from "../contexts/FilesContext";
 import { ImageToTextResponse, Submission } from "../../api/types/types";
@@ -43,7 +43,7 @@ const ExtractProcess = () => {
           fieldNames: page.fieldNames,
           sourceImage: page.sourceImage,
           templateImage: page.templateImage,
-        })).map((args) => AddFormData(args))).flat();
+        })).map((args) => ImageToText(args))).flat();
     
       const responses: (ImageToTextResponse | null)[] = await Promise.all(queries);
   
@@ -69,11 +69,11 @@ const ExtractProcess = () => {
         results,
       }
               
-      localStorage.setItem("extractedData", JSON.stringify(transformedResponses));
+      localStorage.setItem("submission", JSON.stringify(transformedResponses));
     
       // Update loading state and navigate
       setIsLoading(false);
-      navigate("/");
+      navigate("/extract/review");
       
     } catch (error) {
       console.error("Error processing templates:", error);

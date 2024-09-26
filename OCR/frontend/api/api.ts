@@ -1,6 +1,6 @@
 import { ImageToTextArgs, ImageToTextResponse } from "./types/types";
 
-export const AddFormData = async (args: ImageToTextArgs): Promise<ImageToTextResponse | null> => {
+export const ImageToText = async (args: ImageToTextArgs): Promise<ImageToTextResponse | null> => {
 
     const { sourceImage, templateImage, fieldNames } = args;
     const form = new URLSearchParams({
