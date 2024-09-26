@@ -37,15 +37,14 @@ jobs:
       - name: Run unit tests
         run: npm run test
 
-      - name: check dir
-        run: ls ./dist
-
       - name: Create client build archive
         shell: bash
         run: |
           echo "::group::Create application archive"
           tar -C ./dist/ -czf ./client.tgz .
           echo "::endgroup::"
+      - name: check dir
+        run: ls -a
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v4
