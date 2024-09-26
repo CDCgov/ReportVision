@@ -13,8 +13,16 @@ processor = DonutProcessor.from_pretrained("naver-clova-ix/donut-base-finetuned-
 model = VisionEncoderDecoderModel.from_pretrained("naver-clova-ix/donut-base-finetuned-docvqa")
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-# # OS X Specific, if you have an m2 chip and want to use mps
-# # device = "mps" if torch.backends.mps.is_available() else device
+# OS X Specific, if you have an m chip and want to use mps (much faster)
+device = "mps" if torch.backends.mps.is_available() else device
+if not torch.backends.mps.is_available():
+    if not torch.backends.mps.is_built():
+        print("MPS not available because the current PyTorch install was not "
+              "built with MPS enabled.")
+    else:
+        print("MPS not available because the current MacOS version is not 12.3+ "
+              "and/or you do not have an MPS-enabled device on this machine.")
+
 model.to(device)
 
 model.eval()
@@ -89,7 +97,7 @@ async def extract(file: UploadFile, question: List[str]):
 
     return Div(
         H1("Extract Information From Image"),
-        Img(src=f"data:image/png;base64,{image_base64}"),
+        Img(src=f"data:image/png;base64,{image_base64}", height="50%"),
         *map(lambda answer: P(f"{answer['question']}: {answer['answer']}"), answers)
     )
 
