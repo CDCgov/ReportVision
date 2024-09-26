@@ -4,9 +4,7 @@ on:
   push:
     branches:
       - GHA-react-build-to-blob
-#   pull_request:
-#     branches:
-#       - main
+
 permissions:
   id-token: write
   contents: read
@@ -22,30 +20,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      
+          node-version: '20'  
       - name: Install NPM packages
         run: npm ci
-      
       - name: Build project
-        run: npm run build
-      
+        run: npm run build 
       - name: Run unit tests
         run: npm run test
-
       - name: Create client build archive
         shell: bash
         run: |
           echo "::group::Create application archive"
           tar -C ./dist/ -czf ./client.tgz .
           echo "::endgroup::"
-      - name: check dir
-        run: ls -a
-
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v4
         with:
@@ -57,7 +47,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: build-frontend-dev
     needs: [build]
-    
     steps:
       - name: Download Artifacts To Job
         uses: actions/download-artifact@v4
@@ -76,14 +65,11 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      
       - name: Upload to Azure blob storage
-        uses: azure/cli@v2
-        with:
-          azcliversion: 2.30.0
-          inlineScript: |
-              az storage blob upload-batch --account-name reportvisionfrontenddev -d '$web' -s client-build/
-    
-      - name: Azure logout
+        shell: bash
         run: |
-              az logout
+          az storage blob upload-batch --account-name reportvisionfrontenddev -d '$web' -s client-build/
+      - name: Azure logout
+        shell: bash
+        run: |
+          az logout
