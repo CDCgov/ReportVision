@@ -37,6 +37,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 main = "ocr.main:main"
+api = "ocr.api:start"
 build = "ocr.pyinstaller:install"
 
 [tool.ruff]

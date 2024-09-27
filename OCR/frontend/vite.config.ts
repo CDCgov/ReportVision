@@ -14,6 +14,9 @@ export default defineConfig({
       '**/e2e/**',
     ],
   },
+  preview: {
+    port: 5173,
+  },
   css: {
     preprocessorOptions: {
       scss: {

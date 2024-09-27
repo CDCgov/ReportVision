@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import ExtractDataHeader from "../componets/ExtractDataHeader";
-import { Divider } from "../componets/Divider";
+import ExtractDataHeader from "../components/ExtractDataHeader";
+import { Divider } from "../components/Divider";
 import { ExtractStep } from "../utils/constants";
-import { ExtractUploadFile } from "../componets/ExtractUploadFile";
-import { ExtractStepper } from "../componets/ExtractStepper";
+import { ExtractUploadFile } from "../components/ExtractUploadFile";
+import { ExtractStepper } from "../components/ExtractStepper";
 import { useState } from "react";
 
 const ExtractUpload = () => {
@@ -18,6 +18,7 @@ const ExtractUpload = () => {
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <ExtractDataHeader
         onBack={() => navigate("/")}
+        onExit={() => navigate("/")}
         onSubmit={() => navigate("/extract/process")}
         isUploadComplete={isUploadComplete}
       />

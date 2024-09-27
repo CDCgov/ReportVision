@@ -11,8 +11,7 @@ interface MultiImageAnnotatorProps {
 }
 
 export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, categories, initialShapes = [[]] }) => {
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const {selectedField, setHandles, annotator, shapes, setShapes } = useAnnotationContext();
+    const {selectedField, setHandles, annotator, shapes, setShapes, index, setIndex } = useAnnotationContext();
     const [dialog, setDialog] = useState<{ show: boolean, shape: Shape | undefined }>({ show: false, shape: undefined });
 
     const selectedCategoriesChanged = (items: string[]) => {
@@ -28,16 +27,17 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
     };
 
     const handleImageChange = (index: number) => {
-        setCurrentImageIndex(index);
+        setIndex(index);
     };
 
     const handleShapeAddition = (shape: Shape) => {
         const fields = [...LABELS.patientInformation.items, ...LABELS.organizationInformation.items];
         const field = fields.find(field => field.name === selectedField?.name);
         const updatedShapes = [...shapes];
-        // todo fix typing but for now this is fine
-        updatedShapes[currentImageIndex] = [...(updatedShapes[currentImageIndex] || []), {...shape, field: selectedField?.name as string, color: field?.color}];
+        // for field?.color.slice(0,7) to remove the alpha channel from the hexcode 
+        updatedShapes[index] = [...(updatedShapes[index] || []), {...shape, field: selectedField?.name as string, color: field?.color.slice(0,7)}];
         setShapes(updatedShapes);
+        localStorage.setItem('shapes', JSON.stringify(updatedShapes));
         annotator?.updateCategories(shape.id, [], field?.color);
         annotator!.stop();
     };
@@ -53,7 +53,8 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
     };
 
     useEffect(() => {
-        setShapes(initialShapes);
+        const localStorageShapes = localStorage.getItem('shapes') as unknown as Array<Array<Shape>> || [[]];
+        setShapes(localStorageShapes.length > 0 ? localStorageShapes : initialShapes);
     }, [])
     return (
         <div>
@@ -70,17 +71,24 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
                     categories={categories}
                 />
             }
+            <div>
+                {images.map((_, index) => (
+                        <Button key={index} onClick={() => handleImageChange(index)} type='button'>
+                            Image {index + 1}
+                        </Button>
+                ))}
+            </div>
             <ImageAnnotator
                 setHandles={setHandles}
                 naturalSize={true}
-                imageUrl={images[currentImageIndex]}
-                shapes={shapes[currentImageIndex] || [[]]}
+                imageUrl={images[index]}
+                shapes={shapes[index] || [[]]}
                 onAdded={handleShapeAddition}
                 onContextMenu={handleShapeContextMenu}
                 onSelected={handleShapeSelection}
                 onReady={() => { }}
             />
-            <div>{JSON.stringify(shapes[currentImageIndex], null, 2)}</div>
+            <div>{JSON.stringify(shapes[index], null, 2)}</div>
         </div>
     );
 }

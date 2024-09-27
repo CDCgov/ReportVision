@@ -1,15 +1,16 @@
-import { UploadHeader } from "../componets/Header.tsx";
-import { Divider } from "../componets/Divider.tsx";
-import { Stepper } from "../componets/Stepper.tsx";
+import { UploadHeader } from "../components/Header.tsx";
+import { Divider } from "../components/Divider.tsx";
+import { Stepper } from "../components/Stepper.tsx";
 import { AnnotateStep } from "../utils/constants.ts";
 import { useFiles } from "../contexts/FilesContext.tsx";
 import * as pdfjsLib from "pdfjs-dist";
 import { Accordion, AccordionItemProps } from "@trussworks/react-uswds";
-import { MultiImageAnnotator } from "../componets/ImageAnnotator.tsx";
+import { MultiImageAnnotator } from "../components/ImageAnnotator.tsx";
 import { useNavigate } from "react-router-dom";
 import { LABELS } from "../constants/labels";
 import { Icon } from "@trussworks/react-uswds";
-import { useEffect, useState, useId } from "react";
+import { useEffect, useState } from "react";
+import html2canvas from "html2canvas";
 
 import "./AnnotateTemplate.scss";
 import { useAnnotationContext } from "../contexts/AnnotationContext.tsx";
@@ -31,9 +32,16 @@ const AnnotateTemplate: React.FC = () => {
   const navigate = useNavigate();
 
   const { files } = useFiles();
-  const { setSelectedField, annotator, shapes, setFields, fields } = useAnnotationContext();
+  const {
+    setSelectedField,
+    annotator,
+    setFields,
+    fields,
+    setAnnotatedImages,
+    index,
+    setIndex,
+  } = useAnnotationContext();
   const pdfFile = files[0];
-  const id = useId();
 
   useEffect(() => {
     if (!(pdfFile instanceof File)) {
@@ -66,18 +74,20 @@ const AnnotateTemplate: React.FC = () => {
 
     convertPdfToImages(pdfFile).then((imgs) => {
       setImages(imgs);
-      localStorage.setItem('images', JSON.stringify(imgs));
+      localStorage.setItem("images", JSON.stringify(imgs));
     });
   }, [files, pdfFile]);
   useEffect(() => {
     const getImage = async () => {
-        const localImages = await JSON.parse(localStorage.getItem('images') || '[]')
-        if (localImages.length > 0) {
-            setImages(localImages)
-        }
-    }
+      const localImages = await JSON.parse(
+        localStorage.getItem("images") || "[]"
+      );
+      if (localImages.length > 0) {
+        setImages(localImages);
+      }
+    };
     getImage();
-  }, [])
+  }, []);
   const renderLabelContent = (category: LabelCategory): JSX.Element => (
     <ul className="usa-list usa-list--unstyled">
       {category.items.map((item, idx) => (
@@ -86,19 +96,25 @@ const AnnotateTemplate: React.FC = () => {
           className="display-flex flex-justify space-between flex-align-center padding-y-1 label-container margin-0"
           onClick={() => {
             setSelectedField({
+
                 name: item.name,
                 id: String(idx + 1),
-                color: item.color,
+                color: item.color.slice(0, 7),
             });
-            
-            if (!fields.has(item.name)){
-                // const localSet = new Set([...fields]);
-
-                annotator!.drawRectangle();
-                fields.add(item.name);
-                setFields(fields)
-            }else {
-                annotator!.edit(idx + 1);
+            let tempFields = [...fields];
+            if (fields.length === 0) {
+              tempFields.unshift(new Set<string>());
+              setFields([new Set()]);
+            } else if (fields.length < index + 1) {
+              tempFields = [...tempFields, new Set()];
+              setFields(tempFields);
+            }
+            if (!tempFields[index].has(item.name)) {
+              annotator!.drawRectangle();
+              tempFields[index].add(item.name);
+              setFields(tempFields);
+            } else {
+              annotator!.edit(idx + 1);
             }
           }}
         >
@@ -111,14 +127,6 @@ const AnnotateTemplate: React.FC = () => {
             </div>
             <span className="margin-left-1 text-normal">{item.name}</span>
           </div>
-          {!item.required && (
-            <span
-              style={{ color: "#6c757d" }}
-              className="text-right margin-left-auto"
-            >
-              Not Found
-            </span>
-          )}
         </li>
       ))}
     </ul>
@@ -131,15 +139,41 @@ const AnnotateTemplate: React.FC = () => {
       expanded: false,
       id: key,
       headingLevel: "h3",
-    }),
+    })
   );
+
+  const handleSubmit = async () => {
+    annotator!.stop();
+    const delay = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    try {
+      const tempImages: string[] = [];
+      // Use a for loop to handle asynchronous behavior in sequence
+      for (let idx = 0; idx < images.length; idx++) {
+        await delay(1000); // Wait for 1 second before moving to the next index
+        setIndex(idx);
+
+        const canvas = await html2canvas(
+          document.getElementById("img-annotator-container") as HTMLElement
+        );
+        const imageData = canvas.toDataURL("image/png"); // Convert the canvas to Base64
+        tempImages.unshift(imageData);
+      }
+      // Update state, save the images, or navigate, as required
+      setAnnotatedImages([...tempImages]);
+      navigate("/new-template/save");
+    } catch (err) {
+      console.error("Error taking screenshot", err);
+    }
+  };
 
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <UploadHeader
         title="Annotate new template"
         onBack={() => navigate("/new-template/upload")}
-        onSubmit={() => navigate("/new-template/save")}
+        onSubmit={handleSubmit}
       />
       <Divider margin="0px" />
       <div className="display-flex flex-justify-center padding-top-4">
@@ -155,7 +189,10 @@ const AnnotateTemplate: React.FC = () => {
           <Divider margin="0px" />
           <Accordion items={accordionItems} />
         </div>
-        <div className="grid-col-9 height-full overflow-y-auto bg-base-lightest display-flex flex-justify-center">
+        <div
+          id="img-annotator-container"
+          className="grid-col-9 height-full overflow-y-auto bg-base-lightest display-flex flex-justify-center"
+        >
           {images.length > 0 ? (
             <MultiImageAnnotator images={images} categories={[]} />
           ) : (

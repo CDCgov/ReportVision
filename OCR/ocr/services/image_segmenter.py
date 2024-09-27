@@ -25,7 +25,8 @@ def segment_by_mask_then_crop(raw_image, segmentation_template, labels, debug) -
     segments = {}
 
     # iterate over the labels
-    for color, label in labels.items():
+    for item in labels:
+        label, color = item["label"], item["color"]
         raw_image = np.array(raw_image, copy=True)
         segmentation_template = np.array(segmentation_template, copy=True)
         color = tuple(map(int, reversed(color.split(","))))
@@ -56,7 +57,8 @@ def segment_by_color_bounding_box(raw_image, segmentation_template, labels, debu
     segments = {}
 
     # iterate over the labels
-    for color, label in labels.items():
+    for item in labels:
+        label, color = item["label"], item["color"]
         # we are reversing from RGB in the label to BGR used by the openCV
         color = tuple(map(int, reversed(color.split(","))))
         # find indices of the color in the segmentation template where the color matches the expected colors

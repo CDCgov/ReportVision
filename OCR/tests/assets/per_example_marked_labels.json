@@ -1,0 +1,792 @@
+[
+    {
+        "label": "invalid_string_0.5800007711815479",
+        "type": "Unknown",
+        "color": "252,55,36"
+    },
+    {
+        "label": "invalid_string_0.762476904117021",
+        "type": "Unknown",
+        "color": "48,66,249"
+    },
+    {
+        "label": "invalid_string_0.8982128586539184",
+        "type": "Unknown",
+        "color": "252,83,158"
+    },
+    {
+        "label": "NBS INVESTIGATION ID 1",
+        "type": "text",
+        "color": "187,176,133"
+    },
+    {
+        "label": "invalid_string_0.9465434749179327",
+        "type": "Unknown",
+        "color": "210,184,30"
+    },
+    {
+        "label": "Address",
+        "type": "text",
+        "color": "57,112,1"
+    },
+    {
+        "label": "City",
+        "type": "text",
+        "color": "124,139,69"
+    },
+    {
+        "label": "County",
+        "type": "text",
+        "color": "165,43,86"
+    },
+    {
+        "label": "Zip",
+        "type": "text",
+        "color": "145,0,183"
+    },
+    {
+        "label": "Region",
+        "type": "text",
+        "color": "226,127,41"
+    },
+    {
+        "label": "Phone_1",
+        "type": "text",
+        "color": "64,78,15"
+    },
+    {
+        "label": "ParentGuardian",
+        "type": "text",
+        "color": "151,144,20"
+    },
+    {
+        "label": "Physician",
+        "type": "text",
+        "color": "57,51,26"
+    },
+    {
+        "label": "Phone_2",
+        "type": "text",
+        "color": "125,255,131"
+    },
+    {
+        "label": "Address 1",
+        "type": "text",
+        "color": "93,185,89"
+    },
+    {
+        "label": "Address 2",
+        "type": "text",
+        "color": "128,246,128"
+    },
+    {
+        "label": "Check box if history of homelessness in last 6 months",
+        "type": "button",
+        "color": "109,51,218"
+    },
+    {
+        "label": "Reported by",
+        "type": "text",
+        "color": "68,2,176"
+    },
+    {
+        "label": "Agency",
+        "type": "text",
+        "color": "50,92,29"
+    },
+    {
+        "label": "Phone_3",
+        "type": "text",
+        "color": "46,169,85"
+    },
+    {
+        "label": "Month1",
+        "type": "text",
+        "color": "37,193,184"
+    },
+    {
+        "label": "Day1",
+        "type": "text",
+        "color": "211,108,168"
+    },
+    {
+        "label": "Year1",
+        "type": "text",
+        "color": "53,178,55"
+    },
+    {
+        "label": "Investigated by",
+        "type": "text",
+        "color": "192,129,65"
+    },
+    {
+        "label": "Agency_2",
+        "type": "text",
+        "color": "54,129,136"
+    },
+    {
+        "label": "Phone_4",
+        "type": "text",
+        "color": "58,8,65"
+    },
+    {
+        "label": "Email",
+        "type": "text",
+        "color": "156,103,156"
+    },
+    {
+        "label": "Month2",
+        "type": "text",
+        "color": "211,138,123"
+    },
+    {
+        "label": "Day2",
+        "type": "text",
+        "color": "52,174,220"
+    },
+    {
+        "label": "Year2",
+        "type": "text",
+        "color": "92,206,203"
+    },
+    {
+        "label": "Month3",
+        "type": "text",
+        "color": "74,40,234"
+    },
+    {
+        "label": "Day3",
+        "type": "text",
+        "color": "216,125,128"
+    },
+    {
+        "label": "Year3",
+        "type": "text",
+        "color": "105,128,41"
+    },
+    {
+        "label": "Month4",
+        "type": "text",
+        "color": "117,29,254"
+    },
+    {
+        "label": "Day4",
+        "type": "text",
+        "color": "23,79,113"
+    },
+    {
+        "label": "Year4",
+        "type": "text",
+        "color": "143,129,157"
+    },
+    {
+        "label": "AGE",
+        "type": "text",
+        "color": "79,26,4"
+    },
+    {
+        "label": "invalid_string_0.3293447998506287",
+        "type": "Unknown",
+        "color": "134,45,136"
+    },
+    {
+        "label": "Other",
+        "type": "text",
+        "color": "44,252,185"
+    },
+    {
+        "label": "invalid_string_0.6444265743150019",
+        "type": "Unknown",
+        "color": "85,187,169"
+    },
+    {
+        "label": "invalid_string_0.11820634792531781",
+        "type": "Unknown",
+        "color": "103,3,140"
+    },
+    {
+        "label": "invalid_string_0.7117336030548493",
+        "type": "Unknown",
+        "color": "23,224,13"
+    },
+    {
+        "label": "White",
+        "type": "button",
+        "color": "178,231,72"
+    },
+    {
+        "label": "Black",
+        "type": "button",
+        "color": "110,199,19"
+    },
+    {
+        "label": "Asian",
+        "type": "button",
+        "color": "50,30,91"
+    },
+    {
+        "label": "Native Hawaiian or Other Pac Islander",
+        "type": "button",
+        "color": "245,203,108"
+    },
+    {
+        "label": "Am Indian or Alaska Native",
+        "type": "button",
+        "color": "105,166,125"
+    },
+    {
+        "label": "Unknown_3",
+        "type": "button",
+        "color": "195,112,102"
+    },
+    {
+        "label": "undefined_14",
+        "type": "button",
+        "color": "246,97,248"
+    },
+    {
+        "label": "Other_2",
+        "type": "text",
+        "color": "43,216,32"
+    },
+    {
+        "label": "invalid_string_0.011008236314575925",
+        "type": "Unknown",
+        "color": "124,221,7"
+    },
+    {
+        "label": "invalid_string_0.5852549402450292",
+        "type": "Unknown",
+        "color": "227,170,187"
+    },
+    {
+        "label": "invalid_string_0.4237377919019335",
+        "type": "Unknown",
+        "color": "235,243,147"
+    },
+    {
+        "label": "invalid_string_0.7096359864736417",
+        "type": "Unknown",
+        "color": "189,190,213"
+    },
+    {
+        "label": "invalid_string_0.8123429568921887",
+        "type": "Unknown",
+        "color": "20,41,99"
+    },
+    {
+        "label": "If yes Mothers age at date of infant birth",
+        "type": "text",
+        "color": "21,169,200"
+    },
+    {
+        "label": "Infant birth weight",
+        "type": "text",
+        "color": "10,31,76"
+    },
+    {
+        "label": "lbs",
+        "type": "text",
+        "color": "147,30,197"
+    },
+    {
+        "label": "oz OR",
+        "type": "text",
+        "color": "108,101,228"
+    },
+    {
+        "label": "Unknown_5",
+        "type": "button",
+        "color": "22,85,182"
+    },
+    {
+        "label": "invalid_string_0.5303910655788298",
+        "type": "Unknown",
+        "color": "20,129,227"
+    },
+    {
+        "label": "Month5",
+        "type": "text",
+        "color": "163,121,77"
+    },
+    {
+        "label": "Day5",
+        "type": "text",
+        "color": "71,30,107"
+    },
+    {
+        "label": "Year5",
+        "type": "text",
+        "color": "116,135,10"
+    },
+    {
+        "label": "invalid_string_0.6581603574877066",
+        "type": "Unknown",
+        "color": "58,83,87"
+    },
+    {
+        "label": "invalid_string_0.31203975594833633",
+        "type": "Unknown",
+        "color": "222,170,141"
+    },
+    {
+        "label": "Obstetricians name address and phone 1",
+        "type": "text",
+        "color": "3,231,143"
+    },
+    {
+        "label": "Obstetricians name address and phone 2",
+        "type": "text",
+        "color": "224,23,168"
+    },
+    {
+        "label": "Month6",
+        "type": "text",
+        "color": "90,180,13"
+    },
+    {
+        "label": "Day6",
+        "type": "text",
+        "color": "68,73,54"
+    },
+    {
+        "label": "Year6",
+        "type": "text",
+        "color": "173,175,72"
+    },
+    {
+        "label": "Month7",
+        "type": "text",
+        "color": "127,149,60"
+    },
+    {
+        "label": "Day7",
+        "type": "text",
+        "color": "77,248,153"
+    },
+    {
+        "label": "Year7",
+        "type": "text",
+        "color": "39,5,171"
+    },
+    {
+        "label": "Month8",
+        "type": "text",
+        "color": "11,44,100"
+    },
+    {
+        "label": "Day8",
+        "type": "text",
+        "color": "33,159,162"
+    },
+    {
+        "label": "Year8",
+        "type": "text",
+        "color": "53,153,92"
+    },
+    {
+        "label": "Final Cough Duration total  of days",
+        "type": "text",
+        "color": "194,4,147"
+    },
+    {
+        "label": "invalid_string_0.7452261723247301",
+        "type": "Unknown",
+        "color": "170,251,182"
+    },
+    {
+        "label": "invalid_string_0.5183913511101238",
+        "type": "Unknown",
+        "color": "254,198,149"
+    },
+    {
+        "label": "invalid_string_0.5638968615353617",
+        "type": "Unknown",
+        "color": "129,235,247"
+    },
+    {
+        "label": "invalid_string_0.9673827746498984",
+        "type": "Unknown",
+        "color": "48,211,62"
+    },
+    {
+        "label": "invalid_string_0.8949661426421909",
+        "type": "Unknown",
+        "color": "70,226,179"
+    },
+    {
+        "label": "invalid_string_0.7631475642617501",
+        "type": "Unknown",
+        "color": "155,218,133"
+    },
+    {
+        "label": "invalid_string_0.658271732163094",
+        "type": "Unknown",
+        "color": "214,151,187"
+    },
+    {
+        "label": "invalid_string_0.6974569165711061",
+        "type": "Unknown",
+        "color": "49,16,70"
+    },
+    {
+        "label": "invalid_string_0.26704294394592865",
+        "type": "Unknown",
+        "color": "223,198,10"
+    },
+    {
+        "label": "invalid_string_0.18322019191048444",
+        "type": "Unknown",
+        "color": "99,1,187"
+    },
+    {
+        "label": "Month9",
+        "type": "text",
+        "color": "99,68,27"
+    },
+    {
+        "label": "Day9",
+        "type": "text",
+        "color": "189,44,234"
+    },
+    {
+        "label": "Year9",
+        "type": "text",
+        "color": "81,252,61"
+    },
+    {
+        "label": "invalid_string_0.7652561486351583",
+        "type": "Unknown",
+        "color": "187,48,112"
+    },
+    {
+        "label": "invalid_string_0.1472768388464345",
+        "type": "Unknown",
+        "color": "105,135,149"
+    },
+    {
+        "label": "invalid_string_0.7943088632139053",
+        "type": "Unknown",
+        "color": "143,73,209"
+    },
+    {
+        "label": "invalid_string_0.38819053733538345",
+        "type": "Unknown",
+        "color": "7,225,122"
+    },
+    {
+        "label": "invalid_string_0.2690869854341297",
+        "type": "Unknown",
+        "color": "175,9,153"
+    },
+    {
+        "label": "invalid_string_0.23230952215841294",
+        "type": "Unknown",
+        "color": "219,164,43"
+    },
+    {
+        "label": "invalid_string_0.17455980710232044",
+        "type": "Unknown",
+        "color": "243,149,148"
+    },
+    {
+        "label": "Other_5",
+        "type": "text",
+        "color": "186,179,31"
+    },
+    {
+        "label": "invalid_string_0.5005751992620884",
+        "type": "Unknown",
+        "color": "228,86,10"
+    },
+    {
+        "label": "invalid_string_0.4812059030436684",
+        "type": "Unknown",
+        "color": "75,64,51"
+    },
+    {
+        "label": "invalid_string_0.10425474517258171",
+        "type": "Unknown",
+        "color": "148,109,147"
+    },
+    {
+        "label": "invalid_string_0.41722071941876737",
+        "type": "Unknown",
+        "color": "96,52,33"
+    },
+    {
+        "label": "invalid_string_0.6300684757064655",
+        "type": "Unknown",
+        "color": "218,161,4"
+    },
+    {
+        "label": "invalid_string_0.2829108486779399",
+        "type": "Unknown",
+        "color": "210,131,187"
+    },
+    {
+        "label": "Azithromycin",
+        "type": "button",
+        "color": "230,8,111"
+    },
+    {
+        "label": "invalid_string_0.34280163124919927",
+        "type": "Unknown",
+        "color": "12,126,163"
+    },
+    {
+        "label": "Month10",
+        "type": "text",
+        "color": "178,79,222"
+    },
+    {
+        "label": "Day10",
+        "type": "text",
+        "color": "115,25,197"
+    },
+    {
+        "label": "Year10",
+        "type": "text",
+        "color": "64,180,152"
+    },
+    {
+        "label": "days_1",
+        "type": "text",
+        "color": "55,242,121"
+    },
+    {
+        "label": "Bactrim",
+        "type": "button",
+        "color": "203,81,211"
+    },
+    {
+        "label": "Month11",
+        "type": "text",
+        "color": "154,231,102"
+    },
+    {
+        "label": "Day11",
+        "type": "text",
+        "color": "55,40,53"
+    },
+    {
+        "label": "Year11",
+        "type": "text",
+        "color": "172,166,99"
+    },
+    {
+        "label": "days_2",
+        "type": "text",
+        "color": "165,213,163"
+    },
+    {
+        "label": "Clarithromycin",
+        "type": "button",
+        "color": "16,206,161"
+    },
+    {
+        "label": "Month12",
+        "type": "text",
+        "color": "120,14,214"
+    },
+    {
+        "label": "Day12",
+        "type": "text",
+        "color": "232,40,96"
+    },
+    {
+        "label": "Year12",
+        "type": "text",
+        "color": "56,171,5"
+    },
+    {
+        "label": "days_3",
+        "type": "text",
+        "color": "186,1,94"
+    },
+    {
+        "label": "Erythromycin",
+        "type": "button",
+        "color": "0,226,83"
+    },
+    {
+        "label": "Month13",
+        "type": "text",
+        "color": "56,121,161"
+    },
+    {
+        "label": "Day13",
+        "type": "text",
+        "color": "184,203,241"
+    },
+    {
+        "label": "Year13",
+        "type": "text",
+        "color": "109,92,30"
+    },
+    {
+        "label": "days_4",
+        "type": "text",
+        "color": "248,242,163"
+    },
+    {
+        "label": "Other Abx1",
+        "type": "button",
+        "color": "139,21,246"
+    },
+    {
+        "label": "Other_3",
+        "type": "text",
+        "color": "122,94,243"
+    },
+    {
+        "label": "Month14",
+        "type": "text",
+        "color": "182,41,145"
+    },
+    {
+        "label": "Day14",
+        "type": "text",
+        "color": "67,135,27"
+    },
+    {
+        "label": "Year14",
+        "type": "text",
+        "color": "135,123,173"
+    },
+    {
+        "label": "days_5",
+        "type": "text",
+        "color": "94,217,217"
+    },
+    {
+        "label": "Other Abx 2",
+        "type": "button",
+        "color": "245,28,130"
+    },
+    {
+        "label": "Other_4",
+        "type": "text",
+        "color": "133,228,65"
+    },
+    {
+        "label": "Month15",
+        "type": "text",
+        "color": "58,3,45"
+    },
+    {
+        "label": "Day15",
+        "type": "text",
+        "color": "11,215,51"
+    },
+    {
+        "label": "Year15",
+        "type": "text",
+        "color": "169,148,27"
+    },
+    {
+        "label": "days_6",
+        "type": "text",
+        "color": "254,151,96"
+    },
+    {
+        "label": "invalid_string_0.7537951973421475",
+        "type": "Unknown",
+        "color": "144,37,183"
+    },
+    {
+        "label": "invalid_string_0.054098886469400975",
+        "type": "Unknown",
+        "color": "247,191,221"
+    },
+    {
+        "label": "Hospitalized at",
+        "type": "text",
+        "color": "218,146,249"
+    },
+    {
+        "label": "Admit month",
+        "type": "text",
+        "color": "213,29,100"
+    },
+    {
+        "label": "admit day",
+        "type": "text",
+        "color": "155,94,223"
+    },
+    {
+        "label": "admit year",
+        "type": "text",
+        "color": "69,49,3"
+    },
+    {
+        "label": "discharge month",
+        "type": "text",
+        "color": "166,125,240"
+    },
+    {
+        "label": "discharge day",
+        "type": "text",
+        "color": "131,221,222"
+    },
+    {
+        "label": "discharge year",
+        "type": "text",
+        "color": "47,145,232"
+    },
+    {
+        "label": "Duration of Stay",
+        "type": "text",
+        "color": "80,247,226"
+    },
+    {
+        "label": "invalid_string_0.8441168614451627",
+        "type": "Unknown",
+        "color": "59,90,32"
+    },
+    {
+        "label": "Month16",
+        "type": "text",
+        "color": "252,214,241"
+    },
+    {
+        "label": "Day16",
+        "type": "text",
+        "color": "68,235,229"
+    },
+    {
+        "label": "Year16",
+        "type": "text",
+        "color": "250,200,191"
+    },
+    {
+        "label": "invalid_string_0.5430167252353398",
+        "type": "Unknown",
+        "color": "253,208,28"
+    },
+    {
+        "label": "invalid_string_0.5151218021208409",
+        "type": "Unknown",
+        "color": "205,249,138"
+    },
+    {
+        "label": "invalid_string_0.16124784192699126",
+        "type": "Unknown",
+        "color": "65,118,235"
+    },
+    {
+        "label": "invalid_string_0.04958545239732148",
+        "type": "Unknown",
+        "color": "6,196,68"
+    },
+    {
+        "label": "invalid_string_0.8110289816996122",
+        "type": "Unknown",
+        "color": "141,94,136"
+    },
+    {
+        "label": "invalid_string_0.007369429373029757",
+        "type": "Unknown",
+        "color": "109,92,105"
+    }
+]

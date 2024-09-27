@@ -1,0 +1,35 @@
+.usa-table--striped tbody tr:nth-child(odd) td.usa-input--error {
+  color: #d54309;
+  background-color: #f0f0f0;
+}
+
+.usa-table--striped tbody tr:nth-child(even) td.usa-input--error {
+  color: #d54309;
+  background-color: inherit;
+}
+
+.custom-tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.custom-tooltip-text {
+  visibility: hidden;
+  width: 220px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 8px;
+  border-radius: 4px;
+
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  transform: translateX(-50%);
+}
+
+.custom-tooltip-container:hover .custom-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
