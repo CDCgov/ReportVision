@@ -6,17 +6,17 @@ on:
           - main
         paths:
         - .github/workflows/frontend-tests.yml
-        - OCR/frontend/**
+        - frontend/**
     pull_request:
         paths:
         - .github/workflows/frontend-tests.yml
-        - OCR/frontend/**
+        - frontend/**
 jobs:
   vitests:
     runs-on: ubuntu-latest
     defaults:
         run:
-          working-directory: OCR/frontend
+          working-directory: frontend
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
         run:
-          working-directory: OCR/frontend
+          working-directory: frontend
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
