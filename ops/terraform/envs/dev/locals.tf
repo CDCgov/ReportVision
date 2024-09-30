@@ -2,8 +2,8 @@ locals {
   environment = "dev"
   init = {
     environment         = local.environment
-    resource_group_name = "reportvision-dev-rg"
-    location            = "westus2"
+    resource_group_name = "reportvision-rg-dev"
+    location            = "eastus2"
   }
   network = {
     config = {
