@@ -79,7 +79,6 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
                 ))}
             </div>
             <ImageAnnotator
-                id='image-annotator'
                 setHandles={setHandles}
                 naturalSize={true}
                 imageUrl={images[index]}
