@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useId, useState } from "react";
 import { Icon, FileInput, Select } from "@trussworks/react-uswds";
-import { useFiles } from "../contexts/FilesContext";
+import { FileType, useFiles } from "../contexts/FilesContext";
 
 interface ExtractUploadFileProps {
   onUploadComplete: (isComplete: boolean) => void;
@@ -71,7 +71,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
     loadTemplatesFromLocalStorage();
   }, []);
 
-  const simulateFileUpload = (file: File) => {
+  const simulateFileUpload = (file: FileType) => {
     let progress = 0;
     const interval = setInterval(() => {
       progress += 10;
@@ -83,7 +83,6 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
       }
     }, 200);
   };
-
   const handleTemplateChange = (event: {
     target: { value: React.SetStateAction<string> };
   }) => {

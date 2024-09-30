@@ -1,4 +1,4 @@
-export function base64ToBinaryFile(base64Data: string, fileName: string): File {
+export function base64ToBlob(base64Data: string): Blob {
     // Remove the data URL part if it exists
     const base64String = base64Data.split(',')[1];
   
@@ -14,29 +14,41 @@ export function base64ToBinaryFile(base64Data: string, fileName: string): File {
     // Create a Blob from the binary data
     const blob = new Blob([binaryData], { type: 'image/png' });
   
-    // Create a file from the Blob if needed
-    const file = new File([blob], fileName, { type: 'image/png' });
-    console.log(file);
-    saveFileLocally(file, fileName);
-    return file;
-  }
+    return blob;
+}
 
-  function saveFileLocally(file: File, fileName: string) {
-    // Create a URL for the file
-    const url = URL.createObjectURL(file);
-  
-    // Create an anchor element and trigger download
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-  
-    // Clean up by revoking the object URL and removing the anchor element
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    }, 0);
-  }
+export function convertBase64SvgToBase64Png(base64Svg: string, width: number, height: number): Promise<string> {
+  return new Promise((resolve, reject) => {
+      // Create an Image object
+      const img: HTMLImageElement = new Image();
+      
+      // Set the image source to the base64-encoded SVG
+      img.src = `data:image/svg+xml;base64,${base64Svg}`;
+      
+      img.onload = () => {
+          // Create a canvas element
+          const canvas: HTMLCanvasElement = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
 
+          if (!ctx) {
+              reject(new Error('Failed to get canvas context'));
+              return;
+          }
 
+          // Draw the SVG image onto the canvas
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Convert the canvas content to a PNG base64 data URL
+          const base64Png = canvas.toDataURL('image/png');
+
+          // Remove the prefix ("data:image/png;base64,") and return the base64 string
+          resolve(base64Png.replace(/^data:image\/png;base64,/, ''));
+      };
+
+      img.onerror = () => {
+          reject(new Error('Failed to load SVG image'));
+      };
+  });
+}

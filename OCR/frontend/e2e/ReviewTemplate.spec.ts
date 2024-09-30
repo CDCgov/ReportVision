@@ -6,17 +6,6 @@ test.describe("ReviewTemplate Page", () => {
     await page.goto("/extract/review");
   });
 
-  test("Document image scrollable", async ({ page }) => {
-    // Check if the document is scrollable
-    const scrollContainer = page.locator("div[style*='overflow-y: auto']");
-    const beforeScroll = await scrollContainer.evaluate((el) => el.scrollTop);
-
-    await scrollContainer.evaluate((el) => el.scrollBy(0, 100));
-    const afterScroll = await scrollContainer.evaluate((el) => el.scrollTop);
-
-    expect(afterScroll).toBeGreaterThan(beforeScroll);
-  });
-
   // Test the Back button functionality
   test("Back button navigates correctly", async ({ page }) => {
     const backButton = page.getByRole("button", { name: "Back" });

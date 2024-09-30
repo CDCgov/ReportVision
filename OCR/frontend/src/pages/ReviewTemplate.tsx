@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ExtractDataHeader from "../components/ExtractDataHeader";
 import React from "react";
 import { ExtractStepper } from "../components/ExtractStepper";
-import { Table, Icon } from "@trussworks/react-uswds";
+import { Table, Icon, Button } from "@trussworks/react-uswds";
 import { Divider } from "../components/Divider";
 import documentImage from "./SyphForm.png"; //Please enter your file of choice here
 import "./ReviewTemplate.scss";
@@ -28,9 +28,12 @@ interface SubmissionData {
 
 const ReviewTemplate: React.FC = () => {
   const navigate = useNavigate();
+  const [index, setIndex] = useState<number>(0);
   const [submissionData, setSubmissionData] = useState<SubmissionData | null>(
     null
   );
+
+  const [images, setImages] = useState<string[]>([]);
 
   const fakeData = {
     template_name: "Syph Template",
@@ -51,6 +54,10 @@ const ReviewTemplate: React.FC = () => {
     },
   };
 
+  const handleImageChange = (index: number) => {
+    setIndex(index);
+  }
+    
   useEffect(() => {
     const data = localStorage.getItem("submission");
     if (data) {
@@ -63,6 +70,15 @@ const ReviewTemplate: React.FC = () => {
 
   const [editedValues, setEditedValues] = useState<Map<string, string>>(new Map());
 
+  useEffect(() => {
+    const data = localStorage.getItem("images");
+    if (data) {
+      setImages(JSON.parse(data));
+    } else {
+      // use fakedata if no data
+      setImages([documentImage]);
+    }
+  }, []);
 
   const handleBack = () => {
     navigate("/extract/upload");
@@ -82,7 +98,6 @@ const ReviewTemplate: React.FC = () => {
   if (!submissionData) {
     return <div>No submission Data</div>;
   }
-
   const { file_image, results } = submissionData;
   const confidenceVal = 75;
 
@@ -202,20 +217,29 @@ const ReviewTemplate: React.FC = () => {
         </div>
         <div className="width-50">
           <div
-            style={{
-              maxHeight: "500px",
-              overflowY: "auto",
-            }}
+            className="width-full height-full bg-white border-gray-5 border-1px"
           >
-            <img
-              src={documentImage}
-              alt={file_image}
-              style={{
-                width: "90",
-                transform: "scale(0.95)",
-                transformOrigin: "top left",
-              }}
-            />
+            <div>
+              {images.map((_, index) => (
+                <Button key={index} onClick={() => handleImageChange(index)} type='button'>
+                    Image {index + 1}
+                </Button>
+              ))}
+            </div>
+            {
+              images.map((image, innerIndex) => (
+                <img
+                  key={`image-${innerIndex}`}
+                  src={image}
+                  alt={`Document ${innerIndex + 1}`}
+                  style={{
+                    width: "100%",
+                    marginBottom: "20px",
+                    display: index === innerIndex ? "block" : "none",
+                  }}
+                />
+              ))
+            }
           </div>
         </div>
       </div>
