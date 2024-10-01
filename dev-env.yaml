@@ -20,4 +20,14 @@ services:
       - ./frontend:/app
     restart: no
     command: "/bin/sh -c 'npm install && npx playwright install && npx playwright test --ui-port=8080 --ui-host=0.0.0.0 & npm run dev -- --host'" 
-    
+  db:
+    image: postgres
+    restart: "unless-stopped"
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: super_secret_password
+      POSTGRES_DB: reportvision
+      POSTGRES_USER: postgres
