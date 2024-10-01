@@ -21,7 +21,7 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
     const hideDialog = () => setDialog({ show: false, shape: undefined });
     const hideAndUpdateCategories = () => {
         if (dialog.show) {
-            annotator!.updateCategories(dialog.shape!.id, dialog.shape!.categories, "#27f17640");
+            annotator!.updateCategories(dialog.shape!.id, dialog.shape!.categories, "#27f176");
             hideDialog();
         }
     };
@@ -35,7 +35,7 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, cate
         const field = fields.find(field => field.name === selectedField?.name);
         const updatedShapes = [...shapes];
         // for field?.color.slice(0,7) to remove the alpha channel from the hexcode 
-        updatedShapes[index] = [...(updatedShapes[index] || []), {...shape, field: selectedField?.name as string, color: field?.color.slice(0,7)}];
+        updatedShapes[index] = [...(updatedShapes[index] || []), {...shape, field: selectedField?.name as string, color: field?.color}];
         setShapes(updatedShapes);
         localStorage.setItem('shapes', JSON.stringify(updatedShapes));
         annotator?.updateCategories(shape.id, [], field?.color);

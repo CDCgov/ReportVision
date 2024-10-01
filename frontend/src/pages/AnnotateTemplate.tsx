@@ -38,7 +38,6 @@ const AnnotateTemplate: React.FC = () => {
     setFields,
     fields,
     setAnnotatedImages,
-    annotatedImages,
     index,
     setIndex,
   } = useAnnotationContext();
@@ -163,6 +162,7 @@ const AnnotateTemplate: React.FC = () => {
       // Update state, save the images, or navigate, as required
       setAnnotatedImages([...tempImages]);
       navigate("/new-template/save");
+      setIndex(0)
     } catch (err) {
       console.error("Error taking screenshot", err);
     }
