@@ -34,7 +34,7 @@ resource "azurerm_linux_web_app" "linux_webapp" {
     vnet_route_all_enabled            = false
 
     application_stack {
-      docker_image_name   = "cdcgov/idwa:GHA-build-docker-image-and-publish"
+      docker_image_name   = "cdcgov/reportvision:1.0.0"
       docker_registry_url = "https://ghcr.io"
     }
 
