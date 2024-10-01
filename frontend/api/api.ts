@@ -8,9 +8,11 @@ export const ImageToText = async (args: ImageToTextArgs): Promise<ImageToTextRes
         segmentation_template: templateImage,
         labels: JSON.stringify(fieldNames),
       });
+
+    const api_url = import.meta.env.VITE_API_URL || "http://localhost:8000/"
       
     try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}image_to_text/`, {
+        const response = await fetch(`${api_url}image_to_text/`, {
             "method": "POST",
             "headers": {
               "Content-Type": "application/x-www-form-urlencoded"
