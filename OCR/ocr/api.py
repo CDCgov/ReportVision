@@ -15,7 +15,7 @@ app = FastAPI()
 origins = [
     "http://localhost:8000",  # Allow requests from this origin
     "http://localhost:5173",  # Add your front-end domain here
-    "*"
+    "*",
 ]
 
 app.add_middleware(
