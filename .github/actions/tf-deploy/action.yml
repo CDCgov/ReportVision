@@ -1,0 +1,67 @@
+name: Terraform Action Deployment
+description: Build and push Docker image to the registry
+inputs:
+  azure_client_id:
+    description: The Azure client_id for this environment.
+    required: true
+  azure_tenant_id:
+    description: The Azure tenant_id for this environment.
+    required: true
+  azure_subscription_id:
+    description: The Azure subscription_id for this environment.
+    required: true
+  deploy_env:
+    description: The environment to deploy to
+    required: true
+  terraform_arm_client_id:
+    description: Terraform ARM client ID
+    required: true
+  terraform_arm_client_secret:
+    description: Terraform ARM client secret
+    required: true
+  terraform_arm_subscription_id:
+    description: Terraform ARM subscription ID
+    required: true
+  terraform_arm_tenant_id:
+    description: Terraform ARM tenant ID
+    required: true
+  okta_api_token:
+    description: Okta API token
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: azure/login@v2
+      with:
+        client-id: ${{ inputs.azure_client_id }}
+        tenant-id: ${{ inputs.azure_tenant_id }}
+        subscription-id: ${{ inputs.azure_subscription_id }}
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+    - name: Build ReportStream function app
+      uses: ./.github/actions/build-reportstream-functions
+      with:
+        deploy-env: ${{ inputs.deploy_env }}
+    - name: Terraform Init
+      working-directory: ./ops/terraform/envs
+      env: # all Azure interaction is through Terraform
+        ARM_CLIENT_ID: ${{ inputs.terraform_arm_client_id }}
+        ARM_CLIENT_SECRET: ${{ inputs.terraform_arm_client_secret }}
+        ARM_SUBSCRIPTION_ID: ${{ inputs.terraform_arm_subscription_id }}
+        ARM_TENANT_ID: ${{ inputs.terraform_arm_tenant_id }}
+        OKTA_API_TOKEN: ${{ inputs.okta_api_token }}
+      shell: bash
+      run: make init-${{ inputs.deploy_env }}
+    - name: Terraform deploy (infrastructure and staging slot)
+      working-directory: ./ops/terraform/envs
+      env: # all Azure interaction is through Terraform
+        ARM_CLIENT_ID: ${{ inputs.terraform_arm_client_id }}
+        ARM_CLIENT_SECRET: ${{ inputs.terraform_arm_client_secret }}
+        ARM_SUBSCRIPTION_ID: ${{ inputs.terraform_arm_subscription_id }}
+        ARM_TENANT_ID: ${{ inputs.terraform_arm_tenant_id }}
+        OKTA_API_TOKEN: ${{ inputs.okta_api_token }}
+      shell: bash
+      run: |
+        terraform -chdir=${{ inputs.deploy_env }} init
+        terraform -chdir=${{ inputs.deploy_env }} plan -var-file=../api.tfvars -lock-timeout=30m
