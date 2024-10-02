@@ -1,17 +1,20 @@
 package gov.cdc.ReportVision.models;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+import java.util.UUID;
 
 @Entity
 public class Template {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  @GeneratedValue(generator = "UUID4")
+  @Column(updatable = false, nullable = false)
+  private UUID id;
 
 
   public String name;

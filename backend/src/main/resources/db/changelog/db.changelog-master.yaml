@@ -3,11 +3,16 @@ databaseChangeLog:
        id:  createTemplates-Table
        author:  zedd@skylight.digital
        changes:
+         - createSequence:
+             sequenceName: template_seq
          -  createTable:
               columns:
                 -  column:
                      name:  id
-                     type:  bigint
+                     type:  uuid
+                     constraints:
+                       primaryKey: true
+                       nullable: false
                 -  column:
                      name:  name
                      type:  text
@@ -15,7 +20,7 @@ databaseChangeLog:
                      name:  description
                      type:  text
                 -  column:
-                     name:  labName
+                     name:  lab_name
                      type:  text
               remarks: A table to store the templates
               schemaName:  public
