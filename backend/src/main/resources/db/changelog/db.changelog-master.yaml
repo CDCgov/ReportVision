@@ -3,8 +3,6 @@ databaseChangeLog:
        id:  createTemplates-Table
        author:  zedd@skylight.digital
        changes:
-         - createSequence:
-             sequenceName: template_seq
          -  createTable:
               columns:
                 -  column:
