@@ -135,7 +135,7 @@ const ReviewTemplate: React.FC = () => {
   }
 
   const labelConfidenceFormatter = (d, _idx, row) => {
-    return row.isEdited ? "Edited" : redTextOnErrorFormatter(d, row.index, row)
+    return row.isEdited ? "Edited" : redTextOnErrorFormatter(d.toFixed(2), row.index, row)
   }
 
   const redTextOnErrorFormatter = (d, _idx, row) => {
