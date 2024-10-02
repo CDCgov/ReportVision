@@ -66,7 +66,7 @@ jobs:
       - name: Upload to Azure blob storage
         shell: bash
         run: |
-          az storage blob upload-batch --account-name reportvisionfrontenddev -d '$web' -s client-build/
+          az storage blob upload-batch --account-name reportvisionfrontenddev -d '$web' -s client-build/ --overwrite
       - name: Azure logout
         shell: bash
         run: |
