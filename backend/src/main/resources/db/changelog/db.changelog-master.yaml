@@ -1,0 +1,22 @@
+databaseChangeLog:
+  -  changeSet:
+       id:  createTemplates-Table
+       author:  zedd@skylight.digital
+       changes:
+         -  createTable:
+              columns:
+                -  column:
+                     name:  id
+                     type:  bigint
+                -  column:
+                     name:  name
+                     type:  text
+                -  column:
+                     name:  description
+                     type:  text
+                -  column:
+                     name:  labName
+                     type:  text
+              remarks: A table to store the templates
+              schemaName:  public
+              tableName:  template
