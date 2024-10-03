@@ -1,16 +1,14 @@
 name: Create and publish a OCR API image
 
 on:
-  workflow_dispatch:
-    inputs:
-        tag:
-            description: 'Version tag for new release'
-            required: true
+  push:
+    branches: temp-ocr-deploy
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  VERSION: ${{ inputs.tag }}
+  # VERSION: ${{ inputs.tag }}
+  VERSION: test-1
 
 jobs:
   build-and-push-image:
@@ -52,4 +50,20 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-ocr-api
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push-image
+    environment: dev
+    steps:
+      - name: Lowercase the repo name
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: reportvision-ocr-api-dev
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: 'ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VERSION }}'
       
