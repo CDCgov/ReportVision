@@ -1,0 +1,66 @@
+name: Terraform Action Deployment
+description: Build and push Docker image to the registry
+inputs:
+  azure_client_id:
+    description: The Azure client_id for this environment.
+    required: true
+  azure_tenant_id:
+    description: The Azure tenant_id for this environment.
+    required: true
+  azure_subscription_id:
+    description: The Azure subscription_id for this environment.
+    required: true
+  deploy_env:
+    description: The environment to deploy to
+    required: true
+  terraform_arm_client_id:
+    description: Terraform ARM client ID
+    required: true
+  terraform_arm_client_secret:
+    description: Terraform ARM client secret
+    required: true
+  terraform_arm_subscription_id:
+    description: Terraform ARM subscription ID
+    required: true
+  terraform_arm_tenant_id:
+    description: Terraform ARM tenant ID
+    required: true
+  okta_api_token:
+    description: Okta API token
+    required: true
+
+runs:
+  using: composite
+  steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-ocr-api
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{version}},value=${{ env.VERSION }}
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./OCR/
+          file: ./OCR/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-ocr-api
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+      
