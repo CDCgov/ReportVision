@@ -34,7 +34,7 @@ resource "azurerm_linux_web_app" "linux_webapp" {
     vnet_route_all_enabled            = false
 
     application_stack {
-      docker_image_name   = "cdcgov/reportvision-ocr-api:0.1.1"
+      docker_image_name   = "cdcgov/reportvision-ocr-api:derek-main-dev"
       docker_registry_url = "https://ghcr.io"
     }
 

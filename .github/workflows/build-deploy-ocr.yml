@@ -57,5 +57,5 @@ jobs:
         with:
           app-name: reportvision-ocr-api-dev
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: 'https://${{ env.REGISTRY }}/${{ env.REPO}}-ocr-api:${{ env.VERSION }}'
+          images: '${{ env.REGISTRY }}/${{ env.REPO}}-ocr-api:${{ env.VERSION }}'
       
