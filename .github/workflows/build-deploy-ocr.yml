@@ -17,6 +17,8 @@ jobs:
       packages: write
       attestations: write
       id-token: write
+    outputs:
+      result: ${{ steps.image_check.outputs.result}}  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,10 +32,6 @@ jobs:
     #       login: "${{ github.actor }}"
     #       password: "${{ secrets.GITHUB_TOKEN }}"
     #       tag: latest
-    # outputs:
-    #   result: ${{ steps.image_exists.conclusion }}  
-    #   image: ${{ steps.image_exists.outputs.image }}
-    #   tag: ${{ steps.image_exists.outputs.tag }}
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
@@ -44,7 +42,7 @@ jobs:
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
       - name: output
         id: image_check
-        run: echo "result=$(docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?)" >> "$GITHUB_OUTPUT"
+        run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
       # - name: Lowercase the repo name
       #   run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
       # - name: Build and push Docker image
