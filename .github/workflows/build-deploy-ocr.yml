@@ -40,6 +40,8 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Lowercase the repo name
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
       - name: output
         id: image_check
         run: echo "result=$(docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?)" >> "$GITHUB_OUTPUT"
