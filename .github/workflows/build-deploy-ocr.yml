@@ -36,13 +36,7 @@ jobs:
           context: ./OCR/
           file: ./OCR/Dockerfile
           push: true
-          tags: ghcr.io/${{ env.REPO }}:${{ env.VERSION }}
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-ocr-api
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+          tags: ghcr.io/${{ env.REPO }}-ocr-api:${{ env.VERSION }}
 
   deploy:
     runs-on: ubuntu-latest
