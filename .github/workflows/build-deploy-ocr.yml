@@ -1,4 +1,4 @@
-name: Create and publish a OCR API image
+name: Create, publish, deploy a OCR API image
 
 on:
   workflow_dispatch:
@@ -9,8 +9,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
   VERSION: ${{ inputs.tag }}
+
 
 jobs:
   build-and-push-image:
@@ -29,14 +29,8 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-ocr-api
-          tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{version}},value=${{ env.VERSION }}
+      - name: Lowercase the repo name
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6
@@ -44,12 +38,21 @@ jobs:
           context: ./OCR/
           file: ./OCR/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v1
+          tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push-image
+    environment: dev
+    steps:
+      - name: Lowercase the repo name
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-ocr-api
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+          app-name: reportvision-ocr-api-dev
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: '${{ env.REGISTRY }}/${{ env.REPO}}-ocr-api:${{ env.VERSION }}'
       
