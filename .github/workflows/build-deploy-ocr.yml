@@ -42,7 +42,7 @@ jobs:
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
       - name: output
         id: image_check
-        run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
+        run: docker manifest inspect ${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
       # - name: Lowercase the repo name
       #   run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
       # - name: Build and push Docker image
