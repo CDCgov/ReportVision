@@ -1,12 +1,18 @@
 package gov.cdc.ReportVision.models;
 
 import jakarta.persistence.*;
-import java.util.List;
+import lombok.Getter;
 
+import java.util.List;
+import java.util.UUID;
+
+@Getter
 @Entity
 public class Page extends BaseEntity {
     @Id
-    private String id;
+    @GeneratedValue(generator = "UUID4")
+    @Column(updatable = false, nullable = false)
+    private UUID id;
 
     @Lob
     private byte[] baseImage;

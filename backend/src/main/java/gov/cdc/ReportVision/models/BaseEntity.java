@@ -1,6 +1,10 @@
 package gov.cdc.ReportVision.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
 import java.util.Date;
 
 @MappedSuperclass

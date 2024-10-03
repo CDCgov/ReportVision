@@ -1,12 +1,26 @@
 package gov.cdc.ReportVision.models;
 
-import jakarta.persistence.*;
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import lombok.Getter;
 
+import java.util.List;
+import java.util.UUID;
+
+@Getter
 @Entity
 public class Extraction extends BaseEntity {
     @Id
-    private String id;
+    @GeneratedValue(generator = "UUID4")
+    @Column(updatable = false, nullable = false)
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     private ExtractionStatus status;

@@ -1,12 +1,21 @@
 package gov.cdc.ReportVision.models;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Getter
 public class Template extends BaseEntity {
 
   @Id
@@ -15,9 +24,9 @@ public class Template extends BaseEntity {
   private UUID id;
 
 
-  public String name;
-  public String description;
-  public String labName;
+  private String name;
+  private String description;
+  private String labName;
 
   @OneToMany(mappedBy = "template")
   private List<Page> pages;
