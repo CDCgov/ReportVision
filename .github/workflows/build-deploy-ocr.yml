@@ -40,33 +40,32 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Lowercase the repo name
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-      - name: output
+      - name: Check if image exists
         id: image_check
-        run: docker manifest inspect ${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
-      # - name: Lowercase the repo name
-      #   run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-      # - name: Build and push Docker image
-      #   id: push
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: ./OCR/
-      #     file: ./OCR/Dockerfile
-      #     push: true
-      #     tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}
+        run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
+      - name: Build and push Docker image
+        id: push
+        if: steps.image_check.outcome == 1
+        uses: docker/build-push-action@v6
+        with:
+          context: ./OCR/
+          file: ./OCR/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: build-and-push-image
-  #   environment: dev
-  #   steps:
-  #     - name: Lowercase the repo name
-  #       run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push-image
+    environment: dev
+    steps:
+      - name: Lowercase the repo name
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
-  #     - name: Deploy to Azure Web App
-  #       id: deploy-to-webapp
-  #       uses: azure/webapps-deploy@v3
-  #       with:
-  #         app-name: reportvision-ocr-api-dev
-  #         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-  #         images: '${{ env.REGISTRY }}/${{ env.REPO}}-ocr-api:${{ env.VERSION }}'
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: reportvision-ocr-api-dev
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: '${{ env.REGISTRY }}/${{ env.REPO}}-ocr-api:${{ env.VERSION }}'
       
