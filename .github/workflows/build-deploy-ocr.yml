@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  VERSION: 0.1.3
+  VERSION: 0.1.2
 
 
 jobs:
@@ -22,16 +22,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-    #   - name: Check image
-    #     id: image_exists
-    #     uses: cloudposse/github-action-docker-image-exists@main
-    #     with:
-    #       registry: ghcr.io
-    #       organization: "cdcgov"
-    #       repository: "reportvision-ocr-api"
-    #       login: "${{ github.actor }}"
-    #       password: "${{ secrets.GITHUB_TOKEN }}"
-    #       tag: latest
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
