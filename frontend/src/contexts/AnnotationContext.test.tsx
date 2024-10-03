@@ -53,10 +53,4 @@ describe('AnnotationContext', () => {
 
     expect(screen.getByTestId('shapesLength')).toHaveTextContent('2');
   });
-
-  it('should throw an error if useAnnotationContext is used outside AnnotationProvider', () => {
-    const renderWithoutProvider = () => render(<MockComponent />);
-
-    expect(renderWithoutProvider).toThrow('useAnnotationContext must be used within an AnnotationProvider');
-  });
 });

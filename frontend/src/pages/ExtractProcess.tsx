@@ -42,7 +42,7 @@ const ExtractProcess = () => {
       const queries = templates.map(template => 
         template.pages.map((page) =>  ({
           fieldNames: page.fieldNames,
-          sourceImage: page.sourceImage,
+          sourceImage: page.sourceImage.image,
           templateImage: page.templateImage,
         })).map((args) => ImageToText(args))).flat();
     
@@ -66,7 +66,7 @@ const ExtractProcess = () => {
         template_name: templates[0].name,
         template_image: templates[0].pages[0].templateImage,
         file_name: 'image name',
-        file_image: templates[0].pages[0].sourceImage,
+        file_image: templates[0].pages[0].sourceImage.image,
         results,
       }
               

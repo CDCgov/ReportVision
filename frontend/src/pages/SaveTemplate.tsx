@@ -7,17 +7,22 @@ import { useNavigate } from "react-router-dom";
 import { useAnnotationContext } from "../contexts/AnnotationContext";
 import { useFiles, FileType, Page } from "../contexts/FilesContext";
 import hexRgb from "hex-rgb";
+import { ImageData } from "./AnnotateTemplate";
+import { makeScreenshots } from "../utils/functions";
 
 
 
 export const SaveTemplate = () => {
     const navigate = useNavigate();
-    const { fields, setDescription, setName, name, description, annotatedImages, shapes} = useAnnotationContext()
+    const { fields, setDescription, setName, name, description, shapes } = useAnnotationContext()
     const { addFile } = useFiles();
     
-    const handleSubmit = () => {
-        const images: string[] = localStorage.getItem('images') ? JSON.parse(localStorage.getItem('images') as string) : [];
+    const handleSubmit = async () => {
+        const images: ImageData[] = localStorage.getItem('images') ? JSON.parse(localStorage.getItem('images') as string) : [];
         let pages: Page[] = [];
+
+        const screenshots = await makeScreenshots()
+
         if (images.length > 0) {
             pages = fields.map((_, index) => {
                 const shape = shapes[index]
@@ -31,7 +36,7 @@ export const SaveTemplate = () => {
                         }
                     }),
                     sourceImage: images[index],
-                    templateImage: annotatedImages[index],
+                    templateImage: screenshots[index],
                     shapes: shape
                 }
             });
@@ -50,13 +55,16 @@ export const SaveTemplate = () => {
             }
 
         } catch {
+            console.log("Invalid information found in templates, it will be overwritten")
             console.error("Invalid information found in templates, it will be overwritten")
         }
         localStorage.setItem('templates', JSON.stringify([...existingTemplates, tempFile]))
         addFile(tempFile)
         }
-        navigate('/')
-    }
+
+        navigate("/")
+    } 
+    
     return (
         <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2"
              data-testid="save-template-page">

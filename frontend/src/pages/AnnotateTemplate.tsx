@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 
 import "./AnnotateTemplate.scss";
 import { useAnnotationContext } from "../contexts/AnnotationContext.tsx";
-import { convertBase64SvgToBase64Png } from "../utils/utils.ts";
 
 interface LabelItem {
   name: string;
@@ -27,8 +26,14 @@ interface LabelCategory {
   items: LabelItem[];
 }
 
+export interface ImageData {
+  image: string;
+  height: string;
+  width: string;
+}
+
 const AnnotateTemplate: React.FC = () => {
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<ImageData[]>([]);
   const navigate = useNavigate();
 
   const { files } = useFiles();
@@ -37,7 +42,6 @@ const AnnotateTemplate: React.FC = () => {
     annotator,
     setFields,
     fields,
-    setAnnotatedImages,
     index,
     setIndex,
   } = useAnnotationContext();
@@ -52,7 +56,7 @@ const AnnotateTemplate: React.FC = () => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
     const convertPdfToImages = async (file: File) => {
-      const images: Array<string> = [];
+      const images: Array<ImageData> = [];
       const data = URL.createObjectURL(file);
 
       const pdf = await pdfjsLib.getDocument(data).promise;
@@ -65,7 +69,7 @@ const AnnotateTemplate: React.FC = () => {
         canvas.width = viewport.width;
         await page.render({ canvasContext: context, viewport: viewport })
           .promise;
-        images.push(canvas.toDataURL());
+        images.push({image: canvas.toDataURL(), height: viewport.height.toString(), width: viewport.width.toString()});
       }
       canvas.remove();
       URL.revokeObjectURL(data);
@@ -73,7 +77,7 @@ const AnnotateTemplate: React.FC = () => {
     };
 
     convertPdfToImages(pdfFile).then((imgs) => {
-      setImages(imgs);
+      setImages([...imgs]);
       localStorage.setItem("images", JSON.stringify(imgs));
     });
   }, [files, pdfFile]);
@@ -82,8 +86,8 @@ const AnnotateTemplate: React.FC = () => {
       const localImages = await JSON.parse(
         localStorage.getItem("images") || "[]"
       );
-      if (localImages.length > 0) {
-        setImages(localImages);
+      if ( localImages.length > 0) {
+        setImages(localImages.images);
       }
     };
     getImage();
@@ -143,24 +147,7 @@ const AnnotateTemplate: React.FC = () => {
 
   const handleSubmit = async () => {
     annotator!.stop();
-    const delay = (ms: number) =>
-      new Promise((resolve) => setTimeout(resolve, ms));
     try {
-      const tempImages: string[] = [];
-      // Use a for loop to handle asynchronous behavior in sequence
-      for (let idx = 0; idx < images.length; idx++) {
-        setIndex(idx);
-        const svg = document.getElementsByTagName('svg')[document.getElementsByTagName('svg').length - 1]
-        const svgStr = new XMLSerializer().serializeToString(svg);
-
-        const base64 = window.btoa(svgStr) // Convert the canvas to Base64
-
-        const png = await convertBase64SvgToBase64Png(base64, Number(svg.getAttribute('width')) || 0, Number(svg.getAttribute('height')) || 0);
-        tempImages.unshift(`data:image/png;base64,${png}`);
-        await delay(1500); // Wait for 1 second before moving to the next index
-      }
-      // Update state, save the images, or navigate, as required
-      setAnnotatedImages([...tempImages]);
       navigate("/new-template/save");
       setIndex(0)
     } catch (err) {
@@ -194,7 +181,7 @@ const AnnotateTemplate: React.FC = () => {
           className="grid-col-9 height-full overflow-y-auto bg-base-lightest display-flex flex-justify-center"
         >
           {images.length > 0 ? (
-            <MultiImageAnnotator images={images} categories={[]} />
+            <MultiImageAnnotator images={images.map(img => img.image)} categories={[]} />
           ) : (
             <div className="display-flex flex-justify-center flex-align-center height-full">
               No image File available
