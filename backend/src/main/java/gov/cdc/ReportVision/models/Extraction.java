@@ -29,11 +29,14 @@ public class Extraction extends BaseEntity {
     private Template segmentationTemplate;
 
     @ElementCollection
-    private List<byte[]> pages;
+    private List<String> sourceImages;
 
     @OneToMany(mappedBy = "extraction")
     private List<ExtractedField> fields;
 
     @OneToMany(mappedBy = "extraction")
     private List<ExtractedField> corrections;
+
+    @ManyToOne
+    private Upload upload;
 }

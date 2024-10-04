@@ -14,19 +14,21 @@ public class Page extends BaseEntity {
     @Column(updatable = false, nullable = false)
     private UUID id;
 
-    @Lob
-    private byte[] baseImage;
 
-    @Lob
-    private byte[] segmentationTemplate;
+    @JoinTable(
+        name = "page_labels",
+        joinColumns = @JoinColumn(name = "page_id"),
+        inverseJoinColumns = @JoinColumn(name = "label_id"))
+    @OneToMany
+    private List<Label> labels;
 
-//    @OneToMany(mappedBy = "page")
-//    private List<Label> labels;
+    //base64 image
+    private String sourceImage;
+    //base 64 image
+    private String templateImage;
+    //json array
+    private String shapes;
 
-    // TODO: Figure out how to map this to a Shape entity
-//    @OneToMany(mappedBy = "page")
-//    private List<Shape> shapes; // Assuming Shape is another entity
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Template template;
 }

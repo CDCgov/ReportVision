@@ -5,8 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -18,11 +20,11 @@ public class Upload extends BaseEntity {
     private UUID id;
 
     @ManyToOne
-    private User createdBy;
+    private ApiUser createdBy;
 
     @ManyToOne
-    private User updatedBy;
+    private ApiUser updatedBy;
 
-//    @OneToMany(mappedBy = "upload")
-//    private List<Extraction> extractions;
+    @OneToMany(mappedBy = "upload")
+    private Set<Extraction> extractions;
 }

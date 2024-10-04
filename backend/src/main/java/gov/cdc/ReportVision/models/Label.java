@@ -18,6 +18,8 @@ public class Label extends BaseEntity {
     private UUID id;
 
     private String color;
+    private String label;
+    private String type;
     private String humanReadableName;
     private boolean required;
 }

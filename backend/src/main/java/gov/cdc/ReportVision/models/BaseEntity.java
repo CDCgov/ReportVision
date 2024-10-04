@@ -1,5 +1,6 @@
 package gov.cdc.ReportVision.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Temporal;
@@ -10,14 +11,16 @@ import java.util.Date;
 @MappedSuperclass
 public abstract class BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(updatable = false)
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(updatable = false)
     private Date updatedAt;
 
     @ManyToOne
-    private User createdBy;
+    private ApiUser createdBy;
 
     @ManyToOne
-    private User updatedBy;
+    private ApiUser updatedBy;
 }

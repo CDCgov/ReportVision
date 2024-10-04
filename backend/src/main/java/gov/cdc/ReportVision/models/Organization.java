@@ -4,9 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -19,6 +22,10 @@ public class Organization extends BaseEntity {
 
     private String name;
 
-    @ManyToOne
-    private User admin;
+    @JoinTable(
+        name = "organization_admins",
+        joinColumns = @JoinColumn(name = "organization_id"),
+        inverseJoinColumns = @JoinColumn(name = "api_user_id"))
+    @OneToMany
+    private List<ApiUser> admins;
 }
