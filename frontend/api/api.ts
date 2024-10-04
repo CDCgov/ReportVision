@@ -11,7 +11,6 @@ export const ImageToText = async (args: ImageToTextArgs): Promise<ImageToTextRes
 
     const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/"
     const imageToTextURL = `${apiUrl}image_to_text/`
-    console.log("Calling: ", imageToTextURL)
     try {
         const response = await fetch(imageToTextURL, {
             "method": "POST",

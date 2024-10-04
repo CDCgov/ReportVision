@@ -35,7 +35,6 @@ export interface ImageData {
 const AnnotateTemplate: React.FC = () => {
   const [images, setImages] = useState<ImageData[]>([]);
   const navigate = useNavigate();
-
   const { files } = useFiles();
   const {
     setSelectedField,
@@ -77,7 +76,7 @@ const AnnotateTemplate: React.FC = () => {
     };
 
     convertPdfToImages(pdfFile).then((imgs) => {
-      setImages([...imgs]);
+      setImages(imgs);
       localStorage.setItem("images", JSON.stringify(imgs));
     });
   }, [files, pdfFile]);
@@ -86,7 +85,7 @@ const AnnotateTemplate: React.FC = () => {
       const localImages = await JSON.parse(
         localStorage.getItem("images") || "[]"
       );
-      if ( localImages.length > 0) {
+      if (localImages && localImages.length > 0) {
         setImages(localImages.images);
       }
     };
@@ -180,7 +179,7 @@ const AnnotateTemplate: React.FC = () => {
           id="img-annotator-container"
           className="grid-col-9 height-full overflow-y-auto bg-base-lightest display-flex flex-justify-center"
         >
-          {images.length > 0 ? (
+          {Array.isArray(images) && images.length > 0 ? (
             <MultiImageAnnotator images={images.map(img => img.image)} categories={[]} />
           ) : (
             <div className="display-flex flex-justify-center flex-align-center height-full">

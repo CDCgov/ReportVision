@@ -20,8 +20,6 @@ import ReviewTemplate from "./pages/ReviewTemplate.tsx";
 import SubmissionTemplate from "./pages/SubmissionTemplate.tsx";
 
 
-console.log(`API_URL: ${import.meta.env.VITE_API_URL}`)
-console.log(`BASE_URL: ${import.meta.env.BASE_URL}`)
 
 const router = createBrowserRouter([
   {

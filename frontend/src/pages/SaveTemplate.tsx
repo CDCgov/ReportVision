@@ -14,7 +14,7 @@ import { makeScreenshots } from "../utils/functions";
 
 export const SaveTemplate = () => {
     const navigate = useNavigate();
-    const { fields, setDescription, setName, name, description, shapes } = useAnnotationContext()
+    const { fields, setDescription, setName, name, description, shapes, setShapes, setFields } = useAnnotationContext()
     const { addFile } = useFiles();
     
     const handleSubmit = async () => {
@@ -55,13 +55,16 @@ export const SaveTemplate = () => {
             }
 
         } catch {
-            console.log("Invalid information found in templates, it will be overwritten")
             console.error("Invalid information found in templates, it will be overwritten")
         }
         localStorage.setItem('templates', JSON.stringify([...existingTemplates, tempFile]))
         addFile(tempFile)
         }
 
+        setShapes([]);
+        setFields([]);
+        localStorage.setItem('shapes', '');
+        localStorage.setItem('images', '');
         navigate("/")
     } 
     

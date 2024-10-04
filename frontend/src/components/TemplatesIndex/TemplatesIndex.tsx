@@ -18,7 +18,6 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
 
         const localStorageEvent = (event) => {
             if (event.storageArea === localStorage) {
-                console.log("Local Storage Updated")
                 const templatesJSON = localStorage.getItem("templates")
                 setTemplates(JSON.parse(templatesJSON))
             }
