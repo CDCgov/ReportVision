@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Entity
 public class User extends BaseEntity {
+
     @Id
     @GeneratedValue(generator = "UUID4")
     @Column(updatable = false, nullable = false)
@@ -20,7 +22,7 @@ public class User extends BaseEntity {
     private String name;
     private String email;
     private String password; // Should be hashed and salted
-
-    @ManyToOne
-    private Organization organization;
+//
+//    @OneToOne
+//    private Organization organization;
 }
