@@ -121,8 +121,8 @@ class ImageOCR:
 
             text_blocks = list(self.split_text_blocks(image))
 
-            # Ignore output from `split_text_blocks` algorithm if only one text block is detected
-            if len(text_blocks) == 1:
+            # Ignore output from `split_text_blocks` algorithm if one or fewer text blocks are detected
+            if len(text_blocks) <= 1:
                 text_blocks = [image]
 
             for block in text_blocks:
