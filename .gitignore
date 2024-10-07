@@ -3,6 +3,11 @@ tmp/
 temp/
 *.tmp
 
+# Datasets
+OCR/ocr/reportvision-dataset-1/ground_truth/
+OCR/ocr/reportvision-dataset-1/images/
+
+
 # macOS
 .DS_Store
 
@@ -412,3 +417,4 @@ sketch
 .terraform
 *.tfplan*
 *.tfstate*
+
