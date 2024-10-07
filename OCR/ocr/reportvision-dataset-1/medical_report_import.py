@@ -4,7 +4,7 @@ from datasets import load_dataset
 import random
 
 
-destination_folder = 'reportvision-dataset-1'
+destination_folder = "reportvision-dataset-1"
 
 dataset = load_dataset("singhsays/fake-w2-us-tax-form-dataset")
 
@@ -29,7 +29,6 @@ def generate_unique_random_number():
             return random_number
 
 
-
 for split in dataset.keys():
     split_data = dataset[split]
     for example in split_data:
@@ -40,22 +39,19 @@ for split in dataset.keys():
 
         image.save(image_path)
 
-
-        #example["json"]
+        # example["json"]
         ground_truth_data = json.loads(example["ground_truth"])["gt_parse"]
-        
+
         # Save the corresponding ground truth (JSON)
         json_filename = f"report_{unique_id}.json"
         json_path = os.path.join(json_folder, json_filename)
-        
+
         json_filename = f"report_{unique_id}.json"
         json_path = os.path.join(json_folder, json_filename)
-        
-        with open(json_path, 'w') as f:
+
+        with open(json_path, "w") as f:
             json.dump(ground_truth_data, f, indent=4)
 
         print(f"Saved {image_filename} and {json_filename}")
 
 print(f"Dataset has been successfully saved to {destination_folder}")
-
-
