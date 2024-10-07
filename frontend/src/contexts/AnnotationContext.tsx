@@ -2,6 +2,7 @@ import { createContext, useState, useContext, ReactNode } from 'react';
 import { useImageAnnotator } from 'react-image-label';
 
 export interface Shape {
+  points: number[][];
   categories: string[];
   phi: number;
   color?: string | undefined;
@@ -31,8 +32,6 @@ interface AnnotationContextType {
   description: string;
   setName: (name: string) => void;
   setDescription: (description: string) => void;
-  annotatedImages: string[];
-  setAnnotatedImages: React.Dispatch<React.SetStateAction<string[]>>;
   index: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -66,12 +65,11 @@ export const AnnotationProvider = ({ children }: AnnotationProviderProps) => {
   const [description, setDescription] = useState<string>("");
   const [selectedField, setSelectedField] = useState<Field | null>(null);
   const [shapes, setShapes] = useState<CustomShape[][]>([]);
-  const [annotatedImages, setAnnotatedImages] = useState<string[]>([]);
     const [index, setIndex] = useState<number>(0);
   const { setHandles, annotator } = useImageAnnotator();
 
   return (
-    <AnnotationContext.Provider value={{ selectedField, setSelectedField, annotator, setHandles, shapes, setShapes, fields, setFields, name, setName, description, setDescription, annotatedImages, setAnnotatedImages, index, setIndex }}>
+    <AnnotationContext.Provider value={{ selectedField, setSelectedField, annotator, setHandles, shapes, setShapes, fields, setFields, name, setName, description, setDescription, index, setIndex }}>
       {children}
     </AnnotationContext.Provider>
   );

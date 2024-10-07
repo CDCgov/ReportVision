@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import { SaveTemplate } from './SaveTemplate';
@@ -14,6 +14,10 @@ vi.mock('react-router-dom', async (importOriginal) => {
     useNavigate: () => mockNavigate,
   };
 });
+
+vi.mock('../utils/functions', () => ({
+  makeScreenshots: vi.fn(() => Promise.resolve(['screenshot1', 'screenshot2'])),
+}));
 
 describe('SaveTemplate Component', () => {
   beforeEach(() => {
@@ -81,7 +85,8 @@ describe('SaveTemplate Component', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/new-template/annotate');
   });
 
-  it('should navigate to the home page when the form is submitted', () => {
+  it('should navigate to the home page when the form is submitted', async () => {
+    localStorage.setItem('images', JSON.stringify([]));
     render(
         <BrowserRouter>
         <FilesProvider>
@@ -92,7 +97,9 @@ describe('SaveTemplate Component', () => {
       </BrowserRouter>
     );
 
-    fireEvent.click(screen.getByText(/submit/i));
+    await act(async () => {
+      fireEvent.click(screen.getByText(/submit/i));
+    }) 
 
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });

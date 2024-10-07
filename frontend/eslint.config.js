@@ -24,6 +24,7 @@ export default tseslint.config({
       'warn',
       { allowConstantExport: true },
     ],
+    'no-console': ["error", { allow: ["warn", "error"] }],
     'react/forbid-component-props': ['error', { forbid: ['style'] }],
   },
 })
