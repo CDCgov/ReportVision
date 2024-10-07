@@ -5,9 +5,9 @@ from datasets import load_dataset
 # Define the destination folder
 destination_base_folder = "OCR/ocr/reportvision-dataset-1"
 datasets_info = [
+    {"name": "singhsays/fake-w2-us-tax-form-dataset", "json_key": "ground_truth"},
     {"name": "AnubhutiBhardwaj/medical-reports-demo", "json_key": "json"},
     {"name": "Technoculture/medical-prescriptions", "json_key": "json"},
-    {"name": "singhsays/fake-w2-us-tax-form-dataset", "json_key": "ground_truth"},
 ]
 
 

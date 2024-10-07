@@ -86,7 +86,7 @@ poetry run api
 
 Here is the standarized form testing dataset
 https://drive.google.com/drive/folders/1WS2FYn0BTxWv0juh7lblzdMaFlI7zbDd
-You can download the data from google drive link above and drag and drop the two folders i.e images and ground-truth into the reportvision-dataset-1 folder. You can also run the script medical_report_import.py to pull in relevant data.
+You can download the data from google drive link above and drag and drop the two folders i.e images and ground-truth into the reportvision-dataset-1 folder. You can also run the script pytest run reportvision-dataset-1/medical_report_import.py to pull in all relevant data.
 
 ### Dockerized Development
 
