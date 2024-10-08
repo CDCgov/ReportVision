@@ -33,8 +33,6 @@ env:
 jobs:
   build_publish_ocr:
     runs-on: ubuntu-latest
-    outputs: 
-      register_outcome: ${{ steps.image_check.outcome }}
     steps:
       - uses: actions/checkout@v4
       - name: Lowercase the repo name
@@ -47,7 +45,7 @@ jobs:
         with:
           deploy_env: ${{ env.deploy_env }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          registered: ${{ steps.image_check.outputs.register_outcome }}
+          registered: ${{ steps.image_check.outcome }}
 
   # build_frontend:
   #   runs-on: ubuntu-latest
