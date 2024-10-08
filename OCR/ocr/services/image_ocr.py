@@ -101,6 +101,7 @@ class ImageOCR:
         # Simplify each contour into a bounding box
         bbox = [cv.boundingRect(contour) for contour in contours]
 
+        acc = []
         # Merge overlapping bounding boxes, then sort the bounding boxes by y-position (top to bottom)
         for x, y, w, h in sorted(self.merge_bounding_boxes(bbox), key=lambda x: x[1]):
             # Filter lines that are too tiny and probably invalid
@@ -108,7 +109,13 @@ class ImageOCR:
                 continue
 
             res = rotated[y : (y + h), x : (x + w)]
-            yield res
+            acc.append(res)
+
+        # If we skipped all potential text blocks due to filtering conditions, return the
+        # original image anyway.
+        if len(acc) == 0:
+            return [image]
+        return acc
 
     def image_to_text(self, segments: dict[str, np.ndarray]) -> dict[str, tuple[str, float]]:
         digitized: dict[str, tuple[str, float]] = {}
@@ -121,8 +128,8 @@ class ImageOCR:
 
             text_blocks = list(self.split_text_blocks(image))
 
-            # Ignore output from `split_text_blocks` algorithm if one or fewer text blocks are detected
-            if len(text_blocks) <= 1:
+            # Ignore output from `split_text_blocks` algorithm if only one text block is detected
+            if len(text_blocks) == 1:
                 text_blocks = [image]
 
             for block in text_blocks:
