@@ -17,23 +17,23 @@ runs:
       uses: actions/cache@v4
       with:
         path: |
-          ./OCR/frontend/node_modules
-        key: npm-${{ env.NODE_VERSION }}-${{ hashFiles('OCR/frontend/package.json') }}
+          ./frontend/node_modules
+        key: npm-${{ env.NODE_VERSION }}-${{ hashFiles('frontend/package.json') }}
     - name: Install dependencies
-      working-directory: ./OCR/frontend
+      working-directory: ./frontend
       shell: bash
       run: |
         npm ci
     - name: Build deployable frontend
       shell: bash
-      working-directory: ./OCR/frontend
+      working-directory: ./frontend
       env:
         DEPLOY_ENV: ${{ inputs.deploy_env }}
       run: |
-        npm run build 
+        VITE_API_URL='https://reportvision-ocr-api-dev.azurewebsites.net/' npm run build
     - name: Test frontend
       shell: bash
-      working-directory: ./OCR/frontend
+      working-directory: ./frontend
       env:
         DEPLOY_ENV: ${{ inputs.deploy_env }}
       run: |
@@ -41,7 +41,7 @@ runs:
     - name: Pack frontend into a tarball
       shell: bash
       run: |
-        tar -C ./OCR/frontend/build -czf ${{ inputs.frontend_tarball }} .
+        tar -C ./frontend/build -czf ${{ inputs.frontend_tarball }} .
     - name: Upload frontend build files
       uses: actions/upload-artifact@v4
       if: success()

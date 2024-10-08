@@ -1,22 +1,24 @@
 name: Build and Deploy full app
 
 on:
-  workflow_dispatch:
-    inputs:
-      deploy_env:
-        description: 'The environment to deploy to'
-        required: true
-        type: choice
-        options:
-          - dev
-          - dev2
-          - dev3
-          - dev4
-          - dev5
-          - dev6
-      ocr-version:
-        description: 'The environment to deploy to'
-        required: true
+  push:
+    branches: reusable-actions-combine-frontend-api
+  # workflow_dispatch:
+  #   inputs:
+  #     deploy_env:
+  #       description: 'The environment to deploy to'
+  #       required: true
+  #       type: choice
+  #       options:
+  #         - dev
+  #         - dev2
+  #         - dev3
+  #         - dev4
+  #         - dev5
+  #         - dev6
+  #     ocr-version:
+  #       description: 'The environment to deploy to'
+  #       required: true
 
 permissions:
   id-token: write
@@ -24,64 +26,64 @@ permissions:
 
 env:
   NODE_VERSION: 20
+  VERSION: ${{ inputs.ocr-version }}
+  deploy_env: dev
 
 jobs:
-  build_frontend:
+  build_publish_ocr:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy_env }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/build-frontend
-        name: Build front-end application
+      - name: Build and Push backend
+        uses: ./.github/actions/build-publish-ocr
         with:
-          frontend_tarball: ./frontend.tgz
-          deploy_env: ${{ inputs.deploy_env }}
+          deploy_env: ${{ env.deploy_env }}
 
-  prerelease_backend:
-    runs-on: ubuntu-latest
-    needs: [build_frontend, build_docker]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/tf-deploy
-        name: Deploy with Terraform
-        with:
-          azure_creds: ${{ secrets.AZURE_CREDENTIALS }}
-          deploy_env: ${{ inputs.deploy_env }}
-          terraform_arm_client_id: ${{ secrets.TERRAFORM_ARM_CLIENT_ID }}
-          terraform_arm_client_secret: ${{ secrets.TERRAFORM_ARM_CLIENT_SECRET }}
-          terraform_arm_subscription_id: ${{ secrets.TERRAFORM_ARM_SUBSCRIPTION_ID }}
-          terraform_arm_tenant_id: ${{ secrets.TERRAFORM_ARM_TENANT_ID }}
-          okta_api_token: ${{ secrets.OKTA_API_TOKEN_NONPROD }}
-      - uses: ./.github/actions/stg-wait-for-slot-commit
-        name: Wait for correct commit to be deployed in staging slot
-        timeout-minutes: 5
-        with:
-          deploy_env: ${{ inputs.deploy_env }}
-      - uses: ./.github/actions/stg-wait-for-slot-readiness
-        name: Wait for staging deploy to be ready
-        timeout-minutes: 1
-        with:
-          deploy_env: ${{ inputs.deploy_env }}
+  # build_frontend:
+  #   runs-on: ubuntu-latest
+  #   environment: ${{ env.deploy_env }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./.github/actions/build-frontend
+  #       name: Build front-end application
+  #       with:
+  #         frontend_tarball: ./frontend.tgz
+  #         deploy_env: ${{ env.deploy_env }}
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy_env }}
-    needs: [build_frontend]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Promote and deploy
-        uses: ./.github/actions/deploy-frontend
-        with:
-          azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-          azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          frontend_tarball: frontend.tgz
-          deploy_env: ${{ inputs.deploy_env }}
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: reportvision-ocr-api-${{ inputs.deploy_env }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: 'ghcr.io/ReportVision:${{ inputs.ocr-version }}'
+  # prerelease_backend:
+  #   runs-on: ubuntu-latest
+  #   needs: [build_frontend, build_docker_ocr]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./.github/actions/tf-deploy
+  #       name: Deploy with Terraform
+  #       with:
+  #         deploy_env: ${{ env.deploy_env }}
+  #         azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+  #         azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  # deploy:
+  #   name: Deploy
+  #   runs-on: ubuntu-latest
+  #   environment: ${{ env.deploy_env }}
+  #   needs: [build_frontend]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Promote and deploy
+  #       uses: ./.github/actions/deploy-frontend
+  #       with:
+  #         azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+  #         azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #         frontend_tarball: frontend.tgz
+  #         deploy_env: ${{ env.deploy_env }}
+  #     - name: Lowercase the repo name
+  #       run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+  #     - name: Deploy to Azure Web App
+  #       id: deploy-to-webapp
+  #       uses: azure/webapps-deploy@v3
+  #       with:
+  #         app-name: reportvision-ocr-api-${{ env.deploy_env }}
+  #         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+  #         images: '${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}-${{ env.deploy_env }}'
