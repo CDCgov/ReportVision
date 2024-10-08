@@ -79,7 +79,7 @@ class ImageOCR:
         rotation_mat = cv.getRotationMatrix2D((image.shape[1] / 2, image.shape[0] / 2), skew_angle, 1)
         return cv.warpAffine(np.array(image, dtype=np.uint8), rotation_mat, (image.shape[1], image.shape[0]))
 
-    def split_text_blocks(self, image: np.ndarray, line_length_prop=0.5) -> np.ndarray:
+    def split_text_blocks(self, image: np.ndarray, line_length_prop=0.5) -> list[np.ndarray]:
         """
         Splits an image with text in it into possibly multiple images, one for each line.
 
@@ -126,7 +126,7 @@ class ImageOCR:
             generated_text = []
             confidence = []
 
-            text_blocks = list(self.split_text_blocks(image))
+            text_blocks = self.split_text_blocks(image)
 
             # Ignore output from `split_text_blocks` algorithm if only one text block is detected
             if len(text_blocks) == 1:
