@@ -48,7 +48,7 @@ jobs:
         run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
       - name: Build and Push backend
         uses: ./.github/actions/build-publish-ocr
-        if: steps.image_check.outcome == 1
+        if: steps.image_check.outcome == "manifest unknown"
         with:
           deploy_env: ${{ env.deploy_env }}
           token: ${{ secrets.GITHUB_TOKEN }}
