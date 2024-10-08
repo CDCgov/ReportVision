@@ -26,6 +26,7 @@ permissions:
 
 env:
   NODE_VERSION: 20
+  REGISTRY: ghcr.io
   VERSION: ${{ inputs.ocr-version }}
   deploy_env: dev
 
