@@ -7,22 +7,28 @@ inputs:
   token:
     description: Github Token
     required: true
-  username:
-    description: Github Token
-    required: true
+
 runs:
   using: composite
   steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ inputs.token }}
       - name: Lowercase the repo name
         shell: bash
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-      - name: Login to ACR
+      - name: Check if image exists
         shell: bash
-        run: docker login ${{ env.REGISTRY }} -u ${{ inputs.username }} -p ${{ inputs.token }}
+        id: image_check
+        run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
       - name: Build and push Docker image
         id: push
+        if: steps.image_check.outcome == 1
         uses: docker/build-push-action@v6
         with:
           context: ./OCR/
