@@ -35,17 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and Push backend
         uses: ./.github/actions/build-publish-ocr
         with:
           deploy_env: ${{ env.deploy_env }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ github.actor }}
 
   # build_frontend:
   #   runs-on: ubuntu-latest

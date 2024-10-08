@@ -7,7 +7,9 @@ inputs:
   token:
     description: Github Token
     required: true
-
+  username:
+    description: Github Token
+    required: true
 runs:
   using: composite
   steps:
@@ -16,6 +18,9 @@ runs:
       - name: Lowercase the repo name
         shell: bash
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: Login to ACR
+        shell: bash
+        run: docker login ${{ env.REGISTRY }} -u ${{ input.username }} -p ${{ inputs.token }}
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6
