@@ -33,13 +33,21 @@ env:
 jobs:
   build_publish_ocr:
     runs-on: ubuntu-latest
+    outputs: 
+      register_outcome: ${{ steps.image_check.outcome }}
     steps:
       - uses: actions/checkout@v4
+      - name: Lowercase the repo name
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: Check if image exists
+        id: image_check
+        run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
       - name: Build and Push backend
         uses: ./.github/actions/build-publish-ocr
         with:
           deploy_env: ${{ env.deploy_env }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          registered: ${{ steps.image_check.outputs.register_outcome }}
 
   # build_frontend:
   #   runs-on: ubuntu-latest
