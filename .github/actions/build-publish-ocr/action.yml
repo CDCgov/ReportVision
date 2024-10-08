@@ -20,7 +20,7 @@ runs:
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
       - name: Login to ACR
         shell: bash
-        run: docker login ${{ env.REGISTRY }} -u ${{ input.username }} -p ${{ inputs.token }}
+        run: docker login ${{ env.REGISTRY }} -u ${{ inputs.username }} -p ${{ inputs.token }}
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6
