@@ -1,5 +1,6 @@
 import os
 
+import numpy as np
 import cv2 as cv
 
 from ocr.services.image_segmenter import (
@@ -18,6 +19,12 @@ labels_path = os.path.join(path, "./assets/labels.json")
 
 
 class TestOCR:
+    def test_split_text_blocks(self):
+        ocr = ImageOCR()
+        img = np.ones([10, 10, 3], np.uint8)
+        result = ocr.split_text_blocks(img)
+        assert np.array_equiv(result, img)
+
     def test_ocr_printed(self):
         segmenter = ImageSegmenter(
             segmentation_function=segment_by_color_bounding_box,
