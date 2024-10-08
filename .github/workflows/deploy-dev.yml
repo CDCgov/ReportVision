@@ -27,7 +27,7 @@ permissions:
 env:
   NODE_VERSION: 20
   REGISTRY: ghcr.io
-  VERSION: ${{ inputs.ocr-version }}
+  VERSION: derek-dev-combine
   deploy_env: dev
 
 jobs:
@@ -88,4 +88,4 @@ jobs:
   #       with:
   #         app-name: reportvision-ocr-api-${{ env.deploy_env }}
   #         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-  #         images: '${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}-${{ env.deploy_env }}'
+  #         images: '${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}'
