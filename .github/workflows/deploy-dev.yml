@@ -38,6 +38,7 @@ jobs:
         uses: ./.github/actions/build-publish-ocr
         with:
           deploy_env: ${{ env.deploy_env }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   # build_frontend:
   #   runs-on: ubuntu-latest

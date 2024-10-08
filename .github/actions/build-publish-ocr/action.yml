@@ -4,7 +4,9 @@ inputs:
   deploy_env:
     description: The environment to deploy to
     required: true
-
+  token:
+    description: Github Token
+    required: true
 
 runs:
   using: composite
@@ -16,7 +18,7 @@ runs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ inputs.token }}
       - name: Lowercase the repo name
         shell: bash
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
