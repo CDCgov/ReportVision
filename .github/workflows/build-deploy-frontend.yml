@@ -1,0 +1,73 @@
+name: Build and Deploy Frontend
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+          working-directory: frontend
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  
+      - name: Install NPM packages
+        run: npm ci
+      - name: Build project
+        run: VITE_API_URL='https://reportvision-ocr-api-dev.azurewebsites.net/' npm run build
+      - name: Run unit tests
+        run: npm run test
+      - name: Create client build archive
+        shell: bash
+        run: |
+          echo "::group::Create application archive"
+          tar -C ./dist/ -czf ./client.tgz .
+          echo "::endgroup::"
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-files
+          path: ./frontend/client.tgz
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: build-frontend-dev
+    needs: [build]
+    steps:
+      - name: Download Artifacts To Job
+        uses: actions/download-artifact@v4
+        with:
+          name: production-files
+      - name: Unpack client
+        shell: bash
+        run: |
+          echo "::group::Unpack client"
+          mkdir client-build;
+          tar -C client-build -zxvf client.tgz
+          echo "::endgroup::"
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Upload to Azure blob storage
+        shell: bash
+        run: |
+          az storage blob upload-batch --account-name reportvisionfrontenddev -d '$web' -s client-build/ --overwrite
+      - name: Azure logout
+        shell: bash
+        run: |
+          az logout
