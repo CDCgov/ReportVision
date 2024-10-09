@@ -41,7 +41,7 @@ runs:
     - name: Pack frontend into a tarball
       shell: bash
       run: |
-        tar -C ./frontend/build -czf ${{ inputs.frontend_tarball }} .
+        tar -C ./frontend/dist/ -czf ${{ inputs.frontend_tarball }} .
     - name: Upload frontend build files
       uses: actions/upload-artifact@v4
       if: success()
