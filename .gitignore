@@ -417,4 +417,4 @@ sketch
 .terraform
 *.tfplan*
 *.tfstate*
-
+*.tfvars
