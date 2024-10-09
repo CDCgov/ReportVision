@@ -49,7 +49,7 @@ jobs:
 
   build_frontend:
     runs-on: ubuntu-latest
-    environment: ${{ env.deploy_env }}
+    environment: dev
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/build-frontend
