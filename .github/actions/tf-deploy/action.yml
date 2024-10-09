@@ -45,6 +45,18 @@ runs:
     #     ARM_TENANT_ID: ${{ inputs.terraform_arm_tenant_id }}
     #   shell: bash
     #   run: make init-${{ inputs.deploy_env }}
+    - name: Load input variables
+      working-directory: ./ops/terraform/envs/dev
+      shell: bash
+      env:
+        SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+        RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }} #the one thats selected
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      run: |
+        echo subscription_id=\""$SUBSCRIPTION_ID"\" >> terraform.tfvars
+        echo resource_group_name=\""$RESOURCE_GROUP_NAME"\" >> terraform.tfvars
+        echo client_id=\""$CLIENT_ID"\" >> terraform.tfvars
+        az config set defaults.group=$RESOURCE_GROUP_NAME
     - name: Set environment
       shell: bash
       id: set-environment
@@ -55,7 +67,7 @@ runs:
           echo ${{ github.event.inputs.environment }}
         )" >> $GITHUB_OUTPUT
     - name: Terraform deploy
-      working-directory: ./ops/terraform/envs
+      working-directory: ./ops/terraform/envs/dev
       env:
         ARM_CLIENT_ID: ${{ inputs.azure_client_id }}
         ARM_TENANT_ID: ${{ inputs.azure_tenant_id }}
@@ -69,7 +81,7 @@ runs:
       #   ARM_TENANT_ID: ${{ inputs.terraform_arm_tenant_id }}
       shell: bash
       run: |
-        terraform -chdir=${{ inputs.deploy_env }} init
+        terraform init
         terraform workspace select -or-create $TF_ENV
-        terraform -chdir=${{ inputs.deploy_env }} plan -lock-timeout=30m
-        terraform -chdir=${{ inputs.deploy_env }} apply -auto-approve -lock-timeout=30m
+        terraform plan -lock-timeout=30m
+        terraform apply -auto-approve -lock-timeout=30m
