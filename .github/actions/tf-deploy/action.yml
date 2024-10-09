@@ -70,5 +70,6 @@ runs:
       shell: bash
       run: |
         terraform -chdir=${{ inputs.deploy_env }} init
+        terraform workspace select -or-create $TF_ENV
         terraform -chdir=${{ inputs.deploy_env }} plan -lock-timeout=30m
         terraform -chdir=${{ inputs.deploy_env }} apply -auto-approve -lock-timeout=30m
