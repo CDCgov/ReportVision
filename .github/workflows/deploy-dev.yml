@@ -31,32 +31,32 @@ env:
   deploy_env: dev
 
 jobs:
-  build_publish_ocr:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build and Push backend
-        uses: ./.github/actions/build-publish-ocr
-        with:
-          deploy_env: ${{ env.deploy_env }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          username: ${{ github.actor }}
-
-  # build_frontend:
+  # build_publish_ocr:
   #   runs-on: ubuntu-latest
-  #   environment: ${{ env.deploy_env }}
+  #   permissions:
+  #     contents: read
+  #     packages: write
+  #     attestations: write
+  #     id-token: write
   #   steps:
   #     - uses: actions/checkout@v4
-  #     - uses: ./.github/actions/build-frontend
-  #       name: Build front-end application
+  #     - name: Build and Push backend
+  #       uses: ./.github/actions/build-publish-ocr
   #       with:
-  #         frontend_tarball: ./frontend.tgz
   #         deploy_env: ${{ env.deploy_env }}
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         username: ${{ github.actor }}
+
+  build_frontend:
+    runs-on: ubuntu-latest
+    environment: ${{ env.deploy_env }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build-frontend
+        name: Build front-end application
+        with:
+          frontend_tarball: ./frontend.tgz
+          deploy_env: ${{ env.deploy_env }}
 
   # prerelease_backend:
   #   runs-on: ubuntu-latest
