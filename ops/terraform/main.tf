@@ -9,7 +9,7 @@ locals {
 ## 02-network
 ##########
 module "networking" {
-  source         = "../../modules/network"
+  source         = "./modules/network"
   location       = data.azurerm_resource_group.dev.location
   resource_group = data.azurerm_resource_group.dev.name
   vnetcidr       = local.network.config.vnetcidr
@@ -25,7 +25,7 @@ module "networking" {
 ##########
 
 module "securitygroup" {
-  source         = "../../modules/security"
+  source         = "./modules/security"
   location       = data.azurerm_resource_group.dev.location
   resource_group = data.azurerm_resource_group.dev.name
   web_subnet_id  = module.networking.websubnet_id
@@ -36,7 +36,7 @@ module "securitygroup" {
 }
 
 module "app_gateway" {
-  source                  = "../../modules/app_gateway"
+  source                  = "./modules/app_gateway"
   resource_group_location = data.azurerm_resource_group.dev.location
   resource_group_name     = data.azurerm_resource_group.dev.name
 
@@ -54,7 +54,7 @@ module "app_gateway" {
 ##########
 
 module "storage" {
-  source          = "../../modules/storage"
+  source          = "./modules/storage"
   location        = data.azurerm_resource_group.dev.location
   resource_group  = data.azurerm_resource_group.dev.name
   env             = local.environment
@@ -68,7 +68,7 @@ module "storage" {
 ##########
 
 module "ocr_api" {
-  source         = "../../modules/app_service"
+  source         = "./modules/app_service"
   location       = local.init.location
   resource_group = data.azurerm_resource_group.dev.name
   app_subnet_id  = module.networking.lbsubnet_id
@@ -77,7 +77,7 @@ module "ocr_api" {
 }
 
 # module "compute" {
-#   source         = "../../modules/container_instances"
+#   source         = "./modules/container_instances"
 #   location       = data.azurerm_resource_group.test.location
 #   resource_group = data.azurerm_resource_group.test.name
 #   environment    = local.environment
