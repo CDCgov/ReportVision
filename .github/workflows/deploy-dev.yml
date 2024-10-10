@@ -26,8 +26,6 @@ env:
   NODE_VERSION: 20
   OCR_API_URL: 'https://reportvision-ocr-api-dev.azurewebsites.net/'
 
-
-
 jobs:
   build_publish_ocr:
     runs-on: ubuntu-latest
