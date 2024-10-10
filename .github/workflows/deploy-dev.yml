@@ -1,4 +1,4 @@
-name: Build and Deploy full app
+name: Build and deploy all of ReportVision's services to a development environment
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ on:
           - dev5
           - dev6
       ocr-version:
-        description: 'The environment to deploy to'
+        description: 'Create a version for this OCR API image'
         required: true
 
 permissions:

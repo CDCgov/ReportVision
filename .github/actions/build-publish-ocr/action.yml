@@ -1,4 +1,4 @@
-name: Terraform Action Deployment
+name: Build and publish ReportVision's OCR API
 description: Build and push Docker image to the registry
 inputs:
   deploy_env:
