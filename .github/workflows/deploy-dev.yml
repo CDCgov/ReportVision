@@ -31,67 +31,29 @@ env:
   deploy_env: dev
 
 jobs:
-  # build_publish_ocr:
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: read
-  #     packages: write
-  #     attestations: write
-  #     id-token: write
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Build and Push backend
-  #       uses: ./.github/actions/build-publish-ocr
-  #       with:
-  #         deploy_env: ${{ env.deploy_env }}
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         username: ${{ github.actor }}
-
-  # build_frontend:
-  #   runs-on: ubuntu-latest
-  #   environment: dev
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: ./.github/actions/build-frontend
-  #       name: Build front-end application
-  #       with:
-  #         frontend_tarball: ./frontend.tgz
-  #         deploy_env: ${{ env.deploy_env }}
-
-  prerelease_backend:
+  build_publish_ocr:
     runs-on: ubuntu-latest
-    # needs: [build_frontend, build_docker_ocr]
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/tf-deploy
-        name: Deploy with Terraform
+      - name: Build and Push backend
+        uses: ./.github/actions/build-publish-ocr
         with:
           deploy_env: ${{ env.deploy_env }}
-          azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-          azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ github.actor }}
 
-  # deploy:
-  #   name: Deploy
-  #   runs-on: ubuntu-latest
-  #   environment: ${{ env.deploy_env }}
-  #   needs: [build_frontend]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Promote and deploy
-  #       uses: ./.github/actions/deploy-frontend
-  #       with:
-  #         azure_client_id: ${{ secrets.AZURE_CLIENT_ID }}
-  #         azure_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-  #         azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  #         frontend_tarball: frontend.tgz
-  #         deploy_env: ${{ env.deploy_env }}
-  #     - name: Lowercase the repo name
-  #       run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-  #     - name: Deploy to Azure Web App
-  #       id: deploy-to-webapp
-  #       uses: azure/webapps-deploy@v3
-  #       with:
-  #         app-name: reportvision-ocr-api-${{ env.deploy_env }}
-  #         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-  #         images: '${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}'
+  build_frontend:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build-frontend
+        name: Build front-end application
+        with:
+          frontend_tarball: ./frontend.tgz
+          deploy_env: ${{ env.deploy_env }}
