@@ -1,24 +1,22 @@
 name: Build and Deploy full app
 
 on:
-  push:
-    branches: reusable-actions-combine-frontend-api
-  # workflow_dispatch:
-  #   inputs:
-  #     deploy_env:
-  #       description: 'The environment to deploy to'
-  #       required: true
-  #       type: choice
-  #       options:
-  #         - dev
-  #         - dev2
-  #         - dev3
-  #         - dev4
-  #         - dev5
-  #         - dev6
-  #     ocr-version:
-  #       description: 'The environment to deploy to'
-  #       required: true
+  workflow_dispatch:
+    inputs:
+      deploy_env:
+        description: 'The environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - dev2
+          - dev3
+          - dev4
+          - dev5
+          - dev6
+      ocr-version:
+        description: 'The environment to deploy to'
+        required: true
 
 permissions:
   id-token: write
@@ -27,8 +25,7 @@ permissions:
 env:
   NODE_VERSION: 20
   REGISTRY: ghcr.io
-  VERSION: derek-dev-combine
-  deploy_env: dev
+
 
 jobs:
   build_publish_ocr:
@@ -43,9 +40,9 @@ jobs:
       - name: Build and Push backend
         uses: ./.github/actions/build-publish-ocr
         with:
-          deploy_env: ${{ env.deploy_env }}
+          deploy_env: ${{ inputs.deploy_env }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          username: ${{ github.actor }}
+          version: ${{ inputs.ocr-version }}
 
   build_frontend:
     runs-on: ubuntu-latest
@@ -56,4 +53,4 @@ jobs:
         name: Build front-end application
         with:
           frontend_tarball: ./frontend.tgz
-          deploy_env: ${{ env.deploy_env }}
+          deploy_env: ${{ inputs.deploy_env }}

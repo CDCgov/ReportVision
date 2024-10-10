@@ -7,6 +7,9 @@ inputs:
   token:
     description: Github Token
     required: true
+  version:
+    description: ocr-api version
+    required: true
 
 runs:
   using: composite
@@ -29,4 +32,4 @@ runs:
           context: ./OCR/
           file: ./OCR/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}
+          tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ inputs.version }}
