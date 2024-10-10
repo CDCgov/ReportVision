@@ -10,6 +10,9 @@ inputs:
   frontend-path:
     description: The path to the root of the frontend files
     required: true
+  frontend-build-path:
+    description: The temporary path where build files are storaged
+    required: true
 
 runs:
   using: composite

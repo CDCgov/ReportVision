@@ -1,24 +1,22 @@
 name: Build and deploy all of ReportVision's services to a development environment
 
 on:
-  push:
-    branches: reusable-actions-combine-frontend-api
-  # workflow_dispatch:
-  #   inputs:
-  #     deploy-env:
-  #       description: 'The environment to deploy to'
-  #       required: true
-  #       type: choice
-  #       options:
-  #         - dev
-  #         - dev2
-  #         - dev3
-  #         - dev4
-  #         - dev5
-  #         - dev6
-  #     ocr-version:
-  #       description: 'Create a version for this OCR API image'
-  #       required: true
+  workflow_dispatch:
+    inputs:
+      deploy-env:
+        description: 'The environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - dev2
+          - dev3
+          - dev4
+          - dev5
+          - dev6
+      ocr-version:
+        description: 'Create a version for this OCR API image'
+        required: true
 
 permissions:
   id-token: write
@@ -46,7 +44,7 @@ jobs:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          version: derek-dev-combine
+          version: ${{ inputs.ocr-version }}
           dockerfile-path: ./OCR/Dockerfile
           docker-context-path: ./OCR/
           api-name: ocr-api
@@ -60,6 +58,6 @@ jobs:
         name: Build front-end application
         with:
           frontend-tarball: ./frontend.tgz
-          deploy-env: dev
+          deploy-env: ${{ inputs.deploy-env }}
           frontend-path: ./frontend
           frontend-build-path: ./frontend/dist/
