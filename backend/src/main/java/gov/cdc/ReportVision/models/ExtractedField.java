@@ -17,6 +17,7 @@ public class ExtractedField extends BaseEntity {
     @Column(updatable = false, nullable = false)
     private UUID id;
 
+//    TODO: This should link to a Label
     private String label;
     private String value;
 

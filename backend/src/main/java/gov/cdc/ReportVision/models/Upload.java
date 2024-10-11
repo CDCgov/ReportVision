@@ -19,6 +19,7 @@ public class Upload extends BaseEntity {
     @Column(updatable = false, nullable = false)
     private UUID id;
 
+//    TODO: These can probably be removed
     @ManyToOne
     private ApiUser createdBy;
 
