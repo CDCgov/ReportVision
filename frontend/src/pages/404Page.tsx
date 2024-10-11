@@ -12,12 +12,12 @@ const NotFound: React.FC = () => {
     <div className="width-full height-full display-flex flex-column">
         <AppHeader jurisdiction={''} />
         <div className="error-content">
+          <h1 className='error-cta'>Sorry, this page can’t be found</h1>
           <img
               data-testid="404-image"
               src={image}
               alt="404"
             />               
-            <h1>Sorry, this page can’t be found</h1>
             <p>The page you are looking for doesn’t exist or has been moved.</p>
             <Button onClick={() => navigate('/')} type='button'>Back to Previous Page</Button>
           </div>
