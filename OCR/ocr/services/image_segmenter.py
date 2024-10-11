@@ -3,6 +3,8 @@ import numpy as np
 import json
 import os
 
+from ocr.services.alignment import ImageHomography
+
 
 def crop_zeros(image):
     # argwhere will give you the coordinates of every non-zero point
@@ -107,6 +109,13 @@ class ImageSegmenter:
         segmentation_template = cv.imread(segmentation_template_path)
         if segmentation_template is None:
             raise ValueError(f"Failed to open image file: {segmentation_template_path}")
+
+        # Align raw image to template
+        aligner = ImageHomography(segmentation_template)
+        aligned_image = aligner.transform_homography(raw_image)
+        cv.imwrite("aligned.png", aligned_image)
+        cv.imwrite("template.png", segmentation_template)
+        cv.imwrite("raw.png", raw_image)
 
         labels = json.load(open(labels_path, "r"))
 
