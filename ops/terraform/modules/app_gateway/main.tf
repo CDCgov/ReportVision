@@ -84,7 +84,7 @@ resource "azurerm_application_gateway" "load_balancer" {
     port                                = 80
     protocol                            = "Http"
     request_timeout                     = 120
-    path                                = "/api"
+    path                                = "/"
     pick_host_name_from_backend_address = true
     probe_name                          = local.api_probe_name_app
   }
@@ -161,7 +161,7 @@ resource "azurerm_application_gateway" "load_balancer" {
 
     path_rule {
       name                       = "api"
-      paths                      = ["/api/*", "/api"]
+      paths                      = ["/*", "/"]
       backend_address_pool_name  = local.backend_address_pool_name_api
       backend_http_settings_name = local.http_setting_name_api
       // this is the default, why would we set it again?
@@ -178,7 +178,7 @@ resource "azurerm_application_gateway" "load_balancer" {
       condition {
         ignore_case = true
         negate      = false
-        pattern     = ".*api/(.*)"
+        pattern     = "./(.*)"
         variable    = "var_uri_path"
       }
 
