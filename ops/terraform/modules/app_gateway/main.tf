@@ -154,7 +154,7 @@ resource "azurerm_application_gateway" "load_balancer" {
 
 
   url_path_map {
-    name                               = "${var.name}${var.env}-urlmap"
+    name                               = "${var.name}-${var.env}-urlmap"
     default_backend_address_pool_name  = local.backend_address_pool_name_static
     default_backend_http_settings_name = local.http_setting_name_static
     default_rewrite_rule_set_name      = "${var.name}-routing"
