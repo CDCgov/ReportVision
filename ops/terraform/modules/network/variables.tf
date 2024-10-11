@@ -1,4 +1,5 @@
 variable "resource_group" {}
+variable "name" {}
 variable "location" {}
 variable "vnetcidr" {}
 variable "websubnetcidr" {}

@@ -3,7 +3,7 @@ locals {
 }
 
 resource "azurerm_service_plan" "asp" {
-  name                = "${var.name_ocr}-appserviceplan-${var.env}"
+  name                = "${var.name}-ocr-appserviceplan-${var.env}"
   location            = var.location
   os_type             = "Linux"
   resource_group_name = var.resource_group
@@ -11,7 +11,7 @@ resource "azurerm_service_plan" "asp" {
 }
 
 resource "azurerm_linux_web_app" "linux_webapp" {
-  name                          = "${var.name_ocr}-${var.env}"
+  name                          = "${var.name}-ocr-${var.env}"
   https_only                    = var.https_only
   location                      = var.location
   resource_group_name           = var.resource_group
@@ -33,10 +33,10 @@ resource "azurerm_linux_web_app" "linux_webapp" {
     ftps_state                        = "Disabled"
     vnet_route_all_enabled            = false
 
-    # application_stack {
-    #   docker_image_name   = "cdcgov/reportvision-ocr-api:derek-main-dev"
-    #   docker_registry_url = "https://ghcr.io"
-    # }
+    application_stack {
+      docker_image_name   = "${var.docker_registry_path}:${var.docker_tag}"
+      docker_registry_url = var.docker_registry_url
+    }
 
     ip_restriction {
       virtual_network_subnet_id = var.app_subnet_id

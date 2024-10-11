@@ -1,12 +1,12 @@
 resource "azurerm_virtual_network" "vnet" {
-  name                = "reportvision-vnet-${var.env}"
+  name                = "${var.name}-vnet-${var.env}"
   resource_group_name = var.resource_group
   location            = var.location
   address_space       = [var.vnetcidr]
 }
 
 resource "azurerm_subnet" "web-subnet" {
-  name                 = "reportvision-web-subnet-${var.env}"
+  name                 = "${var.name}-web-subnet-${var.env}"
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
   address_prefixes     = [var.websubnetcidr]
@@ -15,7 +15,7 @@ resource "azurerm_subnet" "web-subnet" {
 }
 
 resource "azurerm_subnet" "app-subnet" {
-  name                 = "reportvision-app-subnet-${var.env}"
+  name                 = "${var.name}-app-subnet-${var.env}"
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
   address_prefixes     = [var.appsubnetcidr]
@@ -31,7 +31,7 @@ resource "azurerm_subnet" "app-subnet" {
 }
 
 resource "azurerm_subnet" "lb-subnet" {
-  name                 = "reportvision-lb-subnet-${var.env}"
+  name                 = "${var.name}-lb-subnet-${var.env}"
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
   address_prefixes     = [var.lbsubnetcidr]
@@ -39,7 +39,7 @@ resource "azurerm_subnet" "lb-subnet" {
 }
 
 resource "azurerm_subnet" "db-subnet" {
-  name                 = "reportvision-db-subnet-${var.env}"
+  name                 = "${var.name}-db-subnet-${var.env}"
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
   address_prefixes     = [var.dbsubnetcidr]

@@ -10,6 +10,7 @@ locals {
 ##########
 module "networking" {
   source         = "./modules/network"
+  name           = var.name
   location       = data.azurerm_resource_group.dev.location
   resource_group = data.azurerm_resource_group.dev.name
   vnetcidr       = local.network.config.vnetcidr
@@ -26,6 +27,7 @@ module "networking" {
 
 module "securitygroup" {
   source         = "./modules/security"
+  name           = var.name
   location       = data.azurerm_resource_group.dev.location
   resource_group = data.azurerm_resource_group.dev.name
   web_subnet_id  = module.networking.websubnet_id
@@ -37,6 +39,7 @@ module "securitygroup" {
 
 module "app_gateway" {
   source                  = "./modules/app_gateway"
+  name                    = var.name
   resource_group_location = data.azurerm_resource_group.dev.location
   resource_group_name     = data.azurerm_resource_group.dev.name
 
@@ -55,6 +58,7 @@ module "app_gateway" {
 
 module "storage" {
   source          = "./modules/storage"
+  name            = var.name
   location        = data.azurerm_resource_group.dev.location
   resource_group  = data.azurerm_resource_group.dev.name
   env             = local.environment
@@ -68,12 +72,16 @@ module "storage" {
 ##########
 
 module "ocr_api" {
-  source         = "./modules/app_service"
-  location       = local.init.location
-  resource_group = data.azurerm_resource_group.dev.name
-  app_subnet_id  = module.networking.lbsubnet_id
-  env            = local.environment
-  vnet           = module.networking.network_name
+  source               = "./modules/app_service"
+  name                 = var.name
+  location             = local.init.location
+  resource_group       = data.azurerm_resource_group.dev.name
+  docker_tag           = var.docker_tag
+  docker_registry_path = var.docker_registry_path
+  docker_registry_url  = var.docker_registry_url
+  app_subnet_id        = module.networking.lbsubnet_id
+  env                  = local.environment
+  vnet                 = module.networking.network_name
 }
 
 # module "compute" {
