@@ -2,7 +2,6 @@ locals {
   environment = "${terraform.workspace}"
   init = {
     environment         = local.environment
-    resource_group_name = "reportvision-rg-${terraform.workspace}"
     location            = "eastus2"
   }
   network = {

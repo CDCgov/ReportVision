@@ -1,7 +1,4 @@
-variable "vnet-name" {
-  type    = string
-  default = "reportvision-dev"
-}
+variable "name" {}
 variable "resource_group_name" {}
 variable "resource_group_location" {}
 variable "web-subnet" {}

@@ -9,3 +9,15 @@ variable "subscription_id" {
 variable "client_id" {
   description = "Client ID"
 }
+
+variable "docker_tag" {
+}
+
+variable "docker_registry_path" {
+}
+
+variable "docker_registry_url" {
+}
+
+variable "name" {
+}

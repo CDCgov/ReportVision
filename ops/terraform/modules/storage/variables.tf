@@ -1,4 +1,5 @@
 variable "resource_group" {}
+variable "name" {}
 variable "env" {}
 variable "location" {}
 variable "management_tags" {}
