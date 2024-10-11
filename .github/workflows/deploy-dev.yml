@@ -36,26 +36,40 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      - name: Build and Push backend
-        uses: ./.github/actions/build-publish-api
-        with:
-          docker-registry: ghcr.io
-          docker-pw: ${{ secrets.GITHUB_TOKEN }}
-          docker-username: ${{ github.actor }}
-          version: ${{ inputs.ocr-version }}
-          dockerfile-path: ./OCR/Dockerfile
-          docker-context-path: ./OCR/
-          api-name: ocr-api
+  #     - name: Build and Push backend
+  #       uses: ./.github/actions/build-publish-api
+  #       with:
+  #         docker-registry: ghcr.io
+  #         docker-pw: ${{ secrets.GITHUB_TOKEN }}
+  #         docker-username: ${{ github.actor }}
+  #         docker-tag: ${{ inputs.ocr-version }}
+  #         dockerfile-path: ./OCR/Dockerfile
+  #         docker-context-path: ./OCR/
+  #         api-name: ocr-api
 
-  build_frontend:
+  # build_frontend:
+  #   runs-on: ubuntu-latest
+  #   environment: dev
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./.github/actions/build-frontend
+  #       name: Build front-end application
+  #       with:
+  #         frontend-tarball: ./frontend.tgz
+  #         deploy-env: ${{ inputs.deploy-env }}
+  #         frontend-path: ./frontend
+  #         frontend-build-path: ./frontend/dist/
+
+  prerelease_backend:
     runs-on: ubuntu-latest
-    environment: dev
+    # needs: [build_frontend, build_docker_ocr]
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/build-frontend
-        name: Build front-end application
+      - uses: ./.github/actions/tf-deploy
+        name: Deploy with Terraform
         with:
-          frontend-tarball: ./frontend.tgz
-          deploy-env: ${{ inputs.deploy-env }}
-          frontend-path: ./frontend
-          frontend-build-path: ./frontend/dist/
+          deploy-env: dev
+          docker-tag: derek-dev-combine
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
