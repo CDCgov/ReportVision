@@ -1,5 +1,5 @@
 locals {
-  environment = terraform.workspace
+  environment = "${terraform.workspace}"
   init = {
     environment         = local.environment
     location            = "eastus2"
