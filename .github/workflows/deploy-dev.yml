@@ -1,6 +1,8 @@
 name: Build and deploy all of ReportVision's services to a development environment
 
 on:
+  # push:
+  #   branches: reusable-gha-tf-deploy
   workflow_dispatch:
     inputs:
       deploy-env:
@@ -70,6 +72,9 @@ jobs:
         with:
           deploy-env: dev
           docker-tag: derek-dev-combine
+          docker-registry-path: "cdcgov/reportvision-ocr-api"
+          docker-registry-url: "https://ghcr.io"
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          app-name: reportvision
