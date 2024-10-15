@@ -32,7 +32,7 @@ module "securitygroup" {
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
   web_subnet_id  = module.networking.websubnet_id
-  db_subnet_id   = module.networking.dbsubnet_id
+  # db_subnet_id   = module.networking.dbsubnet_id
   lb_subnet_id   = module.networking.lbsubnet_id
   env            = local.environment
 }
