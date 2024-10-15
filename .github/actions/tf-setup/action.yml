@@ -1,15 +1,6 @@
-name: Deploy Terraform
-description: Deploy needed resources with Terraform to individual environments.
+name: Setup Environment with Terraform
+description: This action sets up the given environment using Terraform.
 inputs:
-  docker-tag:
-    description: The environment to deploy to.
-    required: true
-  docker-registry-path:
-    description: Docker path in the registry.
-    required: true
-  docker-registry-url:
-    description: Docker registry url.
-    required: true
   deploy-env:
     description: The environment to deploy to.
     required: true
@@ -49,8 +40,8 @@ runs:
         client-id: ${{ inputs.azure-client-id }}
         tenant-id: ${{ inputs.azure-tenant-id }}
         subscription-id: ${{ inputs.azure-subscription-id }}
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
+    # - name: Setup Terraform
+    #   uses: hashicorp/setup-terraform@v3
     # - name: Terraform Init
     #   working-directory: ./ops/terraform/envs
     #   env: # all Azure interaction is through Terraform
@@ -67,17 +58,10 @@ runs:
         SUBSCRIPTION_ID: ${{ inputs.azure-subscription-id }}
         RESOURCE_GROUP_NAME: ${{ inputs.azure-resource-group }}
         CLIENT_ID: ${{ inputs.azure-client-id }}
-        DOCKER_TAG: ${{ inputs.docker-tag }}
-        DOCKER_REGISTRY_PATH: ${{ inputs.docker-registry-path }}
-        DOCKER_REGISTRY_URL: ${{ inputs.docker-registry-url }}
-        NAME: ${{ inputs.app-name }}
       run: |
         echo subscription_id=\""$SUBSCRIPTION_ID"\" >> terraform.tfvars
         echo resource_group_name=\""$RESOURCE_GROUP_NAME"\" >> terraform.tfvars
         echo client_id=\""$CLIENT_ID"\" >> terraform.tfvars
-        echo docker_tag=\""$DOCKER_TAG"\" >> terraform.tfvars
-        echo docker_registry_path=\""DOCKER_REGISTRY_PATH"\" >> terraform.tfvars
-        echo docker_registry_url=\""$DOCKER_REGISTRY_URL"\" >> terraform.tfvars
         echo name=\""$NAME"\" >> terraform.tfvars
         az config set defaults.group=$RESOURCE_GROUP_NAME
     - name: Set environment
