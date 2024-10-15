@@ -81,7 +81,7 @@ jobs:
         with:
           deploy-env: dev2
           azure-resource-group: reportvision-rg-dev2
-          # azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          # azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          # azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           app-name: reportvision
