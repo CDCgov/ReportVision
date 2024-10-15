@@ -122,3 +122,30 @@ class OCRMetrics:
             dict_writer = csv.DictWriter(output_file, fieldnames=keys)
             dict_writer.writeheader()
             dict_writer.writerows(metrics)
+
+    def process_dataset(self, dataset_paths):
+        """
+        Processes multiple datasets for calculating metrics.
+        Parameters:
+        dataset_paths (list of dict): A list of dictionaries containing paths for ocr_json, ground_truth_json, and original_image.
+        """
+        all_metrics = []
+        for paths in dataset_paths:
+            self.ocr_json = self.load_json_file(paths['ocr_json_path'])
+            self.ground_truth_json = self.load_json_file(paths['ground_truth_json_path'])
+            metrics = self.calculate_metrics()
+            all_metrics.extend(metrics)
+
+        return all_metrics
+
+    @staticmethod
+    def batch_save_metrics_to_csv(metrics, file_path):
+        """
+        Save metrics for multiple datasets to a CSV.
+        """
+        if metrics:
+            keys = metrics[0].keys()
+            with open(file_path, "w", newline="") as output_file:
+                dict_writer = csv.DictWriter(output_file, fieldnames=keys)
+                dict_writer.writeheader()
+                dict_writer.writerows(metrics)
