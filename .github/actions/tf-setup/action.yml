@@ -51,13 +51,9 @@ runs:
       working-directory: ./ops/terraform
       shell: bash
       env:
-        SUBSCRIPTION_ID: ${{ inputs.azure-subscription-id }}
         RESOURCE_GROUP_NAME: ${{ inputs.azure-resource-group }}
-        CLIENT_ID: ${{ inputs.azure-client-id }}
       run: |
-        # echo subscription_id=\""$SUBSCRIPTION_ID"\" >> terraform.tfvars
         echo resource_group_name=\""$RESOURCE_GROUP_NAME"\" >> terraform.tfvars
-        # echo client_id=\""$CLIENT_ID"\" >> terraform.tfvars
         echo name=\""$NAME"\" >> terraform.tfvars
         az config set defaults.group=$RESOURCE_GROUP_NAME
     - name: Set environment
