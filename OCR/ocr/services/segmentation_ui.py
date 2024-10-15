@@ -27,21 +27,6 @@ class ImageViewer(QGraphicsView):
     This class provides functions for loading images, zooming, panning,
     and drawing colored boxes on the image. It's designed for
     segmenting images for OCR.
-
-    Variables:
-        scene (QGraphicsScene): Holds image and relevant actions
-        pixmap_item (QGraphicsPixmapItem): The item that displays the loaded image.
-        boxes (list): A list of dictionaries containing information about the boxes
-        current_rect (QGraphicsRectItem): The box being drawn
-        start_pos (QPointF): The starting position of the current box being drawn.
-
-    Methods:
-        setImage(pixmap): Set a new image to be displayed.
-        wheelEvent(event): Handle mouse wheel events for zooming.
-        mousePressEvent(event): Handle mouse press events for drawing boxes.
-        mouseMoveEvent(event): Handle mouse move events for drawing boxes.
-        mouseReleaseEvent(event): Handle mouse release events for finalizing boxes.
-        keyPressEvent(event): Handle key press events for navigation and zooming.
     """
 
     def __init__(self):
@@ -201,12 +186,16 @@ class MainWindow(QMainWindow):
 
         labels_file, _ = QFileDialog.getSaveFileName(self, "Save Labels", "", "JSON Files (*.json)")
         if labels_file:
-            labels = {
-                f"{box['color'][0]},{box['color'][1]},{box['color'][2]}": box["key"]
+            labels = [
+                {
+                    "label": box["key"],
+                    "type": "text",
+                    "color": f"{box['color'][0]},{box['color'][1]},{box['color'][2]}",
+                }
                 for box in self.image_viewer.boxes
-            }
+            ]
             with open(labels_file, "w") as f:
-                json.dump(labels, f)
+                json.dump(labels, f, indent=2)
 
 
 if __name__ == "__main__":

@@ -131,8 +131,8 @@ class OCRMetrics:
         """
         all_metrics = []
         for paths in dataset_paths:
-            self.ocr_json = self.load_json_file(paths['ocr_json_path'])
-            self.ground_truth_json = self.load_json_file(paths['ground_truth_json_path'])
+            self.ocr_json = self.load_json_file(paths["ocr_json_path"])
+            self.ground_truth_json = self.load_json_file(paths["ground_truth_json_path"])
             metrics = self.calculate_metrics()
             all_metrics.extend(metrics)
 
