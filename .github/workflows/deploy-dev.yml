@@ -28,9 +28,7 @@ env:
   NODE_VERSION: 20
   APP_NAME: reportversion
   DEPLOY_ENV: dev2
-  SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  
+
 jobs:
   build_publish_ocr:
     runs-on: ubuntu-latest
@@ -81,9 +79,7 @@ jobs:
         env:
           RESOURCE_GROUP_NAME: ${{ env.APP_NAME}}-rg-${{ env.DEPLOY_ENV }}
         run: |
-          # echo subscription_id=\""$SUBSCRIPTION_ID"\" >> terraform.tfvars
           echo resource_group_name=\""$RESOURCE_GROUP_NAME"\" >> terraform.tfvars
-          # echo client_id=\""$CLIENT_ID"\" >> terraform.tfvars
           echo name=\""$APP_NAME"\" >> terraform.tfvars
           az config set defaults.group=$RESOURCE_GROUP_NAME
       - name: Set environment
