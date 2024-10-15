@@ -27,6 +27,9 @@ permissions:
 env:
   NODE_VERSION: 20
   OCR_API_URL: 'https://reportvision-ocr-api-dev.azurewebsites.net/'
+  SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
 
 jobs:
   build_publish_ocr:
