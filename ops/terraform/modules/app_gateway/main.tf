@@ -159,7 +159,7 @@ resource "azurerm_application_gateway" "load_balancer" {
 
     path_rule {
       name                       = "api"
-      paths                      = ["/*", "/"]
+      paths                      = ["/api/*", "/api"]
       backend_address_pool_name  = local.backend_address_pool_name_api
       backend_http_settings_name = local.http_setting_name_api
       // this is the default, why would we set it again?

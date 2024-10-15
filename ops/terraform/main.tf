@@ -8,6 +8,22 @@ locals {
   }
 }
 
+output "workspace" {
+  value = "${terraform.workspace}"
+}
+
+output "vnetcidr" {
+  value = "${local.workspace["vnetcidr"]}"
+}
+
+output "websubnetcidr" {
+  value = "${local.workspace["websubnetcidr"]}"
+}
+
+output "lbsubnetcidr" {
+  value = "${local.workspace["lbsubnetcidr"]}"
+}
+
 ##########
 ## 02-network
 ##########
@@ -19,6 +35,7 @@ module "networking" {
   vnetcidr       = local.workspace["vnetcidr"]
   websubnetcidr  = local.workspace["websubnetcidr"]
   lbsubnetcidr   = local.workspace["lbsubnetcidr"]
+  appsubnetcidr  = local.workspace["appsubnetcidr"]
   env            = local.environment
 }
 
@@ -32,6 +49,7 @@ module "securitygroup" {
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
   web_subnet_id  = module.networking.websubnet_id
+  app_subnet_id  = module.networking.appsubnet_id
   # db_subnet_id   = module.networking.dbsubnet_id
   lb_subnet_id   = module.networking.lbsubnet_id
   env            = local.environment
