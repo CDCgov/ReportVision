@@ -7,15 +7,15 @@ inputs:
   azure-resource-group:
     description: The Azure Resource Group for this environment.
     required: true
-  azure-client-id:
-    description: The Azure client_id for this environment.
-    required: true
-  azure-tenant-id:
-    description: The Azure tenant_id for this environment.
-    required: true
-  azure-subscription-id:
-    description: The Azure subscription_id for this environment.
-    required: true
+  # azure-client-id:
+  #   description: The Azure client_id for this environment.
+  #   required: true
+  # azure-tenant-id:
+  #   description: The Azure tenant_id for this environment.
+  #   required: true
+  # azure-subscription-id:
+  #   description: The Azure subscription_id for this environment.
+  #   required: true
   app-name:
     description: The name of the application being deployed in Terraform.
     required: true
@@ -35,11 +35,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
     # - name: Setup Terraform
     #   uses: hashicorp/setup-terraform@v3
     # - name: Terraform Init
@@ -59,9 +55,9 @@ runs:
         RESOURCE_GROUP_NAME: ${{ inputs.azure-resource-group }}
         CLIENT_ID: ${{ inputs.azure-client-id }}
       run: |
-        echo subscription_id=\""$SUBSCRIPTION_ID"\" >> terraform.tfvars
+        # echo subscription_id=\""$SUBSCRIPTION_ID"\" >> terraform.tfvars
         echo resource_group_name=\""$RESOURCE_GROUP_NAME"\" >> terraform.tfvars
-        echo client_id=\""$CLIENT_ID"\" >> terraform.tfvars
+        # echo client_id=\""$CLIENT_ID"\" >> terraform.tfvars
         echo name=\""$NAME"\" >> terraform.tfvars
         az config set defaults.group=$RESOURCE_GROUP_NAME
     - name: Set environment
@@ -76,9 +72,9 @@ runs:
     - name: Terraform deploy
       working-directory: ./ops/terraform
       env:
-        ARM_CLIENT_ID: ${{ inputs.azure-client-id }}
-        ARM_TENANT_ID: ${{ inputs.azure-tenant-id }}
-        ARM_SUBSCRIPTION_ID: ${{ inputs.azure-subscription-id }}
+        # ARM_CLIENT_ID: ${{ inputs.azure-client-id }}
+        # ARM_TENANT_ID: ${{ inputs.azure-tenant-id }}
+        # ARM_SUBSCRIPTION_ID: ${{ inputs.azure-subscription-id }}
         TF_ENV: ${{ steps.set-environment.outputs.tf-env }}
 
       # env: # all Azure interaction is through Terraform
