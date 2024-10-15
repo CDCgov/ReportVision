@@ -55,7 +55,6 @@ resource "azurerm_application_gateway" "load_balancer" {
     port                                = 80
     protocol                            = "Http"
     request_timeout                     = 60
-    path                                = "/"
     pick_host_name_from_backend_address = true
     probe_name                          = local.static_probe_name_app
   }
@@ -84,7 +83,6 @@ resource "azurerm_application_gateway" "load_balancer" {
     port                                = 80
     protocol                            = "Http"
     request_timeout                     = 120
-    path                                = "/"
     pick_host_name_from_backend_address = true
     probe_name                          = local.api_probe_name_app
   }
