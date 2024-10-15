@@ -123,7 +123,7 @@ class OCRMetrics:
             dict_writer.writeheader()
             dict_writer.writerows(metrics)
 
-    def process_dataset(self, dataset_paths):
+    def calculate_batch_metrics(self, dataset_paths):
         """
         Processes multiple datasets for calculating metrics.
         Parameters:

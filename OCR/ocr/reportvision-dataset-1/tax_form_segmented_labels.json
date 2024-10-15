@@ -1,0 +1,227 @@
+[
+  {
+    "label": "box_b_employer_identification_number",
+    "type": "text",
+    "color": "250,147,170"
+  },
+  {
+    "label": "box_c_employer_name",
+    "type": "text",
+    "color": "30,139,23"
+  },
+  {
+    "label": "box_c_employer_street_address",
+    "type": "text",
+    "color": "96,94,70"
+  },
+  {
+    "label": "box_c_employer_city_state_zip",
+    "type": "text",
+    "color": "199,206,140"
+  },
+  {
+    "label": "box_a_employee_ssn",
+    "type": "text",
+    "color": "85,32,176"
+  },
+  {
+    "label": "box_e_employee_name",
+    "type": "text",
+    "color": "24,57,100"
+  },
+  {
+    "label": "box_e_employee_street_address",
+    "type": "text",
+    "color": "71,106,180"
+  },
+  {
+    "label": "box_e_employee_city_state_zip",
+    "type": "text",
+    "color": "88,71,92"
+  },
+  {
+    "label": "box_d_control_number",
+    "type": "text",
+    "color": "23,6,135"
+  },
+  {
+    "label": "box_1_wages",
+    "type": "text",
+    "color": "31,58,10"
+  },
+  {
+    "label": "box_2_federal_tax_withheld",
+    "type": "text",
+    "color": "36,213,255"
+  },
+  {
+    "label": "box_3_social_security_wages",
+    "type": "text",
+    "color": "188,201,138"
+  },
+  {
+    "label": "box_4_social_security_tax_withheld",
+    "type": "text",
+    "color": "240,130,56"
+  },
+  {
+    "label": "box_5_medicare_wages",
+    "type": "text",
+    "color": "181,153,254"
+  },
+  {
+    "label": "box_6_medicare_wages_tax_withheld",
+    "type": "text",
+    "color": "3,12,151"
+  },
+  {
+    "label": "box_7_social_security_tips",
+    "type": "text",
+    "color": "166,190,172"
+  },
+  {
+    "label": "box_8_allocated_tips",
+    "type": "text",
+    "color": "245,211,21"
+  },
+  {
+    "label": "box_9_advance_eic_payment",
+    "type": "text",
+    "color": "35,128,36"
+  },
+  {
+    "label": "box_10_dependent_care_benefits",
+    "type": "text",
+    "color": "205,116,11"
+  },
+  {
+    "label": "box_11_nonqualified_plans",
+    "type": "text",
+    "color": "57,72,146"
+  },
+  {
+    "label": "box_12a_code",
+    "type": "text",
+    "color": "32,113,125"
+  },
+  {
+    "label": "box_12a_value",
+    "type": "text",
+    "color": "237,195,73"
+  },
+  {
+    "label": "box_12b_code",
+    "type": "text",
+    "color": "46,191,247"
+  },
+  {
+    "label": "box_12b_value",
+    "type": "text",
+    "color": "61,170,144"
+  },
+  {
+    "label": "box_12c_code",
+    "type": "text",
+    "color": "214,15,99"
+  },
+  {
+    "label": "box_12c_value",
+    "type": "text",
+    "color": "116,53,114"
+  },
+  {
+    "label": "box_12d_code",
+    "type": "text",
+    "color": "93,16,87"
+  },
+  {
+    "label": "box_12d_value",
+    "type": "text",
+    "color": "244,9,127"
+  },
+  {
+    "label": "box_13_statutary_employee",
+    "type": "text",
+    "color": "247,67,162"
+  },
+  {
+    "label": "box_13_retirement_plan",
+    "type": "text",
+    "color": "216,52,1"
+  },
+  {
+    "label": "box_13_third_part_sick_pay",
+    "type": "text",
+    "color": "230,102,160"
+  },
+  {
+    "label": "box_15_1_state",
+    "type": "text",
+    "color": "182,239,9"
+  },
+  {
+    "label": "box_15_1_employee_state_id",
+    "type": "text",
+    "color": "73,182,152"
+  },
+  {
+    "label": "box_16_1_state_wages",
+    "type": "text",
+    "color": "70,120,99"
+  },
+  {
+    "label": "box_17_1_state_income_tax",
+    "type": "text",
+    "color": "178,60,71"
+  },
+  {
+    "label": "box_18_1_local_wages",
+    "type": "text",
+    "color": "251,233,1"
+  },
+  {
+    "label": "box_19_1_local_income_tax",
+    "type": "text",
+    "color": "67,107,37"
+  },
+  {
+    "label": "box_20_1_locality",
+    "type": "text",
+    "color": "254,166,152"
+  },
+  {
+    "label": "box_15_2_state",
+    "type": "text",
+    "color": "113,248,142"
+  },
+  {
+    "label": "box_15_2_employee_state_id",
+    "type": "text",
+    "color": "210,61,31"
+  },
+  {
+    "label": "box_16_2_state_wages",
+    "type": "text",
+    "color": "103,0,7"
+  },
+  {
+    "label": "box_17_2_state_income_tax",
+    "type": "text",
+    "color": "178,141,140"
+  },
+  {
+    "label": "box_18_2_local_wages",
+    "type": "text",
+    "color": "104,93,165"
+  },
+  {
+    "label": "box_19_2_local_income_tax",
+    "type": "text",
+    "color": "162,77,255"
+  },
+  {
+    "label": "box_20_2_locality",
+    "type": "text",
+    "color": "86,110,213"
+  }
+]
