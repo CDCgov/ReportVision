@@ -71,6 +71,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: reportvision-ocr-api-dev
+          app-name: reportvision-ocr-dev
           images: '${{ env.REGISTRY }}/${{ env.REPO}}-ocr-api:${{ env.VERSION }}'
       
