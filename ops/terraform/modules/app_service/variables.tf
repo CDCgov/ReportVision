@@ -14,9 +14,6 @@ variable "https_only" {
   default = false
 }
 variable "vnet" {}
-variable "docker_tag" {}
-variable "docker_registry_path" {}
-variable "docker_registry_url" {}
 variable "app_settings" {
   type        = map(string)
   default     = {}

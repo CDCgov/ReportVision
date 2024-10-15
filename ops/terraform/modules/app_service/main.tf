@@ -33,11 +33,6 @@ resource "azurerm_linux_web_app" "linux_webapp" {
     ftps_state                        = "Disabled"
     vnet_route_all_enabled            = false
 
-    application_stack {
-      docker_image_name   = "${var.docker_registry_path}:${var.docker_tag}"
-      docker_registry_url = var.docker_registry_url
-    }
-
     ip_restriction {
       virtual_network_subnet_id = var.app_subnet_id
       action                    = "Allow"

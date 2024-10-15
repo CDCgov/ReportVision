@@ -76,9 +76,6 @@ module "ocr_api" {
   name                 = var.name
   location             = local.init.location
   resource_group       = data.azurerm_resource_group.rg.name
-  docker_tag           = var.docker_tag
-  docker_registry_path = var.docker_registry_path
-  docker_registry_url  = var.docker_registry_url
   app_subnet_id        = module.networking.lbsubnet_id
   env                  = local.environment
   vnet                 = module.networking.network_name
