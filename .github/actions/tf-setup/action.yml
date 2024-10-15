@@ -52,6 +52,7 @@ runs:
       shell: bash
       env:
         RESOURCE_GROUP_NAME: ${{ inputs.azure-resource-group }}
+        NAME: ${{ inputs.app-name }}
       run: |
         echo resource_group_name=\""$RESOURCE_GROUP_NAME"\" >> terraform.tfvars
         echo name=\""$NAME"\" >> terraform.tfvars
