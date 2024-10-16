@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  VERSION: derek-dev-combine
+  VERSION: ${{ inputs.tag }}
 
 
 jobs:
@@ -20,8 +20,6 @@ jobs:
       packages: write
       attestations: write
       id-token: write
-    outputs:
-      result: ${{ steps.image_check.outputs.result}}  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
