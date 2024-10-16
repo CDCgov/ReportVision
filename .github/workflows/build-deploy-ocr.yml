@@ -1,11 +1,13 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  workflow_dispatch:
-    inputs:
-        tag:
-            description: 'Version tag for new release'
-            required: true
+  push:
+    branches: fix-temp-deploy-app-name-correction
+  # workflow_dispatch:
+  #   inputs:
+  #       tag:
+  #           description: 'Version tag for new release'
+  #           required: true
 
 env:
   REGISTRY: ghcr.io
