@@ -52,18 +52,19 @@ jobs:
   #         docker-context-path: ./OCR/
   #         api-name: ocr-api
 
-  # build_frontend:
-  #   runs-on: ubuntu-latest
-  #   environment: dev
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: ./.github/actions/build-frontend
-  #       name: Build front-end application
-  #       with:
-  #         frontend-tarball: ./frontend.tgz
-  #         deploy-env: ${{ inputs.deploy-env }}
-  #         frontend-path: ./frontend
-  #         frontend-build-path: ./frontend/dist/
+  build_frontend:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build-frontend
+        name: Build front-end application
+        with:
+          api-url: ${{ env.OCR_API_URL }}
+          frontend-tarball: ./frontend.tgz
+          deploy-env: ${{ inputs.deploy-env }}
+          frontend-path: ./frontend
+          frontend-build-path: ./frontend/dist/
 
   env-setup:
     runs-on: ubuntu-latest
