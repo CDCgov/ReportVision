@@ -415,6 +415,7 @@ sketch
 
 ## Terraform ##
 .terraform
+.terraform.lock.hcl
 *.tfplan*
 *.tfstate*
 *.tfvars
