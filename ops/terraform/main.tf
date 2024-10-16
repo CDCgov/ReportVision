@@ -1,27 +1,8 @@
 locals {
-  workspaces = "${merge(local.dev, local.dev2, local.dev3, local.dev4, local.dev5, local.dev6)}"
-  workspace  = "${local.workspaces[terraform.workspace]}"
-
   management_tags = {
     environment    = local.environment
     resource_group = data.azurerm_resource_group.rg.name
   }
-}
-
-output "workspace" {
-  value = "${terraform.workspace}"
-}
-
-output "vnetcidr" {
-  value = "${local.workspace["vnetcidr"]}"
-}
-
-output "websubnetcidr" {
-  value = "${local.workspace["websubnetcidr"]}"
-}
-
-output "lbsubnetcidr" {
-  value = "${local.workspace["lbsubnetcidr"]}"
 }
 
 ##########
@@ -32,10 +13,11 @@ module "networking" {
   name           = var.name
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
-  vnetcidr       = local.workspace["vnetcidr"]
-  websubnetcidr  = local.workspace["websubnetcidr"]
-  lbsubnetcidr   = local.workspace["lbsubnetcidr"]
-  appsubnetcidr  = local.workspace["appsubnetcidr"]
+  vnetcidr       = local.network.config.vnetcidr
+  websubnetcidr  = local.network.config.websubnetcidr
+  appsubnetcidr  = local.network.config.appsubnetcidr
+  lbsubnetcidr   = local.network.config.lbsubnetcidr
+  dbsubnetcidr   = local.network.config.dbsubnetcidr
   env            = local.environment
 }
 
@@ -50,7 +32,7 @@ module "securitygroup" {
   resource_group = data.azurerm_resource_group.rg.name
   web_subnet_id  = module.networking.websubnet_id
   app_subnet_id  = module.networking.appsubnet_id
-  # db_subnet_id   = module.networking.dbsubnet_id
+  db_subnet_id   = module.networking.dbsubnet_id
   lb_subnet_id   = module.networking.lbsubnet_id
   env            = local.environment
 }
