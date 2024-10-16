@@ -171,7 +171,7 @@ resource "azurerm_application_gateway" "load_balancer" {
     name = "${var.name}-routing"
 
     rewrite_rule {
-      name          = "api-wildcard"
+      name          = "ocr-api-wildcard"
       rule_sequence = 101
       condition {
         ignore_case = true
