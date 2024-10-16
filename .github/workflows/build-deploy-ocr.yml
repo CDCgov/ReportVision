@@ -38,7 +38,6 @@ jobs:
       #   run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
       - name: Build and push Docker image
         id: push
-        # if: steps.image_check.outcome == 1
         uses: docker/build-push-action@v6
         with:
           context: ./OCR/

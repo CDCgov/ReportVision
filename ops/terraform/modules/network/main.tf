@@ -14,21 +14,21 @@ resource "azurerm_subnet" "web-subnet" {
   depends_on           = [azurerm_virtual_network.vnet]
 }
 
-resource "azurerm_subnet" "app-subnet" {
-  name                 = "${var.name}-app-subnet-${var.env}"
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  resource_group_name  = var.resource_group
-  address_prefixes     = [var.appsubnetcidr]
+# resource "azurerm_subnet" "app-subnet" {
+#   name                 = "${var.name}-app-subnet-${var.env}"
+#   virtual_network_name = azurerm_virtual_network.vnet.name
+#   resource_group_name  = var.resource_group
+#   address_prefixes     = [var.appsubnetcidr]
 
-  delegation {
-    name = "delegation"
+#   delegation {
+#     name = "delegation"
 
-    service_delegation {
-      name    = "Microsoft.ContainerInstance/containerGroups"
-      actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
-    }
-  }
-}
+#     service_delegation {
+#       name    = "Microsoft.ContainerInstance/containerGroups"
+#       actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+#     }
+#   }
+# }
 
 resource "azurerm_subnet" "lb-subnet" {
   name                 = "${var.name}-lb-subnet-${var.env}"

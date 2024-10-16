@@ -18,6 +18,7 @@ import ExtractProcess from "./pages/ExtractProcess.tsx";
 import { SaveTemplate } from "./pages/SaveTemplate.tsx";
 import ReviewTemplate from "./pages/ReviewTemplate.tsx";
 import SubmissionTemplate from "./pages/SubmissionTemplate.tsx";
+import NotFound from "./pages/404Page.tsx";
 
 
 
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
     path: "/extract/submit",
     element: <SubmissionTemplate />,
   },
+  {
+    path: "*",
+    element: <NotFound />
+  }
 ]);
 
 createRoot(document.getElementById("root")!).render(
