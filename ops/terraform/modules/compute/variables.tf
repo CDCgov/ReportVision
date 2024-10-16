@@ -1,4 +1,5 @@
 variable "resource_group" {}
+variable "name" {}
 variable "location" {}
 variable "web_subnet_id" {}
 variable "app_subnet_id" {}

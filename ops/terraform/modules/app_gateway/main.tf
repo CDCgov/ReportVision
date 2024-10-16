@@ -1,5 +1,5 @@
 resource "azurerm_public_ip" "lb-pip" {
-  name                = "reportvision-pip-lb-${var.env}"
+  name                = "${var.name}-pip-lb-${var.env}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   allocation_method   = "Static"
@@ -10,25 +10,25 @@ resource "azurerm_public_ip" "lb-pip" {
 
 # since these variables are re-used - a locals block makes this more maintainable
 locals {
-  backend_address_pool_name_static = "${var.vnet-name}-beap-static"
-  backend_address_pool_name_api    = "${var.vnet-name}-beap-api"
-  frontend_port_name_api           = "${var.vnet-name}-feport-api"
-  frontend_port_name_static        = "${var.vnet-name}-feport-static"
-  frontend_ip_configuration_name   = "${var.vnet-name}-feip"
-  http_setting_name_static         = "${var.vnet-name}-be-htst-static"
-  http_setting_name_api            = "${var.vnet-name}-be-htst-api"
-  listener_name_static             = "${var.vnet-name}-httplstn-static"
-  listener_name_api                = "${var.vnet-name}-httplstn-api"
-  request_routing_rule_name_api    = "${var.vnet-name}-rqrt-api"
-  request_routing_rule_name_static = "${var.vnet-name}-rqrt-static"
-  redirect_configuration_name      = "${var.vnet-name}-rdrcfg"
-  static_probe_name_app            = "${var.vnet-name}-be-probe-app-static"
-  api_probe_name_app               = "${var.vnet-name}-be-probe-app-api"
-  redirect_rule                    = "${var.vnet-name}-redirect"
+  backend_address_pool_name_static = "${var.name}-${var.env}-beap-static"
+  backend_address_pool_name_api    = "${var.name}-${var.env}-beap-api"
+  frontend_port_name_api           = "${var.name}-${var.env}-feport-api"
+  frontend_port_name_static        = "${var.name}-${var.env}-feport-static"
+  frontend_ip_configuration_name   = "${var.name}-${var.env}-feip"
+  http_setting_name_static         = "${var.name}-${var.env}-be-htst-static"
+  http_setting_name_api            = "${var.name}-${var.env}-be-htst-api"
+  listener_name_static             = "${var.name}-${var.env}-httplstn-static"
+  listener_name_api                = "${var.name}-${var.env}-httplstn-api"
+  request_routing_rule_name_api    = "${var.name}-${var.env}-rqrt-api"
+  request_routing_rule_name_static = "${var.name}-${var.env}-rqrt-static"
+  redirect_configuration_name      = "${var.name}-${var.env}-rdrcfg"
+  static_probe_name_app            = "${var.name}-${var.env}-be-probe-app-static"
+  api_probe_name_app               = "${var.name}-${var.env}-be-probe-app-api"
+  redirect_rule                    = "${var.name}-${var.env}-redirect"
 }
 
 resource "azurerm_application_gateway" "load_balancer" {
-  name                = "reportvision-appgateway-${var.env}"
+  name                = "${var.name}-appgateway-${var.env}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
 
@@ -39,7 +39,7 @@ resource "azurerm_application_gateway" "load_balancer" {
   }
 
   gateway_ip_configuration {
-    name      = "reportvision-gateway-ip-configuration"
+    name      = "${var.name}-gateway-ip-configuration"
     subnet_id = var.web-subnet
   }
 
@@ -55,7 +55,6 @@ resource "azurerm_application_gateway" "load_balancer" {
     port                                = 80
     protocol                            = "Http"
     request_timeout                     = 60
-    path                                = "/"
     pick_host_name_from_backend_address = true
     probe_name                          = local.static_probe_name_app
   }
@@ -84,7 +83,6 @@ resource "azurerm_application_gateway" "load_balancer" {
     port                                = 80
     protocol                            = "Http"
     request_timeout                     = 120
-    path                                = "/api"
     pick_host_name_from_backend_address = true
     probe_name                          = local.api_probe_name_app
   }
@@ -154,31 +152,31 @@ resource "azurerm_application_gateway" "load_balancer" {
 
 
   url_path_map {
-    name                               = "${var.vnet-name}-urlmap"
+    name                               = "${var.name}-${var.env}-urlmap"
     default_backend_address_pool_name  = local.backend_address_pool_name_static
     default_backend_http_settings_name = local.http_setting_name_static
-    default_rewrite_rule_set_name      = "mde-routing"
+    default_rewrite_rule_set_name      = "${var.name}-routing"
 
     path_rule {
       name                       = "api"
-      paths                      = ["/api/*", "/api"]
+      paths                      = ["/ocr-api/*", "/ocr-api"]
       backend_address_pool_name  = local.backend_address_pool_name_api
       backend_http_settings_name = local.http_setting_name_api
       // this is the default, why would we set it again?
       // because if we don't do this we get 404s on API calls
-      rewrite_rule_set_name = "mde-routing"
+      rewrite_rule_set_name = "${var.name}-routing"
     }
   }
   rewrite_rule_set {
-    name = "mde-routing"
+    name = "${var.name}-routing"
 
     rewrite_rule {
-      name          = "api-wildcard"
+      name          = "ocr-api-wildcard"
       rule_sequence = 101
       condition {
         ignore_case = true
         negate      = false
-        pattern     = ".*api/(.*)"
+        pattern     = ".*ocr-api/(.*)"
         variable    = "var_uri_path"
       }
 

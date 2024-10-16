@@ -1,9 +1,6 @@
 terraform {
   backend "azurerm" {
     resource_group_name  = "reportvision-rg-global"
-    storage_account_name = "tfstaterv2024"
-    container_name       = "rv-tfstate"
-    key                  = "dev/terraform.tfstate"
   }
   required_providers {
     azurerm = {

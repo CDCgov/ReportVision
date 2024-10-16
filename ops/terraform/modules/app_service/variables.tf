@@ -1,17 +1,13 @@
 variable "env" {}
+variable "name" {}
 variable "resource_group" {}
 variable "location" {}
-variable "name_ocr" {
-  default = "reportvision-ocr-api"
-}
+
 variable "app_subnet_id" {}
 variable "sku_name" {
   default = "P1v3"
 }
 
-variable "az_account" {
-  default = "reportvision"
-}
 
 variable "https_only" {
   type    = bool

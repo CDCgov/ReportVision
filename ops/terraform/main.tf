@@ -1,7 +1,10 @@
 locals {
+  workspaces = "${merge(local.dev, local.dev2, local.dev3, local.dev4, local.dev5, local.dev6)}"
+  workspace  = "${local.workspaces[terraform.workspace]}"
+
   management_tags = {
     environment    = local.environment
-    resource_group = data.azurerm_resource_group.dev.name
+    resource_group = data.azurerm_resource_group.rg.name
   }
 }
 
@@ -10,13 +13,13 @@ locals {
 ##########
 module "networking" {
   source         = "./modules/network"
-  location       = data.azurerm_resource_group.dev.location
-  resource_group = data.azurerm_resource_group.dev.name
-  vnetcidr       = local.network.config.vnetcidr
-  websubnetcidr  = local.network.config.websubnetcidr
-  appsubnetcidr  = local.network.config.appsubnetcidr
-  lbsubnetcidr   = local.network.config.lbsubnetcidr
-  dbsubnetcidr   = local.network.config.dbsubnetcidr
+  name           = var.name
+  location       = data.azurerm_resource_group.rg.location
+  resource_group = data.azurerm_resource_group.rg.name
+  vnetcidr       = local.workspace["vnetcidr"]
+  websubnetcidr  = local.workspace["websubnetcidr"]
+  lbsubnetcidr   = local.workspace["lbsubnetcidr"]
+  # dbsubnetcidr   = local.network.config.dbsubnetcidr
   env            = local.environment
 }
 
@@ -26,19 +29,20 @@ module "networking" {
 
 module "securitygroup" {
   source         = "./modules/security"
-  location       = data.azurerm_resource_group.dev.location
-  resource_group = data.azurerm_resource_group.dev.name
+  name           = var.name
+  location       = data.azurerm_resource_group.rg.location
+  resource_group = data.azurerm_resource_group.rg.name
   web_subnet_id  = module.networking.websubnet_id
-  app_subnet_id  = module.networking.appsubnet_id
-  db_subnet_id   = module.networking.dbsubnet_id
+  # db_subnet_id   = module.networking.dbsubnet_id
   lb_subnet_id   = module.networking.lbsubnet_id
   env            = local.environment
 }
 
 module "app_gateway" {
   source                  = "./modules/app_gateway"
-  resource_group_location = data.azurerm_resource_group.dev.location
-  resource_group_name     = data.azurerm_resource_group.dev.name
+  name                    = var.name
+  resource_group_location = data.azurerm_resource_group.rg.location
+  resource_group_name     = data.azurerm_resource_group.rg.name
 
   blob_endpoint = module.storage.primary_web_host
   web-subnet    = module.networking.lbsubnet_id
@@ -55,8 +59,9 @@ module "app_gateway" {
 
 module "storage" {
   source          = "./modules/storage"
-  location        = data.azurerm_resource_group.dev.location
-  resource_group  = data.azurerm_resource_group.dev.name
+  name            = var.name
+  location        = data.azurerm_resource_group.rg.location
+  resource_group  = data.azurerm_resource_group.rg.name
   env             = local.environment
   management_tags = local.management_tags
   app_gateway_ip  = module.app_gateway.app_gateway_ip
@@ -68,18 +73,19 @@ module "storage" {
 ##########
 
 module "ocr_api" {
-  source         = "./modules/app_service"
-  location       = local.init.location
-  resource_group = data.azurerm_resource_group.dev.name
-  app_subnet_id  = module.networking.lbsubnet_id
-  env            = local.environment
-  vnet           = module.networking.network_name
+  source               = "./modules/app_service"
+  name                 = var.name
+  location             = local.init.location
+  resource_group       = data.azurerm_resource_group.rg.name
+  app_subnet_id        = module.networking.lbsubnet_id
+  env                  = local.environment
+  vnet                 = module.networking.network_name
 }
 
 # module "compute" {
 #   source         = "./modules/container_instances"
-#   location       = data.azurerm_resource_group.test.location
-#   resource_group = data.azurerm_resource_group.test.name
+#   location       = data.azurerm_resource_group.rg.location
+#   resource_group = data.azurerm_resource_group.rg.name
 #   environment    = local.environment
 #   app_subnet     = module.networking.appsubnet_id
 #   # web_subnet_id   = module.networking.websubnet_id
