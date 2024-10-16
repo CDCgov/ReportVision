@@ -5,12 +5,15 @@ import cv2 as cv
 
 
 class ImageHomography:
-    def __init__(self, template: Path, match_ratio=0.3):
+    def __init__(self, template: Path | np.ndarray, match_ratio=0.3):
         """Initialize the image homography pipeline with a `template` image."""
         if match_ratio >= 1 or match_ratio <= 0:
             raise ValueError("`match_ratio` must be between 0 and 1")
 
-        self.template = cv.imread(template)
+        if isinstance(template, np.ndarray):
+            self.template = template
+        else:
+            self.template = cv.imread(template)
         self.match_ratio = match_ratio
         self._sift = cv.SIFT_create()
 
@@ -48,9 +51,22 @@ class ImageHomography:
         M, _ = cv.findHomography(dst_pts, src_pts, cv.RANSAC, 5.0)
         return M
 
-    def transform_homography(self, other, matrix=None):
-        """Run the image homography pipeline against a query image."""
-        if matrix is None:
-            matrix = self.estimate_transform_matrix(other)
+    def transform_homography(self, other, min_axis=100, matrix=None):
+        """
+        Run the image homography pipeline against a query image.
+
+        Parameters:
+        min_axis: minimum x- and y-axis length, in pixels, to attempt to do a homography transform.
+            If the input image is under the axis limits, return the original input image unchanged.
+        matrix: if specified, a transformation matrix to warp the input image. Otherwise this will be
+            estimated with `estimate_transform_matrix`.
+        """
+
+        if matrix is None and other.shape[1] > min_axis and other.shape[0] > min_axis:
+            try:
+                matrix = self.estimate_transform_matrix(other)
+            except cv.error:
+                print("could not estimate transform matrix")
+                return other
 
         return cv.warpPerspective(other, matrix, (self.template.shape[1], self.template.shape[0]))
