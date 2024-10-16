@@ -19,34 +19,10 @@ inputs:
   app-name:
     description: The name of the application being deployed in Terraform.
     required: true
-  # terraform_arm_client_id:
-  #   description: Terraform ARM client ID
-  #   required: true
-  # terraform_arm_client_secret:
-  #   description: Terraform ARM client secret
-  #   required: true
-  # terraform_arm_subscription_id:
-  #   description: Terraform ARM subscription ID
-  #   required: true
-  # terraform_arm_tenant_id:
-  #   description: Terraform ARM tenant ID
-  #   required: true
 
 runs:
   using: composite
   steps:
-
-    # - name: Setup Terraform
-    #   uses: hashicorp/setup-terraform@v3
-    # - name: Terraform Init
-    #   working-directory: ./ops/terraform/envs
-    #   env: # all Azure interaction is through Terraform
-    #     ARM_CLIENT_ID: ${{ inputs.terraform_arm_client_id }}
-    #     ARM_CLIENT_SECRET: ${{ inputs.terraform_arm_client_secret }}
-    #     ARM_SUBSCRIPTION_ID: ${{ inputs.terraform_arm_subscription_id }}
-    #     ARM_TENANT_ID: ${{ inputs.terraform_arm_tenant_id }}
-    #   shell: bash
-    #   run: make init-${{ inputs.deploy_env }}
     - name: Load input variables
       working-directory: ./ops/terraform
       shell: bash
@@ -72,7 +48,6 @@ runs:
         ARM_CLIENT_ID: ${{ inputs.azure-client-id }}
         ARM_TENANT_ID: ${{ inputs.azure-tenant-id }}
         ARM_SUBSCRIPTION_ID: ${{ inputs.azure-subscription-id }}
-        # TF_ENV: ${{ steps.set-environment.outputs.tf-env }}
       shell: bash
       run: |
         terraform init -backend-config=config/${{ inputs.deploy-env }}.config

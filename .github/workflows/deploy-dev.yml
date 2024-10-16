@@ -1,60 +1,52 @@
 name: Build and deploy all of ReportVision's services to a development environment
 
 on:
-  push:
-    branches: reusable-gha-tf-deploy
-  # workflow_dispatch:
-  #   inputs:
-  #     deploy-env:
-  #       description: 'The environment to deploy to'
-  #       required: true
-  #       type: choice
-  #       options:
-  #         - dev
-  #         - dev2
-  #         - dev3
-  #         - dev4
-  #         - dev5
-  #         - dev6
-  #     ocr-version:
-  #       description: 'Create a version for this OCR API image'
-  #       required: true
+  workflow_dispatch:
+    inputs:
+      deploy-env:
+        description: 'The environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - dev2
+          - dev3
+          - dev4
+          - dev5
+          - dev6
+      ocr-version:
+        description: 'Create a version for this OCR API image'
+        required: true
 
 permissions:
-  id-token: write
   contents: read
+  packages: write
+  attestations: write
+  id-token: write
 
 env:
   NODE_VERSION: 20
   OCR_API_URL: 'https://reportvision-ocr-dev.azurewebsites.net/'
-  SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
 
 jobs:
-  build_publish_ocr:
+  build-publish-ocr:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
     steps:
       - uses: actions/checkout@v4
-  #     - name: Build and Push backend
-  #       uses: ./.github/actions/build-publish-api
-  #       with:
-  #         docker-registry: ghcr.io
-  #         docker-pw: ${{ secrets.GITHUB_TOKEN }}
-  #         docker-username: ${{ github.actor }}
-  #         docker-tag: ${{ inputs.ocr-version }}
-  #         dockerfile-path: ./OCR/Dockerfile
-  #         docker-context-path: ./OCR/
-  #         api-name: ocr-api
+      - name: Build and Push backend
+        uses: ./.github/actions/build-publish-api
+        with:
+          docker-registry: ghcr.io
+          docker-pw: ${{ secrets.GITHUB_TOKEN }}
+          docker-username: ${{ github.actor }}
+          docker-tag: ${{ inputs.ocr-version }}
+          dockerfile-path: ./OCR/Dockerfile
+          docker-context-path: ./OCR/
+          api-name: ocr-api
 
-  build_frontend:
+  build-frontend:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ inputs.deploy-env }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/build-frontend
@@ -66,10 +58,9 @@ jobs:
           frontend-path: ./frontend
           frontend-build-path: ./frontend/dist/
 
-  env-setup:
+  environment-setup:
     runs-on: ubuntu-latest
-    # needs: [build_frontend, build_docker_ocr]
-    environment: dev2
+    environment: ${{ inputs.deploy-env }}
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -80,8 +71,8 @@ jobs:
       - uses: ./.github/actions/tf-setup
         name: Setup this environment with Terraform
         with:
-          deploy-env: dev2
-          azure-resource-group: reportvision-rg-dev2
+          deploy-env: ${{ inputs.deploy-env }}
+          azure-resource-group: reportvision-rg-${{ inputs.deploy-env }}
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
