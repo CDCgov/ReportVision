@@ -23,6 +23,10 @@ export const EditableText: FC<EditableTextProps> = ({
                                                         },
                                                         onSave = () => {
                                                         },
+                                                        onEdit = () => {
+                                                        },
+                                                        onCancel = () => {
+                                                        },
                                                         textFormatter = (text) => text
                                                     }: EditableTextProps) => {
     const [isEditing, setIsEditing] = useState(false)
@@ -45,7 +49,7 @@ export const EditableText: FC<EditableTextProps> = ({
 
     const _onEdit = () => {
         setIsEditing(true)
-        // onEdit()
+        onEdit()
     }
 
     const _onSave = () => {
@@ -56,6 +60,7 @@ export const EditableText: FC<EditableTextProps> = ({
     const _onCancel = () => {
         setValue(text)
         setIsEditing(false)
+        onCancel()
     }
     const _onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
