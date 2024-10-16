@@ -15,43 +15,54 @@ env:
 
 
 jobs:
-  build-and-push-image:
+  # build-and-push-image:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: read
+  #     packages: write
+  #     attestations: write
+  #     id-token: write
+  #   outputs:
+  #     result: ${{ steps.image_check.outputs.result}}  
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #     - name: Log in to the Container registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ${{ env.REGISTRY }}
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Lowercase the repo name
+  #       run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+  #     # - name: Check if image exists
+  #     #   id: image_check
+  #     #   run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
+  #     - name: Build and push Docker image
+  #       id: push
+  #       uses: docker/build-push-action@v6
+  #       with:
+  #         context: ./OCR/
+  #         file: ./OCR/Dockerfile
+  #         push: true
+  #         tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}
+
+  deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
       attestations: write
       id-token: write
-    outputs:
-      result: ${{ steps.image_check.outputs.result}}  
+    environment: dev
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
+      - uses: azure/login@v2
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Lowercase the repo name
-        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-      # - name: Check if image exists
-      #   id: image_check
-      #   run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@v6
-        with:
-          context: ./OCR/
-          file: ./OCR/Dockerfile
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-and-push-image
-    environment: dev
-    steps:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Lowercase the repo name
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
