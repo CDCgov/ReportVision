@@ -24,7 +24,7 @@ runs:
       shell: bash
       run: |
         az storage blob upload-batch -s frontend-deploy/ -d '$web' \
-        --account-name reportvisionfrontend${{ inputs.deploy_env }} \
+        --account-name reportvisionfrontend${{ inputs.deploy-env }} \
         --overwrite
     - name: Logout out of Azure
       shell: bash
