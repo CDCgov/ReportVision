@@ -26,42 +26,38 @@ permissions:
   attestations: write
   id-token: write
 
-env:
-  NODE_VERSION: 20
-
 jobs:
-  build-publish-ocr:
+  # build-publish-ocr:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Build and Push backend
+  #       uses: ./.github/actions/build-publish-api
+  #       with:
+  #         docker-registry: ghcr.io
+  #         docker-pw: ${{ secrets.GITHUB_TOKEN }}
+  #         docker-username: ${{ github.actor }}
+  #         docker-tag: ${{ inputs.ocr-version }}
+  #         dockerfile-path: ./OCR/Dockerfile
+  #         docker-context-path: ./OCR/
+  #         api-name: ocr-api
+
+  build-frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build and Push backend
-        uses: ./.github/actions/build-publish-api
+      - uses: ./.github/actions/build-frontend
+        name: Build frontend
         with:
-          docker-registry: ghcr.io
-          docker-pw: ${{ secrets.GITHUB_TOKEN }}
-          docker-username: ${{ github.actor }}
-          docker-tag: resusable-deploy-test-derek
-          dockerfile-path: ./OCR/Dockerfile
-          docker-context-path: ./OCR/
-          api-name: ocr-api
-
-  # build-frontend:
-  #   runs-on: ubuntu-latest
-  #   environment: dev2
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: ./.github/actions/build-frontend
-  #       name: Build frontend
-  #       with:
-  #         api-endpoint: https://reportvision-ocr-dev2.azurewebsites.net/
-  #         frontend-tarball: ./frontend.tgz
-  #         deploy-env: dev2
-  #         frontend-path: ./frontend
-  #         frontend-build-path: ./frontend/dist/
+          api-endpoint: https://reportvision-ocr-dev2.azurewebsites.net/
+          frontend-tarball: ./frontend.tgz
+          frontend-path: ./frontend
+          frontend-build-path: ./frontend/dist/
+          node-version: 20
 
   # environment-setup:
   #   runs-on: ubuntu-latest
-  #   environment: dev2
+  #   environment: ${{ inputs.deploy-env }}
   #   steps:
   #     - uses: actions/checkout@v4
   #     - uses: azure/login@v2
@@ -72,8 +68,8 @@ jobs:
   #     - uses: ./.github/actions/tf-setup
   #       name: Setup this environment with Terraform
   #       with:
-  #         deploy-env: dev2
-  #         azure-resource-group: reportvision-rg-dev2
+  #         deploy-env: ${{ inputs.deploy-env }}
+  #         azure-resource-group: reportvision-rg-${{ inputs.deploy-env }}
   #         azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
   #         azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
   #         azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -82,7 +78,7 @@ jobs:
   deploy-services:
     runs-on: ubuntu-latest
     environment: dev2
-    needs: [build-publish-ocr]
+    needs: [build-frontend]
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -90,15 +86,15 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      # - name: Deploy frontend
-      #   uses: ./.github/actions/deploy-frontend
-      #   with:
-      #     frontend-tarball: frontend.tgz
-      #     deploy-env: dev2
-      - name: Deploy OCR-API
-        uses: ./.github/actions/deploy-api
+      - name: Deploy frontend
+        uses: ./.github/actions/deploy-frontend
         with:
+          frontend-tarball: frontend.tgz
           deploy-env: dev2
-          docker-tag: resusable-deploy-test-derek
-          docker-registry: ghcr.io
-          api-name: ocr-api
+      # - name: Deploy OCR-API
+      #   uses: ./.github/actions/deploy-api
+      #   with:
+      #     deploy-env: ${{ inputs.deploy-env }}
+      #     docker-tag: ${{ inputs.ocr-version }}
+      #     docker-registry: ghcr.io
+      #     api-name: ocr-api
