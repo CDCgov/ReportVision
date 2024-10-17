@@ -1,0 +1,28 @@
+name: Deploy ReportVisions Frontend Service
+description: Deploy the frontend from a tarball to Azure Blob storage in the appropriate environment.
+inputs:
+  deploy-env:
+    description: The environment being deployed (e.g. "prod" or "test")
+    required: true
+  frontend-tarball:
+    description: The path to the tar file containing the client code to deploy
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Unpack frontend
+      shell: bash
+      run: |
+        mkdir frontend-build;
+        tar -C frontend-deploy -zxvf ${{ inputs.frontend-tarball }}
+    - name: Upload frontend to the environments Azure Blob Storage
+      shell: bash
+      run: |
+        az storage blob upload-batch -s frontend-deploy/ -d '$web' \
+        --account-name reportvisionfrontend${{ inputs.deploy_env }} \
+        --overwrite
+    - name: Logout out of Azure
+      shell: bash
+      run: |
+        az logout
