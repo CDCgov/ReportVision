@@ -18,7 +18,7 @@ runs:
     - name: Unpack frontend
       shell: bash
       run: |
-        mkdir frontend-build;
+        mkdir frontend-deploy;
         tar -C frontend-deploy -zxvf ${{ inputs.frontend-tarball }}
     - name: Upload frontend to the environments Azure Blob Storage
       shell: bash
