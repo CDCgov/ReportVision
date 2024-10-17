@@ -26,7 +26,7 @@ resource "azurerm_linux_web_app" "linux_webapp" {
 
   site_config {
     always_on                         = "true"
-    health_check_path                 = "/"
+    health_check_path                 = "/api"
     health_check_eviction_time_in_min = 5
     scm_minimum_tls_version           = "1.2"
     use_32_bit_worker                 = false
