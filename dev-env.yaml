@@ -18,6 +18,9 @@ services:
       - "8080:8080"
     volumes:
       - ./frontend:/app
+    depends_on:
+      - api
+      - ocr
     restart: "no"
     command: "/bin/sh -c 'npm install && npx playwright install && npx playwright test --ui-port=8080 --ui-host=0.0.0.0 & npm run dev -- --host'"
   db:
@@ -30,3 +33,18 @@ services:
       POSTGRES_DB: reportvision
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: super_secret_password
+  api:
+    build: 
+      context: ./backend
+      dockerfile: dev-dockerfile
+    environment:
+      - DB_HOST=db
+    ports: 
+      - "8081:8081"
+    volumes:
+      - ./backend:/app
+    restart: "unless-stopped"
+    depends_on: 
+      - db
+    command: "./gradlew bootRun --continuous --args='--server.port=8081'"
+
