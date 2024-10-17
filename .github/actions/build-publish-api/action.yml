@@ -10,8 +10,8 @@ inputs:
   docker-username:
     description: Docker registry username
     required: true
-  version:
-    description: API version
+  docker-tag:
+    description: Docker tag, typically an API version
     required: true
   dockerfile-path:
     description: Dockerfile path
@@ -44,4 +44,4 @@ runs:
           context: ${{ inputs.docker-context-path }}
           file: ${{ inputs.dockerfile-path }}
           push: true
-          tags: ${{ inputs.docker-registry }}/${{ env.REPO }}-${{ inputs.api-name }}:${{ inputs.version }}
+          tags: ${{ inputs.docker-registry }}/${{ env.REPO }}-${{ inputs.api-name }}:${{ inputs.docker-tag }}

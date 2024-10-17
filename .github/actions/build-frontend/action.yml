@@ -13,6 +13,9 @@ inputs:
   frontend-build-path:
     description: The temporary path where build files are storaged
     required: true
+  api-endpoint:
+    description: The endpoint to connect the frontend to an api
+    required: true
 
 runs:
   using: composite
@@ -37,7 +40,7 @@ runs:
       env:
         DEPLOY_ENV: ${{ inputs.deploy-env }}
       run: |
-        VITE_API_URL=${{ env.OCR_API_URL }} npm run build
+        VITE_API_URL=${{ inputs.api-endpoint }} npm run build
     - name: Test frontend
       shell: bash
       working-directory: ${{ inputs.frontend-path }}
