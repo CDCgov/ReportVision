@@ -102,14 +102,22 @@ class ImageOCR:
         bbox = [cv.boundingRect(contour) for contour in contours]
 
         acc = []
+        # 3x3 cross-shaped kernel for dilation
+        fine_kernel = cv.getStructuringElement(cv.MORPH_CROSS, (3, 3))
+
         # Merge overlapping bounding boxes, then sort the bounding boxes by y-position (top to bottom)
         for x, y, w, h in sorted(self.merge_bounding_boxes(bbox), key=lambda x: x[1]):
-            # Filter lines that are too tiny and probably invalid
-            if h < 10:
-                continue
-
             res = rotated[y : (y + h), x : (x + w)]
-            acc.append(res)
+
+            # Further subdivide using a 3x3 kernel and find contours to get connected areas
+            dilated = cv.dilate(res, fine_kernel)
+            contours, _ = cv.findContours(cv.cvtColor(dilated, cv.COLOR_BGR2GRAY), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+
+            # Simplify contours into bounding boxes
+            rects = [cv.boundingRect(contour) for contour in contours]
+
+            for x, y, w, h in sorted(self.merge_bounding_boxes(rects), key=lambda x: x[1]):
+                acc.append(res[y:(y+h), x:(x+w)])
 
         # If we skipped all potential text blocks due to filtering conditions, return the
         # original image anyway.
@@ -127,10 +135,6 @@ class ImageOCR:
             confidence = []
 
             text_blocks = self.split_text_blocks(image)
-
-            # Ignore output from `split_text_blocks` algorithm if only one text block is detected
-            if len(text_blocks) == 1:
-                text_blocks = [image]
 
             for block in text_blocks:
                 pixel_values = self.processor(images=block, return_tensors="pt").pixel_values
