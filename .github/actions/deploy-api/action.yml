@@ -1,0 +1,28 @@
+name: Deploy ReportVisions OCR-API
+description: Deploy the OCR-API to Azure App Service in the appropriate environment.
+inputs:
+  deploy-env:
+    description: The environment being deployed (e.g. "prod" or "test")
+    required: true
+  docker-tag:
+    description: The path to the tar file containing the client code to deploy
+    required: true
+  docker-registry:
+    description: The path to the tar file containing the client code to deploy
+    required: true
+  api-name:
+    description: The path to the tar file containing the client code to deploy
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Lowercase the repo name
+      shell: bash
+      run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: reportvision-ocr-${{ inputs.deploy-env }}
+        images: '${{ inputs.docker-registry }}/${{ env.REPO}}-${{ inputs.api-name }}:${{ inputs.docker-tag }}'
