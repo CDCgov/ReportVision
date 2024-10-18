@@ -54,7 +54,8 @@ class ImageOCR:
 
     def identify_blocks(self, input_image: np.ndarray, kernel: np.ndarray):
         """
-        Given an input image and a morphological operation kernel, return bounding boxes of
+        Given an input image and a morphological operation kernel, returns unique (non-overlapping)
+        bounding boxes of potential text regions.
         """
         # Invert threshold `input_image` and dilate using `kernel` to "expand" the size of text blocks
         _, thresh = cv.threshold(cv.cvtColor(input_image, cv.COLOR_BGR2GRAY), 128, 255, cv.THRESH_BINARY_INV)
@@ -93,7 +94,6 @@ class ImageOCR:
         rotation_mat = cv.getRotationMatrix2D((image.shape[1] / 2, image.shape[0] / 2), skew_angle, 1)
         return cv.warpAffine(np.array(image, dtype=np.uint8), rotation_mat, (image.shape[1], image.shape[0]))
 
-
     def split_text_blocks(self, image: np.ndarray, line_length_prop=0.5) -> list[np.ndarray]:
         """
         Splits an image with text in it into possibly multiple images, one for each line.
@@ -106,18 +106,22 @@ class ImageOCR:
         # Kernels for morphological operations.
         # Kernel height of 1 implies a minimum separation between lines of 1px
         line_kernel = np.ones([1, int(line_length)], np.uint8)
-        # 3x3 cross-shaped kernel to help identify words in blank space.
-        word_kernel = cv.getStructuringElement(cv.MORPH_CROSS, (3, 3))
+        # 11x5 cross-shaped kernel to help identify words in blank space.
+        word_kernel = cv.getStructuringElement(cv.MORPH_CROSS, (11, 5))
 
         acc = []
 
         # Sort identified lines by y-position (top to bottom)
         for x, y, w, h in sorted(self.identify_blocks(rotated, line_kernel), key=lambda x: x[1]):
+            # Filter lines that are too tiny and probably invalid
+            if h < 5:
+                continue
+
             res = rotated[y : (y + h), x : (x + w)]
 
             # Sort identified text blocks (putative words or phrases) by x-position (left to right)
             for x, y, w, h in sorted(self.identify_blocks(res, word_kernel), key=lambda x: x[0]):
-                acc.append(res[y:(y+h), x:(x+w)])
+                acc.append(res[y : (y + h), x : (x + w)])
 
         # If we skipped all potential text blocks due to filtering conditions, return the
         # original image anyway.
