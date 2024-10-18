@@ -52,6 +52,20 @@ class ImageOCR:
         # Return the final box
         yield [current[0], current[1], current[2] - current[0], current[3] - current[1]]
 
+    def identify_blocks(self, input_image: np.ndarray, kernel: np.ndarray):
+        """
+        Given an input image and a morphological operation kernel, return bounding boxes of
+        """
+        # Invert threshold `input_image` and dilate using `kernel` to "expand" the size of text blocks
+        _, thresh = cv.threshold(cv.cvtColor(input_image, cv.COLOR_BGR2GRAY), 128, 255, cv.THRESH_BINARY_INV)
+        dial = cv.dilate(thresh, kernel)
+
+        # Estimate contours, only looking for outlines (`RETR_EXTERNAL`) and simplifying the shapes (`CHAIN_APPROX_SIMPLE`)
+        contours, _ = cv.findContours(dial, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+
+        # Simplify each contour into a bounding box and merge potential overlaps
+        return self.merge_bounding_boxes([cv.boundingRect(contour) for contour in contours])
+
     def deskew_image_text(self, image: np.ndarray, line_length_prop=0.5, max_skew_angle=10) -> np.ndarray:
         """
         Deskew an image using Hough transforms to detect lines.
@@ -79,6 +93,7 @@ class ImageOCR:
         rotation_mat = cv.getRotationMatrix2D((image.shape[1] / 2, image.shape[0] / 2), skew_angle, 1)
         return cv.warpAffine(np.array(image, dtype=np.uint8), rotation_mat, (image.shape[1], image.shape[0]))
 
+
     def split_text_blocks(self, image: np.ndarray, line_length_prop=0.5) -> list[np.ndarray]:
         """
         Splits an image with text in it into possibly multiple images, one for each line.
@@ -88,35 +103,20 @@ class ImageOCR:
         line_length = image.shape[1] * line_length_prop
         rotated = self.deskew_image_text(image, line_length_prop)
 
-        # Invert threshold and dilate using a horizontal kernel to "expand" the size of text blocks
-        _, thresh = cv.threshold(cv.cvtColor(rotated, cv.COLOR_BGR2GRAY), 128, 255, cv.THRESH_BINARY_INV)
-
+        # Kernels for morphological operations.
         # Kernel height of 1 implies a minimum separation between lines of 1px
-        kernel = np.ones([1, int(line_length)], np.uint8)
-        dial = cv.dilate(thresh, kernel)
-
-        # Estimate contours, only looking for outlines (`RETR_EXTERNAL`) and simplifying the shapes (`CHAIN_APPROX_SIMPLE`)
-        contours, _ = cv.findContours(dial, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-
-        # Simplify each contour into a bounding box
-        bbox = [cv.boundingRect(contour) for contour in contours]
+        line_kernel = np.ones([1, int(line_length)], np.uint8)
+        # 3x3 cross-shaped kernel to help identify words in blank space.
+        word_kernel = cv.getStructuringElement(cv.MORPH_CROSS, (3, 3))
 
         acc = []
-        # 3x3 cross-shaped kernel for dilation
-        fine_kernel = cv.getStructuringElement(cv.MORPH_CROSS, (3, 3))
 
-        # Merge overlapping bounding boxes, then sort the bounding boxes by y-position (top to bottom)
-        for x, y, w, h in sorted(self.merge_bounding_boxes(bbox), key=lambda x: x[1]):
+        # Sort identified lines by y-position (top to bottom)
+        for x, y, w, h in sorted(self.identify_blocks(rotated, line_kernel), key=lambda x: x[1]):
             res = rotated[y : (y + h), x : (x + w)]
 
-            # Further subdivide using a 3x3 kernel and find contours to get connected areas
-            dilated = cv.dilate(res, fine_kernel)
-            contours, _ = cv.findContours(cv.cvtColor(dilated, cv.COLOR_BGR2GRAY), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-
-            # Simplify contours into bounding boxes
-            rects = [cv.boundingRect(contour) for contour in contours]
-
-            for x, y, w, h in sorted(self.merge_bounding_boxes(rects), key=lambda x: x[1]):
+            # Sort identified text blocks (putative words or phrases) by x-position (left to right)
+            for x, y, w, h in sorted(self.identify_blocks(res, word_kernel), key=lambda x: x[0]):
                 acc.append(res[y:(y+h), x:(x+w)])
 
         # If we skipped all potential text blocks due to filtering conditions, return the
