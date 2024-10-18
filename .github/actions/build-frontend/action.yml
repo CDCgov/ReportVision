@@ -1,9 +1,6 @@
 name: Build ReportVision's Front End
 description: Build the React application
 inputs:
-  deploy-env:
-    description: The environment being deployed (e.g. "prod" or "test")
-    required: true
   frontend-tarball:
     description: The path to the tar file containing the client code to deploy
     required: true
@@ -16,13 +13,16 @@ inputs:
   api-endpoint:
     description: The endpoint to connect the frontend to an api
     required: true
+  node-version:
+    description: Node.js Version
+    required: true
 
 runs:
   using: composite
   steps:
     - uses: actions/setup-node@v4
       with:
-        node-version: ${{ env.NODE_VERSION }}
+        node-version: ${{ inputs.node-version }}
     - name: Use cache for node_modules
       uses: actions/cache@v4
       with:
@@ -37,15 +37,11 @@ runs:
     - name: Build deployable frontend
       shell: bash
       working-directory: ${{ inputs.frontend-path }}
-      env:
-        DEPLOY_ENV: ${{ inputs.deploy-env }}
       run: |
         VITE_API_URL=${{ inputs.api-endpoint }} npm run build
     - name: Test frontend
       shell: bash
       working-directory: ${{ inputs.frontend-path }}
-      env:
-        DEPLOY_ENV: ${{ inputs.deploy-env }}
       run: |
         npm run test
     - name: Pack frontend into a tarball
