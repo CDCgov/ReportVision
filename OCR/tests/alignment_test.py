@@ -3,7 +3,7 @@ import os
 import cv2 as cv
 import numpy as np
 
-from alignment import ImageHomography, RandomPerspectiveTransform
+from ocr.services.alignment import ImageHomography, RandomPerspectiveTransform
 
 
 path = os.path.dirname(__file__)
