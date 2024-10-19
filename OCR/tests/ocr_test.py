@@ -19,6 +19,15 @@ labels_path = os.path.join(path, "./assets/labels.json")
 
 
 class TestOCR:
+    def test_extra_blank_space(self):
+        ocr = ImageOCR()
+        paragraph = cv.imread(paragraph_image_path, cv.IMREAD_COLOR)
+        padding = (200, 200, 200, 200)
+        paragraph_extra_space = cv.copyMakeBorder(paragraph, *padding, cv.BORDER_CONSTANT, value=(255, 255, 255))
+        segment = {"text": paragraph, "text_extra": paragraph_extra_space}
+        results = ocr.image_to_text(segment)
+        assert results["text"][0] == results["text_extra"][0]
+
     def test_split_text_blocks(self):
         ocr = ImageOCR()
         img = np.ones([10, 10, 3], np.uint8)
