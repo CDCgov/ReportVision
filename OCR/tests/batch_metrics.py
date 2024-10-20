@@ -9,7 +9,6 @@ class MetricsAnalysis:
         self.ground_truth_folder = ground_truth_folder
         self.csv_output_folder = csv_output_folder
 
-
         os.makedirs(self.csv_output_folder, exist_ok=True)
 
     def calculate_batch_metrics(self):
@@ -22,7 +21,6 @@ class MetricsAnalysis:
 
         total_metrics_summary = {}
 
-
         ocr_files = self.get_files_in_directory(self.ocr_folder)
         ground_truth_files = self.get_files_in_directory(self.ground_truth_folder)
 
@@ -31,7 +29,6 @@ class MetricsAnalysis:
 
         for ocr_file, ground_truth_file in zip(ocr_files, ground_truth_files):
             print(f"Processing OCR: {ocr_file} with Ground Truth: {ground_truth_file}")
-
 
             ocr_path = os.path.join(self.ocr_folder, ocr_file)
             ground_truth_path = os.path.join(self.ground_truth_folder, ground_truth_file)
