@@ -36,6 +36,7 @@ class MetricsAnalysis:
             # Initialize OCRMetrics object and calculate metrics
             ocr_metrics = OCRMetrics(ocr_json_path=ocr_path, ground_truth_json_path=ground_truth_path)
             metrics = ocr_metrics.calculate_metrics()
+
             total_metrics = ocr_metrics.total_metrics(metrics)
 
             # Create a CSV path for this specific file pair
