@@ -1,6 +1,6 @@
 import argparse
-from tests.batch_segmentation import SegmentationOCRBatch
-from tests.batch_metrics import MetricsAnalysis
+from tests.batch_segmentation import BatchSegmentationOCR
+from tests.batch_metrics import BatchMetricsAnalysis
 
 
 def main():
@@ -15,14 +15,14 @@ def main():
     args = parser.parse_args()
 
     # Step 1: Run segmentation and OCR
-    segmentation_ocr = SegmentationOCRBatch(
+    segmentation_ocr = BatchSegmentationOCR(
         args.image_folder, args.segmentation_template, args.labels_path, args.output_folder
     )
-    segmentation_ocr.process_images()
+    ocr_results = segmentation_ocr.process_images()
 
     # Step 2: Run metrics analysis and save CSVs
-    metrics_analysis = MetricsAnalysis(args.output_folder, args.ground_truth_folder, args.csv_output_folder)
-    metrics_analysis.calculate_batch_metrics()
+    metrics_analysis = BatchMetricsAnalysis(args.output_folder, args.ground_truth_folder, args.csv_output_folder)
+    metrics_analysis.calculate_batch_metrics(ocr_results)
 
 
 if __name__ == "__main__":
