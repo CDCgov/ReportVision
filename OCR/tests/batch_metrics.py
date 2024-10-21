@@ -2,7 +2,6 @@ from ocr.services.metrics_analysis import OCRMetrics
 import os
 import csv
 
-from tests.assets.ocr_metrics_test import ocr_metrics
 
 
 class BatchMetricsAnalysis:
