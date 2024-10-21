@@ -44,7 +44,7 @@ class BatchMetricsAnalysis:
             self.extract_problematic_segments(metrics, ocr_file, problematic_segments)
 
             total_metrics = ocr_metrics.total_metrics(metrics)
-            total_metrics["total_time_taken"] = f"{time_taken:.2f} seconds"
+            total_metrics["total_time_taken"] = f"{time_taken:.2f} secondds"
 
             # Create a CSV path for this specific file pair
             csv_file_name = f"{os.path.splitext(ocr_file)[0]}_metrics.csv"
