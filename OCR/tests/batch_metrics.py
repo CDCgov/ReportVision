@@ -2,6 +2,8 @@ from ocr.services.metrics_analysis import OCRMetrics
 import os
 import csv
 
+from tests.assets.ocr_metrics_test import ocr_metrics
+
 
 class BatchMetricsAnalysis:
     def __init__(self, ocr_folder, ground_truth_folder, csv_output_folder):
@@ -11,7 +13,7 @@ class BatchMetricsAnalysis:
 
         os.makedirs(self.csv_output_folder, exist_ok=True)
 
-    def calculate_batch_metrics(self, ocr_results):
+    def calculate_batch_metrics(self, ocr_results=None):
         """
         Processes OCR and ground truth files and saves individual CSVs.
         """
@@ -22,8 +24,9 @@ class BatchMetricsAnalysis:
         time_taken = 0.0
         problematic_segments = []
 
-        for result in ocr_results:
-            time_taken = result["time_taken"]
+        if ocr_results is not None:
+            for result in ocr_results:
+                time_taken = result["time_taken"]
 
         ocr_files = self.get_files_in_directory(self.ocr_folder)
         ground_truth_files = self.get_files_in_directory(self.ground_truth_folder)

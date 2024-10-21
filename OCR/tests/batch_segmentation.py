@@ -20,20 +20,38 @@ class BatchSegmentationOCR:
         segmenter = ImageSegmenter()
         ocr = ImageOCR()
         results = []
-        i = 0
 
-        for image_file in os.listdir(self.image_folder):
-            if image_file.lower().endswith((".png", ".jpg", ".jpeg", ".tiff")):
-                image_path = os.path.join(self.image_folder, image_file)
-                print(f"Processing {image_file}...")
 
-                ocr_result, time_taken = self.segment_ocr_image(segmenter, ocr, image_path, image_file)
+        valid_images = [
+            f for f in os.listdir(self.image_folder)
+            if f.lower().endswith((".png", ".jpg", ".jpeg", ".tiff"))
+        ]
+        total_files = len(valid_images)  # Total valid files
+        print(f"Found {total_files} valid images to process.")
 
-                results.append({"image_file": image_file, "ocr_result": ocr_result, "time_taken": time_taken})
-            # This counter has been added to limit the number of iterations please note for a large folder this could take some time...
-            i = i + 1
-            if i > 1:
-                break
+        # Set a maximum iterations
+        max_iterations = min(2, total_files)
+
+        for i, image_file in enumerate(valid_images[:max_iterations]):
+            image_path = os.path.join(self.image_folder, image_file)
+            print(f"Processing {image_file}... ({i + 1}/{max_iterations})")
+
+            # Perform segmentation and OCR
+            ocr_result, time_taken = self.segment_ocr_image(segmenter, ocr, image_path, image_file)
+
+            # Append results with time taken
+            results.append({
+                "image_file": image_file,
+                "ocr_result": ocr_result,
+                "time_taken": time_taken
+            })
+
+            # Notify user how many files are left
+            remaining = max_iterations - (i + 1)
+            print(f"{time_taken} time taken for this iteration")
+            print(f"{remaining} iterations left...")
+
+        print("Processing complete.")
         return results
 
     def segment_ocr_image(self, segmenter, ocr, image_path, image_file):
