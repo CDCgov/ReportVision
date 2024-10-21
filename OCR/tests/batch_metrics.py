@@ -3,7 +3,6 @@ import os
 import csv
 
 
-
 class BatchMetricsAnalysis:
     def __init__(self, ocr_folder, ground_truth_folder, csv_output_folder):
         self.ocr_folder = ocr_folder
