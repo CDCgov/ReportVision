@@ -20,8 +20,6 @@ jobs:
       packages: write
       attestations: write
       id-token: write
-    outputs:
-      result: ${{ steps.image_check.outputs.result}}  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,12 +31,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Lowercase the repo name
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-      - name: Check if image exists
-        id: image_check
-        run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
+      # - name: Check if image exists
+      #   id: image_check
+      #   run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
       - name: Build and push Docker image
         id: push
-        if: steps.image_check.outcome == 1
         uses: docker/build-push-action@v6
         with:
           context: ./OCR/
@@ -48,9 +45,20 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     needs: build-and-push-image
     environment: dev
     steps:
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Lowercase the repo name
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
@@ -58,7 +66,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: reportvision-ocr-api-dev
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          app-name: reportvision-ocr-dev
           images: '${{ env.REGISTRY }}/${{ env.REPO}}-ocr-api:${{ env.VERSION }}'
       

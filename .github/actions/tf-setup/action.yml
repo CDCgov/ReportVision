@@ -1,0 +1,56 @@
+name: Setup Environment with Terraform
+description: This action sets up the given environment using Terraform.
+inputs:
+  deploy-env:
+    description: The environment to deploy to.
+    required: true
+  azure-resource-group:
+    description: The Azure Resource Group for this environment.
+    required: true
+  azure-client-id:
+    description: The Azure client_id for this environment.
+    required: true
+  azure-tenant-id:
+    description: The Azure tenant_id for this environment.
+    required: true
+  azure-subscription-id:
+    description: The Azure subscription_id for this environment.
+    required: true
+  app-name:
+    description: The name of the application being deployed in Terraform.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Load input variables
+      working-directory: ./ops/terraform
+      shell: bash
+      env:
+        RESOURCE_GROUP_NAME: ${{ inputs.azure-resource-group }}
+        NAME: ${{ inputs.app-name }}
+      run: |
+        echo resource_group_name=\""$RESOURCE_GROUP_NAME"\" >> terraform.tfvars
+        echo name=\""$NAME"\" >> terraform.tfvars
+        az config set defaults.group=$RESOURCE_GROUP_NAME
+    - name: Set environment
+      shell: bash
+      id: set-environment
+      env:
+        DEPLOY_ENV: ${{ inputs.deploy-env }}
+      run: |-
+        echo "tf-env=$(
+          echo ${DEPLOY_ENV}
+        )" >> $GITHUB_OUTPUT
+    - name: Terraform deploy
+      working-directory: ./ops/terraform
+      env:
+        ARM_CLIENT_ID: ${{ inputs.azure-client-id }}
+        ARM_TENANT_ID: ${{ inputs.azure-tenant-id }}
+        ARM_SUBSCRIPTION_ID: ${{ inputs.azure-subscription-id }}
+      shell: bash
+      run: |
+        terraform init -backend-config=config/${{ inputs.deploy-env }}.config
+        terraform workspace select -or-create ${{ inputs.deploy-env }}
+        terraform plan -lock-timeout=30m
+        terraform apply -auto-approve -lock-timeout=30m

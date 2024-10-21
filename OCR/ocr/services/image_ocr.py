@@ -52,6 +52,21 @@ class ImageOCR:
         # Return the final box
         yield [current[0], current[1], current[2] - current[0], current[3] - current[1]]
 
+    def identify_blocks(self, input_image: np.ndarray, kernel: np.ndarray):
+        """
+        Given an input image and a morphological operation kernel, returns unique (non-overlapping)
+        bounding boxes of potential text regions.
+        """
+        # Invert threshold `input_image` and dilate using `kernel` to "expand" the size of text blocks
+        _, thresh = cv.threshold(cv.cvtColor(input_image, cv.COLOR_BGR2GRAY), 128, 255, cv.THRESH_BINARY_INV)
+        dial = cv.dilate(thresh, kernel)
+
+        # Estimate contours, only looking for outlines (`RETR_EXTERNAL`) and simplifying the shapes (`CHAIN_APPROX_SIMPLE`)
+        contours, _ = cv.findContours(dial, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+
+        # Simplify each contour into a bounding box and merge potential overlaps
+        return self.merge_bounding_boxes([cv.boundingRect(contour) for contour in contours])
+
     def deskew_image_text(self, image: np.ndarray, line_length_prop=0.5, max_skew_angle=10) -> np.ndarray:
         """
         Deskew an image using Hough transforms to detect lines.
@@ -88,28 +103,25 @@ class ImageOCR:
         line_length = image.shape[1] * line_length_prop
         rotated = self.deskew_image_text(image, line_length_prop)
 
-        # Invert threshold and dilate using a horizontal kernel to "expand" the size of text blocks
-        _, thresh = cv.threshold(cv.cvtColor(rotated, cv.COLOR_BGR2GRAY), 128, 255, cv.THRESH_BINARY_INV)
-
+        # Kernels for morphological operations.
         # Kernel height of 1 implies a minimum separation between lines of 1px
-        kernel = np.ones([1, int(line_length)], np.uint8)
-        dial = cv.dilate(thresh, kernel)
-
-        # Estimate contours, only looking for outlines (`RETR_EXTERNAL`) and simplifying the shapes (`CHAIN_APPROX_SIMPLE`)
-        contours, _ = cv.findContours(dial, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-
-        # Simplify each contour into a bounding box
-        bbox = [cv.boundingRect(contour) for contour in contours]
+        line_kernel = np.ones([1, int(line_length)], np.uint8)
+        # 11x5 cross-shaped kernel to help identify words in blank space.
+        word_kernel = cv.getStructuringElement(cv.MORPH_CROSS, (11, 5))
 
         acc = []
-        # Merge overlapping bounding boxes, then sort the bounding boxes by y-position (top to bottom)
-        for x, y, w, h in sorted(self.merge_bounding_boxes(bbox), key=lambda x: x[1]):
+
+        # Sort identified lines by y-position (top to bottom)
+        for x, y, w, h in sorted(self.identify_blocks(rotated, line_kernel), key=lambda x: x[1]):
             # Filter lines that are too tiny and probably invalid
-            if h < 10:
+            if h < 5:
                 continue
 
             res = rotated[y : (y + h), x : (x + w)]
-            acc.append(res)
+
+            # Sort identified text blocks (putative words or phrases) by x-position (left to right)
+            for x, y, w, h in sorted(self.identify_blocks(res, word_kernel), key=lambda x: x[0]):
+                acc.append(res[y : (y + h), x : (x + w)])
 
         # If we skipped all potential text blocks due to filtering conditions, return the
         # original image anyway.
@@ -127,10 +139,6 @@ class ImageOCR:
             confidence = []
 
             text_blocks = self.split_text_blocks(image)
-
-            # Ignore output from `split_text_blocks` algorithm if only one text block is detected
-            if len(text_blocks) == 1:
-                text_blocks = [image]
 
             for block in text_blocks:
                 pixel_values = self.processor(images=block, return_tensors="pt").pixel_values

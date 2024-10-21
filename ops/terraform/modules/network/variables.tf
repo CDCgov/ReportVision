@@ -1,8 +1,8 @@
 variable "resource_group" {}
+variable "name" {}
 variable "location" {}
 variable "vnetcidr" {}
 variable "websubnetcidr" {}
-variable "appsubnetcidr" {}
 variable "lbsubnetcidr" {}
-variable "dbsubnetcidr" {}
+# variable "dbsubnetcidr" {}
 variable "env" {}

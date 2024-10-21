@@ -414,7 +414,8 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/react
 
 ## Terraform ##
-.terraform
+*.terraform
+*.lock.hcl
 *.tfplan*
 *.tfstate*
 *.tfvars
