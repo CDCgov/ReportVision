@@ -30,6 +30,7 @@ class BatchSegmentationOCR:
                 ocr_result, time_taken = self.segment_ocr_image(segmenter, ocr, image_path, image_file)
 
                 results.append({"image_file": image_file, "ocr_result": ocr_result, "time_taken": time_taken})
+            # This counter has been added to limit the number of iterations please note for a large folder this could take some time...
             i = i + 1
             if i > 1:
                 break
