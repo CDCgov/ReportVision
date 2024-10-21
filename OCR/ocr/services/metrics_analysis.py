@@ -61,7 +61,7 @@ class OCRMetrics:
             if isinstance(value, list) and len(value) >= 2:
                 extracted_value, confidence = value[0], value[1]
             else:
-                extracted_value, confidence = value, 100.0  # defaults to 100% if no confidence provided.
+                extracted_value, confidence = value, 0  # defaults to 0% if no confidence provided.
 
             normalized_key = self.normalize(key)
             normalized_value = self.normalize(extracted_value)

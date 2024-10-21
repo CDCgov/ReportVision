@@ -53,7 +53,7 @@ class BatchMetricsAnalysis:
             print(f"Saving metrics to: {csv_output_path}")
             self.save_metrics_to_csv(metrics, total_metrics, csv_output_path)
 
-            # Store total metrics for summary reporting
+            # Store total metrics
             total_metrics_summary[ocr_file] = total_metrics
 
         problematic_csv_path = os.path.join(self.csv_output_folder, "problematic_segments.csv")
