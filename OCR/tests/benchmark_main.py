@@ -15,13 +15,12 @@ def main():
         "run_type",
         type=int,
         choices=[1, 2, 3],
-        help="Choose run type: 1 for Segmentation Only, 2 for Metrics Only, 3 for Both."
+        help="Choose run type: 1 for Segmentation Only, 2 for Metrics Only, 3 for Both.",
     )
 
     args = parser.parse_args()
 
     ocr_results = None
-
 
     if args.run_type == 1:  # Segmentation Only
         print("Running segmentation and OCR...")
@@ -33,6 +32,7 @@ def main():
         print("Running both segmentation and metrics analysis...")
         ocr_results = run_segmentation_and_ocr(args)
         run_metrics_analysis(args, ocr_results)
+
 
 def run_segmentation_and_ocr(args):
     """
@@ -46,16 +46,16 @@ def run_segmentation_and_ocr(args):
     print(f"OCR results saved to: {args.output_folder}")
     return ocr_results
 
+
 def run_metrics_analysis(args, ocr_results):
     """
     Runs metrics analysis based on OCR output and ground truth.
     Uses OCR results to capture time values if available.
     """
-    metrics_analysis = BatchMetricsAnalysis(
-        args.output_folder, args.ground_truth_folder, args.csv_output_folder
-    )
+    metrics_analysis = BatchMetricsAnalysis(args.output_folder, args.ground_truth_folder, args.csv_output_folder)
     metrics_analysis.calculate_batch_metrics(ocr_results)  # Pass OCR results
     print(f"Metrics analysis completed. Results saved to: {args.csv_output_folder}")
+
 
 if __name__ == "__main__":
     main()

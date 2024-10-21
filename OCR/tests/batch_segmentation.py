@@ -21,10 +21,8 @@ class BatchSegmentationOCR:
         ocr = ImageOCR()
         results = []
 
-
         valid_images = [
-            f for f in os.listdir(self.image_folder)
-            if f.lower().endswith((".png", ".jpg", ".jpeg", ".tiff"))
+            f for f in os.listdir(self.image_folder) if f.lower().endswith((".png", ".jpg", ".jpeg", ".tiff"))
         ]
         total_files = len(valid_images)  # Total valid files
         print(f"Found {total_files} valid images to process.")
@@ -40,11 +38,7 @@ class BatchSegmentationOCR:
             ocr_result, time_taken = self.segment_ocr_image(segmenter, ocr, image_path, image_file)
 
             # Append results with time taken
-            results.append({
-                "image_file": image_file,
-                "ocr_result": ocr_result,
-                "time_taken": time_taken
-            })
+            results.append({"image_file": image_file, "ocr_result": ocr_result, "time_taken": time_taken})
 
             # Notify user how many files are left
             remaining = max_iterations - (i + 1)
