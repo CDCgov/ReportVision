@@ -107,6 +107,7 @@ When running make sure to pass arguments in this order:
 /path/to/output/folder (path to folder where the output would be. This should exist but can be empty)
 /path/to/ground/truth_folder(path to folder for metrics that we would compare against)
 /path/to/csv_out_folder(path to folder where all metrics would be. This should exist but can be empty) 
+the last arguement is a number 1 for running segmentation and ocr 2 for metrics analysis and 3 for running both
 
 Notes: 
 benchmark takes one second per segment for OCR please be patient or set a counter to limit the number of files processed
