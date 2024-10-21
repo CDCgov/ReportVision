@@ -1,5 +1,5 @@
-resource "azurerm_monitor_autoscale_setting" "simplereport_autoscale" {
-  name                = "${var.name}-appserviceplan-${var.env}-autoscale"
+resource "azurerm_monitor_autoscale_setting" "autoscale" {
+  name                = "${var.name}-${var.service}-autoscale-${var.env}"
   resource_group_name = var.resource_group
   location            = var.location
   target_resource_id  = var.target_resource_id

@@ -1,4 +1,5 @@
 variable "name" {}
+variable "service" {}
 variable "env" {}
 variable "resource_group" {}
 variable "location" {}

@@ -82,8 +82,9 @@ module "ocr_api" {
   vnet           = module.networking.network_name
 }
 
-module "app_service_autoscale" {
+module "ocr_autoscale" {
   source             = "./modules/app_service_autoscale"
+  service            = "ocr"
   name               = var.name
   location           = local.init.location
   env                = local.environment
