@@ -74,17 +74,20 @@ class MetricsAnalysis:
     @staticmethod
     def save_metrics_to_csv(metrics, total_metrics, file_path):
         """
-        Saves individual and total metrics to a CSV file.
+        Saves individual and total metrics to a CSV file, including time taken.
         """
-        metric_keys = metrics[0].keys()
-        total_metric_keys = total_metrics.keys()
+        metric_keys = list(metrics[0].keys()) + ["time_taken"]
+        total_metric_keys = list(total_metrics.keys())
 
         with open(file_path, "w", newline="") as output_file:
             dict_writer = csv.DictWriter(output_file, fieldnames=metric_keys)
             dict_writer.writeheader()
-            dict_writer.writerows(metrics)
+            for metric in metrics:
+                # Add time_taken to each row for individual metrics
+                metric["time_taken"] = total_metrics["total_time_taken"]
+                dict_writer.writerow(metric)
 
-            output_file.write("\n")
+            output_file.write("\n")  # Add a separator
 
             total_writer = csv.DictWriter(output_file, fieldnames=total_metric_keys)
             total_writer.writeheader()
