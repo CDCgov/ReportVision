@@ -1,7 +1,9 @@
 name: Build and Deploy Frontend
 
 on:
-  workflow_dispatch:
+  push:
+    branches: enable-auto-scaling-tf
+  # workflow_dispatch:
 
 permissions:
   id-token: write
@@ -43,7 +45,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: build-frontend-dev
+    environment: dev
     needs: [build]
     steps:
       - name: Download Artifacts To Job

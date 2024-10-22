@@ -5,7 +5,7 @@ variable "location" {}
 
 variable "app_subnet_id" {}
 variable "sku_name" {
-  default = "P1v3"
+  default = "B1"
 }
 
 
