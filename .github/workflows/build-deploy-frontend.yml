@@ -27,7 +27,7 @@ jobs:
       - name: Install NPM packages
         run: npm ci
       - name: Build project
-        run: VITE_API_URL='https://reportvision-ocr-dev.azurewebsites.net/' npm run build
+        run: VITE_API_URL='https://reportvision-ocr-dev3.azurewebsites.net/' npm run build
       - name: Run unit tests
         run: npm run test
       - name: Create client build archive
@@ -45,7 +45,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: dev
+    environment: dev3
     needs: [build]
     steps:
       - name: Download Artifacts To Job
@@ -68,7 +68,7 @@ jobs:
       - name: Upload to Azure blob storage
         shell: bash
         run: |
-          az storage blob upload-batch --account-name reportvisionfrontenddev -d '$web' -s client-build/ --overwrite
+          az storage blob upload-batch --account-name reportvisionfrontenddev3 -d '$web' -s client-build/ --overwrite
       - name: Azure logout
         shell: bash
         run: |

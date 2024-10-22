@@ -16,7 +16,7 @@ resource "azurerm_linux_web_app" "linux_webapp" {
   location                      = var.location
   resource_group_name           = var.resource_group
   service_plan_id               = azurerm_service_plan.asp.id
-  public_network_access_enabled = true
+  virtual_network_subnet_id = var.app_subnet_id
 
   app_settings = local.app_settings
 
@@ -34,7 +34,7 @@ resource "azurerm_linux_web_app" "linux_webapp" {
     vnet_route_all_enabled            = false
 
     ip_restriction {
-      virtual_network_subnet_id = var.app_subnet_id
+      virtual_network_subnet_id = var.lb_subnet_id
       action                    = "Allow"
     }
   }

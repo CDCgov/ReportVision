@@ -19,7 +19,7 @@ module "networking" {
   vnetcidr       = local.workspace["vnetcidr"]
   websubnetcidr  = local.workspace["websubnetcidr"]
   lbsubnetcidr   = local.workspace["lbsubnetcidr"]
-  # dbsubnetcidr   = local.network.config.dbsubnetcidr
+  appsubnetcidr   = local.workspace["appsubnetcidr"]
   env = local.environment
 }
 
@@ -75,11 +75,13 @@ module "storage" {
 module "ocr_api" {
   source         = "./modules/app_service"
   name           = var.name
-  location       = local.init.location
+  location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
-  app_subnet_id  = module.networking.lbsubnet_id
+  app_subnet_id  = module.networking.appsubnet_id
+  lb_subnet_id = module.networking.lbsubnet_id
   env            = local.environment
   vnet           = module.networking.network_name
+  https_only   = true
 }
 
 module "ocr_autoscale" {
@@ -87,7 +89,7 @@ module "ocr_autoscale" {
   service            = "ocr"
   name               = var.name
   location           = local.init.location
-  env                = local.environment
+  env                = data.azurerm_resource_group.rg.location
   resource_group     = data.azurerm_resource_group.rg.name
   target_resource_id = module.ocr_api.service_plan_id
 
