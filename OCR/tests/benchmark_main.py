@@ -29,7 +29,7 @@ def main():
         print("Running metrics analysis...")
         run_metrics_analysis(args, ocr_results=None)
     elif args.run_type == 3:
-        print("Running both segmentation and metrics analysis...")
+        print("Running both segmentation,ocr and metrics analysis...")
         ocr_results = run_segmentation_and_ocr(args)
         run_metrics_analysis(args, ocr_results)
 

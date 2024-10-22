@@ -14,25 +14,29 @@ class BatchMetricsAnalysis:
     def calculate_batch_metrics(self, ocr_results=None):
         """
         Processes OCR and ground truth files and saves individual CSVs.
+        Ensures only matching files are processed.
         """
         print(f"Loading OCR files from: {self.ocr_folder}")
         print(f"Loading ground truth files from: {self.ground_truth_folder}")
         print(f"Saving individual CSVs to: {self.csv_output_folder}")
-        total_metrics_summary = {}
-        time_taken = 0.0
-        problematic_segments = []
 
-        if ocr_results is not None:
-            for result in ocr_results:
-                time_taken = result["time_taken"]
+        total_metrics_summary = {}
+        problematic_segments = []
 
         ocr_files = self.get_files_in_directory(self.ocr_folder)
         ground_truth_files = self.get_files_in_directory(self.ground_truth_folder)
 
-        if len(ocr_files) != len(ground_truth_files):
-            print("Warning: The number of OCR files and ground truth files do not match.")
+        # Create dic for matching files by name
+        ocr_dict = {os.path.splitext(f)[0]: f for f in ocr_files}
+        ground_truth_dict = {os.path.splitext(f)[0]: f for f in ground_truth_files}
+        # Find the intersection of matching file names
+        matching_files = ocr_dict.keys() & ground_truth_dict.keys()
+        # Process only matching files
+        print(f"Processing matching files: {matching_files}")
+        for file_name in matching_files:
+            ocr_file = ocr_dict[file_name]
+            ground_truth_file = ground_truth_dict[file_name]
 
-        for ocr_file, ground_truth_file in zip(ocr_files, ground_truth_files):
             print(f"Processing OCR: {ocr_file} with Ground Truth: {ground_truth_file}")
 
             ocr_path = os.path.join(self.ocr_folder, ocr_file)
@@ -44,10 +48,9 @@ class BatchMetricsAnalysis:
             self.extract_problematic_segments(metrics, ocr_file, problematic_segments)
 
             total_metrics = ocr_metrics.total_metrics(metrics)
-            total_metrics["total_time_taken"] = f"{time_taken:.2f} secondds"
 
             # Create a CSV path for this specific file pair
-            csv_file_name = f"{os.path.splitext(ocr_file)[0]}_metrics.csv"
+            csv_file_name = f"{file_name}_metrics.csv"
             csv_output_path = os.path.join(self.csv_output_folder, csv_file_name)
 
             print(f"Saving metrics to: {csv_output_path}")
@@ -56,6 +59,7 @@ class BatchMetricsAnalysis:
             # Store total metrics
             total_metrics_summary[ocr_file] = total_metrics
 
+        # Save problematic segments to CSV
         problematic_csv_path = os.path.join(self.csv_output_folder, "problematic_segments.csv")
         print(f"Saving problematic segments to: {problematic_csv_path}")
         self.save_problematic_segments_to_csv(problematic_segments, problematic_csv_path)
@@ -125,7 +129,8 @@ class BatchMetricsAnalysis:
     @staticmethod
     def get_files_in_directory(directory):
         """
-        Returns a list of files in the specified directory.
+        Returns a sorted list of files in the specified directory.
+        Assumes that files are named consistently for OCR and ground truth.
         """
         try:
             files = sorted(

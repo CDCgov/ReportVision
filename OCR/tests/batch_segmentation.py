@@ -1,6 +1,7 @@
 import os
 import json
 import time
+import csv
 from ocr.services.image_segmenter import ImageSegmenter
 from ocr.services.image_ocr import ImageOCR
 
@@ -20,6 +21,7 @@ class BatchSegmentationOCR:
         segmenter = ImageSegmenter()
         ocr = ImageOCR()
         results = []
+        time_dict = {}
 
         valid_images = [
             f for f in os.listdir(self.image_folder) if f.lower().endswith((".png", ".jpg", ".jpeg", ".tiff"))
@@ -39,12 +41,13 @@ class BatchSegmentationOCR:
 
             # Append results with time taken
             results.append({"image_file": image_file, "ocr_result": ocr_result, "time_taken": time_taken})
-
+            time_dict[image_file] = time_taken
             # Notify user how many files are left
             remaining = max_iterations - (i + 1)
             print(f"{time_taken} time taken for this iteration")
             print(f"{remaining} iterations left...")
 
+        self.write_times_to_csv(time_dict, self.output_folder)
         print("Processing complete.")
         return results
 
@@ -69,3 +72,18 @@ class BatchSegmentationOCR:
 
         time_taken = time.time() - start_time
         return ocr_result, time_taken
+
+    def write_times_to_csv(self, time_dict, csv_output_path):
+        """
+        Writes the time taken for each file to a CSV.
+        """
+        csv_file_path = os.path.join(csv_output_path, "time_taken.csv")
+
+        with open(csv_file_path, "w", newline="") as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(["File Name", "Time Taken (seconds)"])  # Write header
+
+            for file_name, time_taken in time_dict.items():
+                writer.writerow([file_name, f"{time_taken:.2f}"])
+
+        print(f"Time taken for all files saved to: {csv_file_path}")
