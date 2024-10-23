@@ -90,7 +90,7 @@ You can also run the script pytest run reportvision-dataset-1/medical_report_imp
 This will: 
 1.Segment and Run OCR on a folder of images using given segmentation template and labels file.
 2.Compare OCR outputs to ground truth by searching for matching file names .
-3.Writes metrics(Confidence,Raw Distance,Hamming Distance, Levenshtein_Distance) as well as total metrics to a csv file.
+3.Writes metrics(Confidence,Raw Distance,Hamming Distance, Levenshtein Distance) as well as total metrics to a csv file.
 
 
 To Run:
