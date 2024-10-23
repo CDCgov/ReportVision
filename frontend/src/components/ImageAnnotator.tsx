@@ -43,7 +43,7 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, init
         getShapes();
     }, [])
     return (
-        <div>
+        <div className='display-flex flex-justify-center flex-align-center flex-column'>
             <div>
                 {images.map((_, index) => (
                         <Button key={index} onClick={() => handleImageChange(index)} type='button'>
@@ -60,7 +60,6 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, init
                 onSelected={handleShapeSelection}
                 onReady={() => { }}
             />
-            <div>{JSON.stringify(shapes[index], null, 2)}</div>
         </div>
     );
 }
