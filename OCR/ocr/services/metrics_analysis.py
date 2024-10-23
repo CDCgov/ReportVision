@@ -1,6 +1,7 @@
 import json
 import csv
 import Levenshtein
+from statistics import mean
 
 
 class OCRMetrics:
@@ -109,8 +110,7 @@ class OCRMetrics:
         total_levenshtein_distance = sum(
             item["levenshtein_distance"] for item in metrics if isinstance(item["levenshtein_distance"], int)
         )
-        total_confidence = sum(item["confidence"] for item in metrics)
-        avg_confidence = total_confidence / len(metrics) if metrics else 0
+        avg_confidence = mean(item["confidence"] for item in metrics) if metrics else 0
 
         try:
             total_hamming_distance = sum(
