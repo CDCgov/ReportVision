@@ -15,9 +15,9 @@ test.describe("ReviewTemplate Page", () => {
     await expect(page).toHaveURL("/extract/upload");
   });
 
-  // Test the Submit button functionality
-  test("Submit button navigates correctly", async ({ page }) => {
-    const submitButton = page.getByRole("button", { name: "Submit" });
+  // Test the Done button functionality
+  test("Done button navigates correctly", async ({ page }) => {
+    const submitButton = page.getByRole("button", { name: "Done" });
     await expect(submitButton).toBeVisible();
     await expect(submitButton).toBeDisabled();
     const errorRows = await page.locator("tr *[data-testid='edit-fix-error']");
@@ -27,7 +27,7 @@ test.describe("ReviewTemplate Page", () => {
     }
 
     await submitButton.click();
-    await expect(page).toHaveURL("/extract/submit");
+    await expect(page).toHaveURL("/");
   });
 
   // Test the extracted data section
@@ -48,7 +48,7 @@ test.describe("ReviewTemplate Page", () => {
     const headers = page.locator("th");
     await expect(headers.nth(0)).toHaveText("Label"); // First header
     await expect(headers.nth(1)).toHaveText("Value"); // Second header
-    await expect(headers.nth(3)).toHaveText("Label Confidence"); // Third header
+    await expect(headers.nth(3)).toHaveText("Label CS"); // Third header
   });
 
   test("should calculate overall confidence score correctly", async ({
@@ -62,7 +62,7 @@ test.describe("ReviewTemplate Page", () => {
   test("should correctly identify and count errors (below threshold)", async ({
     page,
   }) => {
-    const errorCount = await page.locator("tr .text-error").count();
+    const errorCount = await page.locator("tr .error-text").count();
 
     await expect(errorCount).toBeGreaterThan(0);
   });
@@ -71,6 +71,6 @@ test.describe("ReviewTemplate Page", () => {
     page,
   }) => {
     const DrawLocation = page.locator("td >> text=BH_1Diamondd_LAB");
-    await expect(DrawLocation).toHaveClass(/text-error/);
+    await expect(DrawLocation).toHaveClass(/error-text/);
   });
 });

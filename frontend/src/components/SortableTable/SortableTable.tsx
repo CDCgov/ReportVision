@@ -2,6 +2,8 @@ import {FC, useState} from 'react';
 import {Table} from "@trussworks/react-uswds";
 import SortArrow from './sort-direction-arrow.svg'
 import SortableIcon from './sortable-icon.svg'
+import AIIcon from '../../assets/ai_icon.svg';
+
 import './SortableTable.scss'
 
 interface SortableTableProps {
@@ -100,7 +102,8 @@ const SortableTableHeader: FC<SortableTableHeaderProps> = ({
     return (
         <th onClick={disabled?() => {}:() => onClick(column)}>
             <div className="display-flex flex-row">
-                <div>{name}</div>
+                {name === 'Label CS' && <img src={AIIcon} alt='ai-icon'></img>}
+                <span className='sortable-header-name'>{name}</span>
                 <div className="flex-1"></div>
             {!disabled && (isSortedBy ? <SortOrderIcon isDescending={isDescending}/> : <SortIcon/>)}
             </div>
