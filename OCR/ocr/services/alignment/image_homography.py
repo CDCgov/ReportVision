@@ -62,7 +62,10 @@ class ImageHomography:
             estimated with `estimate_transform_matrix`.
         """
 
-        if matrix is None and other.shape[1] > min_axis and other.shape[0] > min_axis:
+        if other.shape[0] < min_axis and other.shape[1] < min_axis:
+            return other
+
+        if matrix is None:
             try:
                 matrix = self.estimate_transform_matrix(other)
             except cv.error:
