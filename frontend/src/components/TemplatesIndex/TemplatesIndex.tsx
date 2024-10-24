@@ -43,7 +43,7 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
         'lastUpdated': (d) => {
             const date = Date.parse(d)
             if (isNaN(date)) {
-                return "Invalid Date"
+                return new Date().toLocaleDateString()
             }
             return new Date(date).toLocaleDateString()
 
