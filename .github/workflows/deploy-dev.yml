@@ -94,7 +94,7 @@ jobs:
       - name: Deploy OCR-API
         env:
           ENV: "demo"
-        if: ${{ env.ENV  }} != 'demo'
+        if: "!contains(${{ env.ENV  }}, 'demo')"
         uses: ./.github/actions/deploy-api
         with:
           deploy-env: ${{ env.ENV  }}
