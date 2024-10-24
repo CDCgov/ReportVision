@@ -45,7 +45,7 @@ module "app_gateway" {
   resource_group_name     = data.azurerm_resource_group.rg.name
 
   blob_endpoint = module.storage.primary_web_host
-  web-subnet    = module.networking.lbsubnet_id
+  lb_subnet    = module.networking.lbsubnet_id
   tags          = local.management_tags
   env           = local.environment
 

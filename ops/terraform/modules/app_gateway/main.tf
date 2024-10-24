@@ -40,7 +40,7 @@ resource "azurerm_application_gateway" "load_balancer" {
 
   gateway_ip_configuration {
     name      = "${var.name}-gateway-ip-configuration"
-    subnet_id = var.web-subnet
+    subnet_id = var.lb_subnet
   }
 
   # ------- Static -------------------------
