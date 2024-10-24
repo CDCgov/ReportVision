@@ -19,7 +19,7 @@ module "networking" {
   vnetcidr       = local.workspace["vnetcidr"]
   websubnetcidr  = local.workspace["websubnetcidr"]
   lbsubnetcidr   = local.workspace["lbsubnetcidr"]
-  # dbsubnetcidr   = local.network.config.dbsubnetcidr
+  appsubnetcidr   = local.workspace["appsubnetcidr"]
   env = local.environment
 }
 
@@ -45,7 +45,7 @@ module "app_gateway" {
   resource_group_name     = data.azurerm_resource_group.rg.name
 
   blob_endpoint = module.storage.primary_web_host
-  web-subnet    = module.networking.lbsubnet_id
+  lb_subnet    = module.networking.lbsubnet_id
   tags          = local.management_tags
   env           = local.environment
 
@@ -75,11 +75,26 @@ module "storage" {
 module "ocr_api" {
   source         = "./modules/app_service"
   name           = var.name
-  location       = local.init.location
+  location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
-  app_subnet_id  = module.networking.lbsubnet_id
+  app_subnet_id  = module.networking.appsubnet_id
+  lb_subnet_id = module.networking.lbsubnet_id
   env            = local.environment
   vnet           = module.networking.network_name
+  https_only   = true
+}
+
+module "ocr_autoscale" {
+  source             = "./modules/app_service_autoscale"
+  service            = "ocr"
+  name               = var.name
+  location           = data.azurerm_resource_group.rg.location
+  env                = local.environment
+  resource_group     = data.azurerm_resource_group.rg.name
+  target_resource_id = module.ocr_api.service_plan_id
+
+  peak_capacity_instances    = 2
+  weekend_capacity_instances = 1
 }
 
 # module "compute" {
