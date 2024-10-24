@@ -13,6 +13,10 @@ class FourPointTransform:
     def __init__(self, image: Path):
         self.image = cv.imread(str(image), cv.IMREAD_GRAYSCALE)
 
+    @classmethod
+    def align(self, source_image, template_image):
+        return FourPointTransform(source_image).dewarp()
+
     @staticmethod
     def _order_points(quadrilateral: np.ndarray) -> np.ndarray:
         "Reorder points from a 4x2 input array representing the vertices of a quadrilateral, such that the coordinates of each vertex are arranged in order from top left, top right, bottom right, and bottom left."
