@@ -88,8 +88,8 @@ module "ocr_autoscale" {
   source             = "./modules/app_service_autoscale"
   service            = "ocr"
   name               = var.name
-  location           = local.init.location
-  env                = data.azurerm_resource_group.rg.location
+  location           = data.azurerm_resource_group.rg.location
+  env                = local.environment
   resource_group     = data.azurerm_resource_group.rg.name
   target_resource_id = module.ocr_api.service_plan_id
 
