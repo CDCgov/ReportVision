@@ -79,6 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     # environment: ${{ inputs.deploy-env }}
     # needs: [build-publish-ocr, build-frontend, environment-setup]
+    if: ${{ 'demo' != 'demo'}}
     steps:
       - uses: actions/checkout@v4
       # - uses: azure/login@v2
@@ -92,9 +93,6 @@ jobs:
       #     frontend-tarball: frontend.tgz
       #     deploy-env: ${{ inputs.deploy-env }}
       - name: Deploy OCR-API
-        env:
-          ENV: "demo"
-        if: "!contains(${{ env.ENV  }}, 'demo')"
         uses: ./.github/actions/deploy-api
         with:
           deploy-env: ${{ env.ENV  }}
