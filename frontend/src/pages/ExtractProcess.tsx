@@ -5,7 +5,7 @@ import { ExtractStepper } from "../components/ExtractStepper";
 import { ExtractStep } from "../utils/constants";
 import LoadingWrapper from "../components/LoadingWrapper";
 import { ImageToText } from "../../api/api"
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FileType, useFiles } from "../contexts/FilesContext";
 import { ImageToTextResponse, Submission } from "../../api/types/types";
 import * as pdfjsLib from "pdfjs-dist";
@@ -28,7 +28,7 @@ const ExtractProcess = () => {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     const templates: FileType[] = JSON.parse(localStorage.getItem("templates") || "[]");    
     // Check if templates exist
     if (templates.length === 0) {
@@ -80,7 +80,7 @@ const ExtractProcess = () => {
       console.error("Error processing templates:", error);
       setIsLoading(false);
     }
-  }
+  }, [navigate])
 
   useEffect(() => {
     const pdfFile = files[0]
@@ -112,11 +112,13 @@ const ExtractProcess = () => {
       return images;
     };
 
-    convertPdfToImages(pdfFile).then((imgs) => {
+    convertPdfToImages(pdfFile)
+    .then((imgs) => {
       setImages(imgs);
       localStorage.setItem("images", JSON.stringify(imgs));
-    });
-  }, [files]);
+    })
+    .finally(() => handleSubmit())
+  }, [files, handleSubmit]);
 
   return (
     <LoadingWrapper isLoading={isLoading}>
