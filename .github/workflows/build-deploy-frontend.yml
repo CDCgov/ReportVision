@@ -2,6 +2,18 @@ name: Build and Deploy Frontend
 
 on:
   workflow_dispatch:
+    inputs:
+      deploy-env:
+        description: 'The environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - dev2
+          - dev3
+          - dev4
+          - dev5
+          - dev6
 
 permissions:
   id-token: write
@@ -25,7 +37,7 @@ jobs:
       - name: Install NPM packages
         run: npm ci
       - name: Build project
-        run: VITE_API_URL='https://reportvision-ocr-api-dev.azurewebsites.net/' npm run build
+        run: VITE_API_URL='https://reportvision-ocr-${{ inputs.deploy-env }}.azurewebsites.net/' npm run build
       - name: Run unit tests
         run: npm run test
       - name: Create client build archive
@@ -43,7 +55,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: build-frontend-dev
+    environment: ${{ inputs.deploy-env }}
     needs: [build]
     steps:
       - name: Download Artifacts To Job
@@ -66,7 +78,7 @@ jobs:
       - name: Upload to Azure blob storage
         shell: bash
         run: |
-          az storage blob upload-batch --account-name reportvisionfrontenddev -d '$web' -s client-build/ --overwrite
+          az storage blob upload-batch --account-name reportvisionfrontend${{ inputs.deploy-env }} -d '$web' -s client-build/ --overwrite
       - name: Azure logout
         shell: bash
         run: |
