@@ -110,13 +110,6 @@ class ImageSegmenter:
         if segmentation_template is None:
             raise ValueError(f"Failed to open image file: {segmentation_template_path}")
 
-        # Align raw image to template
-        aligner = ImageHomography(segmentation_template)
-        aligned_image = aligner.transform_homography(raw_image)
-        cv.imwrite("aligned.png", aligned_image)
-        cv.imwrite("template.png", segmentation_template)
-        cv.imwrite("raw.png", raw_image)
-
         labels = json.load(open(labels_path, "r"))
 
         if self.debug is True:
