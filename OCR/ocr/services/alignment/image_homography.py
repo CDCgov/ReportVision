@@ -17,6 +17,10 @@ class ImageHomography:
         self.match_ratio = match_ratio
         self._sift = cv.SIFT_create()
 
+    @classmethod
+    def align(self, source_image, template_image):
+        return ImageHomography(template_image).transform_homography(source_image)
+
     def estimate_self_similarity(self):
         """Calibrate `match_ratio` using a self-similarity metric."""
         raise NotImplementedError

@@ -3,9 +3,6 @@ import numpy as np
 import json
 import os
 
-from ocr.services.alignment import ImageHomography
-
-
 def crop_zeros(image):
     # argwhere will give you the coordinates of every non-zero point
     true_points = np.argwhere(image)
