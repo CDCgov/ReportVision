@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     # environment: ${{ inputs.deploy-env }}
     # needs: [build-publish-ocr, build-frontend, environment-setup]
-    if: ${{ 'demo' != 'demo'}}
+    if: ${{ 'dev3' != 'demo'}}
     steps:
       - uses: actions/checkout@v4
       # - uses: azure/login@v2
