@@ -10,11 +10,11 @@ resource "azurerm_subnet" "web-subnet" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
   address_prefixes     = [var.websubnetcidr]
-  service_endpoints = [
+  service_endpoints    = [
     "Microsoft.Storage",
     "Microsoft.Web"
   ]
-  depends_on = [azurerm_virtual_network.vnet]
+  depends_on           = [azurerm_virtual_network.vnet]
 }
 
 resource "azurerm_subnet" "app-subnet" {
