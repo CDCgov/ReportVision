@@ -1,8 +1,6 @@
 name: Build and deploy all of ReportVision's services to a development environment
 
 on:
-  push:
-    branches: deploy-both-ocr-api-frontend
   workflow_dispatch:
     inputs:
       deploy-env:
