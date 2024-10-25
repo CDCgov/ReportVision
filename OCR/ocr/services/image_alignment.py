@@ -3,6 +3,7 @@ import numpy as np
 
 from ocr.services.alignment import ImageHomography
 
+
 class ImageAligner:
     def __init__(self, aligner=ImageHomography):
         self.aligner = aligner
