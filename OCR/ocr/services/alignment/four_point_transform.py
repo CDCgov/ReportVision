@@ -35,7 +35,9 @@ class FourPointTransform:
 
     def find_largest_contour(self):
         """Compute contours for an image and find the biggest one by area."""
-        contours, _ = cv.findContours(cv.cvtColor(self.image, cv.COLOR_BGR2GRAY), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv.findContours(
+            cv.cvtColor(self.image, cv.COLOR_BGR2GRAY), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE
+        )
         return functools.reduce(lambda a, b: b if cv.contourArea(a) < cv.contourArea(b) else a, contours)
 
     def simplify_polygon(self, contour):
