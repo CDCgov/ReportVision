@@ -11,7 +11,7 @@ interface MultiImageAnnotatorProps {
 }
 
 export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, initialShapes = [[]] }) => {
-    const {selectedField, setHandles, annotator, shapes, setShapes, index, setIndex } = useAnnotationContext();
+    const {selectedField, setHandles, annotator, shapes, setShapes, index, setIndex, setDrawnFields, drawnFields, setSelectedField} = useAnnotationContext();
 
 
 
@@ -23,12 +23,15 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, init
     const handleShapeAddition = (shape: Shape) => {
         const fields = [...LABELS.patientInformation.items, ...LABELS.organizationInformation.items];
         const field = fields.find(field => field.name === selectedField?.name);
+        const tempFieldsSet = new Set([...drawnFields, selectedField?.name as string]);
         const updatedShapes = [...shapes];
         // for field?.color.slice(0,7) to remove the alpha channel from the hexcode 
-        updatedShapes[index] = [...(updatedShapes[index] || []), {...shape, field: selectedField?.name as string, color: field?.color}];
+        updatedShapes[index] = [...(updatedShapes[index] || []), {...shape, field: selectedField?.name as string, color: field?.color, id: tempFieldsSet.size}];
         setShapes(updatedShapes);
         localStorage.setItem('shapes', JSON.stringify(updatedShapes));
-        annotator?.updateCategories(shape.id, [], field?.color);
+        annotator?.updateCategories(shape.id, [], `${field?.color}4D`);
+        setDrawnFields(tempFieldsSet);
+        setSelectedField(null);
         annotator!.stop();
     };
 

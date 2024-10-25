@@ -14,6 +14,7 @@ export interface CustomShape extends Shape {
 }
 
 interface Field {
+    displayedName: string;
     name: string;
     id: string;
     color: string;
@@ -26,7 +27,9 @@ interface AnnotationContextType {
   setHandles: React.Dispatch<React.SetStateAction<AnnotatorHandles | undefined>>
   shapes: CustomShape[][];
   fields: Array<Set<string>>;
+  drawnFields: Set<string>;
   setFields: React.Dispatch<React.SetStateAction<Array<Set<string>>>>;
+  setDrawnFields: React.Dispatch<React.SetStateAction<Set<string>>>;
   setShapes: React.Dispatch<React.SetStateAction<CustomShape[][]>>;
   name: string;
   description: string;
@@ -60,7 +63,8 @@ type AnnotatorHandles = {
 const AnnotationContext = createContext<AnnotationContextType | undefined>(undefined);
 
 export const AnnotationProvider = ({ children }: AnnotationProviderProps) => {
-  const [fields, setFields] = useState<Array<Set<string>>>([]);
+  const [fields, setFields] = useState<Array<Set<string>>>([new Set(), new Set()]);
+  const [drawnFields, setDrawnFields] = useState<Set<string>>(new Set());
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [selectedField, setSelectedField] = useState<Field | null>(null);
@@ -69,7 +73,7 @@ export const AnnotationProvider = ({ children }: AnnotationProviderProps) => {
   const { setHandles, annotator } = useImageAnnotator();
 
   return (
-    <AnnotationContext.Provider value={{ selectedField, setSelectedField, annotator, setHandles, shapes, setShapes, fields, setFields, name, setName, description, setDescription, index, setIndex }}>
+    <AnnotationContext.Provider value={{ selectedField, setSelectedField, annotator, setHandles, shapes, setShapes, fields, setFields, name, setName, description, setDescription, index, setIndex, drawnFields, setDrawnFields }}>
       {children}
     </AnnotationContext.Provider>
   );

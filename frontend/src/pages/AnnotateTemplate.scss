@@ -6,3 +6,56 @@
         outline-offset: 4px;
     }
 }
+
+.img-annotation-container { 
+    background: #F5FBFF !important;
+}
+
+li:hover {
+    background-color: rgba(221, 241, 247, 0.5);
+    outline: 2px solid #005EA2 !important;
+}
+
+.hover{
+    background-color: rgba(221, 241, 247, 0.5);
+    outline: 2px solid #005EA2 !important;
+}
+
+.field-container {
+    height: 100%;
+    min-width: 496px;
+    width: 496px;
+    border-right: 1px solid #EAEAEA;
+    border-left: 1px solid #EAEAEA;
+    border-bottom: 1px solid #EAEAEA;
+}
+
+
+.usa-accordion__button {
+    background-color: #ffffff;
+    border-bottom: 1px solid #EAEAEA;
+}
+.annotate-label-heading {
+    margin-top: 16px;
+    margin-bottom: 16px;;
+}
+
+.annotate-headers {
+    margin-left: 16px;
+}
+
+.accordion { 
+    background-color: white;
+}
+
+.annotation-copy {
+    margin-left: 16px;
+    margin-right: 16px;;
+}
+
+.field-label-container {
+    display: inline-flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
