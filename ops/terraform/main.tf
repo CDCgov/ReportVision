@@ -19,8 +19,8 @@ module "networking" {
   vnetcidr       = local.workspace["vnetcidr"]
   websubnetcidr  = local.workspace["websubnetcidr"]
   lbsubnetcidr   = local.workspace["lbsubnetcidr"]
-  appsubnetcidr   = local.workspace["appsubnetcidr"]
-  env = local.environment
+  appsubnetcidr  = local.workspace["appsubnetcidr"]
+  env            = local.environment
 }
 
 ##########
@@ -45,7 +45,7 @@ module "app_gateway" {
   resource_group_name     = data.azurerm_resource_group.rg.name
 
   blob_endpoint = module.storage.primary_web_host
-  lb_subnet    = module.networking.lbsubnet_id
+  lb_subnet     = module.networking.lbsubnet_id
   tags          = local.management_tags
   env           = local.environment
 
@@ -78,10 +78,11 @@ module "ocr_api" {
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
   app_subnet_id  = module.networking.appsubnet_id
-  lb_subnet_id = module.networking.lbsubnet_id
+  lb_subnet_id   = module.networking.lbsubnet_id
   env            = local.environment
   vnet           = module.networking.network_name
-  https_only   = true
+  sku_name       = var.sku_name
+  https_only     = true
 }
 
 module "ocr_autoscale" {
