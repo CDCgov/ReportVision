@@ -86,6 +86,7 @@ poetry run api
 
 You can also run the script pytest run reportvision-dataset-1/medical_report_import.py to pull in all relevant data.
 
+
 ### Run E2E Benchmark Main
 This will: 
 1.Segment and Run OCR on a folder of images using given segmentation template and labels file.
@@ -95,8 +96,8 @@ This will:
 
 To Run:
 Locate file benchmark_main.py
-Ensure all the paths/folders exist and are set up correctly
-Ensure segmentation file and labels file exist and are set up correctly
+Ensure all the paths/folders exist
+https://drive.google.com/drive/folders/1WS2FYn0BTxWv0juh7lblzdMaFlI7zbDd?usp=sharing (This link for all segmentation/labels files)
 Ensure ground_truth folder and files exist
 Ensure labels.json is in the correct format see(tax_form_segmented_labels.json as an example) 
 When running make sure to pass arguments in this order:
