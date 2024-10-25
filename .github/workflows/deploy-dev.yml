@@ -24,10 +24,6 @@ permissions:
   attestations: write
   id-token: write
 
-env:
-  NODE_VERSION: 20
-  OCR_API_URL: 'https://reportvision-ocr-dev.azurewebsites.net/'
-
 jobs:
   build-publish-ocr:
     runs-on: ubuntu-latest
@@ -46,17 +42,16 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/build-frontend
-        name: Build front-end application
+        name: Build frontend
         with:
-          api-endpoint: ${{ env.OCR_API_URL }}
+          api-endpoint: https://reportvision-ocr-${{ inputs.deploy-env }}.azurewebsites.net/
           frontend-tarball: ./frontend.tgz
-          deploy-env: ${{ inputs.deploy-env }}
           frontend-path: ./frontend
           frontend-build-path: ./frontend/dist/
+          node-version: 20
 
   environment-setup:
     runs-on: ubuntu-latest
@@ -77,3 +72,40 @@ jobs:
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           app-name: reportvision
+
+  deploy-backend:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.deploy-env }}
+    needs: [build-publish-ocr, environment-setup]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Deploy OCR-API
+        uses: ./.github/actions/deploy-api
+        with:
+          deploy-env: ${{ inputs.deploy-env }}
+          docker-tag: ${{ inputs.ocr-version }}
+          docker-registry: ghcr.io
+          api-name: ocr-api
+
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.deploy-env }}
+    needs: [build-frontend, environment-setup]
+    if: ${{ inputs.deploy-env != 'demo'}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Deploy frontend
+        uses: ./.github/actions/deploy-frontend
+        with:
+          frontend-tarball: frontend.tgz
+          deploy-env: ${{ inputs.deploy-env }}

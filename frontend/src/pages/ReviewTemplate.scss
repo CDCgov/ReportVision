@@ -1,6 +1,6 @@
 .usa-table--striped tbody tr:nth-child(odd) td.usa-input--error {
   color: #d54309;
-  background-color: #f0f0f0;
+  background-color:  #DCDEE0;
 }
 
 .usa-table--striped tbody tr:nth-child(even) td.usa-input--error {
@@ -9,9 +9,21 @@
 }
 
 .custom-tooltip-container {
+  margin-left: 4px;
   position: relative;
-  display: inline-block;
   cursor: pointer;
+}
+
+.table-group-container {
+  margin: 24px 16px;
+  border: 1px solid #DCDEE0;
+  border-radius: 5px;
+}
+
+.table-container {
+  padding: 24px 16px;
+  margin-right: 16px;
+
 }
 
 .custom-tooltip-text {
@@ -32,4 +44,48 @@
 .custom-tooltip-container:hover .custom-tooltip-text {
   visibility: visible;
   opacity: 1;
+}
+
+.review-template-header {
+  justify-content: space-between;
+  margin: 24px 16px;
+}
+
+.image-container {
+  width: 50%;
+  background-color: #F5FBFF;
+  padding: 16px;
+}
+
+.text-success-confidence {
+  color: #0C7C65;
+}
+
+.error-text {
+  color: #B32C54;
+}
+
+.review-template-header-container {
+  margin: 24px 16px;
+}
+
+.review-template-header-outer {
+  border-bottom: 1px solid #DCDEE0;
+} 
+
+.review-button-container {
+  margin-left: 16px;
+  margin-bottom: 24px;
+}
+
+.outer-review-header-container {
+  border-bottom: 1px solid #DCDEE0;
+}
+
+.csv {
+  height: 44px;
+}
+
+.csv-icon {
+  margin-right: 4px;
 }
