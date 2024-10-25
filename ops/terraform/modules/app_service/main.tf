@@ -11,11 +11,11 @@ resource "azurerm_service_plan" "asp" {
 }
 
 resource "azurerm_linux_web_app" "linux_webapp" {
-  name                          = "${var.name}-ocr-${var.env}"
-  https_only                    = var.https_only
-  location                      = var.location
-  resource_group_name           = var.resource_group
-  service_plan_id               = azurerm_service_plan.asp.id
+  name                      = "${var.name}-ocr-${var.env}"
+  https_only                = var.https_only
+  location                  = var.location
+  resource_group_name       = var.resource_group
+  service_plan_id           = azurerm_service_plan.asp.id
   virtual_network_subnet_id = var.app_subnet_id
 
   app_settings = local.app_settings
