@@ -1,6 +1,6 @@
 import numpy as np
 
-from ocr.services.alignment import ImageHomography
+from ocr.services.alignment.backends import ImageHomography
 
 
 class ImageAligner:

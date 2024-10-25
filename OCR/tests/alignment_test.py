@@ -4,8 +4,8 @@ import cv2 as cv
 import numpy as np
 import pytest
 
-from ocr.services.alignment import FourPointTransform, ImageHomography, RandomPerspectiveTransform
-from ocr.services.image_alignment import ImageAligner
+from ocr.services.alignment.backends import FourPointTransform, ImageHomography, RandomPerspectiveTransform
+from ocr.services.alignment import ImageAligner
 
 
 path = os.path.dirname(__file__)
