@@ -2,8 +2,10 @@ import os
 
 import cv2 as cv
 import numpy as np
+import pytest
 
-from ocr.services.alignment import ImageHomography, RandomPerspectiveTransform
+from ocr.services.alignment import FourPointTransform, ImageHomography, RandomPerspectiveTransform
+from ocr.services.image_alignment import ImageAligner
 
 
 path = os.path.dirname(__file__)
@@ -14,6 +16,15 @@ filled_image = cv.imread(filled_image_path)
 
 
 class TestAlignment:
+    @pytest.mark.parametrize("align_class", [ImageHomography, FourPointTransform])
+    def test_align_implementation(self, align_class):
+        """Tests that the ImageAligner class backends implement the `align` method."""
+        template_image = cv.imread(template_image_path)
+        aligner = ImageAligner(aligner=align_class)
+        result = aligner.align(filled_image, template_image)
+        assert result.shape == template_image.shape, "Aliged image has wrong shape"
+        assert np.median(cv.absdiff(template_image, result)) <= 1, "Median difference too high"
+
     def test_random_warp(self):
         """Test that a random warp generates an image different from the template."""
         transformed = RandomPerspectiveTransform(filled_image_path).random_transform(distortion_scale=0.1)
