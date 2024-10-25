@@ -10,7 +10,6 @@ export const ExtractStepper = ({
     ExtractStep.Upload,
     ExtractStep.Extract,
     ExtractStep.Review,
-    ExtractStep.Submit,
   ];
 
   const determineStatus = (step: ExtractStep, currentStep: ExtractStep) => {

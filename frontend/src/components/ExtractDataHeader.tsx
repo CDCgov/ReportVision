@@ -1,11 +1,14 @@
 import React from "react";
 import { Button, Icon, Header } from "@trussworks/react-uswds";
 
+import './ExtractDataHeader.scss'
+
 interface ExtractDataHeaderProps {
   onBack: () => void;
   onSubmit: () => void;
   onExit: () => void;
   isUploadComplete: boolean;
+  hasSubmit?: boolean;
 }
 
 export const ExtractDataHeader: React.FC<ExtractDataHeaderProps> = ({
@@ -13,9 +16,10 @@ export const ExtractDataHeader: React.FC<ExtractDataHeaderProps> = ({
   onSubmit,
   onExit,
   isUploadComplete,
+  hasSubmit = true,
 }) => {
   return (
-    <Header style={{ height: "50px", padding: "8px" }}>
+    <Header className="extract-header">
       <div
         className="display-flex height-full flex-align-center"
         style={{ justifyContent: "space-between" }}
@@ -25,10 +29,10 @@ export const ExtractDataHeader: React.FC<ExtractDataHeaderProps> = ({
           style={{ justifyContent: "flex-start" }}
         >
           <Button
+            className="extract-close-button"
             data-testid="close-button"
             unstyled
             type="button"
-            style={{ paddingRight: "8px" }}
             onClick={onExit}
           >
             <Icon.Close size={3} color="black" />
@@ -37,25 +41,25 @@ export const ExtractDataHeader: React.FC<ExtractDataHeaderProps> = ({
         </div>
         <div className="display-flex flex-align-center">
           <Button
+            className="extract-button-reset"
             onClick={onBack}
             type="reset"
             outline
-            style={{
-              height: "40px",
-              boxShadow: "inset 0 0 0 2px #adadad",
-              color: "#adadad",
-            }}
           >
             Back
           </Button>
-          <Button
-            onClick={onSubmit}
-            type="submit"
-            disabled={!isUploadComplete}
-            style={{ height: "40px", marginLeft: "8px" }}
-          >
-            Submit
-          </Button>
+          {
+            hasSubmit && (
+              <Button
+                className="extract-button-submit"
+                onClick={onSubmit}
+                type="submit"
+                disabled={!isUploadComplete}
+              >
+                Submit
+              </Button>
+            )
+          }
         </div>
       </div>
     </Header>
