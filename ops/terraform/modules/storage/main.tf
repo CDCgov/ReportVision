@@ -11,7 +11,7 @@ resource "azurerm_storage_account" "frontend" {
   location                   = var.location
   resource_group_name        = var.resource_group
   name                       = "${var.env == "demo" ? random_password.password.result : "${var.name}frontend${var.env}"}"
-  https_traffic_only_enabled = false
+  https_traffic_only_enabled = true
 
   static_website {
     index_document     = "index.html"

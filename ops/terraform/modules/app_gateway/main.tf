@@ -52,8 +52,8 @@ resource "azurerm_application_gateway" "load_balancer" {
   backend_http_settings {
     name                                = local.http_setting_name_static
     cookie_based_affinity               = "Disabled"
-    port                                = 80
-    protocol                            = "Http"
+    port                                = 443
+    protocol                            = "Https"
     request_timeout                     = 60
     pick_host_name_from_backend_address = true
     probe_name                          = local.static_probe_name_app
@@ -64,8 +64,8 @@ resource "azurerm_application_gateway" "load_balancer" {
     interval                                  = 30
     timeout                                   = 30
     unhealthy_threshold                       = 3
-    protocol                                  = "Http"
-    port                                      = 80
+    protocol                                  = "Https"
+    port                                      = 443
     path                                      = "/"
     pick_host_name_from_backend_http_settings = true
   }
@@ -80,8 +80,8 @@ resource "azurerm_application_gateway" "load_balancer" {
   backend_http_settings {
     name                                = local.http_setting_name_api
     cookie_based_affinity               = "Disabled"
-    port                                = 80
-    protocol                            = "Http"
+    port                                = 443
+    protocol                            = "Https"
     request_timeout                     = 120
     pick_host_name_from_backend_address = true
     probe_name                          = local.api_probe_name_app
@@ -92,8 +92,8 @@ resource "azurerm_application_gateway" "load_balancer" {
     interval                                  = 30
     timeout                                   = 30
     unhealthy_threshold                       = 3
-    protocol                                  = "Http"
-    port                                      = 80
+    protocol                                  = "Https"
+    port                                      = 443
     path                                      = "/"
     pick_host_name_from_backend_http_settings = true
     match {
