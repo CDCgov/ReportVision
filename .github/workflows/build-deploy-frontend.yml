@@ -87,12 +87,14 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Upload to Azure blob storage
         shell: bash
+        if: ${{ env.demo-blob-name == '' }}
         run: |
-          if [ -z "${{ env.demo-blob-name }}" ]; then
-            az storage blob upload-batch --account-name reportvisionfrontend${{ env.deploy-env }} -d '$web' -s client-build/ --overwrite
-          else
-            az storage blob upload-batch --account-name ${{ env.demo-blob-name }} -d '$web' -s client-build/ --overwrite
-          fi
+          az storage blob upload-batch --account-name reportvisionfrontend${{ env.deploy-env }} -d '$web' -s client-build/ --overwrite
+      - name: Upload to Azure blob storage
+        shell: bash
+        if: ${{ env.demo-blob-name != '' }}
+        run: |
+          az storage blob upload-batch --account-name ${{ env.demo-blob-name }} -d '$web' -s client-build/ --overwrite
       - name: Azure logout
         shell: bash
         run: |
