@@ -47,7 +47,7 @@ jobs:
       - name: Install NPM packages
         run: npm ci
       - name: Build project
-        run: VITE_API_URL='https://reportvision-ocr-${{ inputs.deploy-env }}.azurewebsites.net/' npm run build
+        run: VITE_API_URL='https://reportvision-ocr-${{ env.deploy-env }}.azurewebsites.net/' npm run build
       - name: Run unit tests
         run: npm run test
       - name: Create client build archive
@@ -65,9 +65,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
-    env:
-      DEMO_BLOB_NAME: ${{ inputs.deploy-env }}
+    environment: demo
     needs: [build]
     steps:
       - name: Download Artifacts To Job
@@ -91,9 +89,9 @@ jobs:
         shell: bash
         run: |
           if [ -z "${{ env.demo-blob-name }}" ]; then
-            az storage blob upload-batch --account-name reportvisionfrontend${{ inputs.deploy-env }} -d '$web' -s client-build/ --overwrite
+            az storage blob upload-batch --account-name reportvisionfrontend${{ env.deploy-env }} -d '$web' -s client-build/ --overwrite
           else
-            az storage blob upload-batch --account-name ${{ inputs.demo-blob-name }} -d '$web' -s client-build/ --overwrite
+            az storage blob upload-batch --account-name ${{ env.demo-blob-name }} -d '$web' -s client-build/ --overwrite
           fi
       - name: Azure logout
         shell: bash
