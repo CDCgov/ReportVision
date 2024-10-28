@@ -10,8 +10,15 @@ import cv2 as cv
 
 
 class FourPointTransform:
-    def __init__(self, image: Path):
-        self.image = cv.imread(str(image), cv.IMREAD_GRAYSCALE)
+    def __init__(self, image: Path | np.ndarray):
+        if isinstance(image, np.ndarray):
+            self.image = image
+        else:
+            self.image = cv.imread(str(image))
+
+    @classmethod
+    def align(self, source_image, template_image):
+        return FourPointTransform(source_image).dewarp()
 
     @staticmethod
     def _order_points(quadrilateral: np.ndarray) -> np.ndarray:
@@ -28,7 +35,9 @@ class FourPointTransform:
 
     def find_largest_contour(self):
         """Compute contours for an image and find the biggest one by area."""
-        _, contours, _ = cv.findContours(self.image, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv.findContours(
+            cv.cvtColor(self.image, cv.COLOR_BGR2GRAY), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE
+        )
         return functools.reduce(lambda a, b: b if cv.contourArea(a) < cv.contourArea(b) else a, contours)
 
     def simplify_polygon(self, contour):
@@ -40,8 +49,8 @@ class FourPointTransform:
         biggest_contour = self.find_largest_contour()
         simplified = self.simplify_polygon(biggest_contour)
 
-        height, width = self.image.shape
+        height, width, _ = self.image.shape
         destination = np.array([[0, 0], [width, 0], [width, height], [0, height]], dtype=np.float32)
 
-        M = cv.getPerspectiveTransform(self.order_points(simplified), destination)
+        M = cv.getPerspectiveTransform(self._order_points(simplified), destination)
         return cv.warpPerspective(self.image, M, (width, height))
