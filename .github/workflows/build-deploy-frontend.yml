@@ -22,8 +22,8 @@ on:
   #       required: false
 
 env:
-  demo-blob-name: xjvw1dq9tg7srfo2ylonkgxb
-  deploy-env: demo
+  demo-blob-name: 
+  deploy-env: dev4
 
 permissions:
   id-token: write
@@ -65,7 +65,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: demo
+    environment: dev4
     needs: [build]
     steps:
       - name: Download Artifacts To Job
