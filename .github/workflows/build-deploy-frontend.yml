@@ -1,23 +1,29 @@
 name: Build and Deploy Frontend
 
 on:
-  workflow_dispatch:
-    inputs:
-      deploy-env:
-        description: 'The environment to deploy to'
-        required: true
-        type: choice
-        options:
-          - dev
-          - dev2
-          - dev3
-          - dev4
-          - dev5
-          - dev6
-          - demo
-      demo-blob-name:
-        description: 'After the demo env gets created, copy its blob storage name here'
-        required: false
+  push:
+    branches: update-frontend-deploy-for-demo-env
+  # workflow_dispatch:
+  #   inputs:
+  #     deploy-env:
+  #       description: 'The environment to deploy to'
+  #       required: true
+  #       type: choice
+  #       options:
+  #         - dev
+  #         - dev2
+  #         - dev3
+  #         - dev4
+  #         - dev5
+  #         - dev6
+  #         - demo
+  #     demo-blob-name:
+  #       description: 'After the demo env gets created, copy its blob storage name here'
+  #       required: false
+
+env:
+  demo-blob-name: xjvw1dq9tg7srfo2ylonkgxb
+  deploy-env: demo
 
 permissions:
   id-token: write
@@ -84,7 +90,7 @@ jobs:
       - name: Upload to Azure blob storage
         shell: bash
         run: |
-          if [ -z "${{ inputs.demo-blob-name }}" ]; then
+          if [ -z "${{ env.demo-blob-name }}" ]; then
             az storage blob upload-batch --account-name reportvisionfrontend${{ inputs.deploy-env }} -d '$web' -s client-build/ --overwrite
           else
             az storage blob upload-batch --account-name ${{ inputs.demo-blob-name }} -d '$web' -s client-build/ --overwrite
