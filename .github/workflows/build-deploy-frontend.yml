@@ -26,8 +26,10 @@ env:
   deploy-env: dev4
 
 permissions:
-  id-token: write
   contents: read
+  packages: write
+  attestations: write
+  id-token: write
 
 jobs:
   build:
