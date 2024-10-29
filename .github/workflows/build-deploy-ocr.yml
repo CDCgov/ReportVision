@@ -1,15 +1,17 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  workflow_dispatch:
-    inputs:
-        tag:
-            description: 'Version tag for new release'
-            required: true
+  push:
+    branches: fix-docker-image-check
+  # workflow_dispatch:
+  #   inputs:
+  #       tag:
+  #           description: 'Version tag for new release'
+  #           required: true
 
 env:
   REGISTRY: ghcr.io
-  VERSION: ${{ inputs.tag }}
+  VERSION: demo-test-env-derek
 
 
 jobs:
@@ -20,6 +22,8 @@ jobs:
       packages: write
       attestations: write
       id-token: write
+    outputs:
+      tf_env: ${{ steps.set-environment.outputs.tf_env }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,12 +35,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Lowercase the repo name
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-      # - name: Check if image exists
-      #   id: image_check
-      #   run: docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
+      - name: Check if image exists
+        id: image_check
+        run: |
+          echo "tf_env=$(
+              docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
+            )" >> $GITHUB_OUTPUT
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6
+        if: ${{ steps.image_check.outputs.tf_env == 1 }}
         with:
           context: ./OCR/
           file: ./OCR/Dockerfile
@@ -51,7 +59,7 @@ jobs:
       attestations: write
       id-token: write
     needs: build-and-push-image
-    environment: dev
+    environment: dev3
     steps:
       - uses: azure/login@v2
         with:
@@ -66,6 +74,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: reportvision-ocr-dev
+          app-name: reportvision-ocr-dev3
           images: '${{ env.REGISTRY }}/${{ env.REPO}}-ocr-api:${{ env.VERSION }}'
       
