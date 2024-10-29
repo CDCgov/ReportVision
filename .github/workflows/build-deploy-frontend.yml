@@ -14,6 +14,10 @@ on:
           - dev4
           - dev5
           - dev6
+          - demo
+      demo-blob-name:
+        description: 'After the demo env gets created, copy its blob storage name here'
+        required: false
 
 permissions:
   id-token: write
@@ -78,7 +82,11 @@ jobs:
       - name: Upload to Azure blob storage
         shell: bash
         run: |
-          az storage blob upload-batch --account-name reportvisionfrontend${{ inputs.deploy-env }} -d '$web' -s client-build/ --overwrite
+          if [ -z "${{ inputs.demo-blob-name }}" ]; then
+            az storage blob upload-batch --account-name reportvisionfrontend${{ inputs.deploy-env }} -d '$web' -s client-build/ --overwrite
+          else
+            az storage blob upload-batch --account-name ${{ inputs.demo-blob-name }} -d '$web' -s client-build/ --overwrite
+          fi
       - name: Azure logout
         shell: bash
         run: |
