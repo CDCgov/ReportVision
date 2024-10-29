@@ -1,11 +1,13 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  workflow_dispatch:
-    inputs:
-        tag:
-            description: 'Version tag for new release'
-            required: true
+  push:
+    branches: fix-docker-image-check
+  # workflow_dispatch:
+  #   inputs:
+  #       tag:
+  #           description: 'Version tag for new release'
+  #           required: true
 
 env:
   REGISTRY: ghcr.io
@@ -37,7 +39,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
+              docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:demo-test-env-derek > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and push Docker image
         id: push
@@ -47,7 +49,7 @@ jobs:
           context: ./OCR/
           file: ./OCR/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }}
+          tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:demo-test-env-derek
 
   deploy:
     runs-on: ubuntu-latest
