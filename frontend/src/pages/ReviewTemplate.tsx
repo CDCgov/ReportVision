@@ -280,7 +280,7 @@ const ReviewTemplate: React.FC = () => {
               </div>
               <div className="table-container">
                 <SortableTable
-                    columns={["name", "value", "isError", "confidence"]}
+                    columns={["name", "value", "confidence"]}
                     data={resultsTable}
                     sortableBy={["name", "confidence", "value"]}
                     defaultSort={"confidence"}
