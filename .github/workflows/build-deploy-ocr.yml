@@ -1,17 +1,15 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  push:
-    branches: fix-docker-image-check
-  # workflow_dispatch:
-  #   inputs:
-  #       tag:
-  #           description: 'Version tag for new release'
-  #           required: true
+  workflow_dispatch:
+    inputs:
+        tag:
+            description: 'Version tag for new release'
+            required: true
 
 env:
   REGISTRY: ghcr.io
-  VERSION: demo-test-env-derek1
+  VERSION: ${{ inputs.tag }}
 
 
 jobs:
@@ -23,7 +21,7 @@ jobs:
       attestations: write
       id-token: write
     outputs:
-      tf_env: ${{ steps.set-environment.outputs.tf_env }}
+      docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,13 +36,13 @@ jobs:
       - name: Check if image exists
         id: image_check
         run: |
-          echo "tf_env=$(
+          echo "docker_inspect=$(
               docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:${{ env.VERSION }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6
-        if: ${{ steps.image_check.outputs.tf_env == 1 }}
+        if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
         with:
           context: ./OCR/
           file: ./OCR/Dockerfile
