@@ -39,7 +39,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:demo-test-env-derek > /dev/null ; echo $?
+              docker manifest inspect ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:demo-test-env-derek1 > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and push Docker image
         id: push
@@ -49,7 +49,7 @@ jobs:
           context: ./OCR/
           file: ./OCR/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:demo-test-env-derek
+          tags: ${{ env.REGISTRY }}/${{ env.REPO }}-ocr-api:demo-test-env-derek1
 
   deploy:
     runs-on: ubuntu-latest
