@@ -14,17 +14,18 @@ import { makeScreenshots } from "../utils/functions";
 
 export const SaveTemplate = () => {
     const navigate = useNavigate();
-    const { fields, setDescription, setName, name, description, shapes, setShapes, setFields } = useAnnotationContext()
+    const { fields, setDescription, setName, name, description, shapes, setShapes, setFields, setDrawnFields, setSelectedField } = useAnnotationContext()
     const { addFile } = useFiles();
     
     const handleSubmit = async () => {
         const images: ImageData[] = localStorage.getItem('images') ? JSON.parse(localStorage.getItem('images') as string) : [];
         let pages: Page[] = [];
-
+        const tempFields = fields.filter(field => field.size > 0);
+        
         const screenshots = await makeScreenshots()
 
         if (images.length > 0) {
-            pages = fields.map((_, index) => {
+            pages = tempFields.map((_, index) => {
                 const shape = shapes[index]
                 return {
                     fieldNames: shape.map(s => {
@@ -62,7 +63,9 @@ export const SaveTemplate = () => {
         }
 
         setShapes([]);
-        setFields([]);
+        setFields([new Set(), new Set()]);
+        setDrawnFields(new Set());
+        setSelectedField(null);
         localStorage.setItem('shapes', '');
         localStorage.setItem('images', '');
         navigate("/")
