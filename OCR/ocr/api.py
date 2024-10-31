@@ -9,6 +9,7 @@ from fastapi import FastAPI, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 
 from ocr.services.image_ocr import ImageOCR
+from ocr.services.alignment import ImageAligner
 from ocr.services.image_segmenter import ImageSegmenter, segment_by_color_bounding_box
 
 app = FastAPI()
@@ -34,6 +35,18 @@ ocr = ImageOCR()
 @app.get("/")
 async def health_check():
     return {"status": "UP"}
+
+
+@app.post("/image_alignment/")
+async def image_alignment(source_image: UploadFile, segmentation_template: UploadFile):
+    source_image_np = np.frombuffer(await source_image.read(), np.uint8)
+    source_image_img = cv.imdecode(source_image_np, cv.IMREAD_COLOR)
+
+    segmentation_template_np = np.frombuffer(await segmentation_template.read(), np.uint8)
+    segmentation_template_img = cv.imdecode(segmentation_template_np, cv.IMREAD_COLOR)
+
+    aligner = ImageAligner()
+    return aligner.align(source_image_img, segmentation_template_img)
 
 
 @app.post("/image_file_to_text/")
