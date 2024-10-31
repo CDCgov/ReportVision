@@ -1,5 +1,5 @@
 locals {
-  workspaces = merge(local.dev, local.dev2, local.dev3, local.dev4, local.dev5, local.dev6, local.demo)
+  workspaces = merge(local.dev, local.demo)
   workspace  = local.workspaces[terraform.workspace]
 
   management_tags = {
