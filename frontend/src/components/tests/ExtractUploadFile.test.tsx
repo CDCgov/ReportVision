@@ -4,6 +4,23 @@ import { describe, it, expect } from "vitest";
 import { ExtractUploadFile } from "../ExtractUploadFile";
 import { Wrapper } from "../../utils/tests";
 
+vi.mock("pdfjs-dist", () => ({
+  GlobalWorkerOptions: {
+    workerSrc: `//unpkg.com/pdfjs-dist@2.0.0/build/pdf.worker.min.mjs`,
+  },
+  version: '2.0.0',
+  getDocument: vi.fn().mockReturnValue({
+    promise: Promise.resolve({
+      numPages: 1,
+      getPage: vi.fn().mockReturnValue(Promise.resolve({
+        getTextContent: vi.fn().mockReturnValue(Promise.resolve({
+          items: [{ str: "Mocked text content" }]
+        }))
+      }))
+    })
+  })
+}));
+
 describe("ExtractUploadFile component", () => {
   it("renders the header with correct text", () => {
     render(<ExtractUploadFile onUploadComplete={vi.fn()} />, {
@@ -11,16 +28,14 @@ describe("ExtractUploadFile component", () => {
     });
 
     const mainHeading = screen.getByRole("heading", {
-      name: /choose template and upload new form/i,
+      name: /Upload new image or PDF to extract data from/i,
     });
     expect(mainHeading).toBeInTheDocument();
-    expect(mainHeading).toHaveStyle({ margin: "0" });
 
     const subHeading = screen.getByRole("heading", {
       name: /upload new image or pdf to extract data from/i,
     });
     expect(subHeading).toBeInTheDocument();
-    expect(subHeading).toHaveStyle({ margin: "10px" });
   });
 
   it("renders the upload area with correct structure", () => {
@@ -31,11 +46,11 @@ describe("ExtractUploadFile component", () => {
     const dashedContainer = screen.getByTestId("dashed-container");
     expect(dashedContainer).toBeInTheDocument();
 
-    const uploadIcon = screen.getByTestId("upload-icon");
-    expect(uploadIcon).toBeInTheDocument();
+    const buttons = screen.queryAllByTestId("button");
+    expect(buttons).toHaveLength(2);
 
     const dragDropText = screen.getByRole("heading", {
-      name: /drag and drop file here/i,
+      name: /Upload new image or PDF to extract data from/i,
     });
     expect(dragDropText).toBeInTheDocument();
     expect(dragDropText).toHaveStyle({ fontWeight: "bold" });

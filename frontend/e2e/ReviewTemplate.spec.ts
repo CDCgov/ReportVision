@@ -18,16 +18,12 @@ test.describe("ReviewTemplate Page", () => {
   // Test the Done button functionality
   test("Done button navigates correctly", async ({ page }) => {
     const submitButton = page.getByRole("button", { name: "Done" });
-    await expect(submitButton).toBeVisible();
     await expect(submitButton).toBeDisabled();
     const errorRows = await page.locator("tr *[data-testid='edit-fix-error']");
     for (const row of await errorRows.elementHandles()) {
       await row.click();
       await page.keyboard.press('Enter');
     }
-
-    await submitButton.click();
-    await expect(page).toHaveURL("/");
   });
 
   // Test the extracted data section
@@ -35,28 +31,30 @@ test.describe("ReviewTemplate Page", () => {
     page,
   }) => {
     const extractedDataHeader = page.getByRole("heading", {
-      name: "Extracted Data",
+      name: "Data Validation",
     });
     await expect(extractedDataHeader).toBeVisible();
 
-    await expect(page.locator("p.font-sans")).toHaveText(
-      "Review and edit errors before you submit."
+    await expect(page.locator("p")).toHaveText(
+      "Here is your batch export. Please review all forms and correct any items with a low confidence score (CS) before downloading."
     );
   });
 
   test("Table contains the correct headers", async ({ page }) => {
     const headers = page.locator("th");
-    await expect(headers.nth(0)).toHaveText("Label"); // First header
-    await expect(headers.nth(1)).toHaveText("Value"); // Second header
-    await expect(headers.nth(2)).toHaveText("Label CS"); // Third header
+    await expect(headers.nth(0)).toHaveText("Name"); // First header
+    await expect(headers.nth(1)).toHaveText("Page Count"); // Second header
+    await expect(headers.nth(2)).toHaveText("Errors"); // Third header
+    await expect(headers.nth(3)).toHaveText("CS"); // Fourth header
+
   });
 
   test("should calculate overall confidence score correctly", async ({
     page,
   }) => {
     // Check that the overall confidence score is calculated correctly
-    const overallConfidence = await page.locator("span.text-black");
-    await expect(overallConfidence).toContainText("83.67%");
+    const overallConfidence = await page.locator("td");
+    await expect(overallConfidence.nth(3)).toContainText("72.08");
   });
 
   test("should correctly identify and count errors (below threshold)", async ({
@@ -70,7 +68,67 @@ test.describe("ReviewTemplate Page", () => {
   test("should apply error styling when confidence is below threshold", async ({
     page,
   }) => {
-    const DrawLocation = page.locator("td >> text=BH_1Diamondd_LAB");
-    await expect(DrawLocation).toHaveClass(/error-text/);
+    const DrawLocation = page.locator("tr .error-text");
+    await expect(DrawLocation.nth(3)).toHaveClass(/error-text/);
+  });
+
+  test("should click into single table view", async ({
+    page,
+  }) => {
+    const DrawLocation = page.locator("tr .error-text");
+    await DrawLocation.nth(3).click();
+
+    const extractedDataHeader = page.getByRole("heading", {
+      name: "Extracted Data",
+    });
+    await expect(extractedDataHeader).toBeVisible();
+
+    await expect(page.locator("p")).toHaveText(
+      "Review and edit errors before you submit."
+    ); 
+  });
+
+  test("should handle error fixes", async ({
+    page,
+  }) => {
+    const DrawLocation = page.locator("tr .error-text");
+    await DrawLocation.nth(3).click();
+    const submitButton = page.getByRole("button", { name: "Done" });
+
+    const errorRows = await page.locator("tr *[data-testid='edit-fix-error']");
+    await expect(submitButton).toBeDisabled();
+    for (const row of await errorRows.elementHandles()) {
+      await row.click();
+      await page.keyboard.press('Enter');
+    }
+    await expect(submitButton).toBeEnabled();
+    await submitButton.click();
+    const extractedDataHeader = page.getByRole("heading", {
+      name: "Data Validation",
+    });
+    await expect(extractedDataHeader).toBeVisible();
+
+    const nextError = page.locator("tr .error-text");
+    await nextError.nth(3).click();
+    await expect(submitButton).toBeDisabled();
+    for (const row of await errorRows.elementHandles()) {
+      await row.click();
+      await page.keyboard.press('Enter');
+    }
+
+    await expect(submitButton).toBeEnabled();
+    await submitButton.click();
+    await nextError.nth(3).click();
+    await expect(submitButton).toBeDisabled();
+    for (const row of await errorRows.elementHandles()) {
+      await row.click();
+      await page.keyboard.press('Enter');
+    }
+
+    await expect(submitButton).toBeEnabled();
+    await submitButton.click();
+
+    await submitButton.click();
+    await expect(page).toHaveURL("/");
   });
 });

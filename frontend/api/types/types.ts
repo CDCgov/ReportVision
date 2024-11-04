@@ -43,3 +43,7 @@ export interface AlignImageArgs {
     sourceImage: string;
     templateImage: string;
 }
+export interface PDF {
+  file: string;
+  images: string[];
+}

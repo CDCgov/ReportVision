@@ -52,3 +52,25 @@ export function convertBase64SvgToBase64Png(base64Svg: string, width: number, he
       };
   });
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const convertPdfToImages = async (file: File, pdfjsLib: any): Promise<string[]> => {
+    const images: Array<string> = [];
+    const data = URL.createObjectURL(file);
+
+    const pdf = await pdfjsLib.getDocument(data).promise;
+    const canvas = document.createElement("canvas");
+    for (let i = 0; i < pdf.numPages; i++) {
+      const page = await pdf.getPage(i + 1);
+      const viewport = page.getViewport({ scale: 1 });
+      const context = canvas.getContext("2d")!;
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      await page.render({ canvasContext: context, viewport: viewport })
+        .promise;
+      images.push(canvas.toDataURL());
+    }
+    canvas.remove();
+    URL.revokeObjectURL(data);
+    return images;
+  };

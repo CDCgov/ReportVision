@@ -59,7 +59,6 @@ const AnnotateTemplate: React.FC = () => {
     index,
     setIndex,
     drawnFields,
-    setShapes,
     setDrawnFields,
   } = useAnnotationContext();
   const pdfFile = files[0];
@@ -95,13 +94,13 @@ const AnnotateTemplate: React.FC = () => {
 
     convertPdfToImages(pdfFile).then((imgs) => {
       setImages(imgs);
-      localStorage.setItem("images", JSON.stringify(imgs));
+      localStorage.setItem('images', JSON.stringify(imgs));
     });
   }, [files, pdfFile]);
   useEffect(() => {
     const getImage = async () => {
       const localImages = await JSON.parse(
-        localStorage.getItem("images") || "[]"
+        localStorage.getItem('images') || "[]"
       );
       if (localImages && localImages.length > 0) {
         setImages(localImages.images);
@@ -114,7 +113,8 @@ const AnnotateTemplate: React.FC = () => {
     }
     getImage();
     return () => handleUnmount();
-  }, []);
+  }, [setDrawnFields, setSelectedField]);
+
   const renderLabelContent = (category: LabelCategory): JSX.Element => (
     <ul className="usa-list usa-list--unstyled">
       {category.items.map((item, idx) => (
