@@ -1,20 +1,18 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  push:
-    branches: fix-docker-image-check
-  # workflow_dispatch:
-  #   inputs:
-  #     deploy-env:
-  #       description: 'The environment to deploy to'
-  #       required: true
-  #       type: choice
-  #       options:
-  #         - dev
-  #         - demo
-  #     ocr-version:
-  #       description: 'Create a version for this OCR API image'
-  #       required: true
+  workflow_dispatch:
+    inputs:
+      deploy-env:
+        description: 'The environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - demo
+      ocr-version:
+        description: 'Create a version for this OCR API image'
+        required: true
 
 permissions:
   contents: read
@@ -43,7 +41,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:resusable-deploy-test-derek > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ inputs.ocr-version }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -52,7 +50,7 @@ jobs:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          docker-tag: resusable-deploy-test-derek
+          docker-tag: ${{ inputs.ocr-version }}
           dockerfile-path: ./OCR/Dockerfile
           docker-context-path: ./OCR/
           api-name: ocr-api
@@ -60,7 +58,7 @@ jobs:
   deploy-ocr:
     name: Deploy OCR
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ inputs.deploy-env }}
     needs: [build-publish-ocr]
     steps:
       - uses: actions/checkout@v4
@@ -72,7 +70,7 @@ jobs:
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
-          deploy-env: dev
-          docker-tag: resusable-deploy-test-derek
+          deploy-env: ${{ inputs.deploy-env }}
+          docker-tag: ${{ inputs.ocr-version }}
           docker-registry: ghcr.io
           api-name: ocr-api
