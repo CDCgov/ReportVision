@@ -1,18 +1,20 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  workflow_dispatch:
-    inputs:
-      deploy-env:
-        description: 'The environment to deploy to'
-        required: true
-        type: choice
-        options:
-          - dev
-          - demo
-      ocr-version:
-        description: 'Create a version for this OCR API image'
-        required: true
+  push:
+    branches: fix-docker-image-check
+  # workflow_dispatch:
+  #   inputs:
+  #     deploy-env:
+  #       description: 'The environment to deploy to'
+  #       required: true
+  #       type: choice
+  #       options:
+  #         - dev
+  #         - demo
+  #     ocr-version:
+  #       description: 'Create a version for this OCR API image'
+  #       required: true
 
 permissions:
   contents: read
@@ -21,7 +23,8 @@ permissions:
   id-token: write
 
 jobs:
-  build-and-push-image:
+  build-publish-ocr:
+    name: Build and Publish OCR
     runs-on: ubuntu-latest
     outputs:
       docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
@@ -40,7 +43,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ inputs.deploy-env }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:derek-clean-up-test > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -49,15 +52,16 @@ jobs:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          docker-tag: ${{ inputs.ocr-version }}
+          docker-tag: derek-clean-up-test
           dockerfile-path: ./OCR/Dockerfile
           docker-context-path: ./OCR/
           api-name: ocr-api
 
-  deploy-ocr-api:
+  deploy-ocr:
+    name: Deploy OCR
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
-    needs: [build-and-push-image]
+    environment: dev
+    needs: [build-publish-ocr]
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -68,7 +72,7 @@ jobs:
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
-          deploy-env: ${{ inputs.deploy-env }}
-          docker-tag: ${{ inputs.ocr-version }}
+          deploy-env: dev
+          docker-tag: derek-clean-up-test
           docker-registry: ghcr.io
           api-name: ocr-api

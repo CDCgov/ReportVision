@@ -27,6 +27,7 @@ permissions:
 
 jobs:
   build-publish-ocr:
+    name: Build and Publish OCR
     runs-on: ubuntu-latest
     outputs:
       docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
@@ -53,6 +54,7 @@ jobs:
           api-name: ocr-api
 
   build-frontend:
+    name: Build Frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -66,6 +68,7 @@ jobs:
           node-version: 20
 
   environment-setup:
+    name: Setup Azure Environment
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
     steps:
@@ -85,7 +88,8 @@ jobs:
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           app-name: reportvision
 
-  deploy-ocr-api:
+  deploy-ocr:
+    name: Deploy OCR
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
     needs: [build-publish-ocr, environment-setup]
@@ -105,6 +109,7 @@ jobs:
           api-name: ocr-api
 
   deploy-frontend:
+    name: Deploy Frontend
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
     needs: [build-frontend, environment-setup]
