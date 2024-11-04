@@ -43,7 +43,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:derek-clean-up-test > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:resusable-deploy-test-derek > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -52,7 +52,7 @@ jobs:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          docker-tag: derek-clean-up-test
+          docker-tag: resusable-deploy-test-derek
           dockerfile-path: ./OCR/Dockerfile
           docker-context-path: ./OCR/
           api-name: ocr-api
@@ -73,6 +73,6 @@ jobs:
         uses: ./.github/actions/deploy-api
         with:
           deploy-env: dev
-          docker-tag: derek-clean-up-test
+          docker-tag: resusable-deploy-test-derek
           docker-registry: ghcr.io
           api-name: ocr-api
