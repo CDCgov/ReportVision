@@ -109,7 +109,6 @@ const AnnotateTemplate: React.FC = () => {
     };
 
     const handleUnmount = () => {
-      setShapes([]);
       setDrawnFields(new Set());
       setSelectedField(null);
     }
