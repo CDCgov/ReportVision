@@ -1,5 +1,7 @@
 import { ImageToTextArgs, ImageToTextResponse, AlignImageArgs, AlignImageResponse } from "./types/types";
 
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/"
+
 export const AlignImage = async (args: AlignImageArgs): Promise<AlignImageResponse | null> => {
     const { sourceImage, templateImage } = args;
     const form = new URLSearchParams({
@@ -7,7 +9,6 @@ export const AlignImage = async (args: AlignImageArgs): Promise<AlignImageRespon
         segmentation_template: templateImage,
       });
 
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/"
     const alignImageURL = `${apiUrl}image_alignment/`
     try {
         const response = await fetch(alignImageURL, {
@@ -33,7 +34,6 @@ export const ImageToText = async (args: ImageToTextArgs): Promise<ImageToTextRes
         labels: JSON.stringify(fieldNames),
       });
 
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/"
     const imageToTextURL = `${apiUrl}image_to_text/`
     try {
         const response = await fetch(imageToTextURL, {
