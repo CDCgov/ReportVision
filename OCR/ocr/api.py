@@ -31,15 +31,16 @@ segmenter = ImageSegmenter(
 )
 ocr = ImageOCR()
 
+
 def data_uri_to_image(data_uri: str):
     image_stripped = data_uri.replace("data:image/png;base64,", "", 1)
     image_np = np.frombuffer(base64.b64decode(image_stripped), np.uint8)
     return cv.imdecode(image_np, cv.IMREAD_COLOR)
 
+
 def image_to_data_uri(image: np.ndarray):
     _, encoded = cv.imencode(".png", image)
     return b"data:image/png;base64," + base64.b64encode(encoded)
-
 
 
 @app.get("/")
