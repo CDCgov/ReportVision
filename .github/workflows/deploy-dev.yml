@@ -9,11 +9,6 @@ on:
         type: choice
         options:
           - dev
-          - dev2
-          - dev3
-          - dev4
-          - dev5
-          - dev6
           - demo
       ocr-version:
         description: 'Create a version for this OCR API image'

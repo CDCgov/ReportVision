@@ -9,11 +9,6 @@ on:
         type: choice
         options:
           - dev
-          - dev2
-          - dev3
-          - dev4
-          - dev5
-          - dev6
           - demo
       demo-blob-name:
         description: 'After the demo env gets created, copy its blob storage name here'
