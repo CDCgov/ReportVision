@@ -30,6 +30,7 @@ We made a seperate workflow that builds and deploys the frontend files only, `bu
 
 Required Inputs:
 
+- `branch`: Any
 - `deploy-env`: Drop down of available environments to chose from.
 
 Optional Inputs:
