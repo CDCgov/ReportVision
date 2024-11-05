@@ -10,7 +10,7 @@ on:
         options:
           - dev
           - demo
-      demo-blob-name:
+      storage-account-name:
         description: 'After the demo env gets created, copy its blob storage name here'
         required: false
 
@@ -19,55 +19,34 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    name: Build
+  build-frontend:
     runs-on: ubuntu-latest
-    defaults:
-        run:
-          working-directory: frontend
-    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build-frontend
+        name: Build frontend
         with:
-          node-version: '20'  
-      - name: Install NPM packages
-        run: npm ci
-      - name: Build project
-        run: VITE_API_URL='https://reportvision-ocr-${{ inputs.deploy-env }}.azurewebsites.net/' npm run build
-      - name: Run unit tests
-        run: npm run test
-      - name: Create client build archive
-        shell: bash
-        run: |
-          echo "::group::Create application archive"
-          tar -C ./dist/ -czf ./client.tgz .
-          echo "::endgroup::"
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v4
-        with:
-          name: production-files
-          path: ./frontend/client.tgz
+          api-endpoint: https://reportvision-ocr-${{ inputs.deploy-env }}.azurewebsites.net/
+          frontend-tarball: ./frontend.tgz
+          frontend-path: ./frontend
+          frontend-build-path: ./frontend/dist/
+          node-version: 20
 
-  deploy:
+  deploy-with-blob-name-optional:
     name: Deploy
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
-    needs: [build]
+    needs: [build-frontend]
     steps:
       - name: Download Artifacts To Job
         uses: actions/download-artifact@v4
         with:
-          name: production-files
+          name: frontend-tarball
       - name: Unpack client
         shell: bash
         run: |
-          echo "::group::Unpack client"
-          mkdir client-build;
-          tar -C client-build -zxvf client.tgz
-          echo "::endgroup::"
+          mkdir frontend-deploy;
+          tar -C frontend-deploy -zxvf frontend.tgz
       - name: Azure login
         uses: azure/login@v2
         with:
@@ -77,10 +56,10 @@ jobs:
       - name: Upload to Azure blob storage
         shell: bash
         run: |
-          if [ -z "${{ inputs.demo-blob-name }}" ]; then
-            az storage blob upload-batch --account-name reportvisionfrontend${{ inputs.deploy-env }} -d '$web' -s client-build/ --overwrite
+          if [ -z "${{ inputs.storage-account-name }}" ]; then
+            az storage blob upload-batch --account-name reportvisionfrontend${{ inputs.deploy-env }} -d '$web' -s frontend-deploy/ --overwrite
           else
-            az storage blob upload-batch --account-name ${{ inputs.demo-blob-name }} -d '$web' -s client-build/ --overwrite
+            az storage blob upload-batch --account-name ${{ inputs.storage-account-name }} -d '$web' -s frontend-deploy/ --overwrite
           fi
       - name: Azure logout
         shell: bash
