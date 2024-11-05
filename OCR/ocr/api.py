@@ -1,4 +1,5 @@
 import base64
+import io
 
 import uvicorn
 import json
@@ -31,6 +32,16 @@ segmenter = ImageSegmenter(
 )
 ocr = ImageOCR()
 
+def data_uri_to_image(data_uri: str):
+    image_stripped = data_uri.replace("data:image/png;base64,", "", 1)
+    image_np = np.frombuffer(base64.b64decode(image_stripped), np.uint8)
+    return cv.imdecode(image_np, cv.IMREAD_COLOR)
+
+def image_to_data_uri(image: np.ndarray):
+    _, encoded = cv.imencode(".png", image)
+    return b"data:image/png;base64," + base64.b64encode(encoded)
+
+
 
 @app.get("/")
 async def health_check():
@@ -38,15 +49,13 @@ async def health_check():
 
 
 @app.post("/image_alignment/")
-async def image_alignment(source_image: UploadFile, segmentation_template: UploadFile):
-    source_image_np = np.frombuffer(await source_image.read(), np.uint8)
-    source_image_img = cv.imdecode(source_image_np, cv.IMREAD_COLOR)
-
-    segmentation_template_np = np.frombuffer(await segmentation_template.read(), np.uint8)
-    segmentation_template_img = cv.imdecode(segmentation_template_np, cv.IMREAD_COLOR)
+async def image_alignment(source_image: str = Form(), segmentation_template: str = Form()):
+    source_image_img = data_uri_to_image(source_image)
+    segmentation_template_img = data_uri_to_image(segmentation_template)
 
     aligner = ImageAligner()
-    return aligner.align(source_image_img, segmentation_template_img)
+    result = aligner.align(source_image_img, segmentation_template_img)
+    return {"result": image_to_data_uri(result)}
 
 
 @app.post("/image_file_to_text/")
@@ -66,13 +75,8 @@ async def image_file_to_text(source_image: UploadFile, segmentation_template: Up
 
 @app.post("/image_to_text/")
 async def image_to_text(source_image: str = Form(), segmentation_template: str = Form(), labels: str = Form()):
-    source_image_stripped = source_image.replace("data:image/png;base64,", "", 1)
-    source_image_np = np.frombuffer(base64.b64decode(source_image_stripped), np.uint8)
-    source_image_img = cv.imdecode(source_image_np, cv.IMREAD_COLOR)
-
-    segmentation_template_stripped = segmentation_template.replace("data:image/png;base64,", "", 1)
-    segmentation_template_np = np.frombuffer(base64.b64decode(segmentation_template_stripped), np.uint8)
-    segmentation_template_img = cv.imdecode(segmentation_template_np, cv.IMREAD_COLOR)
+    source_image_img = data_uri_to_image(source_image)
+    segmentation_template_img = data_uri_to_image(segmentation_template)
 
     loaded_json = json.loads(labels)
     segments = segmenter.segment(source_image_img, segmentation_template_img, loaded_json)
