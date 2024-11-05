@@ -13,9 +13,9 @@ Azure Resource Group Naming:
 
 ## Complete e2e build and deploy for ReportVision
 
-If you would like to build and deploy all of ReportVisions services at once `deploy-dev.yml` will do the trick specifically for dev and demo environments within Azure only.
+If you would like to build and deploy all of ReportVision's services at once, `deploy-dev.yml` will do the trick specifically for dev and demo environments within Azure only.
 
-When you deploy a `demo` environment specifically, note that the `.github/actions/deploy-frontend/` Github Action will be skipped because Terraform will name the Azure Storage Account very uniquely. We decided to do this for demo environments because we are currently not using any type of DNS/custom domain names and wanted to make sure the user's could never return back to the specific url. Once the `deploy-dev.yml` completes for a demo, just make sure to use the `build-deploy-frontend.yml` with the newly created Storage Account name from Azure.
+When you deploy a `demo` environment specifically, note that the `.github/actions/deploy-frontend/` Github Action will be skipped because Terraform will name the Azure Storage Account very uniquely. We decided to do this for demo environments to ensure user's could never return back to the specific url. We are currently not using any custom domain names. Once the `deploy-dev.yml` completes for a demo, just make sure to use the `build-deploy-frontend.yml` with the newly created Storage Account name from Azure.
 
 Required Inputs:
 
