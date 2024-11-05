@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-There are secrets for Azure authentication from Github Action's located within the Github Settings. At the time of reading this, you may need to create new federated secrets and Resource Groups in your Azure account and update the existing `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` secrets in each Github Environmnet.
+There are secrets for Azure authentication from Github Action's located within the Github Settings. At the time of reading this, you may need to create new federated secrets and Resource Groups in your Azure account, while also updating the existing `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` secrets in each Github Environmnet.
 
 **NOTE**: Resource Groups were never created from Terraform on purpose to better replicate CDC's Azure setup and requirements for potential future migrations from Skylight's Azure. CDC manually created Resource Groups for us.
 
