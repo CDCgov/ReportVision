@@ -11,7 +11,7 @@ on:
           - dev
           - demo
       storage-account-name:
-        description: 'After the demo env gets created, copy its blob storage name here'
+        description: 'After the demo env gets created, copy its Azure Storage Account name here'
         required: false
 
 permissions:
