@@ -15,7 +15,7 @@ Azure Resource Group Naming:
 
 If you would like to build and deploy all of ReportVision's services at once, `deploy-dev.yml` will do the trick specifically for dev and demo environments within Azure only.
 
-When you deploy a `demo` environment specifically, note that the `.github/actions/deploy-frontend/` Github Action will be skipped because Terraform will name the Azure Storage Account very uniquely. We decided to do this for demo environments to ensure user's could never return back to the specific url. We are currently not using any custom domain names. Once the `deploy-dev.yml` completes for a demo, just make sure to use the `build-deploy-frontend.yml` with the newly created Storage Account name from Azure.
+When you deploy a `demo` environment specifically, note that the `.github/actions/deploy-frontend/` Github Action will be skipped because Terraform will name the Azure Storage Account very uniquely. We decided to do this for demo environments to ensure user's could never return back to the specific url. We are currently not using any custom domain names. Once the `deploy-dev.yml` completes for a demo, just make sure to use the `build-deploy-frontend.yml` with the newly created Storage Account from Azure as an input.
 
 Required Inputs:
 
@@ -34,11 +34,11 @@ Required Inputs:
 
 Optional Inputs:
 
-- `storage-account-name`: When deploying a demo environment, you will need to use the unique Azure Storage Account name that was created and Terraform applied here.
+- `storage-account-name`: After deploying a demo environment from `deploy-dev.yml`, you will need to use the unique Azure Storage Account name that was created here.
 
 ## Build and deploy the ReportVision's OCR-API only
 
-Just like with the frontend, we needed a way to refresh the OCR-API without having to re-apply Terraform and deploying the frontend. With `build-deploy-ocr.yml` we can build and publish a new OCR-API Docker image or we can use an already registered OCR-API Docker image. Once the Docker image is ready to go it will deploy it to an already running Azure App-Service Webapp. 
+Just like with the frontend, we needed a way to refresh the OCR-API without having to re-apply Terraform and deploying the frontend. With `build-deploy-ocr.yml`, we can either build and publish a new OCR-API Docker image or we can use an already registered OCR-API Docker image. The OCR-API Docker images are located here: https://github.com/CDCgov/ReportVision/pkgs/container/reportvision-ocr-api. Once the Docker image is ready to go it will deploy it to the selected environments Azure App-Service Webapp. 
 
 **Note**: Using an already registered Docker image will be MUCH faster than waiting for a new one to be built.
 
@@ -50,8 +50,8 @@ Required Inputs:
 
 # Github Workflows for building and deploying ReportVision in Staging or Production
 
-Unfortunately we never had the opportunity to pilot our amazing product to actual users which kept us from deploying to any type of Staging or Production environments. We also weren't entirely sure if we'd even be able to deploy to a centrally hosted Azure CP like the current one either.
+Unfortunately we never had the opportunity to pilot our amazing product to actual users which kept us from deploying to any type of Staging or Production environments. We also weren't entirely sure if we'd even be able to deploy to a centrally hosted Azure account like our current one either.
 
-If we were able to deploy to a centrally hosted system. Our thought would have been building out a `deploy-stage.yml` workflow that is stuctured very similarily to `deploy-dev.yml`, except it would be triggered off of the `main` branch or Github `tags`. If all staging jobs and tests pass, a `deploy-prod.yml` workflow would get triggered.
+If we were able to deploy to a centrally hosted system. Our thought would have been to create a `deploy-stage.yml` workflow that is stuctured and functions very similarily to `deploy-dev.yml`, except it would be triggered off of the `main` branch or Github `tags`. If all staging jobs and tests pass, a `deploy-prod.yml` workflow would get triggered.
 
-If we were required to deploy to STLT-hosted environments, our plan was going to ensure that all services are containerized and deploy as a container orchastrated system with something like Kubernetes, which would have paradigm shifted us completely. There was also the possibility of needing to do both. 
+If we were required to deploy to STLT-hosted environments, our plan was going to ensure that all services are containerized and deployed as a container orchastrated system with tooling like Kubernetes. If this were to happen, we would have to paradigm shift completely. There was also the possibility of needing to do both. 
