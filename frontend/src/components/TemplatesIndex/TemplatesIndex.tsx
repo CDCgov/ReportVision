@@ -3,12 +3,21 @@ import {Button} from "@trussworks/react-uswds";
 import {SortableTable} from "../SortableTable/SortableTable.tsx";
 import {useNavigate} from "react-router-dom";
 import extractImage from "../../assets/extract_image.svg";
+import {useQuery} from "@tanstack/react-query";
+import {TemplateAPI} from "../../types/templates.ts";
 
 type TemplateIndexProps = unknown
 
 export const TemplatesIndex: FC<TemplateIndexProps> = () => {
     const [templates, setTemplates] = useState([])
     const navigate = useNavigate()
+    // TODO: Pagination and sorting will be added later
+    const templateQuery = useQuery(
+        {
+            queryKey: ['templates'],
+            queryFn: TemplateAPI.getTemplates
+        }
+    )
     useEffect(() => {
         const templatesJSON = localStorage.getItem("templates")
         setTemplates(JSON.parse(templatesJSON))
@@ -32,15 +41,14 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
 
     const templateColumnNames = {
         'name': 'Name',
-        'lab': 'Lab',
-        'createdBy': 'Creator',
+        'labName': 'Lab',
         'status': 'Status',
-        'lastUpdated': 'Updated On'
+        'updatedAt': 'Updated On'
     }
 
     const templateColumnFormatters = {
 
-        'lastUpdated': (d) => {
+        'updatedAt': (d) => {
             const date = Date.parse(d)
             if (isNaN(date)) {
                 return new Date().toLocaleDateString()
@@ -51,84 +59,11 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
     }
 
     const templateColumns = [
-        'name', 'lastUpdated', 'createdBy', 'lab', 'status'
+        'name', 'updatedAt', 'createdBy', 'labName', 'status'
     ]
-    const templates2: Template[] = [
 
-        {
-            name: "MumpsQuestV1",
-            lab: "Quest",
-            createdBy: "J.Smith",
-            status: "Completed",
-            lastUpdated: new Date(Date.parse("2025-03-24T12:00:00.000-05:00"))
-        },
-        {
-            name: "LBTIRadar",
-            lab: "Radar",
-            createdBy: "C.Alex",
-            status: "Completed",
-            lastUpdated: new Date(Date.parse("2025-05-30T12:00:00.000-05:00"))
-        },
-        {
-            name: "COVIDBaylor1",
-            lab: "Emory",
-            createdBy: "A.Bryant",
-            status: "Completed",
-            lastUpdated: new Date(Date.parse("2025-06-21T12:00:00.000-05:00"))
-        },
-        {
-            name: "COVIDEMory",
-            lab: "Baylor",
-            createdBy: "D.Smith",
-            status: "Completed",
-            lastUpdated: new Date(Date.parse("2024-06-21T12:00:00.000-05:00"))
-        },
-    ];
 
-    // TODO: These are just for demo purposes and allow easily manipulating the template store
-    useEffect(() => {
-        console.debug(`
-        The following methods have been added to the window:
-        
-        LoadNiceTemplates - this will load some pre-formatted templates that display nicely
-        SaveTemplates - this will save the current templates to 'oldTemplates'
-        LoadSavedTemplates - this will load the templates saved in 'oldTemplates'
-        ClearTemplates - this will delete the current templates 
-        
-        `)
-        window.LoadNiceTemplates = () => {
-            const oldTemplates = localStorage.getItem('templates')
-            localStorage.setItem('oldTemplates', oldTemplates)
-            localStorage.setItem('templates', JSON.stringify(templates2))
-            setTemplates(templates2)
-        }
-        window.SaveTemplates = () => {
-            const oldTemplates = localStorage.getItem('templates')
-            if (!oldTemplates) {
-                return
-            }
-            localStorage.setItem('oldTemplates', oldTemplates)
-        }
-        window.ClearTemplates = () => {
-            localStorage.removeItem('templates')
-            setTemplates([])
-        }
-        window.LoadSavedTemplates = () => {
-            const oldTemplates = localStorage.getItem('oldTemplates')
-            if (oldTemplates) {
-                localStorage.setItem('templates', oldTemplates)
-                setTemplates(JSON.parse(oldTemplates))
-            }
-        }
-        return () => {
-            delete window.LoadNiceTemplates
-            delete window.SaveTemplates
-            delete window.ClearTemplates
-            delete window.LoadSavedTemplates
-        }
-    });
-
-    if (!templates || templates.length === 0) {
+    if (!templateQuery.data  || templateQuery.data.length === 0) {
         return (
             <><img
                 className="display-block margin-left-auto margin-right-auto padding-top-8"
@@ -142,7 +77,6 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
                     Template</Button> </>
         )
     }
-
 
     return (
         <>
@@ -164,7 +98,7 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
                 </div>
                 <div className="padding-1 border-1px border-gray-5 bg-white">
                     <h2>Saved Templates</h2>
-                    <SortableTable columns={templateColumns} data={templates}
+                    <SortableTable columns={templateColumns} data={templateQuery.data || []}
                                    formatters={templateColumnFormatters}
                                    columnNames={templateColumnNames}
                     />
