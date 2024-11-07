@@ -280,7 +280,7 @@ const ReviewTemplate: React.FC = () => {
               </div>
               <div className="table-container">
                 <SortableTable
-                    columns={["name", "value", "isError", "confidence"]}
+                    columns={["name", "value", "confidence"]}
                     data={resultsTable}
                     sortableBy={["name", "confidence", "value"]}
                     defaultSort={"confidence"}
@@ -311,7 +311,7 @@ const ReviewTemplate: React.FC = () => {
           </div>
           <div className="image-container">
                       <div
-                          className="width-full height-full bg-white border-gray-5 border-1px"
+                          className="width-full bg-white border-gray-5 border-1px"
                       >
                           <div>
                               {images.map((_, index) => (
@@ -322,7 +322,7 @@ const ReviewTemplate: React.FC = () => {
                           </div>
                           {
                               images.map((image, innerIndex) => (
-                                  <svg viewBox="0 0 612 720" key={innerIndex} width='100%' height='100%'>
+                                  <svg style={{ display: innerIndex !== index ? 'none' : 'initial' }} viewBox="0 0 612 720" key={innerIndex}>
                                       <image result="photo"
                                             href={image}
                                             preserveAspectRatio="xMidYMid slice"
