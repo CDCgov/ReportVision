@@ -5,6 +5,7 @@ import {useLocation} from "react-router-dom";
 import {AppHeader} from "./components/AppHeader/AppHeader.tsx";
 
 import {TemplatesIndex} from "./components/TemplatesIndex/TemplatesIndex.tsx";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 function App() {
     const {pathname} = useLocation()
     const navLinks = [
@@ -13,8 +14,11 @@ function App() {
         {text: "Dashboard", url: "/dashboard"}
     ]
 
+    const queryClient = new QueryClient();
+
     return (
         <>
+            <QueryClientProvider client={queryClient}>
             <div className='display-flex flex-column width-full height-full'>
                 <AppHeader jurisdiction={`Demo STLT`}/>
                 <div className="display-flex flex-row height-full">
@@ -41,7 +45,7 @@ function App() {
                 </div>
 
             </div>
-
+            </QueryClientProvider>
         </>
     )
 }
