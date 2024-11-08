@@ -13,7 +13,7 @@ export type ImageToTextResponse = {
 };
 
 export type AlignImageResponse = {
-    [key: string]: [string, number];
+    [key: string]: string;
 };
 
 export interface ResultItem {

@@ -2,7 +2,7 @@ import { ImageToTextArgs, ImageToTextResponse, AlignImageArgs, AlignImageRespons
 
 const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/"
 
-export const AlignImage = async (args: AlignImageArgs): Promise<AlignImageResponse | null> => {
+export const AlignImage = async (args: AlignImageArgs): Promise<AlignImageResponse> => {
     const { sourceImage, templateImage } = args;
     const form = new URLSearchParams({
         source_image: sourceImage,
@@ -21,15 +21,16 @@ export const AlignImage = async (args: AlignImageArgs): Promise<AlignImageRespon
           return await response.json() as AlignImageResponse;
     } catch (error) {
         console.error(error);
-        return null;
+        return {result: sourceImage};
     }
 }
 
 export const ImageToText = async (args: ImageToTextArgs): Promise<ImageToTextResponse | null> => {
 
     const { sourceImage, templateImage, fieldNames } = args;
+    const aligned_result = await AlignImage({sourceImage, templateImage});
     const form = new URLSearchParams({
-        source_image: sourceImage,
+        source_image: aligned_result["result"],
         segmentation_template: templateImage,
         labels: JSON.stringify(fieldNames),
       });
