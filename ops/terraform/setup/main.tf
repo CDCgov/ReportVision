@@ -18,21 +18,28 @@ terraform {
 }
 
 provider "azurerm" {
+  use_oidc = true
   features {}
 }
 
-resource "azurerm_storage_account" "tfstate" {
-  name                     = "${var.env}-${var.project}tfstate${substr(var.client_id, 0, 8)}"
-  resource_group_name      = var.resource_group_name
-  location                 = var.location
-  account_tier             = "Standard"
-  account_kind             = "StorageV2"
-  account_replication_type = "GRS"
-  # https_traffic_only_enabled = true
+resource "azurerm_storage_account" "storage_account" {
+  name                      = "${var.env}-${var.project}tfstate${substr(var.client_id, 0, 8)}"
+  resource_group_name       = locals.resource_group_name
+  location                  = var.location
+  account_kind              = var.account_kind
+  account_tier              = var.account_tier
+  account_replication_type  = var.account_replication_type
+  enable_https_traffic_only = true
 
   lifecycle {
     prevent_destroy = true
   }
+}
+
+# Enable advanced threat protection
+resource "azurerm_advanced_threat_protection" "advanced_threat_protection" {
+  target_resource_id = azurerm_storage_account.storage_account.id
+  enabled            = true
 }
 
 resource "azurerm_storage_container" "tfstate" {

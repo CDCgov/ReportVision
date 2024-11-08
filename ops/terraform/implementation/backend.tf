@@ -1,9 +1,8 @@
 terraform {
   required_providers {
     azurerm = {
-      source   = "hashicorp/azurerm"
-      version  = "~>3.66.0"
-      features = {}
+      source  = "hashicorp/azurerm"
+      version = "~>3.66.0"
     }
 
     azuread = {
@@ -22,9 +21,9 @@ terraform {
   }
 
   backend "azurerm" {
-    storage_account_name = "reportvision-storage-account"
+    storage_account_name = "tfstaterv2024"
     resource_group_name  = "reportvision-rg"
-    container_name       = "tfstate"
-    key                  = "dev.terraform.tfstate"
+    container_name       = "rv-tfstate"
+    key                  = "dev/terraform.tfstate"
   }
 }
