@@ -68,6 +68,9 @@ export const SaveTemplate = () => {
         setSelectedField(null);
         localStorage.setItem('shapes', '');
         localStorage.setItem('images', '');
+        localStorage.setItem('screenshots', '');
+        localStorage.setItem('images', '');
+        localStorage.setItem('files', '');
         navigate("/")
     } 
     

@@ -24,15 +24,15 @@ const SORTS = {
 }
 
 export const SortableTable: FC<SortableTableProps> = ({
-                                                          data,
-                                                          columns = Object.keys(data[0]),
-                                                          sortableBy = columns,
-                                                          defaultSort = columns?.[0],
-                                                          defaultDescending = false,
+    data,
+    columns = Object.keys(data[0]),
+    sortableBy = columns,
+    defaultSort = columns?.[0],
+    defaultDescending = false,
 
-                                                          formatters = {},
-                                                          columnNames = {},
-                                                      }: SortableTableProps) => {
+    formatters = {},
+    columnNames = {},
+}: SortableTableProps) => {
 
     const [sortBy, setSortBy] = useState(defaultSort)
     const [isDescending, setIsDescending] = useState(defaultDescending)

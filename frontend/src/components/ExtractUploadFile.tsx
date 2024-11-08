@@ -1,6 +1,18 @@
 import React, { ChangeEvent, useEffect, useId, useState } from "react";
-import { Icon, FileInput, Select } from "@trussworks/react-uswds";
-import { FileType, useFiles } from "../contexts/FilesContext";
+import { Button, Select } from "@trussworks/react-uswds";
+import { useFiles } from "../contexts/FilesContext";
+import { useNavigate } from "react-router-dom";
+import image from "../assets/green_check.svg";
+
+import * as pdfjsLib from "pdfjs-dist";
+
+import './ExtractUploadFile.scss';
+import { FileInput } from "./FileInput/file-input";
+
+
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+
 
 interface ExtractUploadFileProps {
   onUploadComplete: (isComplete: boolean) => void;
@@ -23,23 +35,11 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   onUploadComplete,
 }) => {
   const id = useId();
-  const { addFile } = useFiles();
-  const [template, setTemplate] = useState<string>("");
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const { addFile, clearFiles, files, setSelectedTemplates, selectedTemplates } = useFiles();
+  const navigate = useNavigate();
   const [templates, setTemplates] = useState<Template[]>([]);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-
-  // Load templates from local storage, and if none are found, load test data
-  const loadTemplatesFromLocalStorage = () => {
-    const storedTemplates = localStorage.getItem("templates");
-    if (storedTemplates) {
-      const parsedTemplates = JSON.parse(storedTemplates);
-      setTemplates(parsedTemplates);
-    } else {
-      loadTemplatesTestData();
-    }
-  };
-
+  const [isUploadComplete, setIsUploadComplete] = useState<boolean>(false);
+  const [uploadedFile, setUploadedFile] = useState<File[]>([]);
   const loadTemplatesTestData = () => {
     const sampleTemplates: Template[] = [
       {
@@ -68,131 +68,201 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   };
 
   useEffect(() => {
-    loadTemplatesFromLocalStorage();
-  }, []);
-
-  const simulateFileUpload = (file: FileType) => {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 10;
-      setUploadProgress(progress);
-      if (progress >= 100) {
-        clearInterval(interval);
-        onUploadComplete(true);
-        addFile(file);
+    // Load templates from local storage, and if none are found, load test data
+    const loadTemplatesFromLocalStorage = () => {
+      const storedTemplates = localStorage.getItem("templates");
+      if (storedTemplates) {
+        const parsedTemplates = JSON.parse(storedTemplates);
+        setTemplates(parsedTemplates);
+      } else {
+        loadTemplatesTestData();
       }
-    }, 200);
-  };
-  const handleTemplateChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
-    setTemplate(event.target.value);
+    };
+    loadTemplatesFromLocalStorage();
+
+    return () => clearFiles();
+
+  }, []);
+  const simulateFileUpload = async(files: File[]) => {
+    onUploadComplete(true);
+    files.forEach(file => addFile(file));
+    try {
+      const convertedFiles = await Promise.all(files.map(async (file) => {
+        // the obj pdfjsLib is being really stubbon on github actions and failing to load the worker
+        const convertPdfToImages = async (file: File) => {
+          const localImages: string[] = [];
+          const data = URL.createObjectURL(file);
+          const pdf = await pdfjsLib.getDocument(data).promise;
+          const canvas = document.createElement("canvas");
+          for (let i = 0; i < pdf.numPages; i++) {
+            const page = await pdf.getPage(i + 1);
+            const viewport = page.getViewport({ scale: 1 });
+            const context = canvas.getContext("2d")!;
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            await page.render({ canvasContext: context, viewport: viewport })
+              .promise;
+              localImages.push(canvas.toDataURL());
+          }
+          canvas.remove();
+          URL.revokeObjectURL(data);
+          return localImages
+        }
+        const images =  await convertPdfToImages(file); 
+        return {
+          file: file.name,
+          images: images.map((image) => image),
+        };
+      }));
+      localStorage.setItem('extracted_images_uploaded', JSON.stringify(convertedFiles));
+    } catch (e) {
+      console.error(e);
+    }
+ 
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      setUploadedFile(file);
-      const filesObj: IFilesObj = { files: [file] };
+      const files = Array.from(event.target.files);
+      setUploadedFile(files);
+      const filesObj: IFilesObj = { files };
       localStorage.setItem("files", JSON.stringify(filesObj));
-      setUploadProgress(0);
-      simulateFileUpload(file);
+      simulateFileUpload(files);
       onUploadComplete(false);
+      if (!isUploadComplete && uploadedFile.length > 0) {
+        setIsUploadComplete(true);
+      }
     }
   };
 
+  const handleSelect = (templateName: string, fileName: string, index: number) => {
+    setSelectedTemplates({ templateName, fileName }, index);
+  }
   return (
-    <div className="display-flex flex-column flex-align-center flex-justify-start height-full width-full padding-2 bg-primary-lighter">
-      <div style={{ width: "70%", textAlign: "left" }}>
-        <h1 style={{ margin: 0 }}>Choose template and upload new form</h1>
-      </div>
-
-      <div
-        className="display-flex flex-column flex-justify-center flex-align-center"
-        style={{ width: "70%" }}
-      >
-        <label
-          htmlFor="template-select"
-          className="usa-label"
-          style={{ alignSelf: "flex-start" }}
-        >
-          Choose segmentation template
-        </label>
-        <Select
-          id="template-select"
-          name="template"
-          value={template}
-          onChange={handleTemplateChange}
-          style={{ alignSelf: "flex-start", width: "100%", maxWidth: "300px" }}
-        >
-          {templates.length === 0 ? (
-            <option value="">No templates available</option>
-          ) : (
-            templates.map((tpl, index) => (
-              <option key={index} value={tpl.name}>
-                {tpl.name}
-              </option>
-            ))
-          )}
-        </Select>
-      </div>
-
-      <div style={{ width: "70%", textAlign: "left" }}>
-        <h2 style={{ margin: 10 }}>
+    <div className="display-flex flex-column flex-align-start flex-justify-start height-full width-full padding-2 bg-primary-lighter">
+      <div className="extract-upload-header">
+        <h2>
           Upload new image or PDF to extract data from
         </h2>
+        <p>
+          You can import files individually or in bulk for data extraction as either as PDFs or images. PDFs will automatically be converted to images upon import.
+        </p>
+        <p className="helper-text">
+          Select one or more files
+        </p>
       </div>
 
       <div
         data-testid="dashed-container"
-        className="display-flex flex-column margin-top-205 flex-justify flex-align-center bg-white"
-        style={{ width: "70%", height: "50%", border: "1px dashed #005ea2" }}
+        className={`display-flex flex-column margin-top-205 flex-justify-center flex-align-center bg-white dashed-container ${uploadedFile.length > 0 ? "dashed-container-uploaded" : ""}`}
       >
-        {!uploadedFile ? (
+      {
+        uploadedFile.length > 0 && (
+          <div className="display-flex flex-column flex-justify-center flex-align-center select-container width-full">
+            <div className="select-label-container">
+              <label
+                htmlFor="template-select"
+                className="usa-label margin-left-2"
+                style={{ alignSelf: "flex-start" }}
+              >
+                {uploadedFile.length} file(s) selected
+              </label>
+              {
+                !isUploadComplete && (
+                  <FileInput
+                    multiple
+                    onChange={handleChange}
+                    id={`file-input-multiple-${id}-2`}
+                    className="padding-bottom-1"
+                    name="file-input-multiple"
+                    chooseText="Change file(s)"
+                    dragText=" "
+                  />
+                )
+              }
+
+            </div>
+            <div className="display-flex flex-column width-full height-full margin-bottom-2 margin-top-1" style={{ justifyContent: 'space-between'}}>
+
+              {
+                files.map((file, index) => (
+                  <div key={`${file.name}-${index}`} className="display-flex width-full height-8">
+                    <div className="display-flex width-full height-full flex-align-center">
+                    <img
+                        className="margin-left-2"
+                        height='28px'
+                        width='28px'
+                        data-testid="extracted-image"
+                        src={image}
+                        alt="404"
+                      />    
+                      <span className="margin-left-1 text-ink">{files.length > 0 ? file.name : 'default name'}</span>
+                  </div> 
+                    <Select
+                    id="template-select"
+                    key={index}
+                    className="template-select margin-right-2"
+                    name="template"
+                    value={selectedTemplates[index]?.templateName || "Select template"}
+                    onChange={(e) => handleSelect(e.target.value, file.name, index)}
+                  >
+                    {templates.length === 0 ? (
+                      <option value="">No templates available</option>
+                    ) : (
+                      [(<option key="default-opt" value={"Select temlate"}>
+                        Select template
+                      </option>), ...templates.map((tpl, index) => (
+                        <option key={index} value={tpl.name}>
+                          {tpl.name}
+                        </option>
+                      ))]
+                    )}
+                  </Select>
+                </div>
+                ))
+              }
+
+            </div>
+          </div>
+        )
+      }  
+
+        {uploadedFile.length === 0 && (
           <>
-            <Icon.UploadFile
-              data-testid="upload-icon"
-              style={{ marginTop: "16px" }}
-              size={5}
-              color="#005ea2"
-            />
             <div
-              className="display-flex flex-column flex-align-center margin-bottom-1"
-              style={{ width: "60%" }}
+              className="display-flex flex-column flex-align-center flex-justify-center margin-bottom-1"
+              style={{ width: "80%" }}
             >
-              <h3 style={{ fontWeight: "bold" }}>Drag and drop file here</h3>
-              <p>or</p>
               <FileInput
+                multiple
                 onChange={handleChange}
-                id={`file-input-${id}`}
-                className="padding-bottom-1"
-                style={{ border: "1px dashed #005ea2" }}
-                name="file-input-single"
-                chooseText="Browse Files"
-                dragText="  "
+                id={`file-input-multiple-${id}-1`}
+                className="padding-bottom-1 extract-file-input"
+                name="file-input-multiple"
+                chooseText=" "
+                dragText="Drag file(s) here or choose from folder"
               />
             </div>
           </>
-        ) : (
-          <div>
-            <div className="display-flex flex-align-center margin-bottom-1">
-              <Icon.FilePresent
-                size={3}
-                className="margin-right-1 text-primary"
-              />
-              <span className="margin-left-1 text-ink">
-                {uploadedFile.name} ({Math.round(uploadedFile.size / 1024)} KB)
-                - {uploadProgress}%
-              </span>
-            </div>
-
-            {uploadProgress >= 100 && (
-              <div className="text-center margin-top-2 text-green">
-                Upload complete!
-              </div>
-            )}
-          </div>
         )}
+      </div>
+      <div className="display-flex margin-top-3">
+        <Button
+          type="button"
+          outline
+          className="margin-right-1"
+          onClick={() => navigate('/')}
+        >
+          Cancel Import
+        </Button>
+        <Button
+          type="button"
+          className="usa-button display-flex flex-align-center margin-left-auto margin-right-auto"
+          disabled={uploadedFile.length === 0 || selectedTemplates.length === 0}
+          onClick={() => navigate("/extract/process")}
+        >
+          Extract Data
+        </Button>
       </div>
     </div>
   );
