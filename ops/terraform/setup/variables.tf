@@ -14,11 +14,8 @@ variable "account_replication_type" {
 }
 
 variable "access_tier" {
-  type = string
-}
-
-variable "client_id" {
-  description = "value of the Azure App registration ID to use in the tfstate storage account name"
+  type    = string
+  default = "Standard"
 }
 
 variable "env" {
@@ -27,12 +24,12 @@ variable "env" {
 
 variable "location" {
   description = "value of the Azure location to deploy to"
-  default     = "Central US"
+  default     = "eastus"
 }
 
 variable "project" {
-  description = "value of the project or team name"
-  default     = "ReportVision"
+  description = "value of the project name"
+  default     = "reportvision"
 }
 
 variable "resource_group_name" {
