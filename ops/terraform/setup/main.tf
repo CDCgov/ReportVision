@@ -22,8 +22,8 @@ provider "azurerm" {
   features {}
 }
 
+# Note: Only lowercase and alphanumeric characters allowed for name
 resource "azurerm_storage_account" "storage_account" {
-  # name                      = "${var.env}-${var.project}tfstate${substr(var.client_id, 0, 8)}"
   name                      = "${var.project}tfstate${var.env}"
   resource_group_name       = var.resource_group_name
   location                  = var.location
