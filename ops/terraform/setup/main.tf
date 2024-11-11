@@ -42,8 +42,3 @@ resource "azurerm_advanced_threat_protection" "advanced_threat_protection" {
   target_resource_id = azurerm_storage_account.storage_account.id
   enabled            = true
 }
-
-# resource "azurerm_storage_container" "tfstate" {
-#   name                 = "tfstate"
-#   storage_account_name = azurerm_storage_account.tfstate.name
-# }
