@@ -37,7 +37,7 @@ resource "azurerm_storage_account" "storage_account" {
   }
 }
 
-# Enable advanced threat protection
+# Enable advanced threat protection for azurerm_storage_account
 resource "azurerm_advanced_threat_protection" "advanced_threat_protection" {
   target_resource_id = azurerm_storage_account.storage_account.id
   enabled            = true
