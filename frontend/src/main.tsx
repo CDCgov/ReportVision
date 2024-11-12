@@ -19,6 +19,7 @@ import { SaveTemplate } from "./pages/SaveTemplate.tsx";
 import ReviewTemplate from "./pages/ReviewTemplate.tsx";
 import SubmissionTemplate from "./pages/SubmissionTemplate.tsx";
 import NotFound from "./pages/404Page.tsx";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 
 
@@ -61,12 +62,16 @@ const router = createBrowserRouter([
   }
 ]);
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <QueryClientProvider client={queryClient}>
     <AnnotationProvider>
       <FilesProvider>
         <RouterProvider router={router} />
       </FilesProvider>
     </AnnotationProvider>
+    </QueryClientProvider>
   </StrictMode>
 );
