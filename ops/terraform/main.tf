@@ -68,9 +68,9 @@ module "storage" {
   web_subnet_id   = module.networking.websubnet_id
 }
 
-##########
+#######
 ## app
-##########
+#######
 
 module "ocr_api" {
   source         = "./modules/app_service"
@@ -99,8 +99,6 @@ module "ocr_autoscale" {
 }
 
 module "database" {
-  source = "./modules/database"
-  # name                    = var.name
+  source              = "./modules/database"
   resource_group_name = data.azurerm_resource_group.rg.name
-  # resource_group_location = data.resource_group_location.rg.location
 }
