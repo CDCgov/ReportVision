@@ -8,9 +8,6 @@ locals {
   }
 }
 
-##########
-## network
-##########
 module "networking" {
   source         = "./modules/network"
   name           = var.name
@@ -22,10 +19,6 @@ module "networking" {
   appsubnetcidr  = local.workspace["appsubnetcidr"]
   env            = local.environment
 }
-
-###########
-## security
-###########
 
 module "securitygroup" {
   source         = "./modules/security"
@@ -53,10 +46,6 @@ module "app_gateway" {
   depends_on = [module.networking, module.ocr_api]
 }
 
-##########
-## storage
-##########
-
 module "storage" {
   source          = "./modules/storage"
   name            = var.name
@@ -67,10 +56,6 @@ module "storage" {
   app_gateway_ip  = module.app_gateway.app_gateway_ip
   web_subnet_id   = module.networking.websubnet_id
 }
-
-#######
-## app
-#######
 
 module "ocr_api" {
   source         = "./modules/app_service"
