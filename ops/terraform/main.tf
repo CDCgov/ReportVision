@@ -9,7 +9,7 @@ locals {
 }
 
 ##########
-## 02-network
+## network
 ##########
 module "networking" {
   source         = "./modules/network"
@@ -23,9 +23,9 @@ module "networking" {
   env            = local.environment
 }
 
-##########
-## 02-security
-##########
+###########
+## security
+###########
 
 module "securitygroup" {
   source         = "./modules/security"
@@ -54,7 +54,7 @@ module "app_gateway" {
 }
 
 ##########
-## 05-Persistent
+## storage
 ##########
 
 module "storage" {
@@ -69,7 +69,7 @@ module "storage" {
 }
 
 ##########
-## 06-App
+## app
 ##########
 
 module "ocr_api" {
@@ -98,26 +98,9 @@ module "ocr_autoscale" {
   weekend_capacity_instances = 1
 }
 
-# module "compute" {
-#   source         = "./modules/container_instances"
-#   location       = data.azurerm_resource_group.rg.location
-#   resource_group = data.azurerm_resource_group.rg.name
-#   environment    = local.environment
-#   app_subnet     = module.networking.appsubnet_id
-#   # web_subnet_id   = module.networking.websubnet_id
-#   # app_subnet_id   = module.networking.appsubnet_id
-#   # web_host_name   = local.app.web_host_name
-#   # web_username    = local.app.web_username
-#   # web_os_password = local.app.web_os_password
-#   # app_host_name   = local.app.app_host_name
-#   # app_username    = local.app.app_username
-#   # app_os_password = local.app.app_os_password
-# }
-
-##########
-## 04-config
-##########
-
-##########
-## 07-Monitor
-##########
+module "database" {
+  source = "./modules/database"
+  # name                    = var.name
+  resource_group_name = data.azurerm_resource_group.rg.name
+  # resource_group_location = data.resource_group_location.rg.location
+}
