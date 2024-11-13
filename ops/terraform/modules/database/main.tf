@@ -1,4 +1,4 @@
-# PostgreSQL Server in the pre-existing resource group
+# PostgreSQL Server
 resource "azurerm_postgresql_server" "postgres_server" {
   name                         = "reportvisionpgserver"
   location                     = data.azurerm_resource_group.rg.location
@@ -13,7 +13,7 @@ resource "azurerm_postgresql_server" "postgres_server" {
 
 }
 
-# PostgreSQL Database in the pre-existing resource group
+# PostgreSQL Database
 resource "azurerm_postgresql_database" "postgres_db" {
   name                = "postgresdb"
   resource_group_name = data.azurerm_resource_group.rg.name
@@ -22,7 +22,8 @@ resource "azurerm_postgresql_database" "postgres_db" {
   collation           = "English_United Kingdom.1252"
 }
 
-# Optional: Firewall rule for the PostgreSQL server (to allow Azure services in resource group)
+# Firewall rule for the PostgreSQL server, allowing 
+# db access to Azure services in same resource group
 resource "azurerm_postgresql_firewall_rule" "allow_azure" {
   name                = "AllowAllAzureIps"
   server_name         = azurerm_postgresql_server.postgres_server.name
