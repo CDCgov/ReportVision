@@ -104,8 +104,8 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4
+      # - name: Download all workflow run artifacts
+      #   uses: actions/download-artifact@v4
         with:
           deploy-env: ${{ inputs.deploy-env }}
           docker-tag: ${{ inputs.ocr-version }}
