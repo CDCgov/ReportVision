@@ -53,7 +53,7 @@ runs:
         ARM_CLIENT_ID: ${{ inputs.azure-client-id }}
         ARM_TENANT_ID: ${{ inputs.azure-tenant-id }}
         ARM_SUBSCRIPTION_ID: ${{ inputs.azure-subscription-id }}
-        ARM_CLIENT_ID: ${{ inputs.azure-client-id }}
+        ARM_OBJECT_ID: ${{ inputs.azure-object-id }}
       shell: bash
       run: |
         terraform init -backend-config=config/${{ inputs.deploy-env }}.config

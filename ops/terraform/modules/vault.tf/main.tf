@@ -30,10 +30,10 @@ resource "azurerm_key_vault_secret" "postgres_password" {
 resource "azurerm_azuread_application" "frontendapp" {
   name = "frontend-application"
   # TODO: Ask if the VITE_API_URL is the correct endpoint we are using
-  homepage        = var.VITE_API_URL
-  identifier_uris = [VITE_API_URL]
+  homepage        = var.vite_api_url
+  identifier_uris = [var.vite_api_url]
 }
 
-resource "azurerm_azuread_service_principal" "example" {
+resource "azurerm_azuread_service_principal" "this" {
   application_id = azurerm_azuread_application.frontendapp.application_id
 }

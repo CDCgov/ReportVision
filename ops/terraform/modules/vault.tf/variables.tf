@@ -1,8 +1,7 @@
 variable "resource_group_name" {}
 variable "azure_tenant_id" {}
-variable "object_id" {
-
-}
+variable "object_id" {}
+variable "vite_api_url" {}
 
 variable "db_username" {
   type        = string
