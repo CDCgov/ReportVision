@@ -104,13 +104,14 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4
         with:
           deploy-env: ${{ inputs.deploy-env }}
           docker-tag: ${{ inputs.ocr-version }}
           docker-registry: ghcr.io
           api-name: ocr-api
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4
+          docker-build: CDCgov~ReportVision~VPLMV6.dockerbuild
 
   deploy-frontend:
     name: Deploy Frontend
