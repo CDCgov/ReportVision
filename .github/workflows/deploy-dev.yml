@@ -111,7 +111,7 @@ jobs:
           docker-tag: ${{ inputs.ocr-version }}
           docker-registry: ghcr.io
           api-name: ocr-api
-          docker-build: CDCgov~ReportVision~VPLMV6.dockerbuild
+          reportvision-dockerbuild: CDCgov~ReportVision~VPLMV6.dockerbuild
 
   deploy-frontend:
     name: Deploy Frontend
