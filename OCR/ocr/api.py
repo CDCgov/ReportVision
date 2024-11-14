@@ -4,8 +4,10 @@ import uvicorn
 import json
 import cv2 as cv
 import numpy as np
+import asyncio
 
-from fastapi import FastAPI, UploadFile, Form
+
+from fastapi import FastAPI, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from ocr.services.image_ocr import ImageOCR
@@ -60,15 +62,46 @@ async def image_alignment(source_image: str = Form(), segmentation_template: str
 
 @app.post("/image_file_to_text/")
 async def image_file_to_text(source_image: UploadFile, segmentation_template: UploadFile, labels: str = Form()):
-    source_image_np = np.frombuffer(await source_image.read(), np.uint8)
-    source_image_img = cv.imdecode(source_image_np, cv.IMREAD_COLOR)
+    try:
+        source_image_np = np.frombuffer(await source_image.read(), np.uint8)
+        source_image_img = cv.imdecode(source_image_np, cv.IMREAD_COLOR)
 
-    segmentation_template_np = np.frombuffer(await segmentation_template.read(), np.uint8)
-    segmentation_template_img = cv.imdecode(segmentation_template_np, cv.IMREAD_COLOR)
+        if source_image_img is None:
+            raise HTTPException(
+                status_code=422, detail="Failed to decode source image. Ensure the file is a valid image format."
+            )
 
-    loaded_json = json.loads(labels)
-    segments = segmenter.segment(source_image_img, segmentation_template_img, loaded_json)
-    results = ocr.image_to_text(segments)
+        segmentation_template_np = np.frombuffer(await segmentation_template.read(), np.uint8)
+        segmentation_template_img = cv.imdecode(segmentation_template_np, cv.IMREAD_COLOR)
+
+        if segmentation_template_img is None:
+            raise HTTPException(
+                status_code=422,
+                detail="Failed to decode segmentation template. Ensure the file is a valid image format.",
+            )
+
+        if source_image_img.shape[:2] != segmentation_template_img.shape[:2]:
+            raise HTTPException(
+                status_code=400,
+                detail="Dimension mismatch between source image and segmentation template. Both images must have the same width and height.",
+            )
+
+        loaded_json = json.loads(labels)
+
+        segments = segmenter.segment(source_image_img, segmentation_template_img, loaded_json)
+        results = ocr.image_to_text(segments)
+
+    except json.JSONDecodeError:
+        raise HTTPException(
+            status_code=422, detail="Failed to parse labels JSON. Ensure the labels are in valid JSON format."
+        )
+    except asyncio.TimeoutError:
+        raise HTTPException(status_code=504, detail="The request timed out. Please try again.")
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"Unexpected error occurred: {str(e)}")
+        raise HTTPException(status_code=500, detail="An unexpected server error occurred.")
 
     return results
 
