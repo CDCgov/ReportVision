@@ -67,36 +67,41 @@ async def image_file_to_text(source_image: UploadFile, segmentation_template: Up
         source_image_img = cv.imdecode(source_image_np, cv.IMREAD_COLOR)
 
         if source_image_img is None:
-            return {"error": "Failed to decode source image. Ensure the file is a valid image format."}, 400
+            raise HTTPException(
+                status_code=422, detail="Failed to decode source image. Ensure the file is a valid image format."
+            )
 
         segmentation_template_np = np.frombuffer(await segmentation_template.read(), np.uint8)
         segmentation_template_img = cv.imdecode(segmentation_template_np, cv.IMREAD_COLOR)
 
         if segmentation_template_img is None:
-            return {"error": "Failed to decode segmentation template. Ensure the file is a valid image format."}, 400
+            raise HTTPException(
+                status_code=422,
+                detail="Failed to decode segmentation template. Ensure the file is a valid image format.",
+            )
 
         if source_image_img.shape[:2] != segmentation_template_img.shape[:2]:
-            return {
-                "error": "Dimension mismatch between source image and segmentation template. "
-                "Both images must have the same width and height."
-            }, 400
+            raise HTTPException(
+                status_code=400,
+                detail="Dimension mismatch between source image and segmentation template. Both images must have the same width and height.",
+            )
+
+        loaded_json = json.loads(labels)
+
+        segments = segmenter.segment(source_image_img, segmentation_template_img, loaded_json)
+        results = ocr.image_to_text(segments)
 
     except json.JSONDecodeError:
         raise HTTPException(
-            status_code=400, detail="Failed to parse labels JSON. Ensure the labels are in valid JSON format."
+            status_code=422, detail="Failed to parse labels JSON. Ensure the labels are in valid JSON format."
         )
     except asyncio.TimeoutError:
         raise HTTPException(status_code=504, detail="The request timed out. Please try again.")
+    except HTTPException as e:
+        raise e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
-
-    try:
-        loaded_json = json.loads(labels)
-    except json.JSONDecodeError:
-        return {"error": "Failed to parse labels JSON. Ensure the labels are in valid JSON format."}, 400
-
-    segments = segmenter.segment(source_image_img, segmentation_template_img, loaded_json)
-    results = ocr.image_to_text(segments)
+        print(f"Unexpected error occurred: {str(e)}")
+        raise HTTPException(status_code=500, detail="An unexpected server error occurred.")
 
     return results
 
