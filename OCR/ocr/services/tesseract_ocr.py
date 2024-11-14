@@ -1,6 +1,6 @@
 import tesserocr
-
 import numpy as np
+from PIL import Image
 
 
 class TesseractOCR:
@@ -11,7 +11,7 @@ class TesseractOCR:
                 if image is None:
                     continue
 
-                api.SetImage(image)
+                api.SetImage(Image.fromarray(image))
                 digitized[label] = (api.GetUTF8Text(), api.MeanTextConf())
 
         return digitized
