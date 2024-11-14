@@ -87,3 +87,9 @@ module "database" {
   source              = "./modules/database"
   resource_group_name = data.azurerm_resource_group.rg.name
 }
+
+module "vault" {
+  source              = "./modules/vault.tf"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  azure_tenant_id     = var.azure_tenant_id
+}

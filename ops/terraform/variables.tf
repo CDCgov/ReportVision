@@ -5,3 +5,5 @@ variable "resource_group_name" {
 variable "name" {}
 
 variable "sku_name" {}
+
+variable "azure_tenant_id" {}
