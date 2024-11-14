@@ -5,7 +5,7 @@ import { Stepper } from "../components/Stepper";
 import { AnnotateStep } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { useAnnotationContext } from "../contexts/AnnotationContext";
-import { useFiles, FileType, Page } from "../contexts/FilesContext";
+import { FileType, Page } from "../contexts/FilesContext";
 import hexRgb from "hex-rgb";
 import { ImageData } from "./AnnotateTemplate";
 import { makeScreenshots } from "../utils/functions";
@@ -15,7 +15,6 @@ import { makeScreenshots } from "../utils/functions";
 export const SaveTemplate = () => {
     const navigate = useNavigate();
     const { fields, setDescription, setName, name, description, shapes, setShapes, setFields, setDrawnFields, setSelectedField } = useAnnotationContext()
-    const { addFile } = useFiles();
     
     const handleSubmit = async () => {
         const images: ImageData[] = localStorage.getItem('images') ? JSON.parse(localStorage.getItem('images') as string) : [];
@@ -59,7 +58,6 @@ export const SaveTemplate = () => {
             console.error("Invalid information found in templates, it will be overwritten")
         }
         localStorage.setItem('templates', JSON.stringify([...existingTemplates, tempFile]))
-        addFile(tempFile)
         }
 
         setShapes([]);

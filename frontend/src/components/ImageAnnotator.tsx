@@ -1,4 +1,3 @@
-import { Button } from '@trussworks/react-uswds';
 import { FC, useEffect } from 'react';
 import { ImageAnnotator, Shape } from 'react-image-label';
 import { useAnnotationContext } from '../contexts/AnnotationContext';
@@ -11,14 +10,11 @@ interface MultiImageAnnotatorProps {
 }
 
 export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, initialShapes = [[]] }) => {
-    const {selectedField, setHandles, annotator, shapes, setShapes, index, setIndex, setDrawnFields, drawnFields, setSelectedField} = useAnnotationContext();
+    const {selectedField, setHandles, annotator, shapes, setShapes, index, setDrawnFields, drawnFields, setSelectedField} = useAnnotationContext();
 
 
 
 
-    const handleImageChange = (index: number) => {
-        setIndex(index);
-    };
 
     const handleShapeAddition = (shape: Shape) => {
         const fields = [...LABELS.patientInformation.items, ...LABELS.organizationInformation.items];
@@ -46,14 +42,7 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, init
         getShapes();
     }, [])
     return (
-        <div className='display-flex flex-justify-center flex-align-center flex-column'>
-            <div>
-                {images.map((_, index) => (
-                        <Button key={index} onClick={() => handleImageChange(index)} type='button'>
-                            Image {index + 1}
-                        </Button>
-                ))}
-            </div>
+        <div className='display-flex flex-justify-center flex-align-center flex-column height-full width-full'>
             <ImageAnnotator
                 setHandles={setHandles}
                 naturalSize={true}

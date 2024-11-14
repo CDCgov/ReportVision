@@ -1,0 +1,25 @@
+.page-number {
+    display: flex;
+    align-items: center;
+
+  
+    &__text {
+      margin: 0 5px;
+    }
+  
+    &__button {
+        display: flex;
+        margin: 0 5px;
+        border: none;
+        background-color: white;
+        align-items: center;
+        justify-content: center;
+        width: 27px;
+        height: 27px;
+    }
+  
+    &__input {
+      width: 30px;
+      text-align: center;
+    }
+  }
