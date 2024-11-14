@@ -16,6 +16,9 @@ inputs:
   azure-subscription-id:
     description: The Azure subscription_id for this environment.
     required: true
+  azure-object-id:
+    description: The Azure object_id for this environment.
+    required: true
   app-name:
     description: The name of the application being deployed in Terraform.
     required: true
@@ -50,6 +53,7 @@ runs:
         ARM_CLIENT_ID: ${{ inputs.azure-client-id }}
         ARM_TENANT_ID: ${{ inputs.azure-tenant-id }}
         ARM_SUBSCRIPTION_ID: ${{ inputs.azure-subscription-id }}
+        ARM_CLIENT_ID: ${{ inputs.azure-client-id }}
       shell: bash
       run: |
         terraform init -backend-config=config/${{ inputs.deploy-env }}.config

@@ -7,16 +7,14 @@ resource "azurerm_key_vault" "key_vault" {
 
   access_policy {
 
-    object_id = data.azurerm_client_config.example.object_id
+    object_id = var.object_id
 
     key_permissions = [
-      "get",
-      "list"
+      "get"
     ]
 
     secret_permissions = [
-      "get",
-      "list"
+      "get"
     ]
   }
 }
@@ -26,4 +24,16 @@ resource "azurerm_key_vault_secret" "postgres_password" {
   name         = "postgres-password"
   value        = azurerm_postgresql_server.postgres_db.administrator_login_password.result
   key_vault_id = azurerm_key_vault.key_vault.id
+}
+
+# Define the Service Principal for which we are granting access
+resource "azurerm_azuread_application" "frontendapp" {
+  name = "frontend-application"
+  # TODO: Ask if the VITE_API_URL is the correct endpoint we are using
+  homepage        = var.VITE_API_URL
+  identifier_uris = [VITE_API_URL]
+}
+
+resource "azurerm_azuread_service_principal" "example" {
+  application_id = azurerm_azuread_application.frontendapp.application_id
 }
