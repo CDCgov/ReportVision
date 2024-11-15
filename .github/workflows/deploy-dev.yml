@@ -123,6 +123,11 @@ jobs:
         with:
           name: ocr-docker-image-artifact  # The name of the artifact to download
           path: ./downloaded-artifact  # Path where the artifact will be saved
+      
+      # Ensure that the downloaded artifact is available
+    - name: List files in the downloaded artifact directory (for debugging)
+      run: ls -l ./downloaded-artifact
+      
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
