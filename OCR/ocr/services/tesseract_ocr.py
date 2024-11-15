@@ -9,12 +9,23 @@ from PIL import Image
 class TesseractOCR:
     @staticmethod
     def _guess_tessdata_path():
+        """
+        Attempts to guess potential locations for the `tessdata` folder.
+
+        The `tessdata` folder is needed to use pre-trained Tesseract OCR data, though the automatic detection
+        provided in `tesserocr` may not be reliable. Instead iterate over common paths on various systems (e.g.,
+        Red Hat, Ubuntu, macOS) and check for the presence of a `tessdata` folder.
+
+        If `TESSDATA_PREFIX` is available in the environment, preferentially use that instead, skipping the
+        guessing step. If all guessed locations lack a `tessdata` folder, fall back to automatic detection
+        provided by `tesserocr` and the tesseract API.
+        """
         candidate_paths = [
-                "/usr/local/share/tesseract/",      # Default local install
-                "/usr/share/tesseract/",            # Red Hat
-                "/usr/share/tesseract-ocr/4.00",    # Ubuntu
-                "/opt/homebrew/share",              # macOS (Homebrew)
-                "/opt/local/share"                  # macOS (MacPorts)
+                "/usr/local/share/tesseract/",
+                "/usr/share/tesseract/",
+                "/usr/share/tesseract-ocr/4.00",
+                "/opt/homebrew/share",
+                "/opt/local/share"
                 ]
 
         if "TESSDATA_PREFIX" in os.environ:
