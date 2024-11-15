@@ -66,6 +66,10 @@ jobs:
           name: ocr-docker-image-artifact
           path: ./OCR/dockerbuild_file.dockerbuild  # Path to the artifact
 
+      # Check to see if the file is uploaded in this directory
+      - name: List files in OCR directory
+        run: ls -l ./OCR
+
   build-frontend:
     name: Build Frontend
     runs-on: ubuntu-latest
