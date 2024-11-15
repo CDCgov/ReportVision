@@ -126,11 +126,11 @@ jobs:
           docker-tag: ${{ inputs.ocr-version }}
           docker-registry: ghcr.io
           api-name: ocr-api
-      - name: Download Docker Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: ocr-docker-image-artifact  # The name of the artifact to download
-          path: ./OCR/dockerbuild_file.dockerbuild   # Path where the artifact is saved
+      # - name: Download Docker Artifact
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: ocr-docker-image-artifact  # The name of the artifact to download
+      #     path: ./OCR/dockerbuild_file.dockerbuild   # Path where the artifact is saved
   
   deploy-frontend:
     name: Deploy Frontend
