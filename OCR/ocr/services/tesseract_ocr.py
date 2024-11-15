@@ -21,12 +21,12 @@ class TesseractOCR:
         provided by `tesserocr` and the tesseract API.
         """
         candidate_paths = [
-                "/usr/local/share/tesseract/",
-                "/usr/share/tesseract/",
-                "/usr/share/tesseract-ocr/4.00",
-                "/opt/homebrew/share",
-                "/opt/local/share"
-                ]
+            "/usr/local/share/tesseract/",
+            "/usr/share/tesseract/",
+            "/usr/share/tesseract-ocr/4.00",
+            "/opt/homebrew/share",
+            "/opt/local/share",
+        ]
 
         if "TESSDATA_PREFIX" in os.environ:
             return os.environ["TESSDATA_PREFIX"]
