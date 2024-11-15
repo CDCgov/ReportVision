@@ -63,8 +63,8 @@ jobs:
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
         uses: actions/upload-artifact@v3
         with:
-          name: ocr-api-image
-          path: ./OCR  # TODO: make sure this is the correct path
+          name: ocr-docker-image-artifact
+          path: ./OCR/dockerbuild_file.dockerbuild  # Path to the artifact
 
   build-frontend:
     name: Build Frontend
@@ -118,8 +118,8 @@ jobs:
       - name: Download Docker Artifact
         uses: actions/download-artifact@v3
         with:
-          name: ocr-api-image  # artifact uploaded in the build-publish-ocr job
-
+          name: ocr-docker-image-artifact  # The name of the artifact to download
+          path: ./downloaded-artifact  # Path where the artifact will be saved
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
@@ -127,7 +127,11 @@ jobs:
           docker-tag: ${{ inputs.ocr-version }}
           docker-registry: ghcr.io
           api-name: ocr-api
-          reportvision-dockerbuild: ocr-api-image  # artifact downloaded
+      - name: Download Docker Artifact (Optional)
+        uses: actions/download-artifact@v3
+        with:
+          name: ocr-docker-image-artifact  # The name of the artifact to download
+          path: ./downloaded-artifact  # Path where the artifact will be saved
 
   deploy-frontend:
     name: Deploy Frontend
