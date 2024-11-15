@@ -18,6 +18,8 @@ class TesseractOCR:
         If `TESSDATA_PREFIX` is available in the environment, this function will check that location first.
         If all guessed locations do not exist, fall back to automatic detection provided by `tesserocr` and
         the tesseract API.
+
+        `wanted_lang` (str): a desired language to search for. Defaults to English `eng`.
         """
         candidate_paths = [
             "/usr/local/share/tesseract/tessdata",
