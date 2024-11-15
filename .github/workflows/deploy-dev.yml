@@ -29,23 +29,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Lowercase the repo name
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+
       - name: Check if image exists
         id: image_check
         run: |
           echo "docker_inspect=$(
               docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ inputs.ocr-version }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
+
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
-        uses: ./.github/actions/build-publish-api
+        uses: docker/build-push-action@v4
         with:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
@@ -55,11 +59,19 @@ jobs:
           docker-context-path: ./OCR/
           api-name: ocr-api
 
+      - name: Upload Docker Build Artifact
+        if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ocr-api-image
+          path: ./OCR  # TODO: make sure this is the correct path
+
   build-frontend:
     name: Build Frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: ./.github/actions/build-frontend
         name: Build frontend
         with:
@@ -102,16 +114,20 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Download Docker Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ocr-api-image  # artifact uploaded in the build-publish-ocr job
+
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
-      # - name: Download all workflow run artifacts
-      #   uses: actions/download-artifact@v4
         with:
           deploy-env: ${{ inputs.deploy-env }}
           docker-tag: ${{ inputs.ocr-version }}
           docker-registry: ghcr.io
           api-name: ocr-api
-          reportvision-dockerbuild: CDCgov~ReportVision~VPLMV6.dockerbuild
+          reportvision-dockerbuild: ocr-api-image  # artifact downloaded
 
   deploy-frontend:
     name: Deploy Frontend
