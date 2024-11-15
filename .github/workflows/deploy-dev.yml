@@ -49,7 +49,7 @@ jobs:
 
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
-        uses: docker/build-push-action@v4
+        uses: ./.github/actions/build-publish-api
         with:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
