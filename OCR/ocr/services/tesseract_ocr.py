@@ -1,4 +1,3 @@
-import pathlib
 import os
 
 import tesserocr
@@ -8,7 +7,7 @@ from PIL import Image
 
 class TesseractOCR:
     @staticmethod
-    def _guess_tessdata_path():
+    def _guess_tessdata_path(wanted_lang="eng") -> bytes:
         """
         Attempts to guess potential locations for the `tessdata` folder.
 
@@ -16,27 +15,30 @@ class TesseractOCR:
         provided in `tesserocr` may not be reliable. Instead iterate over common paths on various systems (e.g.,
         Red Hat, Ubuntu, macOS) and check for the presence of a `tessdata` folder.
 
-        If `TESSDATA_PREFIX` is available in the environment, preferentially use that instead, skipping the
-        guessing step. If all guessed locations lack a `tessdata` folder, fall back to automatic detection
-        provided by `tesserocr` and the tesseract API.
+        If `TESSDATA_PREFIX` is available in the environment, this function will check that location first.
+        If all guessed locations do not exist, fall back to automatic detection provided by `tesserocr` and
+        the tesseract API.
         """
         candidate_paths = [
-            "/usr/local/share/tesseract/",
-            "/usr/share/tesseract/",
-            "/usr/share/tesseract-ocr/4.00",
-            "/opt/homebrew/share",
-            "/opt/local/share",
+            "/usr/local/share/tesseract/tessdata",
+            "/usr/share/tesseract/tessdata",
+            "/usr/share/tesseract-ocr/4.00/tessdata",
+            "/opt/homebrew/share/tessdata",
+            "/opt/local/share/tessdata",
         ]
 
+        # Prepend env variable if defined
         if "TESSDATA_PREFIX" in os.environ:
-            return os.environ["TESSDATA_PREFIX"]
+            candidate_paths.insert(os.environ["TESSDATA_PREFIX"], 0)
 
+        # Test candidate paths
         for path in candidate_paths:
-            tessdata = pathlib.Path(path) / "tessdata"
-            if tessdata.exists():
-                return bytes(tessdata)
+            retpath, langs = tesserocr.get_languages(path)
+            if wanted_lang in langs:
+                return retpath
 
-        return None
+        # Nothing matched, just return the default path
+        return tesserocr.get_languages()[0]
 
     def image_to_text(self, segments: dict[str, np.ndarray]) -> dict[str, tuple[str, float]]:
         digitized: dict[str, tuple[str, float]] = {}
