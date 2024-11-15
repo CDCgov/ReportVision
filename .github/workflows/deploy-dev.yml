@@ -64,7 +64,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ocr-docker-image-artifact
-          path: ./OCR/dockerbuild_file.dockerbuild  # Path to the artifact
+          path: ./OCR/dev-dockerfile  # Path to the artifact
 
       # Check to see if the file is uploaded in this directory
       - name: List files in OCR directory
