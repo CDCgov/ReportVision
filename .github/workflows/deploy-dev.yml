@@ -115,11 +115,6 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Download Docker Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: ocr-docker-image-artifact  # The name of the artifact to download
-          path: ./downloaded-artifact  # Path where the artifact will be saved
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
@@ -127,11 +122,11 @@ jobs:
           docker-tag: ${{ inputs.ocr-version }}
           docker-registry: ghcr.io
           api-name: ocr-api
-      - name: Download Docker Artifact (Optional)
+      - name: Download Docker Artifact
         uses: actions/download-artifact@v3
         with:
           name: ocr-docker-image-artifact  # The name of the artifact to download
-          path: ./downloaded-artifact  # Path where the artifact will be saved
+          path: ./OCR/dockerbuild_file.dockerbuild   # Path where the artifact is saved
 
   deploy-frontend:
     name: Deploy Frontend
