@@ -1,3 +1,4 @@
+# Variables from GitHub Actions
 variable "resource_group_name" {}
 variable "azure_tenant_id" {}
 variable "object_id" {}
