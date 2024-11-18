@@ -1,7 +1,3 @@
-# Variables from GitHub Actions
-variable "resource_group_name" {}
-variable "subnet" {}
-
 variable "db_username" {
   type        = string
   description = "Username of RDS Instance."
@@ -19,6 +15,11 @@ variable "location" {
   default     = "eastus"
 }
 
+variable "resource_group_name" {
+  type        = string
+  description = "The Azure Resource Group Name"
+}
+
 variable "sku_name" {
   type        = string
   description = "value"
@@ -26,6 +27,6 @@ variable "sku_name" {
 }
 
 variable "subnet" {
-  description = "The subnet ID to associate with the PostgreSQL server"
   type        = string
+  description = "The subnet ID to associate with the PostgreSQL server"
 }

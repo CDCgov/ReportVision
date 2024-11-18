@@ -1,8 +1,6 @@
-# Variables from GitHub Actions
-variable "resource_group_name" {}
-variable "azure_tenant_id" {}
-variable "object_id" {}
-variable "vite_api_url" {}
+variable "azure_tenant_id" {
+  description = "Unique Identifier for the Azure Active Directory tenant"
+}
 
 variable "db_username" {
   type        = string
@@ -22,12 +20,22 @@ variable "location" {
 }
 
 variable "object_id" {
-  description = "The Azure Object ID"
   type        = string
+  description = "The Azure Object ID"
+}
+
+variable "resource_group_name" {
+  type        = string
+  description = "The Azure Resource Group Name"
 }
 
 variable "sku_name" {
   type        = string
-  description = "value"
+  description = "The Azure Stock Keep Unit (SKU) version"
   default     = "B_Gen5_1" # Basic SKU, Gen5, 1 vCore
+}
+
+variable "vite_api_url" {
+  type        = string
+  description = "The application API Url"
 }
