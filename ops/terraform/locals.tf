@@ -1,5 +1,10 @@
 locals {
   environment = terraform.workspace
+
+  # Explicitly get object_id from the environment variable (e.g., in GitHub Actions)
+  azure_object_id = getenv("ARM_OBJECT_ID", var.object_id)
+  vite_api_url    = getenv("VITE_API_URL", "") # Default to an empty string if not set
+
   init = {
     environment = local.environment
     location    = "eastus2"

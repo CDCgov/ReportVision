@@ -1,4 +1,5 @@
 variable "resource_group_name" {}
+variable "subnet" {}
 
 variable "db_username" {
   type        = string
@@ -21,4 +22,9 @@ variable "sku_name" {
   type        = string
   description = "value"
   default     = "B_Gen5_1" # Basic SKU, Gen5, 1 vCore
+}
+
+variable "subnet" {
+  description = "The subnet ID to associate with the PostgreSQL server"
+  type        = string
 }

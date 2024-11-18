@@ -20,6 +20,11 @@ variable "location" {
   default     = "eastus"
 }
 
+variable "object_id" {
+  description = "The Azure Object ID"
+  type        = string
+}
+
 variable "sku_name" {
   type        = string
   description = "value"

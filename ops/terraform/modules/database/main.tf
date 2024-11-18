@@ -11,6 +11,9 @@ resource "azurerm_postgresql_server" "postgres_server" {
   backup_retention_days        = 7
   ssl_enforcement_enabled      = true
 
+  # Enable Virtual Network service endpoint
+  virtual_network_subnet_id = var.subnet
+
 }
 
 # PostgreSQL Database
