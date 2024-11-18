@@ -86,7 +86,7 @@ module "ocr_autoscale" {
 module "database" {
   source              = "./modules/database"
   resource_group_name = data.azurerm_resource_group.rg.name
-  subnet              = module.network.azurerm_subnet.web-subnet.id
+  subnet              = module.network.azurerm_subnet.app-subnet.id
 }
 
 module "vault" {
