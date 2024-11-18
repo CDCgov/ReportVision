@@ -46,11 +46,18 @@ jobs:
           echo "docker_inspect=$(
               docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ inputs.ocr-version }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
+          
+  
+          # Pull the image from GHCR
+    # - name: Pull OCR Docker image from GHCR
+    #   run: |
+    #     docker pull ghcr.io/${{ github.repository }}-ocr-api:${{ inputs.ocr-version }}
 
       # Debugging step to check the value of docker_inspect
       - name: Debug image inspect result
         run: echo "Docker inspect result: ${{ steps.image_check.outputs.docker_inspect }}"
 
+# TODO: Check if image exists, if not create and build & if it does then do a docker pull
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 0 }} # TODO: May need to change this back to 1, but test out 0
         uses: ./.github/actions/build-publish-api
