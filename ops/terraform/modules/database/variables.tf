@@ -17,7 +17,7 @@ variable "location" {
 
 variable "resource_group_name" {
   type        = string
-  description = "The Azure Resource Group Name"
+  description = "The Azure Resource Group to deploy to"
 }
 
 variable "sku_name" {

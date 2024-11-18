@@ -1,5 +1,5 @@
 variable "azure_tenant_id" {
-  description = "Unique Identifier for the Azure Active Directory tenant"
+  description = "Unique Identifier for the Azure AD tenant for the app"
 }
 
 variable "db_username" {
@@ -26,7 +26,7 @@ variable "object_id" {
 
 variable "resource_group_name" {
   type        = string
-  description = "The Azure Resource Group Name"
+  description = "The Azure Resource Group to deploy to"
 }
 
 variable "sku_name" {
