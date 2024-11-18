@@ -1,11 +1,17 @@
+resource "random_password" "password" {
+  length = 24
+  special = false
+  upper = false
+}
+
 resource "azurerm_storage_account" "frontend" {
   account_replication_type   = "GRS"
   account_tier               = "Standard"
   account_kind               = "StorageV2"
   location                   = var.location
   resource_group_name        = var.resource_group
-  name                       = "${var.name}frontend${var.env}"
-  https_traffic_only_enabled = false
+  name                       = "${var.env == "demo" ? random_password.password.result : "${var.name}frontend${var.env}"}"
+  https_traffic_only_enabled = true
 
   static_website {
     index_document     = "index.html"

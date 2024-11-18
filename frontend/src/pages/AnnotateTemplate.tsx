@@ -4,18 +4,31 @@ import { Stepper } from "../components/Stepper.tsx";
 import { AnnotateStep } from "../utils/constants.ts";
 import { useFiles } from "../contexts/FilesContext.tsx";
 import * as pdfjsLib from "pdfjs-dist";
-import { Accordion, AccordionItemProps } from "@trussworks/react-uswds";
+import { Accordion, HeadingLevel } from "@trussworks/react-uswds";
+
 import { MultiImageAnnotator } from "../components/ImageAnnotator.tsx";
 import { useNavigate } from "react-router-dom";
 import { LABELS } from "../constants/labels";
 import { Icon } from "@trussworks/react-uswds";
 import { useEffect, useState } from "react";
+import { useAnnotationContext } from "../contexts/AnnotationContext.tsx";
+import CheckIcon from '../assets/check.svg';
 
 import "./AnnotateTemplate.scss";
-import { useAnnotationContext } from "../contexts/AnnotationContext.tsx";
+
+interface AccordionItemProps {
+  title: React.ReactNode | string;
+  content: React.ReactNode;
+  expanded: boolean;
+  id: string;
+  className?: string;
+  headingLevel: HeadingLevel;
+  handleToggle?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
 
 interface LabelItem {
   name: string;
+  displayedName: string;
   required: boolean;
   color: string;
   subItems?: LabelItem[];
@@ -34,15 +47,19 @@ export interface ImageData {
 
 const AnnotateTemplate: React.FC = () => {
   const [images, setImages] = useState<ImageData[]>([]);
+  const [localIds, setLocalIds] = useState<Map<string, string>>(new Map());
   const navigate = useNavigate();
   const { files } = useFiles();
   const {
+    selectedField,
     setSelectedField,
     annotator,
     setFields,
     fields,
     index,
     setIndex,
+    drawnFields,
+    setDrawnFields,
   } = useAnnotationContext();
   const pdfFile = files[0];
 
@@ -77,58 +94,61 @@ const AnnotateTemplate: React.FC = () => {
 
     convertPdfToImages(pdfFile).then((imgs) => {
       setImages(imgs);
-      localStorage.setItem("images", JSON.stringify(imgs));
+      localStorage.setItem('images', JSON.stringify(imgs));
     });
   }, [files, pdfFile]);
   useEffect(() => {
     const getImage = async () => {
       const localImages = await JSON.parse(
-        localStorage.getItem("images") || "[]"
+        localStorage.getItem('images') || "[]"
       );
       if (localImages && localImages.length > 0) {
         setImages(localImages.images);
       }
     };
+
+    const handleUnmount = () => {
+      setDrawnFields(new Set());
+      setSelectedField(null);
+    }
     getImage();
-  }, []);
+    return () => handleUnmount();
+  }, [setDrawnFields, setSelectedField]);
+
   const renderLabelContent = (category: LabelCategory): JSX.Element => (
     <ul className="usa-list usa-list--unstyled">
       {category.items.map((item, idx) => (
         <li
-          key={item.name}
-          className="display-flex flex-justify space-between flex-align-center padding-y-1 label-container margin-0"
+          key={item.displayedName}
+          className={`display-flex flex-justify space-between flex-align-center padding-y-1 label-container margin-0 width-full ${selectedField?.name === item.name ? 'hover' : null}`}
           onClick={() => {
             setSelectedField({
-
+                displayedName: item.displayedName,
                 name: item.name,
-                id: String(idx + 1),
+                id: String(category.title === 'Organization Information' ? idx + 1 + 7 : idx + 1),
                 color: item.color.slice(0, 7),
             });
-            let tempFields = [...fields];
-            if (fields.length === 0) {
-              tempFields.unshift(new Set<string>());
-              setFields([new Set()]);
-            } else if (fields.length < index + 1) {
-              tempFields = [...tempFields, new Set()];
-              setFields(tempFields);
-            }
+            const tempFields = [...fields];
+            const tempMap = new Map(localIds);
             if (!tempFields[index].has(item.name)) {
               annotator!.drawRectangle();
               tempFields[index].add(item.name);
+              tempMap.set(`${category.title === 'Organization Information' ? idx + 7 : idx}`, String(drawnFields.size + 1));
               setFields(tempFields);
+              setLocalIds(tempMap);
             } else {
-              annotator!.edit(idx + 1);
+              annotator!.edit(Number(localIds.get(`${category.title === 'Organization Information' ? idx + 7 : idx}`)));
             }
           }}
         >
-          <div className="display-flex flex-align-center">
+          <div className="display-flex flex-align-center width-full">
             <div
-              className="display-flex flex-align-center bg-primary padding-1px"
+              className="display-flex flex-align-center bg-primary padding-1px "
               style={{ backgroundColor: item.color || "#007BFF" }}
             >
               <Icon.TextFields color="white" />
             </div>
-            <span className="margin-left-1 text-normal">{item.name}</span>
+            <span className="margin-left-1 text-normal field-label-container">{item.displayedName}&nbsp;{drawnFields.has(item.name) &&<img src={CheckIcon} alt="check-icon" role="presentation" />}</span>
           </div>
         </li>
       ))}
@@ -166,18 +186,19 @@ const AnnotateTemplate: React.FC = () => {
         <Stepper currentStep={AnnotateStep.Annotate} />
       </div>
       <Divider margin="0px" />
-      <div className="grid-row  flex-1 overflow-hidden">
-        <div className="grid-col-3 flex-3 height-full overflow-y-auto">
-          <h2>Segment and label</h2>
-          <p className="text-base">
-            Annotate by segmenting and labeling your new template.
+      <div className="display-flex height-full overflow-hidden">
+        <div className="display-flexflex-3 height-full overflow-y-auto field-container">
+          <h2 className="annotate-headers">Segment and label</h2>
+          <p className="text-base annotation-copy">
+          Segmenting means selecting and highlighting a specific part of an image. After segmenting, link it to the correct label that describes what the segment represents.
           </p>
           <Divider margin="0px" />
-          <Accordion items={accordionItems} />
+          <h2 className="annotate-headers annotate-label-heading">Labels Required</h2>
+          <Accordion  className="accordion" items={accordionItems} />
         </div>
         <div
           id="img-annotator-container"
-          className="grid-col-9 height-full overflow-y-auto bg-base-lightest display-flex flex-justify-center"
+          className="img-annotation-container width-full height-full overflow-y-auto display-flex flex-justify-center"
         >
           {Array.isArray(images) && images.length > 0 ? (
             <MultiImageAnnotator images={images.map(img => img.image)} categories={[]} />

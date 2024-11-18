@@ -1,30 +1,107 @@
-export const LABELS = {
-  patientInformation: {
-    title: "Patient Information",
-    items: [
-      { name: "First Name", required: true, color: '#FF0000' }, // red with 50% transparency
-      { name: "Last Name", required: true, color: '#00FF00' },  // green with 50% transparency
-      { name: "DOB", required: false, color: '#0000FF' },       // blue with 50% transparency
-      { name: "Gender", required: false, color: '#00FFFF' },    // cyan with 50% transparency
-      { name: "Phone Number", required: false, color: '#FF00FF' }, // magenta with 50% transparency
-      { name: "Email", required: false, color: '#FFFF00' },      // yellow with 50% transparency
-      {
-        name: "Address",
-        required: false,
-        color: '#EE82EE' // violet with 50% transparency
-      },
-    ],
-  },
-  organizationInformation: {
-    title: "Organization Information",
-    items: [
-      { name: "Name", required: true, color: '#00FF00' },        // lime with 50% transparency
-      { name: "Email", required: false, color: '#FF2400' },      // scarlet with 50% transparency
-      {
-        name: "Address",
-        required: false,
-        color: '#4B0082'  // indigo with 50% transparency
-      },
-    ],
-  },
+// Helper function to create label items
+const createLabelItem = (
+  id: string,
+  originalName: string,
+  isRequired: boolean,
+  color: string,
+  orgPrefix: string
+) => {
+  const name = `${orgPrefix} - ${originalName}`;
+  
+  return {
+    id,
+    name,
+    displayedName: originalName,
+    required: isRequired,
+    color,
+  };
 };
+
+// Function to create label configuration
+export const createLabels = () => {
+  return {
+    patientInformation: {
+      title: 'Patient Information',
+      items: [
+        createLabelItem(
+          '1',
+          'First Name',
+          true,
+          '#00008B',
+          'Patient'
+        ),
+        createLabelItem(
+          '2',
+          'Last Name',
+          true,
+          '#228B22',
+          'Patient'
+        ),
+        createLabelItem(
+          '3',
+          'DOB',
+          false,
+          '#DC143C',
+          'Patient'
+        ),
+        createLabelItem(
+          '4',
+          'Gender',
+          false,
+          '#9400D3',
+          'Patient'
+        ),
+        createLabelItem(
+          '5',
+          'Phone Number',
+          false,
+          '#8B4513',
+          'Patient'
+        ),
+        createLabelItem(
+          '6',
+          'Email',
+          false,
+          '#008080',
+          'Patient'
+        ),
+        createLabelItem(
+          '7',
+          'Address',
+          false,
+          '#191970',
+          'Patient'
+        ),
+      ],
+    },
+    organizationInformation: {
+      title: 'Organization Information',
+      items: [
+        createLabelItem(
+          '8',
+          'Name',
+          true,
+          '#556B2F',
+          'Organization'
+        ),
+        createLabelItem(
+          '9',
+          'Email',
+          false,
+          '#4B0082',
+          'Organization'
+        ),
+        createLabelItem(
+          '10',
+          'Address',
+          false,
+          '#B22222',
+          'Organization'
+        ),
+      ],
+    },
+  };
+};
+
+// Export LABELS using the createLabels function
+export const LABELS = createLabels();

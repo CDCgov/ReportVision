@@ -5,10 +5,13 @@ export const makeScreenshots = async () => {
     const images: ImageData[] = JSON.parse(localStorage.getItem('images') || '[]') as ImageData[];
     const shapes: CustomShape[][] = JSON.parse(localStorage.getItem('shapes') || '[]') as CustomShape[][];
     const screenshots: string[] = [];
-
     for (let i = 0; i < images.length; i++) {
-        const screenshot = await createScreenshot(images[i], shapes[i]);
-        screenshots.push(screenshot);
+        try {
+            const screenshot = await createScreenshot(images[i], shapes[i] ?? []);
+            screenshots.push(screenshot);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     // Final log of all screenshots
@@ -28,7 +31,6 @@ const createScreenshot = (localImg: ImageData, shapeData: CustomShape[]) => {
 
             img.onload = () => {
                 context.drawImage(img, 0, 0, canvas.width, canvas.height);
-
                 shapeData.forEach((shape) => {
                     context.fillStyle = shape.color || 'red';
 
@@ -50,7 +52,15 @@ const createScreenshot = (localImg: ImageData, shapeData: CustomShape[]) => {
                 const screenshot = canvas.toDataURL('image/png');
                 resolve(screenshot);
                 canvas.remove();
+                context.closePath();
             };
+            // If the image fails to load, reject the promise
+            img.onerror = () => {
+                console.error('Failed to load image');
+                resolve('');
+                context.closePath();
+                canvas.remove();
+            }
         }
     });
 };

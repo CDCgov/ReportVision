@@ -15,6 +15,7 @@
     "e2e:ui": "npx playwright test --ui"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.59.20",
     "@trussworks/react-uswds": "^9.0.0",
     "@types/hex-rgb": "^3.0.0",
     "@uswds/uswds": "^3.8.1",

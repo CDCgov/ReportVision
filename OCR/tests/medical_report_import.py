@@ -5,21 +5,26 @@ from datasets import load_dataset
 # Define the destination folder
 destination_base_folder = "OCR/ocr/reportvision-dataset-1"
 datasets_info = [
-    {"name": "singhsays/fake-w2-us-tax-form-dataset", "json_key": "ground_truth"},
-    {"name": "AnubhutiBhardwaj/medical-reports-demo", "json_key": "json"},
     {"name": "Technoculture/medical-prescriptions", "json_key": "json"},
 ]
 
 
-images_folder = os.path.join(destination_base_folder, "images")
-json_folder = os.path.join(destination_base_folder, "ground_truth")
+"""
+,
+{"name": "AnubhutiBhardwaj/medical-reports-demo", "json_key": "json"}
+{"name": "singhsays/fake-w2-us-tax-form-dataset", "json_key": "ground_truth"}
+{"name": "Technoculture/medical-prescriptions", "json_key": "json"},
+"""
+
+images_folder = os.path.join(destination_base_folder, "images_medical_prescriptions")
+json_folder = os.path.join(destination_base_folder, "ground_truth_medical_prescriptions")
 
 os.makedirs(images_folder, exist_ok=True)
 os.makedirs(json_folder, exist_ok=True)
 
 
 def process_dataset(dataset_name, json_key):
-    print(f"Processing dataset: {dataset_name}")
+    print(f"Processing datasets: {dataset_name}")
     dataset = load_dataset(dataset_name)
 
     for split in dataset.keys():

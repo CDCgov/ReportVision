@@ -1,6 +1,6 @@
 terraform {
   backend "azurerm" {
-    resource_group_name = "reportvision-rg-global"
+    resource_group_name = "reportvision-rg"
   }
   required_providers {
     azurerm = {

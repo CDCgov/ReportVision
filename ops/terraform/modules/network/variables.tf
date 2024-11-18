@@ -5,4 +5,5 @@ variable "vnetcidr" {}
 variable "websubnetcidr" {}
 variable "lbsubnetcidr" {}
 # variable "dbsubnetcidr" {}
+variable "appsubnetcidr" {}
 variable "env" {}

@@ -1,7 +1,7 @@
 variable "name" {}
 variable "resource_group_name" {}
 variable "resource_group_location" {}
-variable "web-subnet" {}
+variable "lb_subnet" {}
 variable "blob_endpoint" {}
 variable "tags" {}
 

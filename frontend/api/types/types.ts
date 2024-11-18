@@ -12,6 +12,10 @@ export type ImageToTextResponse = {
     [key: string]: [string, number];
 };
 
+export type AlignImageResponse = {
+    [key: string]: string;
+};
+
 export interface ResultItem {
     text: string;
     confidence: number;
@@ -32,4 +36,14 @@ export interface ResultItem {
     sourceImage: string;
     templateImage: string;
     fieldNames: Field[];
+}
+
+export interface AlignImageArgs {
+    // base 64 encoded image
+    sourceImage: string;
+    templateImage: string;
+}
+export interface PDF {
+  file: string;
+  images: string[];
 }
