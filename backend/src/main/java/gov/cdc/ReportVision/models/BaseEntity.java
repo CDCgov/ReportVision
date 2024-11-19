@@ -7,6 +7,8 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -24,7 +26,13 @@ public abstract class BaseEntity {
   @LastModifiedDate
   private Date updatedAt;
 
-  @ManyToOne private ApiUser createdBy;
+  @JsonProperty
+  @Fetch(FetchMode.JOIN)
+  @ManyToOne
+  private ApiUser createdBy;
 
-  @ManyToOne private ApiUser updatedBy;
+  @JsonProperty
+  @Fetch(FetchMode.JOIN)
+  @ManyToOne
+  private ApiUser updatedBy;
 }
