@@ -20,6 +20,9 @@ const MIDDLEWARE_URL = import.meta.env.MIDDLEWARE_API_URL || 'http://localhost:8
 export const TemplateAPI = {
     getTemplates: async (): Promise<Template[]> => {
         const response = await fetch(`${MIDDLEWARE_URL}/templates`);
+        if (!response.ok) {
+            throw new Error('Unable to fetch templates');
+        }
         const jsonResponse = await response.json();
         return jsonResponse._embedded.templates;
     }
