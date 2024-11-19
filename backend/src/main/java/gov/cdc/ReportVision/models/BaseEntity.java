@@ -1,26 +1,30 @@
 package gov.cdc.ReportVision.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-
 import java.util.Date;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @MappedSuperclass
 public abstract class BaseEntity {
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(updatable = false)
-    private Date createdAt;
+  @JsonProperty
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(updatable = false)
+  @CreatedDate
+  private Date createdAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(updatable = false)
-    private Date updatedAt;
+  @JsonProperty
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(updatable = false)
+  @LastModifiedDate
+  private Date updatedAt;
 
-    @ManyToOne
-    private ApiUser createdBy;
+  @ManyToOne private ApiUser createdBy;
 
-    @ManyToOne
-    private ApiUser updatedBy;
+  @ManyToOne private ApiUser updatedBy;
 }

@@ -8,6 +8,8 @@ import * as pdfjsLib from "pdfjs-dist";
 
 import './ExtractUploadFile.scss';
 import { FileInput } from "./FileInput/file-input";
+import {TemplateAPI} from "../types/templates.ts";
+import {useQuery} from "@tanstack/react-query";
 
 
 
@@ -37,52 +39,16 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   const id = useId();
   const { addFile, clearFiles, files, setSelectedTemplates, selectedTemplates } = useFiles();
   const navigate = useNavigate();
-  const [templates, setTemplates] = useState<Template[]>([]);
+  // const [templates, setTemplates] = useState<Template[]>([]);
+    const templates = useQuery(
+        {
+            queryKey: ['templates'],
+            queryFn: TemplateAPI.getTemplates
+        }
+    ).data || [];
   const [isUploadComplete, setIsUploadComplete] = useState<boolean>(false);
   const [uploadedFile, setUploadedFile] = useState<File[]>([]);
-  const loadTemplatesTestData = () => {
-    const sampleTemplates: Template[] = [
-      {
-        name: "Test Template COVID",
-        description: "This is the first sample template.",
-        pages: [
-          {
-            image: "base64encodedimage1",
-            fieldNames: ["patient_name", "patient_dob"],
-          },
-        ],
-      },
-      {
-        name: "Test Template Syph",
-        description: "This is the second sample template.",
-        pages: [
-          {
-            image: "base64encodedimage2",
-            fieldNames: ["patient_name", "address"],
-          },
-        ],
-      },
-    ];
 
-    setTemplates(sampleTemplates);
-  };
-
-  useEffect(() => {
-    // Load templates from local storage, and if none are found, load test data
-    const loadTemplatesFromLocalStorage = () => {
-      const storedTemplates = localStorage.getItem("templates");
-      if (storedTemplates) {
-        const parsedTemplates = JSON.parse(storedTemplates);
-        setTemplates(parsedTemplates);
-      } else {
-        loadTemplatesTestData();
-      }
-    };
-    loadTemplatesFromLocalStorage();
-
-    return () => clearFiles();
-
-  }, []);
   const simulateFileUpload = async(files: File[]) => {
     onUploadComplete(true);
     files.forEach(file => addFile(file));

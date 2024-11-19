@@ -3,6 +3,7 @@ import "@testing-library/jest-dom";
 import { describe, it, expect } from "vitest";
 import { ExtractUploadFile } from "../ExtractUploadFile";
 import { Wrapper } from "../../utils/tests";
+import React from "react";
 
 vi.mock("pdfjs-dist", () => ({
   GlobalWorkerOptions: {

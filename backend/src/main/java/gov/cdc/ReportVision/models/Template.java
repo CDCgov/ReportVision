@@ -1,5 +1,7 @@
 package gov.cdc.ReportVision.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -11,12 +13,14 @@ import lombok.Getter;
 @Entity
 @Getter
 @Builder
+@JsonInclude(JsonInclude.Include.ALWAYS)
 public class Template extends BaseEntity {
 
   @Valid
   @Id
   @GeneratedValue(generator = "UUID4")
   @Column(updatable = false, nullable = false)
+  @JsonProperty
   private UUID id;
 
   @NotBlank(message = "Name is required")
