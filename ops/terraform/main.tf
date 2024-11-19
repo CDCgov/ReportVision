@@ -1,5 +1,5 @@
 locals {
-  workspaces = merge(local.dev, local.demo)
+  workspaces = merge(local.environments)
   workspace  = local.workspaces[terraform.workspace]
 
   management_tags = {
@@ -13,10 +13,11 @@ module "networking" {
   name           = var.name
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
-  vnetcidr       = local.workspace["vnetcidr"]
-  websubnetcidr  = local.workspace["websubnetcidr"]
-  lbsubnetcidr   = local.workspace["lbsubnetcidr"]
-  appsubnetcidr  = local.workspace["appsubnetcidr"]
+  vnetcidr       = local.env_config.vnetcidr
+  websubnetcidr  = local.env_config.websubnetcidr
+  lbsubnetcidr   = local.env_config.lbsubnetcidr
+  appsubnetcidr  = local.env_config.appsubnetcidr
+  dbsubnetcidr   = local.env_config.dbsubnetcidr
   env            = local.environment
 }
 
@@ -26,9 +27,9 @@ module "securitygroup" {
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
   web_subnet_id  = module.networking.websubnet_id
-  # db_subnet_id   = module.networking.dbsubnet_id
-  lb_subnet_id = module.networking.lbsubnet_id
-  env          = local.environment
+  db_subnet_id   = module.networking.dbsubnet_id
+  lb_subnet_id   = module.networking.lbsubnet_id
+  env            = local.environment
 }
 
 module "app_gateway" {
@@ -86,7 +87,7 @@ module "ocr_autoscale" {
 module "database" {
   source              = "./modules/database"
   resource_group_name = data.azurerm_resource_group.rg.name
-  subnet              = module.network.azurerm_subnet.app-subnet.id
+  subnet              = module.network.azurerm_subnet.db-subnet.id
 }
 
 module "vault" {
