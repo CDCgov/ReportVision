@@ -8,10 +8,10 @@ output "websubnet_id" {
   description = "Id of websubnet in the network"
 }
 
-# output "dbsubnet_id" {
-#   value       = azurerm_subnet.db-subnet.id
-#   description = "Id of dbsubnet in the network"
-# }
+output "dbsubnet_id" {
+  value       = azurerm_subnet.db-subnet.id
+  description = "Id of dbsubnet in the network"
+}
 
 output "lbsubnet_id" {
   value       = azurerm_subnet.lb-subnet.id

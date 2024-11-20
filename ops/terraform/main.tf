@@ -1,5 +1,5 @@
 locals {
-  workspaces = merge(local.environments)
+  workspaces = merge(local.dev, local.demo)
   workspace  = local.workspaces[terraform.workspace]
 
   management_tags = {
@@ -13,11 +13,11 @@ module "networking" {
   name           = var.name
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
-  vnetcidr       = local.env_config.vnetcidr
-  websubnetcidr  = local.env_config.websubnetcidr
-  lbsubnetcidr   = local.env_config.lbsubnetcidr
-  appsubnetcidr  = local.env_config.appsubnetcidr
-  dbsubnetcidr   = local.env_config.dbsubnetcidr
+  vnetcidr       = local.workspace["vnetcidr"]
+  websubnetcidr  = local.workspace["websubnetcidr"]
+  lbsubnetcidr   = local.workspace["lbsubnetcidr"]
+  appsubnetcidr  = local.workspace["appsubnetcidr"]
+  dbsubnetcidr   = local.workspace["dbsubnetcidr"]
   env            = local.environment
 }
 
@@ -87,7 +87,8 @@ module "ocr_autoscale" {
 module "database" {
   source              = "./modules/database"
   resource_group_name = data.azurerm_resource_group.rg.name
-  subnet              = module.network.azurerm_subnet.db-subnet.id
+  subnet              = module.networking.dbsubnet_id
+  # azurerm_subnet.dbsubnetcidr.id
 }
 
 module "vault" {
@@ -96,4 +97,5 @@ module "vault" {
   azure_tenant_id     = var.azure_tenant_id
   object_id           = var.object_id
   vite_api_url        = var.vite_api_url
+  postgres_password   = module.database.postgres_db_admin_password
 }

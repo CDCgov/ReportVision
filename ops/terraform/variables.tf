@@ -2,6 +2,13 @@ variable "azure_tenant_id" {
   description = "Unique Identifier for the Azure AD tenant for the app"
 }
 
+variable "client_id" {}
+variable "client_secret" {
+
+}
+variable "tenant_id" {
+
+}
 variable "name" {}
 
 variable "object_id" {

@@ -24,6 +24,11 @@ variable "object_id" {
   description = "The Azure Object ID"
 }
 
+variable "postgres_password" {
+  description = "The PostgreSQL password"
+  type        = string
+}
+
 variable "resource_group_name" {
   type        = string
   description = "The Azure Resource Group to deploy to"

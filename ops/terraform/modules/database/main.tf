@@ -1,8 +1,8 @@
 # PostgreSQL Server
 resource "azurerm_postgresql_server" "postgres_server" {
   name                         = "reportvisionpgserver"
-  location                     = data.azurerm_resource_group.rg.location
-  resource_group_name          = data.azurerm_resource_group.rg.name
+  location                     = var.location
+  resource_group_name          = var.resource_group_name
   sku_name                     = var.sku_name
   version                      = var.engine_version
   administrator_login          = var.db_username
@@ -12,14 +12,15 @@ resource "azurerm_postgresql_server" "postgres_server" {
   ssl_enforcement_enabled      = true
 
   # Enable Virtual Network service endpoint
-  virtual_network_subnet_id = var.subnet
+  # virtual_network_subnet_id = var.subnet
+  # Virtual Network Rule (optional)
 
 }
 
 # PostgreSQL Database
 resource "azurerm_postgresql_database" "postgres_db" {
   name                = "postgresdb"
-  resource_group_name = data.azurerm_resource_group.rg.name
+  resource_group_name = var.resource_group_name
   server_name         = azurerm_postgresql_server.postgres_server.name
   charset             = "UTF8"
   collation           = "English_United Kingdom.1252"
@@ -30,7 +31,7 @@ resource "azurerm_postgresql_database" "postgres_db" {
 resource "azurerm_postgresql_firewall_rule" "allow_azure" {
   name                = "AllowAllAzureIps"
   server_name         = azurerm_postgresql_server.postgres_server.name
-  resource_group_name = data.azurerm_resource_group.rg.name
+  resource_group_name = var.resource_group_name
   start_ip_address    = "0.0.0.0"
   end_ip_address      = "0.0.0.0"
 }
