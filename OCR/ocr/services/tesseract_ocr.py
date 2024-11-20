@@ -58,6 +58,6 @@ class TesseractOCR:
                     continue
 
                 api.SetImage(Image.fromarray(image))
-                digitized[label] = (api.GetUTF8Text(), api.MeanTextConf())
+                digitized[label] = (api.GetUTF8Text().strip(), api.MeanTextConf())
 
         return digitized
