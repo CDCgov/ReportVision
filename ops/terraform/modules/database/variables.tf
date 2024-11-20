@@ -20,10 +20,12 @@ variable "resource_group_name" {
   description = "The Azure Resource Group to deploy to"
 }
 
+# Designed for medium to high-performance workloads and is scalable.
+# May downsize to Standard_B1ms for development environments and small workloads.
 variable "sku_name" {
   type        = string
   description = "value"
-  default     = "B_Gen5_1" # Basic SKU, Gen5, 1 vCore
+  default     = "GP_Standard_D2ds_v4" # General Purpose tier
 }
 
 variable "subnet" {
