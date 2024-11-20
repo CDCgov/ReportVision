@@ -35,6 +35,14 @@ class TesseractOCR:
 
         # Test candidate paths
         for path in candidate_paths:
+            # When compiled for certain systems (macOS), libtesseract aborts due to an untrapped exception if it
+            # cannot access the path for any reason (e.g., does not exist, lacks read permissions). Attempt to
+            # enumerate the directory and, if it fails, skip this path.
+            try:
+                os.listdir(path)
+            except OSError:
+                continue
+
             retpath, langs = tesserocr.get_languages(path)
             if wanted_lang in langs:
                 return retpath
