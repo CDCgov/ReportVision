@@ -1,4 +1,4 @@
-# Note: Postgres Single Service (azurerm_postgresql_server) is retiring March 2025.  
+# Azure Postgres Single Service (azurerm_postgresql_server) retires in March 2025.  
 # As a result we are using Azure Database for PostgreSQL Flexible Server
 # with granular control, flexibility and better cost optimization. 
 resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
