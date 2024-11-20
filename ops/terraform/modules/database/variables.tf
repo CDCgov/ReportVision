@@ -25,7 +25,8 @@ variable "resource_group_name" {
 variable "sku_name" {
   type        = string
   description = "value"
-  default     = "GP_Standard_D2ds_v4" # General Purpose tier
+  # default     = "GP_Standard_D2ds_v4" # General Purpose tier
+  default = "B_Gen5_1" # Basic SKU, Gen5, 1 vCore
 }
 
 variable "subnet" {
