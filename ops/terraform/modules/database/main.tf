@@ -10,11 +10,6 @@ resource "azurerm_postgresql_server" "postgres_server" {
   storage_mb                   = 5120 # 5 GB storage
   backup_retention_days        = 7
   ssl_enforcement_enabled      = true
-
-  # Enable Virtual Network service endpoint
-  # virtual_network_subnet_id = var.subnet
-  # Virtual Network Rule (optional)
-
 }
 
 # PostgreSQL Database

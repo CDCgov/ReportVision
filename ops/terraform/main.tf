@@ -88,14 +88,13 @@ module "database" {
   source              = "./modules/database"
   resource_group_name = data.azurerm_resource_group.rg.name
   subnet              = module.networking.dbsubnet_id
-  # azurerm_subnet.dbsubnetcidr.id
 }
 
 module "vault" {
-  source              = "./modules/vault.tf"
+  source              = "./modules/vault"
   resource_group_name = data.azurerm_resource_group.rg.name
   azure_tenant_id     = var.azure_tenant_id
   object_id           = var.object_id
   vite_api_url        = var.vite_api_url
-  postgres_password   = module.database.postgres_db_admin_password
+  postgres_password   = module.database.postgres_db_password
 }

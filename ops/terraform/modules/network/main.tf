@@ -51,9 +51,4 @@ resource "azurerm_subnet" "db-subnet" {
   resource_group_name  = var.resource_group
   address_prefixes     = [var.dbsubnetcidr]
 
-  # Enable service endpoint for Azure PostgreSQL
-  service_endpoints = [
-    "Microsoft.DBforPostgreSQL"
-  ]
-
 }
