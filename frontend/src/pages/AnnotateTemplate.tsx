@@ -16,6 +16,8 @@ import CheckIcon from '../assets/check.svg';
 import Toolbar from "../components/Toolbar.tsx";
 
 import "./AnnotateTemplate.scss";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import {TemplateAPI, useCreateTemplateStore} from "../types/templates.ts";
 
 interface AccordionItemProps {
   title: React.ReactNode | string;
@@ -48,6 +50,9 @@ export interface ImageData {
 
 const AnnotateTemplate: React.FC = () => {
   const [images, setImages] = useState<ImageData[]>([]);
+  const storeImages = useCreateTemplateStore((state) => state.setBaseImages);
+  const baseImages = useCreateTemplateStore((state) => state.baseImages);
+
   const [localIds, setLocalIds] = useState<Map<string, string>>(new Map());
   const navigate = useNavigate();
   const { files } = useFiles();
@@ -94,17 +99,16 @@ const AnnotateTemplate: React.FC = () => {
     };
 
     convertPdfToImages(pdfFile).then((imgs) => {
+      // TODO: This is redundant, we should just store the images in the store
       setImages(imgs);
-      localStorage.setItem('images', JSON.stringify(imgs));
+      storeImages(imgs);
     });
   }, [files, pdfFile]);
   useEffect(() => {
     const getImage = async () => {
-      const localImages = await JSON.parse(
-        localStorage.getItem('images') || "[]"
-      );
+      const localImages = baseImages;
       if (localImages && localImages.length > 0) {
-        setImages(localImages.images);
+        setImages(localImages);
       }
     };
 
@@ -112,6 +116,7 @@ const AnnotateTemplate: React.FC = () => {
       setDrawnFields(new Set());
       setSelectedField(null);
     }
+    // TODO: Ask Kevin what this is for, it's not clear
     getImage();
     return () => handleUnmount();
   }, [setDrawnFields, setSelectedField]);

@@ -2,6 +2,7 @@ import { FC, useEffect } from 'react';
 import { ImageAnnotator, Shape } from 'react-image-label';
 import { useAnnotationContext } from '../contexts/AnnotationContext';
 import { LABELS } from '../constants/labels';
+import {useCreateTemplateStore} from "../types/templates.ts";
 
 interface MultiImageAnnotatorProps {
     images: string[];
@@ -11,7 +12,8 @@ interface MultiImageAnnotatorProps {
 
 export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, initialShapes = [[]] }) => {
     const {selectedField, setHandles, annotator, shapes, setShapes, index, setDrawnFields, drawnFields, setSelectedField} = useAnnotationContext();
-
+    const storeShapes = useCreateTemplateStore((state) => state.setShapes);
+    const getStoredShapes = useCreateTemplateStore((state) => state.shapes);
 
 
 
@@ -24,7 +26,8 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, init
         // for field?.color.slice(0,7) to remove the alpha channel from the hexcode 
         updatedShapes[index] = [...(updatedShapes[index] || []), {...shape, field: selectedField?.name as string, color: field?.color, id: tempFieldsSet.size}];
         setShapes(updatedShapes);
-        localStorage.setItem('shapes', JSON.stringify(updatedShapes));
+        setShapes(updatedShapes);
+        storeShapes(updatedShapes);
         annotator?.updateCategories(shape.id, [], `${field?.color}4D`);
         setDrawnFields(tempFieldsSet);
         setSelectedField(null);
@@ -35,9 +38,8 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({ images, init
         annotator?.edit(shape.id);
     };
     useEffect(() => {
-        const getShapes = async () => {
-            const localStorageShapes = await JSON.parse(localStorage.getItem('shapes') || '[]') as unknown as Array<Array<Shape>> || [];
-            setShapes(localStorageShapes.length > 0 ? localStorageShapes : initialShapes);
+        const getShapes = () => {
+            setShapes(getStoredShapes);
         }
         getShapes();
     }, [])
