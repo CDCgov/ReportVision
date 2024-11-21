@@ -19,16 +19,25 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
         }
     )
     useEffect(() => {
-        const templatesJSON = localStorage.getItem("templates")
-        setTemplates(JSON.parse(templatesJSON))
-    }, []);
-
+        const getTemplates = async () => {
+            const templatesJSON = localStorage.getItem("templates") || "[]"
+            if (templateQuery.data && templateQuery.data?.length > 0) {
+                setTemplates(templateQuery.data as [])
+            } else if (templatesJSON) {
+                setTemplates(JSON.parse(templatesJSON))
+            } else {
+                setTemplates([])
+            }
+        }
+        getTemplates();
+    }, [templateQuery.data]);
+    
     useEffect(() => {
 
         const localStorageEvent = (event) => {
             if (event.storageArea === localStorage) {
                 const templatesJSON = localStorage.getItem("templates")
-                setTemplates(JSON.parse(templatesJSON))
+                setTemplates(JSON.parse(templatesJSON || '[]'))
             }
         }
         window.addEventListener("storage", localStorageEvent, false)
@@ -42,6 +51,8 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
     const templateColumnNames = {
         'name': 'Name',
         'labName': 'Lab',
+        'lab': 'Lab',
+        'createdBy': 'Creator',
         'status': 'Status',
         'updatedAt': 'Updated On'
     }
@@ -55,15 +66,64 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
             }
             return new Date(date).toLocaleDateString()
 
+        },
+        'lastUpdated': (d) => {
+            const date = Date.parse(d)
+            if (isNaN(date)) {
+                return new Date().toLocaleDateString()
+            }
+            return new Date(date).toLocaleDateString()
+
         }
     }
 
     const templateColumns = [
-        'name', 'updatedAt', 'createdBy', 'labName', 'status'
+        'name', 'lastUpdated', 'createdBy', 'lab', 'status', 'updatedAt', 'labName'
     ]
 
+    useEffect(() => {
+        console.debug(`
+        The following methods have been added to the window:
+        
+        LoadNiceTemplates - this will load some pre-formatted templates that display nicely
+        SaveTemplates - this will save the current templates to 'oldTemplates'
+        LoadSavedTemplates - this will load the templates saved in 'oldTemplates'
+        ClearTemplates - this will delete the current templates 
+        
+        `)
+        window.LoadNiceTemplates = () => {
+            const oldTemplates = localStorage.getItem('templates')
+            localStorage.setItem('oldTemplates', oldTemplates)
+            localStorage.setItem('templates', JSON.stringify(templates2))
+            setTemplates(templates2)
+        }
+        window.SaveTemplates = () => {
+            const oldTemplates = localStorage.getItem('templates')
+            if (!oldTemplates) {
+                return
+            }
+            localStorage.setItem('oldTemplates', oldTemplates)
+        }
+        window.ClearTemplates = () => {
+            localStorage.removeItem('templates')
+            setTemplates([])
+        }
+        window.LoadSavedTemplates = () => {
+            const oldTemplates = localStorage.getItem('oldTemplates')
+            if (oldTemplates) {
+                localStorage.setItem('templates', oldTemplates)
+                setTemplates(JSON.parse(oldTemplates))
+            }
+        }
+        return () => {
+            delete window.LoadNiceTemplates
+            delete window.SaveTemplates
+            delete window.ClearTemplates
+            delete window.LoadSavedTemplates
+        }
+    });
 
-    if (!templateQuery.data  || templateQuery.data.length === 0) {
+    if (!templates || templates.length === 0) {
         return (
             <><img
                 className="display-block margin-left-auto margin-right-auto padding-top-8"
@@ -98,7 +158,7 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
                 </div>
                 <div className="padding-1 border-1px border-gray-5 bg-white">
                     <h2>Saved Templates</h2>
-                    <SortableTable columns={templateColumns} data={templateQuery.data || []}
+                    <SortableTable columns={templateColumns} data={templates}
                                    formatters={templateColumnFormatters}
                                    columnNames={templateColumnNames}
                     />

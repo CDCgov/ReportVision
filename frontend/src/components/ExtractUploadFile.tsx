@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useId, useState } from "react";
+import React, { ChangeEvent, useEffect, useId, useState } from "react";
 import { Button, Select } from "@trussworks/react-uswds";
 import { useFiles } from "../contexts/FilesContext";
 import { useNavigate } from "react-router-dom";
@@ -24,23 +24,23 @@ interface IFilesObj {
   files: File[];
 }
 
-// interface Template {
-//   name: string;
-//   description: string;
-//   pages: {
-//     image: string;
-//     fieldNames: string[];
-//   }[];
-// }
+interface Template {
+  name: string;
+  description: string;
+  pages: {
+    image: string;
+    fieldNames: string[];
+  }[];
+}
 
 export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   onUploadComplete,
 }) => {
   const id = useId();
-  const { addFile, files, setSelectedTemplates, selectedTemplates , clearTemplates} = useFiles();
+  const { addFile, files, setSelectedTemplates, selectedTemplates , clearTemplates,} = useFiles();
   const navigate = useNavigate();
-  // const [templates, setTemplates] = useState<Template[]>([]);
-    const templates = useQuery(
+  const [templates, setTemplates] = useState<Template[]>([]);
+    const _templates = useQuery(
         {
             queryKey: ['templates'],
             queryFn: TemplateAPI.getTemplates
@@ -49,6 +49,49 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   const [isUploadComplete, setIsUploadComplete] = useState<boolean>(false);
   const [uploadedFile, setUploadedFile] = useState<File[]>([]);
 
+  const loadTemplatesTestData = () => {
+    const sampleTemplates: Template[] = [
+      {
+        name: "Test Template COVID",
+        description: "This is the first sample template.",
+        pages: [
+          {
+            image: "base64encodedimage1",
+            fieldNames: ["patient_name", "patient_dob"],
+          },
+        ],
+      },
+      {
+        name: "Test Template Syph",
+        description: "This is the second sample template.",
+        pages: [
+          {
+            image: "base64encodedimage2",
+            fieldNames: ["patient_name", "address"],
+          },
+        ],
+      },
+    ];
+    setTemplates(sampleTemplates);
+  };
+
+
+  useEffect(() => {
+    // Load templates from local storage, and if none are found, load test data
+    const loadTemplatesFromLocalStorage = () => {
+      const storedTemplates = localStorage.getItem("templates");
+      if (_templates.length > 0) {
+        setTemplates(_templates);
+      } else if (storedTemplates) {
+        const parsedTemplates = JSON.parse(storedTemplates);
+        setTemplates(parsedTemplates);
+      } else {
+        loadTemplatesTestData();
+      }
+    };
+    loadTemplatesFromLocalStorage();
+
+  }, []);
   const simulateFileUpload = async(files: File[]) => {
     onUploadComplete(true);
     files.forEach(file => addFile(file));
