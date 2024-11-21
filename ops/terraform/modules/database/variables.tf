@@ -12,7 +12,7 @@ variable "engine_version" {
 variable "location" {
   type        = string
   description = "Location of the resource."
-  default     = "eastus"
+  default     = "eastus2"
 }
 
 variable "resource_group_name" {
@@ -25,11 +25,16 @@ variable "resource_group_name" {
 variable "sku_name" {
   type        = string
   description = "value"
-  # default     = "GP_Standard_D2ds_v4" # General Purpose tier
-  default = "B_Gen5_1" # Basic SKU, Gen5, 1 vCore
+  default     = "GP_Standard_D2ds_v4" # General Purpose tier
+  # default = "B_Gen5_1" # Basic SKU, Gen5, 1 vCore
 }
 
 variable "subnet" {
   type        = string
-  description = "The subnet ID to associate with the PostgreSQL server"
+  description = "The subnet ID to associate with the PostgreSQL Flexible Server"
+}
+
+variable "private_dns_zone_id" {
+  type        = string
+  description = "Private DNS Zone for PostgreSQL Flexible Server"
 }

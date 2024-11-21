@@ -88,8 +88,10 @@ module "database" {
   source              = "./modules/database"
   resource_group_name = data.azurerm_resource_group.rg.name
   subnet              = module.networking.dbsubnet_id
+  private_dns_zone_id = module.networking.private_dns_zone_id
 }
 
+## TODO: Complete in separate ticket
 # module "vault" {
 #   source              = "./modules/vault"
 #   resource_group_name = data.azurerm_resource_group.rg.name

@@ -45,10 +45,30 @@ resource "azurerm_subnet" "lb-subnet" {
   depends_on = [azurerm_virtual_network.vnet]
 }
 
+
 resource "azurerm_subnet" "db-subnet" {
   name                 = "${var.name}-db-subnet-${var.env}"
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
   address_prefixes     = [var.dbsubnetcidr]
 
+  delegation {
+    name = "postgresql-delegation"
+    service_delegation {
+      name = "Microsoft.DBforPostgreSQL/flexibleServers"
+    }
+  }
+}
+
+resource "azurerm_private_dns_zone" "postgresql_dns_zone" {
+  name                = "privatelink.postgres.database.azure.com"
+  resource_group_name = var.resource_group
+}
+
+# Link Private DNS Zone to Virtual Network
+resource "azurerm_private_dns_zone_virtual_network_link" "dns_link" {
+  name                  = "postgresql-vnet-link"
+  resource_group_name   = var.resource_group
+  private_dns_zone_name = azurerm_private_dns_zone.postgresql_dns_zone.name
+  virtual_network_id    = azurerm_virtual_network.vnet.id
 }
