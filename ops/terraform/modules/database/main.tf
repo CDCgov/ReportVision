@@ -24,7 +24,7 @@ resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
 }
 
 resource "azurerm_postgresql_flexible_server_database" "postgres_db" {
-  name      = azurerm_postgresql_flexible_server.postgres_flexible_server.name
+  name      = "${azurerm_postgresql_flexible_server.postgres_flexible_server.name}-db"
   server_id = azurerm_postgresql_flexible_server.postgres_flexible_server.id
 }
 
