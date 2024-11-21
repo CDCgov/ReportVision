@@ -12,15 +12,16 @@ locals {
 ## 02-network
 ##########
 module "networking" {
-  source         = "./modules/network"
-  name           = var.name
-  location       = data.azurerm_resource_group.rg.location
-  resource_group = data.azurerm_resource_group.rg.name
-  vnetcidr       = local.workspace["vnetcidr"]
-  websubnetcidr  = local.workspace["websubnetcidr"]
-  lbsubnetcidr   = local.workspace["lbsubnetcidr"]
-  appsubnetcidr  = local.workspace["appsubnetcidr"]
-  env            = local.environment
+  source            = "./modules/network"
+  name              = var.name
+  location          = data.azurerm_resource_group.rg.location
+  resource_group    = data.azurerm_resource_group.rg.name
+  vnetcidr          = local.workspace["vnetcidr"]
+  websubnetcidr     = local.workspace["websubnetcidr"]
+  lbsubnetcidr      = local.workspace["lbsubnetcidr"]
+  ocrsubnetcidr     = local.workspace["ocrsubnetcidr"]
+  backendsubnetcidr = local.workspace["backendsubnetcidr"]
+  env               = local.environment
 }
 
 ##########
@@ -72,13 +73,28 @@ module "storage" {
 ## 06-App
 ##########
 
-module "ocr_api" {
+module "backend_api" {
   source         = "./modules/app_service"
+  service        = local.backend-api
   name           = var.name
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
-  app_subnet_id  = module.networking.appsubnet_id
+  app_subnet_id  = module.networking.backendsubnet_id
   lb_subnet_id   = module.networking.lbsubnet_id
+  env            = local.environment
+  vnet           = module.networking.network_name
+  sku_name       = var.sku_name
+  https_only     = true
+}
+
+module "ocr_api" {
+  source         = "./modules/app_service"
+  service        = local.ocr-api
+  name           = var.name
+  location       = data.azurerm_resource_group.rg.location
+  resource_group = data.azurerm_resource_group.rg.name
+  app_subnet_id  = module.networking.ocrsubnet_id
+  lb_subnet_id   = module.networking.backendsubnet_id
   env            = local.environment
   vnet           = module.networking.network_name
   sku_name       = var.sku_name
@@ -87,7 +103,7 @@ module "ocr_api" {
 
 module "ocr_autoscale" {
   source             = "./modules/app_service_autoscale"
-  service            = "ocr"
+  service            = local.ocr-api
   name               = var.name
   location           = data.azurerm_resource_group.rg.location
   env                = local.environment

@@ -13,6 +13,9 @@ on:
       ocr-version:
         description: 'Create a version for this OCR API image'
         required: true
+      backend-version:
+        description: 'Create a version for this Backend API image'
+        required: true
 
 permissions:
   contents: read
@@ -21,6 +24,33 @@ permissions:
   id-token: write
 
 jobs:
+  build-publish-backend:
+    name: Build and Publish Backend
+    runs-on: ubuntu-latest
+    outputs:
+      docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lowercase the repo name
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: Check if image exists
+        id: image_check
+        run: |
+          echo "docker_inspect=$(
+              docker manifest inspect ghcr.io/${{ env.REPO }}-backend-api:${{ inputs.backend-version }} > /dev/null ; echo $?
+            )" >> $GITHUB_OUTPUT
+      - name: Build and Push backend
+        if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
+        uses: ./.github/actions/build-publish-api
+        with:
+          docker-registry: ghcr.io
+          docker-pw: ${{ secrets.GITHUB_TOKEN }}
+          docker-username: ${{ github.actor }}
+          docker-tag: ${{ inputs.backend-version }}
+          dockerfile-path: ./backend/Dockerfile
+          docker-context-path: ./backend/
+          api-name: backend-api
+
   build-publish-ocr:
     name: Build and Publish OCR
     runs-on: ubuntu-latest
@@ -62,7 +92,7 @@ jobs:
           frontend-build-path: ./frontend/dist/
           node-version: 20
 
-  environment-setup:
+  az-environment-setup:
     name: Setup Azure Environment
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
@@ -83,11 +113,31 @@ jobs:
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           app-name: reportvision
 
+  deploy-backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.deploy-env }}
+    needs: [build-publish-backend, az-environment-setup]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Deploy Backend-API
+        uses: ./.github/actions/deploy-api
+        with:
+          deploy-env: ${{ inputs.deploy-env }}
+          docker-tag: ${{ inputs.backend-version }}
+          docker-registry: ghcr.io
+          api-name: backend-api
+
   deploy-ocr:
     name: Deploy OCR
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
-    needs: [build-publish-ocr, environment-setup]
+    needs: [build-publish-ocr, az-environment-setup]
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -107,7 +157,7 @@ jobs:
     name: Deploy Frontend
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
-    needs: [build-frontend, environment-setup]
+    needs: [build-frontend, az-environment-setup]
     if: ${{ inputs.deploy-env != 'demo'}}
     steps:
       - uses: actions/checkout@v4
