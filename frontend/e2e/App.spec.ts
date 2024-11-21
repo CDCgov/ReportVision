@@ -58,9 +58,9 @@ test.describe('when templates exist', async () => {
         await expect(page.getByRole('heading', { name: 'Saved Templates' })).toBeVisible()
         await expect(page.locator('tbody').getByRole('row')).toHaveCount(4)
         await page.getByText('Updated On').click()
-        await expect(page.locator('tbody').locator('tr').nth(0).getByRole('cell').nth(1)).toHaveText('3/24/2025')
-        await page.getByText('Updated On').click()
         await expect(page.locator('tbody').locator('tr').nth(0).getByRole('cell').nth(1)).toHaveText('6/21/2024')
+        await page.getByText('Updated On').click()
+        await expect(page.locator('tbody').locator('tr').nth(0).getByRole('cell').nth(1)).toHaveText('6/21/2025')
         await page.close()
 
     })
