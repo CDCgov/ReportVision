@@ -1,12 +1,6 @@
 import { test, expect } from '@playwright/test';
 
 
-test.beforeEach(async ({ page }) => {
-    await page.route("*/**/templates", async (route) => {
-        route.fulfill({});
-    })
-});
-
 test('has STLT Name', async ({ page }) => {
 
     await page.goto('/');
@@ -24,45 +18,40 @@ test('has new template button', async ({ page , baseURL}) => {
 
 test.describe('when templates exist', async () => {
     test.beforeEach(async ({page}) => {
-        await page.route("*/**/templates", async (route) => {
-            route.fulfill({
-                status: 200,
-                body: JSON.stringify({
-                    _embedded: {
-                        templates: [
-                            {
-                                name: "MumpsQuestV1",
-                                lab: "Quest",
-                                createdBy: "J.Smith",
-                                status: "Completed",
-                                updatedAt: new Date(Date.parse("2025-03-24T12:00:00.000-05:00"))
-                            },
-                            {
-                                name: "LBTIRadar",
-                                lab: "Radar",
-                                createdBy: "C.Alex",
-                                status: "Completed",
-                                updatedAt: new Date(Date.parse("2025-05-30T12:00:00.000-05:00"))
-                            },
-                            {
-                                name: "COVIDBaylor1",
-                                lab: "Emory",
-                                createdBy: "A.Bryant",
-                                status: "Completed",
-                                updatedAt: new Date(Date.parse("2025-06-21T12:00:00.000-05:00"))
-                            },
-                            {
-                                name: "COVIDEMory",
-                                lab: "Baylor",
-                                createdBy: "D.Smith",
-                                status: "Completed",
-                                updatedAt: new Date(Date.parse("2024-06-21T12:00:00.000-05:00"))
-                            },
-                        ]
-                    }
-                })
-            })
-        });
+        await page.goto('/')
+        await page.evaluate(() => {
+            const templates = [
+                {
+                    name: "MumpsQuestV1",
+                    lab: "Quest",
+                    createdBy: "J.Smith",
+                    status: "Completed",
+                    lastUpdated: new Date(Date.parse("2025-03-24T12:00:00.000-05:00"))
+                },
+                {
+                    name: "LBTIRadar",
+                    lab: "Radar",
+                    createdBy: "C.Alex",
+                    status: "Completed",
+                    lastUpdated: new Date(Date.parse("2025-05-30T12:00:00.000-05:00"))
+                },
+                {
+                    name: "COVIDBaylor1",
+                    lab: "Emory",
+                    createdBy: "A.Bryant",
+                    status: "Completed",
+                    lastUpdated: new Date(Date.parse("2025-06-21T12:00:00.000-05:00"))
+                },
+                {
+                    name: "COVIDEMory",
+                    lab: "Baylor",
+                    createdBy: "D.Smith",
+                    status: "Completed",
+                    lastUpdated: new Date(Date.parse("2024-06-21T12:00:00.000-05:00"))
+                },
+            ];
+            localStorage.setItem('templates', JSON.stringify(templates))
+        })
     })
     test('displays list of templates if they exist and sorting functions', async ({page}) => {
         await page.goto('/')
