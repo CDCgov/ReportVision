@@ -24,7 +24,7 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
             if (templateQuery.data && templateQuery.data?.length > 0) {
                 setTemplates(templateQuery.data as [])
             } else if (templatesJSON) {
-                setTemplates(JSON.parse(templatesJSON))
+                setTemplates(JSON.parse(templatesJSON).map(template => ({ ...template, updatedAt: template.lastUpdated })))
             } else {
                 setTemplates([])
             }
@@ -78,7 +78,7 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
     }
 
     const templateColumns = [
-        'name', 'lastUpdated', 'createdBy', 'lab', 'status', 'updatedAt', 'labName'
+        'name', 'updatedAt', 'createdBy', 'lab', 'status', 'labName'
     ]
 
     useEffect(() => {
