@@ -15,7 +15,7 @@ resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
   delegated_subnet_id    = var.subnet
   private_dns_zone_id    = var.private_dns_zone_id
 
-  // Disable Public Network Access 
+  # Disable Public Network Access 
   public_network_access_enabled = false
 
   lifecycle {

@@ -23,7 +23,3 @@ locals {
     }
   }
 }
-
-# Get the values for the current environment
-# env_config = local.environments[local.environment]
-# }
