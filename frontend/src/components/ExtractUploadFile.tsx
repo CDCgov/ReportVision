@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useId, useState } from "react";
+import React, { ChangeEvent, useId, useState } from "react";
 import { Button, Select } from "@trussworks/react-uswds";
 import { useFiles } from "../contexts/FilesContext";
 import { useNavigate } from "react-router-dom";
@@ -24,20 +24,20 @@ interface IFilesObj {
   files: File[];
 }
 
-interface Template {
-  name: string;
-  description: string;
-  pages: {
-    image: string;
-    fieldNames: string[];
-  }[];
-}
+// interface Template {
+//   name: string;
+//   description: string;
+//   pages: {
+//     image: string;
+//     fieldNames: string[];
+//   }[];
+// }
 
 export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   onUploadComplete,
 }) => {
   const id = useId();
-  const { addFile, clearFiles, files, setSelectedTemplates, selectedTemplates } = useFiles();
+  const { addFile, files, setSelectedTemplates, selectedTemplates , clearTemplates} = useFiles();
   const navigate = useNavigate();
   // const [templates, setTemplates] = useState<Template[]>([]);
     const templates = useQuery(
@@ -104,6 +104,12 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   const handleSelect = (templateName: string, fileName: string, index: number) => {
     setSelectedTemplates({ templateName, fileName }, index);
   }
+
+  const onCancel = () => {
+    navigate('/');
+    clearTemplates();
+  }
+
   return (
     <div className="display-flex flex-column flex-align-start flex-justify-start height-full width-full padding-2 bg-primary-lighter">
       <div className="extract-upload-header">
@@ -217,14 +223,14 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
           type="button"
           outline
           className="margin-right-1"
-          onClick={() => navigate('/')}
+          onClick={onCancel}
         >
           Cancel Import
         </Button>
         <Button
           type="button"
           className="usa-button display-flex flex-align-center margin-left-auto margin-right-auto"
-          disabled={uploadedFile.length === 0 || selectedTemplates.length === 0}
+          disabled={uploadedFile.length === 0 || selectedTemplates.length !== uploadedFile.length}
           onClick={() => navigate("/extract/process")}
         >
           Extract Data

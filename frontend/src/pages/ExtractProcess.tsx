@@ -67,16 +67,16 @@ const ExtractProcess = () => {
         if(response.name in arrResults) {
           Object.keys(response.resp as ImageToTextResponse).forEach(key => {
             arrResults[response.name][key] = {
-              text: response.resp[key][0],
-              confidence: response.resp[key][1],
+              text: response.resp ? response.resp[key][0] : '',
+              confidence: response.resp ? response.resp[key][1] : 0,
             };
           });
         } else {
           arrResults[response.name] = {}
           Object.keys(response.resp as ImageToTextResponse).forEach(key => {
             arrResults[response.name][key] = {
-              text: response.resp[key][0],
-              confidence: response.resp[key][1],
+              text: response.resp ? response.resp[key][0] : '',
+              confidence: response.resp ? response.resp[key][1] : 0,
             };
           });
         }
@@ -105,6 +105,7 @@ const ExtractProcess = () => {
       setIsLoading(false);
       navigate("/extract/upload");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate])
 
   useEffect(() => {
@@ -126,7 +127,7 @@ const ExtractProcess = () => {
 
   return (
     <LoadingWrapper isLoading={isLoading} title="Extracting your data" subtitle="This process could take up to 10-15 seconds.">
-      <div className="display-flex flex-column flex-justify-start center width-full height-full padding-1 padding-top-2">
+      <div className="display-flex flex-column flex-justify-start center width-full height-full padding-top-2">
         <ExtractDataHeader
           onBack={() => navigate("extract/upload")}
           onSubmit={handleSubmit}
