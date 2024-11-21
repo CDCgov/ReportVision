@@ -90,13 +90,3 @@ module "database" {
   subnet              = module.networking.dbsubnet_id
   private_dns_zone_id = module.networking.private_dns_zone_id
 }
-
-## TODO: Complete in separate ticket
-# module "vault" {
-#   source              = "./modules/vault"
-#   resource_group_name = data.azurerm_resource_group.rg.name
-#   azure_tenant_id     = var.azure_tenant_id
-#   object_id           = var.object_id
-#   vite_api_url        = var.vite_api_url
-#   postgres_password   = module.database.postgres_db_password
-# }
