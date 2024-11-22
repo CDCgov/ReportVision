@@ -55,6 +55,22 @@ export const SaveTemplate = () => {
                     shapes: shape
                 }
             });
+            if (pages.length !== images.length) { 
+                images.forEach((_, idx) => {
+                    if (!tempFields[idx]) {
+                        pages.push({
+                            fieldNames: [],
+                            sourceImage: {
+                                image: "",
+                                height: "",
+                                width: ""
+                            },
+                            templateImage: '',
+                            shapes: []
+                        })
+                    }
+                })
+            }
             const tempFile: FileType = {
                 name,
                 description,
