@@ -5,7 +5,7 @@ resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
   name                  = "reportvisionpostgresql-flexible-server"
   location              = var.location
   resource_group_name   = var.resource_group_name
-  sku_name              = var.sku_name
+  sku_name              = var.postgres_sku_name
   version               = var.engine_version
   storage_mb            = 32768 # 32 GB, the lowest of the valid options
   backup_retention_days = 7

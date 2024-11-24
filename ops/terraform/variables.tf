@@ -1,6 +1,4 @@
-variable "client_id" {}
 variable "name" {}
-variable "tenant_id" {}
 
 variable "sku_name" {
   type        = string
