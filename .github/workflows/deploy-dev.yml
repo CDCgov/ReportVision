@@ -13,8 +13,8 @@ on:
       ocr-version:
         description: 'Create a version for this OCR API image'
         required: true
-      backend-version:
-        description: 'Create a version for this Backend API image'
+      middleware-version:
+        description: 'Create a version for this middleware API image'
         required: true
 
 permissions:
@@ -24,8 +24,8 @@ permissions:
   id-token: write
 
 jobs:
-  build-publish-backend:
-    name: Build and Publish Backend
+  build-publish-middleware:
+    name: Build and Publish middleware
     runs-on: ubuntu-latest
     outputs:
       docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
@@ -37,19 +37,19 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-backend-api:${{ inputs.backend-version }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-middleware-api:${{ inputs.middleware-version }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
-      - name: Build and Push backend
+      - name: Build and Push the middleware
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
         uses: ./.github/actions/build-publish-api
         with:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          docker-tag: ${{ inputs.backend-version }}
+          docker-tag: ${{ inputs.middleware-version }}
           dockerfile-path: ./backend/Dockerfile
           docker-context-path: ./backend/
-          api-name: backend-api
+          api-name: middleware-api
 
   build-publish-ocr:
     name: Build and Publish OCR
@@ -66,7 +66,7 @@ jobs:
           echo "docker_inspect=$(
               docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ inputs.ocr-version }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
-      - name: Build and Push backend
+      - name: Build and Push the OCR
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
         uses: ./.github/actions/build-publish-api
         with:
@@ -113,11 +113,11 @@ jobs:
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           app-name: reportvision
 
-  deploy-backend:
-    name: Deploy Backend
+  deploy-middleware:
+    name: Deploy middleware
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
-    needs: [build-publish-backend, az-environment-setup]
+    needs: [build-publish-middleware, az-environment-setup]
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -125,13 +125,13 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: Deploy Backend-API
+      - name: Deploy middleware-API
         uses: ./.github/actions/deploy-api
         with:
           deploy-env: ${{ inputs.deploy-env }}
-          docker-tag: ${{ inputs.backend-version }}
+          docker-tag: ${{ inputs.middleware-version }}
           docker-registry: ghcr.io
-          api-name: backend-api
+          api-name: middleware-api
 
   deploy-ocr:
     name: Deploy OCR
