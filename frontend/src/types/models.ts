@@ -7,23 +7,9 @@ import {Shape} from "react-image-label";
 
 type Base64<imageType extends string> = `data:image/${imageType};base64${string}`
 
-interface Template {
-    id: string;
-    name: string;
-    description: string;
-    labName: string
-    pages: Page[];
-    status: TemplateStatus;
-    createdBy: User;
-    updatedBy: User | undefined;
-    createdAt: Date;
-    updatedAt: Date | undefined;
-    organization: Organization;
-}
 
-type TemplateStatus = "Completed" | "In Progress" | "Deprecated"
 
-interface Label {
+export interface Label {
     key: string;
     color: string;
     humanReadableName: string;
@@ -34,7 +20,7 @@ interface Label {
     updatedBy: User | undefined;
 }
 
-interface Page {
+export interface Page {
     id: string;
     baseImage: Base64<"png">;
     segmentationTemplate: Base64<"png">;
@@ -46,7 +32,7 @@ interface Page {
     updatedBy: User | undefined;
 }
 
-interface User {
+export interface User {
     id: string;
     name: string;
     email: string;
@@ -56,7 +42,7 @@ interface User {
     updatedAt: Date | undefined;
 }
 
-interface Upload {
+export interface Upload {
     id: string;
     createdBy: User;
     updatedBy: User | undefined;
@@ -65,7 +51,7 @@ interface Upload {
     extractions: Extraction[];
 }
 
-interface Extraction {
+export interface Extraction {
     status: ExtractionStatus;
     segmentationTemplate: Template;
     pages: Base64<"png">[];
@@ -79,7 +65,7 @@ interface Extraction {
 
 type ExtractionStatus = "In Progress" | "In Review" | "Submission" | "Discarded"
 
-interface ExtractedField {
+export interface ExtractedField {
     label: string;
     value: string;
     confidence: number | undefined; // Optional because it doesn't need to be stored for human corrections
@@ -89,7 +75,7 @@ interface ExtractedField {
     updatedBy: User | undefined;
 }
 
-interface Organization {
+export interface Organization {
     id: string;
     name: string;
     admin: User;
@@ -97,7 +83,7 @@ interface Organization {
     updatedAt: Date | undefined;
 }
 
-interface Notification {
+export interface Notification {
     id: string;
     organization: Organization;
     content: string;
@@ -110,7 +96,7 @@ interface Notification {
 // Metadata Models
 // -----------------------------------------------------------------------------
 
-interface FeatureFlag {
+export interface FeatureFlag {
     id: string;
     name: string;
     enabled: boolean;

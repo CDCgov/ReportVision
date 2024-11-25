@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
+
 test('has STLT Name', async ({ page }) => {
+
     await page.goto('/');
 
     await expect(page.getByText('Demo STLT')).toBeVisible()
@@ -19,7 +21,6 @@ test.describe('when templates exist', async () => {
         await page.goto('/')
         await page.evaluate(() => {
             const templates = [
-
                 {
                     name: "MumpsQuestV1",
                     lab: "Quest",
