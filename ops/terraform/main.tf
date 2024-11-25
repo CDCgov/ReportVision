@@ -80,11 +80,17 @@ module "backend_api" {
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
   app_subnet_id  = module.networking.backendsubnet_id
-  lb_subnet_id   = module.networking.lbsubnet_id
-  env            = local.environment
-  vnet           = module.networking.network_name
-  sku_name       = var.sku_name
-  https_only     = true
+
+  app_settings = {
+    SPRING-DATASOURCE-REPORTVISION-JDBC = "@Microsoft.KeyVault(SecretUri=${data.azurerm_key_vault_secret.rv_db_jdbc.id})"
+    DB-PASSWORD                         = "@Microsoft.KeyVault(SecretUri=${data.azurerm_key_vault_secret.postgres_password.id})"
+  }
+
+  lb_subnet_id = module.networking.lbsubnet_id
+  env          = local.environment
+  vnet         = module.networking.network_name
+  sku_name     = var.sku_name
+  https_only   = true
 }
 
 module "ocr_api" {
