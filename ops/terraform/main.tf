@@ -86,6 +86,7 @@ module "ocr_autoscale" {
 
 module "database" {
   source              = "./modules/database"
+  env                 = local.environment
   resource_group_name = data.azurerm_resource_group.rg.name
   subnet              = module.networking.dbsubnet_id
   private_dns_zone_id = module.networking.private_dns_zone_id
