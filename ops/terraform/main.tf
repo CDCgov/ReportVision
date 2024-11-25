@@ -98,6 +98,10 @@ module "ocr_autoscale" {
   weekend_capacity_instances = 1
 }
 
+module "vault" {
+  location       = data.azurerm_resource_group.rg.location
+  resource_group = data.azurerm_resource_group.rg.name
+}
 # module "compute" {
 #   source         = "./modules/container_instances"
 #   location       = data.azurerm_resource_group.rg.location
