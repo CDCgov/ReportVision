@@ -72,7 +72,7 @@ module "middleware_api" {
   vnet         = module.networking.network_name
   sku_name     = var.sku_name
   https_only   = true
-  depends_on = [module.networking.middlewaresubnet_id, module.networking.lbsubnet_id]
+  depends_on   = [module.networking.middlewaresubnet_id, module.networking.lbsubnet_id]
 }
 
 module "ocr_api" {
@@ -87,7 +87,7 @@ module "ocr_api" {
   vnet           = module.networking.network_name
   sku_name       = var.sku_name
   https_only     = true
-  depends_on = [module.networking.ocrsubnet_id, module.networking.middlewaresubnet_id]
+  depends_on     = [module.networking.ocrsubnet_id, module.networking.middlewaresubnet_id]
 }
 
 module "ocr_autoscale" {
@@ -103,10 +103,24 @@ module "ocr_autoscale" {
   weekend_capacity_instances = 1
 }
 
+
 module "database" {
   source              = "./modules/database"
   env                 = local.environment
   resource_group_name = data.azurerm_resource_group.rg.name
   subnet              = module.networking.dbsubnet_id
   private_dns_zone_id = module.networking.private_dns_zone_id
+  postgres_password   = module.vault.postgres_password # Password from Vault to DB
+}
+
+module "vault" {
+  source              = "./modules/vault"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  tenant_id           = var.tenant_id
+  client_id           = var.client_id
+  object_id           = var.object_id
+  subscription_id     = var.subscription_id
+  postgres_server_id  = module.database.postgres_server_id
+  service_plan_id     = module.middleware_api.service_plan_id
 }
