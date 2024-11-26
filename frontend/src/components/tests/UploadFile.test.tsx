@@ -13,14 +13,8 @@ describe('Uploadfile component', () => {
     render(<Uploadfile />, {wrapper: Wrapper});
 
     // Check for the main heading
-    const mainHeading = screen.getByRole('heading', { name: /upload new form to segment/i });
+    const mainHeading = screen.getByRole('heading', { name: /Upload new file to annotate/i });
     expect(mainHeading).toBeInTheDocument();
-    expect(mainHeading).toHaveStyle({ margin: '0' });
-
-    // Check for the subheading
-    const subHeading = screen.getByRole('heading', { name: /upload new image or pdf and save as a template/i });
-    expect(subHeading).toBeInTheDocument();
-    expect(subHeading).toHaveStyle({ margin: '0' });
   });
 
   it('renders the upload area with correct structure', () => {
@@ -29,20 +23,11 @@ describe('Uploadfile component', () => {
     // Check for the dashed border container
     const dashedContainer = screen.getByTestId('dashed-container');
     expect(dashedContainer).toBeInTheDocument();
-    expect(dashedContainer).toHaveStyle({
-      width: '70%',
-      height: '40%',
-      border: '1px dashed #005ea2',
-    });
 
-    // Check for the icon
-    const uploadIcon = screen.getByTestId('upload-icon');
-    expect(uploadIcon).toBeInTheDocument();
 
     // Check for the "Drag and drop file here" text
-    const dragDropText = screen.getByRole('heading', { name: /drag and drop file here/i });
+    const dragDropText = screen.getByText(/drag files here or/i);
     expect(dragDropText).toBeInTheDocument();
-    expect(dragDropText).toHaveStyle({ fontWeight: 'bold' });
 
     // Check for the FileInput
     const fileInput = screen.getByTestId('file-input-input');

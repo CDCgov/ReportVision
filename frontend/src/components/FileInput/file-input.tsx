@@ -63,6 +63,7 @@ import React, {
         /Edge\/\d./i.test(navigator?.userAgent)
   
       setHideDragText(hideDragText)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [typeof navigator])
   
     useImperativeHandle(

@@ -13,8 +13,11 @@ import { Icon } from "@trussworks/react-uswds";
 import { useEffect, useState } from "react";
 import { useAnnotationContext } from "../contexts/AnnotationContext.tsx";
 import CheckIcon from '../assets/check.svg';
+import Toolbar from "../components/Toolbar.tsx";
 
 import "./AnnotateTemplate.scss";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import {TemplateAPI, useCreateTemplateStore} from "../types/templates.ts";
 
 interface AccordionItemProps {
   title: React.ReactNode | string;
@@ -47,6 +50,9 @@ export interface ImageData {
 
 const AnnotateTemplate: React.FC = () => {
   const [images, setImages] = useState<ImageData[]>([]);
+  const storeImages = useCreateTemplateStore((state) => state.setBaseImages);
+  const baseImages = useCreateTemplateStore((state) => state.baseImages);
+
   const [localIds, setLocalIds] = useState<Map<string, string>>(new Map());
   const navigate = useNavigate();
   const { files } = useFiles();
@@ -93,17 +99,16 @@ const AnnotateTemplate: React.FC = () => {
     };
 
     convertPdfToImages(pdfFile).then((imgs) => {
+      // TODO: This is redundant, we should just store the images in the store
       setImages(imgs);
-      localStorage.setItem('images', JSON.stringify(imgs));
+      storeImages(imgs);
     });
   }, [files, pdfFile]);
   useEffect(() => {
     const getImage = async () => {
-      const localImages = await JSON.parse(
-        localStorage.getItem('images') || "[]"
-      );
+      const localImages = baseImages;
       if (localImages && localImages.length > 0) {
-        setImages(localImages.images);
+        setImages(localImages);
       }
     };
 
@@ -111,6 +116,7 @@ const AnnotateTemplate: React.FC = () => {
       setDrawnFields(new Set());
       setSelectedField(null);
     }
+    // TODO: Ask Kevin what this is for, it's not clear
     getImage();
     return () => handleUnmount();
   }, [setDrawnFields, setSelectedField]);
@@ -173,9 +179,9 @@ const AnnotateTemplate: React.FC = () => {
       console.error("Error taking screenshot", err);
     }
   };
-
+  
   return (
-    <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
+    <div className="display-flex flex-column flex-justify-start width-full height-full padding-top-2">
       <UploadHeader
         title="Annotate new template"
         onBack={() => navigate("/new-template/upload")}
@@ -186,8 +192,8 @@ const AnnotateTemplate: React.FC = () => {
         <Stepper currentStep={AnnotateStep.Annotate} />
       </div>
       <Divider margin="0px" />
-      <div className="display-flex height-full overflow-hidden">
-        <div className="display-flexflex-3 height-full overflow-y-auto field-container">
+      <div className="display-flex height-full">
+        <div className="display-flexflex-3 height-full field-container">
           <h2 className="annotate-headers">Segment and label</h2>
           <p className="text-base annotation-copy">
           Segmenting means selecting and highlighting a specific part of an image. After segmenting, link it to the correct label that describes what the segment represents.
@@ -198,8 +204,9 @@ const AnnotateTemplate: React.FC = () => {
         </div>
         <div
           id="img-annotator-container"
-          className="img-annotation-container width-full height-full overflow-y-auto display-flex flex-justify-center"
+          className="img-annotation-container width-full display-flex flex-justify-center flex-column"
         >
+          {Array.isArray(images) && images.length > 0 && <Toolbar initialPage={index + 1} totalPages={images.length} onPageChange={(page: number) => setIndex(page - 1)} />}
           {Array.isArray(images) && images.length > 0 ? (
             <MultiImageAnnotator images={images.map(img => img.image)} categories={[]} />
           ) : (
