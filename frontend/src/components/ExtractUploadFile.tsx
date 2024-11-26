@@ -1,8 +1,9 @@
 import React, { ChangeEvent, useEffect, useId, useState } from "react";
-import { Button, Select } from "@trussworks/react-uswds";
+import { Button, Icon, Select } from "@trussworks/react-uswds";
 import { useFiles } from "../contexts/FilesContext";
 import { useNavigate } from "react-router-dom";
 import image from "../assets/green_check.svg";
+import errorIcon from '../assets/error_icon.svg';
 
 import * as pdfjsLib from "pdfjs-dist";
 
@@ -12,9 +13,12 @@ import {TemplateAPI} from "../types/templates.ts";
 import {useQuery} from "@tanstack/react-query";
 
 
-
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
+interface ExtractedFiles {
+  file: string;
+  images: string[];
+}
 
 interface ExtractUploadFileProps {
   onUploadComplete: (isComplete: boolean) => void;
@@ -37,9 +41,11 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   onUploadComplete,
 }) => {
   const id = useId();
-  const { addFile, files, setSelectedTemplates, selectedTemplates , clearTemplates,} = useFiles();
+  const { addFile, files, setSelectedTemplates, selectedTemplates , clearTemplates, clearFiles } = useFiles();
   const navigate = useNavigate();
   const [templates, setTemplates] = useState<Template[]>([]);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [extractedImages, setExtractedImages] = useState<ExtractedFiles[]>([]);
     const _templates = useQuery(
         {
             queryKey: ['templates'],
@@ -124,6 +130,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
         };
       }));
       localStorage.setItem('extracted_images_uploaded', JSON.stringify(convertedFiles));
+      setExtractedImages(convertedFiles);
     } catch (e) {
       console.error(e);
     }
@@ -145,12 +152,36 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   };
 
   const handleSelect = (templateName: string, fileName: string, index: number) => {
-    setSelectedTemplates({ templateName, fileName }, index);
+    const template = { templateName, fileName };
+    setSelectedTemplates(template, index);
+    const tempSelectedTemplates = [...selectedTemplates];
+    if (selectedTemplates.length > 0) {
+      if (index < tempSelectedTemplates.length) {
+        tempSelectedTemplates[index] = template;
+      } else if (index === tempSelectedTemplates.length) {
+        tempSelectedTemplates.push(template);
+      }
+
+      const error = tempSelectedTemplates.some((template) => {
+        const tempplate = templates.find(tpl => tpl.name === template.templateName);
+        const extractedImage = extractedImages.find(img => img.file === template.fileName);
+        return tempplate?.pages.length !== extractedImage?.images.length;
+      })
+      setHasError(error)
+    }
+
+    if (selectedTemplates.length === 0) {
+      const checkTemplate = templates.find(tpl => tpl.name === templateName);
+      const extractedImage = extractedImages.find(img => img.file === fileName);
+      const error = checkTemplate?.pages.length !== extractedImage?.images.length;
+      setHasError(error)
+    }
   }
 
   const onCancel = () => {
     navigate('/');
     clearTemplates();
+    clearFiles();
   }
 
   return (
@@ -166,7 +197,17 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
           Select one or more files
         </p>
       </div>
-
+      {hasError && (
+        <div className="error-container">
+          <div className="error-header">
+            <Icon.Error className="error-icon" />
+            <h2 className="error-title">Mismatch error:</h2>
+          </div>
+          <p className="error-message">
+            The uploaded file has a different number of pages than the template. Please upload a file with the correct pages to proceed or choose a different template.
+          </p>
+        </div>
+      )}
       <div
         data-testid="dashed-container"
         className={`display-flex flex-column margin-top-205 flex-justify-center flex-align-center bg-white dashed-container ${uploadedFile.length > 0 ? "dashed-container-uploaded" : ""}`}
@@ -200,17 +241,34 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
             <div className="display-flex flex-column width-full height-full margin-bottom-2 margin-top-1" style={{ justifyContent: 'space-between'}}>
 
               {
-                files.map((file, index) => (
+                files.map((file, index) => {
+
+                  const extractedImage = extractedImages.find(img => img.file === file.name);
+                  const getPageCheck = () => {
+                    if (Array.isArray(selectedTemplates) && selectedTemplates.length > 0) {
+                    const template = templates.find(tpl => tpl.name === selectedTemplates[index]?.templateName);
+                     return template?.pages.length === extractedImage?.images.length;
+                    }
+                    return false
+                  }
+                  const getImage =  () => {
+                    if (selectedTemplates.length > 0) {
+                      const check = getPageCheck();
+                      return check ? image : errorIcon;
+                    }
+
+                    return image
+                  }
+
+
+                  return (
                   <div key={`${file.name}-${index}`} className="display-flex width-full height-8">
                     <div className="display-flex width-full height-full flex-align-center">
-                    <img
-                        className="margin-left-2"
-                        height='28px'
-                        width='28px'
-                        data-testid="extracted-image"
-                        src={image}
-                        alt="404"
-                      />    
+                      {selectedTemplates.length > 0 &&
+                        <img height='24px' width='24px' src={getImage()} alt="status-icon" className="margin-left-2" />
+                      }
+                      {!getPageCheck() && selectedTemplates.length > 0 && <span className="error-text">Mismatch error</span> }
+                      
                       <span className="margin-left-1 text-ink">{files.length > 0 ? file.name : 'default name'}</span>
                   </div> 
                     <Select
@@ -233,8 +291,9 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
                       ))]
                     )}
                   </Select>
-                </div>
-                ))
+                   </div>
+                )
+              })
               }
 
             </div>

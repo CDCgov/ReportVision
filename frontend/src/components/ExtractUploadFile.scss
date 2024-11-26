@@ -30,6 +30,7 @@ p {
 
 .dashed-container {
     width: 100%;
+    max-width: 900px;
     border: 1px dashed #A9AEB1;
 }
 
@@ -51,3 +52,50 @@ p {
 .usa-file-input__choose {
     text-decoration: none;
 }
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    width: 914px;
+    border-left: 5px solid #D63E04;
+    background-color: #F4E3DB;
+  }
+  
+  .error-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .error-icon {
+    margin-left: 2rem; /* Adjust margin-left as necessary */
+    height: 32px;
+    width: 32px;
+  }
+  
+  .error-title {
+    margin-left: 1rem;
+    color: #000;
+  }
+  
+  .error-message {
+    margin-left: 5rem;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-right: 2rem;
+  }
+  
+  .error-highlight {
+    color: #005EA2;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .error-text {
+    font-size: 14px;
+    text-wrap: nowrap;
+    margin-inline: 8px;
+    color: #B51D09;
+    font-weight: 600;
+  }

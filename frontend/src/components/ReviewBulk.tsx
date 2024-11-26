@@ -37,7 +37,6 @@ const ReviewBulk = ( { resultsTable, setSubmissionIndex, setIsReviewing, onDownl
     const navigate = useNavigate();
 
     const onClick = (index: number) => {
-        console.log(index)
         setIsReviewing(true);
         setSubmissionIndex(index);
     }
