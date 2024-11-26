@@ -3,6 +3,7 @@ package gov.cdc.ReportVision.controllers;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -23,6 +24,10 @@ public class ImageToTextController {
     public ImageToTextController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+
+
+    @Value("${spring.fastapi.url}/image_file_to_text/")
+    private String fastApiUrl;
 
     @PostMapping(value = "/image_to_text", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> imageToText(@RequestPart("source_image") MultipartFile sourceImage,
@@ -46,7 +51,7 @@ public class ImageToTextController {
 
             String url = "http://localhost:8000/image_file_to_text/";
             ResponseEntity<String> response = restTemplate.exchange(
-                url,
+                fastApiUrl,
                 HttpMethod.POST,
                 requestEntity,
                 String.class
