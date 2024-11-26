@@ -76,11 +76,11 @@ const ReviewTable = ({
         isUploadComplete={!(errorCount > 0)}
       />
       <Divider margin="0px" />
-      <div className="display-flex flex-justify-center padding-top-4">
+      <div className="display-flex flex-justify-center padding-top-4 review-border border-bottom">
         <ExtractStepper currentStep={ExtractStep.Review} />
       </div>
 
-      <div className="display-flex flex-justify-between padding-top-4 information-display">
+      <div className="display-flex flex-justify-between information-display">
         <div className="width-50 height-full table-container-half">
           <div className="display-flex flex-column review-template-header-container">
             <h2>Extracted Data</h2>
@@ -178,24 +178,24 @@ const ReviewTable = ({
           </div>
         </div>
         <div className="image-container">
-          <div className="width-full bg-white border-gray-5 border-1px">
-            <div>
-              <Toolbar totalPages={images.length} onPageChange={(index) => handleImageChange(index - 1)} />
+          <Toolbar className="toolbar-borders" totalPages={images.length} onPageChange={(index) => handleImageChange(index - 1)} />
+          <div className=" height-full width-full padding-2">
+            <div className="width-full bg-white">
+              {images.map((image, innerIndex) => (
+                <svg
+                  style={{ display: innerIndex !== index ? "none" : "initial" }}
+                  viewBox="0 0 612 720"
+                  key={innerIndex}
+                >
+                  <image
+                    result="photo"
+                    href={image}
+                    preserveAspectRatio="xMidYMid slice"
+                  ></image>
+                  <polygon points={maskShape} stroke="blue" fill="none" />
+                </svg>
+              ))}
             </div>
-            {images.map((image, innerIndex) => (
-              <svg
-                style={{ display: innerIndex !== index ? "none" : "initial" }}
-                viewBox="0 0 612 720"
-                key={innerIndex}
-              >
-                <image
-                  result="photo"
-                  href={image}
-                  preserveAspectRatio="xMidYMid slice"
-                ></image>
-                <polygon points={maskShape} stroke="blue" fill="none" />
-              </svg>
-            ))}
           </div>
         </div>
       </div>

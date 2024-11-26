@@ -5,7 +5,8 @@ import { Shape } from "react-image-label";
 export interface Template {
   id: string;
   name: string;
-  description: string;
+  condition: string;
+  facility: string;
   labName: string;
   pages: Page[];
   status: TemplateStatus;

@@ -1,6 +1,10 @@
-FROM python:3.10-bullseye
+FROM python:3.10-slim
 
-RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 tesseract-ocr-eng tesseract-ocr -y
+RUN apt-get update && apt-get install libgl1 tesseract-ocr-eng tesseract-ocr -y
+
+# Use larger "best" training data, rather than "fast"
+# Python one-liner because we don't have curl or wget
+RUN python3 -c 'from urllib.request import urlopen; open("/usr/share/tesseract-ocr/5/tessdata/eng.traineddata", "wb").write(urlopen("https://github.com/tesseract-ocr/tessdata_best/raw/refs/heads/main/eng.traineddata").read())'
 
 RUN pip install poetry
 
@@ -8,7 +12,7 @@ COPY /ocr /ocr
 COPY poetry.lock .
 COPY pyproject.toml .
 
-RUN poetry install --without dev
+RUN poetry install --only main && poetry cache list | xargs -n1 poetry cache clear --all
 
 ENTRYPOINT ["poetry", "run", "api"]
 
