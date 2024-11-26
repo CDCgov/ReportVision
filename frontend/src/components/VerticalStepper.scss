@@ -1,71 +1,71 @@
 .stepper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    position: relative;
-    padding-left: 20px;
-    background-color: inherit;
-    padding: 20px;
-    border-radius: 8px;
-    width: 200px; /* Adjust width as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  padding-left: 20px;
+  background-color: inherit;
+  padding: 20px;
+  border-radius: 8px;
+  width: 200px; /* Adjust width as needed */
 }
 
 .vertical-stepper-copy {
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .step {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
 
-    &.active .step-content {
-        font-weight: bold;
-    }
+  &.active .step-content {
+    font-weight: bold;
+  }
 
-    &:last-child .connector {
-        display: none;
-    }
+  &:last-child .connector {
+    display: none;
+  }
 }
 
 .highlight-bar {
-    width: 4px;
-    height: 120%;
-    background-color: #333;
-    margin-right: 10px;
+  width: 4px;
+  height: 120%;
+  background-color: #333;
+  margin-right: 10px;
 }
 
 .step-content {
-    color: #005EA2;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+  color: #005ea2;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .current-step {
-    color: #151515;
-    font-weight: bold;
+  color: #151515;
+  font-weight: bold;
 }
 
 .step-link {
-    color: #0066cc;
-    text-decoration: none;
+  color: #0066cc;
+  text-decoration: none;
 
-    &:hover {
-        text-decoration: underline;
-    }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .connector {
-    position: absolute;
-    left: 10px;
-    top: 24px; /* Adjusted for better spacing */
-    width: 4px;
-    height: calc(100% - 20px); /* Adjusts height to avoid overlap */
-    background-color: #333;
+  position: absolute;
+  left: 10px;
+  top: 24px; /* Adjusted for better spacing */
+  width: 4px;
+  height: calc(100% - 20px); /* Adjusts height to avoid overlap */
+  background-color: #333;
 }

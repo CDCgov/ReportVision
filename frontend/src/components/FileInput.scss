@@ -1,33 +1,33 @@
 .header-text {
-    margin-left: 8px;
-    font-size: 14px;
-    color: black!important;
-    font-weight: 700;
-    position: relative;
-    z-index: 3;
+  margin-left: 8px;
+  font-size: 14px;
+  color: black !important;
+  font-weight: 700;
+  position: relative;
+  z-index: 3;
 }
 
-.header-choose { 
-    color: #005EA2;
-    padding: 2rem 1rem;
-    pointer-events: none;
-    position: relative;
-    z-index: 3;
+.header-choose {
+  color: #005ea2;
+  padding: 2rem 1rem;
+  pointer-events: none;
+  position: relative;
+  z-index: 3;
 }
 
 .usa-file-input {
-    display: block;
-    max-width: unset;
+  display: block;
+  max-width: unset;
 }
 
-.usa-file-input__preview{
-    background-color: white;
+.usa-file-input__preview {
+  background-color: white;
 }
 
 .usa-file-input__target {
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
