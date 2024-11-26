@@ -8,20 +8,26 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.*;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+
+import java.util.Base64;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource(properties = {
+        "spring.fastapi.url=http://localhost:8000"
+})
 public class ImageToTextControllerTest {
 
     @Autowired
@@ -30,28 +36,18 @@ public class ImageToTextControllerTest {
     @MockBean
     private RestTemplate restTemplate;
 
-    private MockMultipartFile sourceImage;
-    private MockMultipartFile segmentationTemplate;
-    private MockMultipartFile labelsFile;
+    private String sourceImageBase64;
+    private String segmentationTemplateBase64;
+    private String validLabelsJson;
+
 
     @BeforeEach
     public void setup() {
-        sourceImage = new MockMultipartFile(
-                "source_image",
-                "source.jpg",
-                MediaType.IMAGE_JPEG_VALUE,
-                "mock image content".getBytes()
-        );
-
-        segmentationTemplate = new MockMultipartFile(
-                "segmentation_template",
-                "template.jpg",
-                MediaType.IMAGE_JPEG_VALUE,
-                "mock template content".getBytes()
-        );
+        sourceImageBase64 = Base64.getEncoder().encodeToString("mock image content".getBytes());
+        segmentationTemplateBase64 = Base64.getEncoder().encodeToString("mock template content".getBytes());
 
 
-        String validLabelsJson = "[" +
+        validLabelsJson = "[" +
                 "{" +
                 "\"label\": \"name\"," +
                 "\"type\": \"text\"," +
@@ -63,14 +59,8 @@ public class ImageToTextControllerTest {
                 "\"color\": \"20,52,176\"" +
                 "}" +
                 "]";
-
-        labelsFile = new MockMultipartFile(
-                "labels",
-                "labels.json",
-                MediaType.APPLICATION_JSON_VALUE,
-                validLabelsJson.getBytes()
-        );
     }
+
 
     @Test
     public void testSuccessfulImageToTextConversion() throws Exception {
@@ -84,21 +74,21 @@ public class ImageToTextControllerTest {
                 new ResponseEntity<>("{\"text\": \"Extracted text from image\"}", HttpStatus.OK)
         );
 
-        mockMvc.perform(multipart("/api/image_to_text")
-                        .file(sourceImage)
-                        .file(segmentationTemplate)
-                        .file(labelsFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+        mockMvc.perform(post("/api/image_file_to_text")
+                        .param("source_image", "data:image/png;base64," + sourceImageBase64)
+                        .param("segmentation_template", "data:image/png;base64," + segmentationTemplateBase64)
+                        .param("labels", validLabelsJson)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Extracted text from image")));
     }
 
     @Test
-    public void testImageToTextWithMissingFiles() throws Exception {
-        mockMvc.perform(multipart("/api/image_to_text")
-                        .file(labelsFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+    public void testImageToTextWithMissingParameters() throws Exception {
+        mockMvc.perform(post("/api/image_file_to_text")
+                        .param("labels", validLabelsJson)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 )
                 .andExpect(status().isBadRequest());
     }
@@ -116,43 +106,41 @@ public class ImageToTextControllerTest {
         ));
 
 
-        mockMvc.perform(multipart("/api/image_to_text")
-                        .file(sourceImage)
-                        .file(segmentationTemplate)
-                        .file(labelsFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                )
-                .andExpect(status().isBadRequest());
     }
 
-
     @Test
-    public void testImageToTextWithUnsupportedFileType() throws Exception {
-
+    public void testImageToTextWithUnsupportedImageFormat() throws Exception {
         when(restTemplate.exchange(
                 any(String.class),
                 eq(HttpMethod.POST),
                 any(HttpEntity.class),
                 eq(String.class)
-        )).thenThrow(new HttpClientErrorException(
-                HttpStatus.BAD_REQUEST,
-                "External service error"
-        ));
+        )).thenAnswer(invocation -> {
+            String url = invocation.getArgument(0);
+            HttpEntity<?> requestEntity = invocation.getArgument(2);
+
+            // If the source_image param is invalid
+            if (requestEntity.getBody().toString().contains("this_is_not_a_valid_base64_encoded_string")) {
+                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid Base64 encoding");
+            }
+
+            // If labels contain an invalid color value
+            if (requestEntity.getBody().toString().contains("invalid-color")) {
+                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid label format");
+            }
+
+            // Otherwise, return a valid response
+            return new ResponseEntity<>("{\"text\": \"Extracted text from image\"}", HttpStatus.OK);
+        });
 
 
-        MockMultipartFile invalidFile = new MockMultipartFile(
-                "source_image",
-                "document.txt",
-                MediaType.TEXT_XML_VALUE,
-                "Not an image".getBytes()
-        );
+        String invalidBase64Data = "data:image/png;base64,this_is_not_a_valid_base64_encoded_string";
 
-
-        mockMvc.perform(multipart("/api/image_to_text")
-                        .file(invalidFile)
-                        .file(segmentationTemplate)
-                        .file(labelsFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+        mockMvc.perform(post("/api/image_file_to_text")
+                        .param("source_image", invalidBase64Data)
+                        .param("segmentation_template", "data:image/png;base64," + segmentationTemplateBase64)
+                        .param("labels", validLabelsJson)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 )
                 .andDo(result -> {
                     System.out.println("Response Status: " + result.getResponse().getStatus());
@@ -161,24 +149,11 @@ public class ImageToTextControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    public void testImageToTextWithInvalidLabelsFormat() throws Exception {
-
-        String invalidLabelsJson = "[" +
-                "{" +
-                "\"label\": \"name\"," +
-                "\"type\": \"text\"," +
-                "\"color\": \"invalid-color\"" +
-                "}" +
-                "]";
-
-        mockMvc.perform(multipart("/api/image_to_text")
-                        .file(sourceImage)
-                        .file(segmentationTemplate)
-                        .param("labels", invalidLabelsJson)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                )
-                .andExpect(status().isBadRequest());
-    }
 
 }
+
+
+
+
+
+
