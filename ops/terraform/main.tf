@@ -18,7 +18,7 @@ module "networking" {
   lbsubnetcidr      = local.workspace["lbsubnetcidr"]
   ocrsubnetcidr     = local.workspace["ocrsubnetcidr"]
   backendsubnetcidr = local.workspace["backendsubnetcidr"]
-  dbsubnetcidr   = local.workspace["dbsubnetcidr"]
+  dbsubnetcidr      = local.workspace["dbsubnetcidr"]
   env               = local.environment
 }
 
