@@ -20,10 +20,10 @@ locals {
     demo = {
       vnetcidr          = "10.1.0.0/16"
       ocrsubnetcidr     = "10.1.1.0/24"
-      backendsubnetcidr = "10.0.2.0/24"
-      websubnetcidr     = "10.1.2.0/24"
-      lbsubnetcidr      = "10.1.3.0/24"
-      dbsubnetcidr      = "10.1.4.0/24"
+      backendsubnetcidr = "10.1.2.0/24"
+      websubnetcidr     = "10.1.3.0/24"
+      lbsubnetcidr      = "10.1.4.0/24"
+      dbsubnetcidr      = "10.1.5.0/24"
     }
   }
 }
