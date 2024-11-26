@@ -25,58 +25,43 @@ public class ImageToTextController {
         this.restTemplate = restTemplate;
     }
 
-
-    @Value("${spring.fastapi.url}/image_file_to_text/")
+    @Value("${spring.fastapi.url}/image_to_text")
     private String fastApiUrl;
 
-    @PostMapping(value = "/image_to_text", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> imageToText(@RequestPart("source_image") MultipartFile sourceImage,
-                                       @RequestPart("segmentation_template") MultipartFile segmentationTemplate,
-                                       @RequestPart("labels") String labels) {
+    @PostMapping(value = "/image_file_to_text", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<?> imageToText(
+            @RequestParam("source_image") String sourceImage,
+            @RequestParam("segmentation_template") String segmentationTemplate,
+            @RequestParam("labels") String labels) {
         try {
-
-            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-
-            // Convert MultipartFile to Resource-based parts
-            body.add("source_image", createFilePart(sourceImage));
-            body.add("segmentation_template", createFilePart(segmentationTemplate));
+            MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+            body.add("source_image", sourceImage);
+            body.add("segmentation_template", segmentationTemplate);
             body.add("labels", labels);
 
-
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+            HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
 
-
-            String url = "http://localhost:8000/image_file_to_text/";
             ResponseEntity<String> response = restTemplate.exchange(
-                fastApiUrl,
-                HttpMethod.POST,
-                requestEntity,
-                String.class
+                    fastApiUrl,
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class
             );
-
+            System.out.println(response.getBody());
             return ResponseEntity.status(response.getStatusCode())
-                               .headers(response.getHeaders())
-                               .body(response.getBody());
-
+                    .headers(response.getHeaders())
+                    .body(response.getBody());
         } catch (HttpClientErrorException e) {
             log.error("Client error when calling FastAPI service", e);
             return ResponseEntity.status(e.getStatusCode())
-                               .body(e.getResponseBodyAsString());
+                    .body(e.getResponseBodyAsString());
         } catch (Exception e) {
             log.error("Unexpected error when processing request", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                               .body("An unexpected server error occurred: " + e.getMessage());
+                    .body("An unexpected server error occurred: " + e.getMessage());
         }
-    }
-
-    private HttpEntity<?> createFilePart(MultipartFile file) throws IOException {
-        HttpHeaders fileHeaders = new HttpHeaders();
-        fileHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
-        fileHeaders.setContentDispositionFormData(file.getName(), file.getOriginalFilename());
-
-        return new HttpEntity<>(file.getResource(), fileHeaders);
     }
 }
