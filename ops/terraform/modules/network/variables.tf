@@ -5,7 +5,7 @@ variable "websubnetcidr" {}
 variable "lbsubnetcidr" {}
 variable "ocrsubnetcidr" {}
 variable "env" {}
-variable "backendsubnetcidr" {}
+variable "middlewaresubnetcidr" {}
 variable "dbsubnetcidr" {}
 variable "env" {}
 

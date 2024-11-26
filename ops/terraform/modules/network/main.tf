@@ -45,11 +45,11 @@ resource "azurerm_subnet" "lb-subnet" {
   depends_on = [azurerm_virtual_network.vnet]
 }
 
-resource "azurerm_subnet" "backend-subnet" {
-  name                 = "${var.name}-backend-subnet-${var.env}"
+resource "azurerm_subnet" "middleware-subnet" {
+  name                 = "${var.name}-middleware-subnet-${var.env}"
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = var.resource_group
-  address_prefixes     = [var.backendsubnetcidr]
+  address_prefixes     = [var.middlewaresubnetcidr]
 
   delegation {
     name = "delegation"

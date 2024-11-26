@@ -9,17 +9,17 @@ locals {
 }
 
 module "networking" {
-  source            = "./modules/network"
-  name              = var.name
-  location          = data.azurerm_resource_group.rg.location
-  resource_group    = data.azurerm_resource_group.rg.name
-  vnetcidr          = local.workspace["vnetcidr"]
-  websubnetcidr     = local.workspace["websubnetcidr"]
-  lbsubnetcidr      = local.workspace["lbsubnetcidr"]
-  ocrsubnetcidr     = local.workspace["ocrsubnetcidr"]
-  backendsubnetcidr = local.workspace["backendsubnetcidr"]
-  dbsubnetcidr      = local.workspace["dbsubnetcidr"]
-  env               = local.environment
+  source               = "./modules/network"
+  name                 = var.name
+  location             = data.azurerm_resource_group.rg.location
+  resource_group       = data.azurerm_resource_group.rg.name
+  vnetcidr             = local.workspace["vnetcidr"]
+  websubnetcidr        = local.workspace["websubnetcidr"]
+  lbsubnetcidr         = local.workspace["lbsubnetcidr"]
+  ocrsubnetcidr        = local.workspace["ocrsubnetcidr"]
+  middlewaresubnetcidr = local.workspace["middlewaresubnetcidr"]
+  dbsubnetcidr         = local.workspace["dbsubnetcidr"]
+  env                  = local.environment
 }
 
 module "securitygroup" {
@@ -59,13 +59,13 @@ module "storage" {
   web_subnet_id   = module.networking.websubnet_id
 }
 
-module "backend_api" {
+module "middleware_api" {
   source         = "./modules/app_service"
-  service        = local.backend-api
+  service        = local.middleware-api
   name           = var.name
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
-  app_subnet_id  = module.networking.backendsubnet_id
+  app_subnet_id  = module.networking.middlewaresubnet_id
 
   app_settings = {
     SPRING-DATASOURCE-REPORTVISION-JDBC = "@Microsoft.KeyVault(SecretUri=${data.azurerm_key_vault_secret.rv_db_jdbc.id})"
@@ -86,7 +86,7 @@ module "ocr_api" {
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
   app_subnet_id  = module.networking.ocrsubnet_id
-  lb_subnet_id   = module.networking.backendsubnet_id
+  lb_subnet_id   = module.networking.middlewaresubnet_id
   env            = local.environment
   vnet           = module.networking.network_name
   sku_name       = var.sku_name
