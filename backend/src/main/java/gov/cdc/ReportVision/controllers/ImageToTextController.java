@@ -1,66 +1,78 @@
 package gov.cdc.ReportVision.controllers;
 
-import gov.cdc.ReportVision.config.FastApiConfig;
-import org.springframework.beans.factory.annotation.Autowired;
+
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class ImageToTextController {
 
-    private final FastApiConfig fastApiConfig;
+    private final RestTemplate restTemplate;
 
-    @Autowired
-    public ImageToTextController(FastApiConfig fastApiConfig) {
-        this.fastApiConfig = fastApiConfig;
+    public ImageToTextController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
-    @PostMapping("/image_to_text")
-    public ResponseEntity<?> imageToText(@RequestBody Map<String, Object> requestPayload) {
-
+    @PostMapping(value = "/image_to_text", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> imageToText(@RequestPart("source_image") MultipartFile sourceImage,
+                                       @RequestPart("segmentation_template") MultipartFile segmentationTemplate,
+                                       @RequestPart("labels") String labels) {
         try {
-            //System.out.println("Incoming Payload: " + requestPayload);
+            // Create MultiValueMap to properly handle multipart/form-data
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
-            if (!requestPayload.containsKey("source_image") || !requestPayload.containsKey("segmentation_template") || !requestPayload.containsKey("labels")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Missing required fields: 'source_image', 'segmentation_template', or 'labels'");
-            }
+            // Convert MultipartFile to Resource-based parts
+            body.add("source_image", createFilePart(sourceImage));
+            body.add("segmentation_template", createFilePart(segmentationTemplate));
+            body.add("labels", labels);
 
+            // Set up headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-            String sourceImageBase64 = (String) requestPayload.get("source_image");
-            String segmentationTemplateBase64 = (String) requestPayload.get("segmentation_template");
-            String labels = (String) requestPayload.get("labels");
-            System.out.println(labels);
+            // Create HTTP entity with headers and body
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-
-            Map<String, Object> fastApiPayload = Map.of(
-                    "source_image", sourceImageBase64,
-                    "segmentation_template", segmentationTemplateBase64,
-                    "labels", labels
+            // Make the request
+            String url = "http://localhost:8000/image_file_to_text/";
+            ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                String.class
             );
 
+            return ResponseEntity.status(response.getStatusCode())
+                               .headers(response.getHeaders())
+                               .body(response.getBody());
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-
-            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(fastApiPayload, headers);
-
-            // Call the FastAPI service
-            RestTemplate restTemplate = new RestTemplate();
-            String fastApiUrl = fastApiConfig.getUrl() + "/image_file_to_text";
-            ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8000/image_file_to_text", entity, String.class);
-
-            return ResponseEntity.ok(response.getBody());
-
+        } catch (HttpClientErrorException e) {
+            log.error("Client error when calling FastAPI service", e);
+            return ResponseEntity.status(e.getStatusCode())
+                               .body(e.getResponseBodyAsString());
         } catch (Exception e) {
-            // Handle errors
+            log.error("Unexpected error when processing request", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while processing the request: " + e.getMessage());
+                               .body("An unexpected server error occurred: " + e.getMessage());
         }
+    }
+
+    private HttpEntity<?> createFilePart(MultipartFile file) throws IOException {
+        HttpHeaders fileHeaders = new HttpHeaders();
+        fileHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+        fileHeaders.setContentDispositionFormData(file.getName(), file.getOriginalFilename());
+
+        return new HttpEntity<>(file.getResource(), fileHeaders);
     }
 }
