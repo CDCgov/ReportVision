@@ -43,7 +43,7 @@ jobs:
           echo "docker_inspect=$(
               docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ inputs.ocr-version }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
-      - name: Build and Push backend
+      - name: Build and Push OCR
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
         uses: ./.github/actions/build-publish-api
         with:

@@ -1,0 +1,78 @@
+name: Create, publish, deploy a Middleware API image
+
+on:
+    push:
+        branches: add-backend-api-to-tf
+#   workflow_dispatch:
+#     inputs:
+#       deploy-env:
+#         description: 'The environment to deploy to'
+#         required: true
+#         type: choice
+#         options:
+#           - dev
+#           - demo
+#       middleware-version:
+#         description: 'Create a version for this OCR API image'
+#         required: true
+
+permissions:
+  contents: read
+  packages: write
+  attestations: write
+  id-token: write
+
+jobs:
+  build-publish-middleware:
+    name: Build and Publish middleware
+    runs-on: ubuntu-latest
+    outputs:
+      docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Lowercase the repo name
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: Check if image exists
+        id: image_check
+        run: |
+          echo "docker_inspect=$(
+              docker manifest inspect ghcr.io/${{ env.REPO }}-middleware-api:test1 > /dev/null ; echo $?
+            )" >> $GITHUB_OUTPUT
+      - name: Build and Push middleware
+        if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
+        uses: ./.github/actions/build-publish-api
+        with:
+          docker-registry: ghcr.io
+          docker-pw: ${{ secrets.GITHUB_TOKEN }}
+          docker-username: ${{ github.actor }}
+          docker-tag: test1
+          dockerfile-path: ./backend/Dockerfile
+          docker-context-path: ./backend/
+          api-name: middleware-api
+
+#   deploy-ocr:
+#     name: Deploy middleware
+#     runs-on: ubuntu-latest
+#     environment: ${{ inputs.deploy-env }}
+#     needs: [build-publish-middleware]
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: azure/login@v2
+#         with:
+#           client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#       - name: Deploy OCR-API
+#         uses: ./.github/actions/deploy-api
+#         with:
+#           deploy-env: ${{ inputs.deploy-env }}
+#           docker-tag: ${{ inputs.ocr-version }}
+#           docker-registry: ghcr.io
+#           api-name: middleware-api
