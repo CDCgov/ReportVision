@@ -23,7 +23,7 @@ export const UploadHeader = ({ title, isUpload, onBack, onSubmit }: UploadHeader
             </div>
             <div className="display-flex flex-jusitfy-start height-full flex-align-center">
                 <Button className="reset-button" onClick={onBack} type="reset" outline>Back</Button>
-                {!isUpload && <Button className="submit-button" onClick={onSubmit} type="submit" base>Submit</Button>}
+                <Button disabled={isUpload} onClick={onSubmit} type="submit" base>Submit</Button>
             </div>
         </div>
     </Header>
