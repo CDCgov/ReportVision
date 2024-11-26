@@ -1,6 +1,7 @@
 import { ImageToTextArgs, ImageToTextResponse, AlignImageArgs, AlignImageResponse } from "./types/types";
 
 const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/"
+const middlewareURL = import.meta.env.VITE_MIDDLEWARE_URL || "http://localhost:8080/";
 
 export const AlignImage = async (args: AlignImageArgs): Promise<AlignImageResponse> => {
     const { sourceImage, templateImage } = args;
@@ -35,7 +36,7 @@ export const ImageToText = async (args: ImageToTextArgs): Promise<ImageToTextRes
         labels: JSON.stringify(fieldNames),
       });
 
-    const imageToTextURL = `${apiUrl}image_to_text/`
+    const imageToTextURL = `${middlewareURL}api/image_file_to_text`
     try {
         const response = await fetch(imageToTextURL, {
             "method": "POST",
