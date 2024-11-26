@@ -29,7 +29,7 @@ public class ImageToTextController {
                                        @RequestPart("segmentation_template") MultipartFile segmentationTemplate,
                                        @RequestPart("labels") String labels) {
         try {
-            // Create MultiValueMap to properly handle multipart/form-data
+
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
             // Convert MultipartFile to Resource-based parts
@@ -37,14 +37,13 @@ public class ImageToTextController {
             body.add("segmentation_template", createFilePart(segmentationTemplate));
             body.add("labels", labels);
 
-            // Set up headers
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-            // Create HTTP entity with headers and body
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-            // Make the request
+
             String url = "http://localhost:8000/image_file_to_text/";
             ResponseEntity<String> response = restTemplate.exchange(
                 url,
