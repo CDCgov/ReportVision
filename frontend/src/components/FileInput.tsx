@@ -8,6 +8,8 @@ import React, {
   import classnames from 'classnames'
   
   import { FilePreview } from './FilePreview'
+
+  import './FileInput.scss'
   
   type FileInputProps = {
     id: string
@@ -71,6 +73,7 @@ import React, {
         /Edge\/\d./i.test(navigator?.userAgent)
   
       setHideDragText(hideDragText)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [typeof navigator])
   
     useImperativeHandle(
@@ -121,10 +124,7 @@ import React, {
       'display-none': filePreviews.length > 0,
     })
   
-    const previewHeaderText =
-      filePreviews.length > 1
-        ? `${filePreviews.length} files selected`
-        : 'Selected file'
+    const previewHeaderText = `${filePreviews.length} files selected`
   
     const preventInvalidFiles = (e: React.DragEvent): void => {
       setShowError(false)
@@ -184,7 +184,8 @@ import React, {
     return (
       <div
         data-testid="file-input"
-        className={fileInputClasses}
+
+        className={`${fileInputClasses} width-full height-full`}
         aria-disabled={disabled}>
         <div
           data-testid="file-input-droptarget"
@@ -195,9 +196,9 @@ import React, {
           {filePreviews.length > 0 && (
             <div
               data-testid="file-input-preview-heading"
-              className="usa-file-input__preview-heading">
-              {previewHeaderText}{' '}
-              <span className="usa-file-input__choose">
+              className="display-flex width-full flex-row flex-justify flex-align-center">
+              <p className='header-text'>{previewHeaderText}</p>
+              <span className="header-choose">
                 Change file{filePreviews.length > 1 && 's'}
               </span>
             </div>

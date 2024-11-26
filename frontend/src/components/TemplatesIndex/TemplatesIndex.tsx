@@ -3,23 +3,41 @@ import {Button} from "@trussworks/react-uswds";
 import {SortableTable} from "../SortableTable/SortableTable.tsx";
 import {useNavigate} from "react-router-dom";
 import extractImage from "../../assets/extract_image.svg";
+import {useQuery} from "@tanstack/react-query";
+import {TemplateAPI} from "../../types/templates.ts";
 
 type TemplateIndexProps = unknown
 
 export const TemplatesIndex: FC<TemplateIndexProps> = () => {
     const [templates, setTemplates] = useState([])
     const navigate = useNavigate()
+    // TODO: Pagination and sorting will be added later
+    const templateQuery = useQuery(
+        {
+            queryKey: ['templates'],
+            queryFn: TemplateAPI.getTemplates
+        }
+    )
     useEffect(() => {
-        const templatesJSON = localStorage.getItem("templates")
-        setTemplates(JSON.parse(templatesJSON))
-    }, []);
-
+        const getTemplates = async () => {
+            const templatesJSON = localStorage.getItem("templates") || "[]"
+            if (templateQuery.data && templateQuery.data?.length > 0) {
+                setTemplates(templateQuery.data as [])
+            } else if (templatesJSON) {
+                setTemplates(JSON.parse(templatesJSON).map(template => ({ ...template, updatedAt: template.lastUpdated })))
+            } else {
+                setTemplates([])
+            }
+        }
+        getTemplates();
+    }, [templateQuery.data]);
+    
     useEffect(() => {
 
         const localStorageEvent = (event) => {
             if (event.storageArea === localStorage) {
                 const templatesJSON = localStorage.getItem("templates")
-                setTemplates(JSON.parse(templatesJSON))
+                setTemplates(JSON.parse(templatesJSON || '[]'))
             }
         }
         window.addEventListener("storage", localStorageEvent, false)
@@ -32,14 +50,23 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
 
     const templateColumnNames = {
         'name': 'Name',
+        'labName': 'Lab',
         'lab': 'Lab',
         'createdBy': 'Creator',
         'status': 'Status',
-        'lastUpdated': 'Updated On'
+        'updatedAt': 'Updated On'
     }
 
     const templateColumnFormatters = {
 
+        'updatedAt': (d) => {
+            const date = Date.parse(d)
+            if (isNaN(date)) {
+                return new Date().toLocaleDateString()
+            }
+            return new Date(date).toLocaleDateString()
+
+        },
         'lastUpdated': (d) => {
             const date = Date.parse(d)
             if (isNaN(date)) {
@@ -51,41 +78,9 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
     }
 
     const templateColumns = [
-        'name', 'lastUpdated', 'createdBy', 'lab', 'status'
+        'name', 'updatedAt', 'createdBy', 'lab', 'status', 'labName'
     ]
-    const templates2: Template[] = [
 
-        {
-            name: "MumpsQuestV1",
-            lab: "Quest",
-            createdBy: "J.Smith",
-            status: "Completed",
-            lastUpdated: new Date(Date.parse("2025-03-24T12:00:00.000-05:00"))
-        },
-        {
-            name: "LBTIRadar",
-            lab: "Radar",
-            createdBy: "C.Alex",
-            status: "Completed",
-            lastUpdated: new Date(Date.parse("2025-05-30T12:00:00.000-05:00"))
-        },
-        {
-            name: "COVIDBaylor1",
-            lab: "Emory",
-            createdBy: "A.Bryant",
-            status: "Completed",
-            lastUpdated: new Date(Date.parse("2025-06-21T12:00:00.000-05:00"))
-        },
-        {
-            name: "COVIDEMory",
-            lab: "Baylor",
-            createdBy: "D.Smith",
-            status: "Completed",
-            lastUpdated: new Date(Date.parse("2024-06-21T12:00:00.000-05:00"))
-        },
-    ];
-
-    // TODO: These are just for demo purposes and allow easily manipulating the template store
     useEffect(() => {
         console.debug(`
         The following methods have been added to the window:
@@ -142,7 +137,6 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
                     Template</Button> </>
         )
     }
-
 
     return (
         <>

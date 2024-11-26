@@ -5,26 +5,22 @@ import {useLocation} from "react-router-dom";
 import {AppHeader} from "./components/AppHeader/AppHeader.tsx";
 
 import {TemplatesIndex} from "./components/TemplatesIndex/TemplatesIndex.tsx";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+
 function App() {
     const {pathname} = useLocation()
-    const navLinks = [
-        {text: "Annotate and Extract", url: "/"},
-        {text: "Label Management", url: "/labels"},
-        {text: "Dashboard", url: "/dashboard"}
-    ]
+    const navLinks = [{text: "Annotate and Extract", url: "/"}, {
+        text: "Label Management",
+        url: "/labels"
+    }, {text: "Dashboard", url: "/dashboard"}]
 
-    const queryClient = new QueryClient();
 
-    return (
-        <>
-            <QueryClientProvider client={queryClient}>
+    return (<>
             <div className='display-flex flex-column width-full height-full'>
                 <AppHeader jurisdiction={`Demo STLT`}/>
                 <div className="display-flex flex-row height-full">
                     <div
                         className="flex-3 padding-top-1 padding-left-1 padding-right-4 minw-15 usa-dark-background bg-primary-dark text-base-lightest display-flex flex-column flex-gap-1 maxw-30 side-nav"
-                        >
+                    >
                         <div className='display-flex flex-column flex-align-start padding-top-2'>
                             {navLinks.map((i, idx) => {
                                 return <Link key={idx} href={i.url}
@@ -45,9 +41,7 @@ function App() {
                 </div>
 
             </div>
-            </QueryClientProvider>
-        </>
-    )
+        </>)
 }
 
 export default App

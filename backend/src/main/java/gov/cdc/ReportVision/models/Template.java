@@ -1,5 +1,7 @@
 package gov.cdc.ReportVision.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -7,16 +9,20 @@ import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Getter
 @Builder
+@JsonInclude(JsonInclude.Include.ALWAYS)
 public class Template extends BaseEntity {
 
   @Valid
   @Id
   @GeneratedValue(generator = "UUID4")
   @Column(updatable = false, nullable = false)
+  @JsonProperty
   private UUID id;
 
   @NotBlank(message = "Name is required")
@@ -28,13 +34,16 @@ public class Template extends BaseEntity {
   private String labName;
 
   @OneToMany(mappedBy = "template")
+  @Fetch(FetchMode.JOIN)
   private List<Page> pages;
 
   @Enumerated(EnumType.STRING)
   @Builder.Default
   private TemplateStatus status = TemplateStatus.IN_PROGRESS;
 
-  @ManyToOne private Organization organization;
+  @Fetch(FetchMode.JOIN)
+  @ManyToOne
+  private Organization organization;
 
   public Template(
       UUID id,

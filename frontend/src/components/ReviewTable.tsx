@@ -9,6 +9,8 @@ import aiIconUrl from "../assets/ai_icon.svg";
 import ErrorIcon from "../assets/error_icon.svg";
 import { useNavigate } from "react-router-dom"
 
+import './ReviewTable.scss';
+
 interface ReviewTableProps {
     isSingle: boolean;
     index: number;
@@ -60,7 +62,7 @@ const ReviewTable = ({ isSingle, hasErrors, overallConfidence, confidenceVal, er
         </div>
 
         <div className="display-flex flex-justify-between padding-top-4">
-          <div className="width-50">
+          <div className="width-50 height-full table-container-half">
             <div className="display-flex flex-column review-template-header-container">
                 <h2>Extracted Data</h2>
                 <span className="font-sans-md font-weight-semibold display-flex flex-align-center">

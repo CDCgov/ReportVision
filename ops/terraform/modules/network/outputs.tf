@@ -8,10 +8,10 @@ output "websubnet_id" {
   description = "Id of websubnet in the network"
 }
 
-# output "dbsubnet_id" {
-#   value       = azurerm_subnet.db-subnet.id
-#   description = "Id of dbsubnet in the network"
-# }
+output "dbsubnet_id" {
+  value       = azurerm_subnet.db-subnet.id
+  description = "Id of dbsubnet in the network"
+}
 
 output "lbsubnet_id" {
   value       = azurerm_subnet.lb-subnet.id
@@ -21,4 +21,9 @@ output "lbsubnet_id" {
 output "appsubnet_id" {
   value       = azurerm_subnet.app-subnet.id
   description = "Id of lbsubnet in the network"
+}
+
+output "private_dns_zone_id" {
+  value       = azurerm_private_dns_zone.postgresql_dns_zone.id
+  description = "Private DNS Zone for PostgreSQL Flexible Server"
 }

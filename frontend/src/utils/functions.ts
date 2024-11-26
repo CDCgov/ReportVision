@@ -1,10 +1,12 @@
 import { CustomShape } from "../contexts/AnnotationContext";
 import { ImageData } from "../pages/AnnotateTemplate";
+import {useCreateTemplateStore} from "../types/templates.ts";
 
-export const makeScreenshots = async () => {
-    const images: ImageData[] = JSON.parse(localStorage.getItem('images') || '[]') as ImageData[];
-    const shapes: CustomShape[][] = JSON.parse(localStorage.getItem('shapes') || '[]') as CustomShape[][];
+export const makeScreenshots = async (images, shapes) => {
+    // const images: ImageData[] = JSON.parse(localStorage.getItem('images') || '[]') as ImageData[];
+    // const shapes: CustomShape[][] = JSON.parse(localStorage.getItem('shapes') || '[]') as CustomShape[][];
     const screenshots: string[] = [];
+
     for (let i = 0; i < images.length; i++) {
         try {
             const screenshot = await createScreenshot(images[i], shapes[i] ?? []);
@@ -15,7 +17,7 @@ export const makeScreenshots = async () => {
     }
 
     // Final log of all screenshots
-    localStorage.setItem('screenshots', JSON.stringify(screenshots));
+    // localStorage.setItem('screenshots', JSON.stringify(screenshots));
     return screenshots;
 };
 

@@ -1,35 +1,49 @@
-import { Label, TextInput } from "@trussworks/react-uswds";
-import { Divider } from "../components/Divider";
-import { UploadHeader } from "../components/Header";
-import { Stepper } from "../components/Stepper";
-import { AnnotateStep } from "../utils/constants";
-import { useNavigate } from "react-router-dom";
-import { useAnnotationContext } from "../contexts/AnnotationContext";
-import { useFiles, FileType, Page } from "../contexts/FilesContext";
+import {Label, TextInput} from "@trussworks/react-uswds";
+import {Divider} from "../components/Divider";
+import {UploadHeader} from "../components/Header";
+import {Stepper} from "../components/Stepper";
+import {AnnotateStep} from "../utils/constants";
+import {useNavigate} from "react-router-dom";
+import {useAnnotationContext} from "../contexts/AnnotationContext";
+import {FileType, Page} from "../contexts/FilesContext";
 import hexRgb from "hex-rgb";
-import { ImageData } from "./AnnotateTemplate";
-import { makeScreenshots } from "../utils/functions";
-
+import {makeScreenshots} from "../utils/functions";
+import {useCreateTemplateStore} from "../types/templates.ts";
 
 
 export const SaveTemplate = () => {
     const navigate = useNavigate();
-    const { fields, setDescription, setName, name, description, shapes, setShapes, setFields, setDrawnFields, setSelectedField } = useAnnotationContext()
-    const { addFile } = useFiles();
-    
+    const {
+        fields,
+        setDescription,
+        setName,
+        name,
+        description,
+        shapes,
+        setShapes,
+        setFields,
+        setDrawnFields,
+        setSelectedField
+    } = useAnnotationContext()
+    const baseImages = useCreateTemplateStore((state) => state.baseImages);
+    const storeTemplateImages = useCreateTemplateStore((state) => state.setTemplateImages);
+    const reset = useCreateTemplateStore((state) => state.reset);
+
     const handleSubmit = async () => {
-        const images: ImageData[] = localStorage.getItem('images') ? JSON.parse(localStorage.getItem('images') as string) : [];
+        // const images: ImageData[] = localStorage.getItem('images') ? JSON.parse(localStorage.getItem('images') as string) : [];
+        const images = baseImages;
         let pages: Page[] = [];
         const tempFields = fields.filter(field => field.size > 0);
-        
-        const screenshots = await makeScreenshots()
+
+        const screenshots = await makeScreenshots(images, shapes);
+        storeTemplateImages(screenshots);
 
         if (images.length > 0) {
             pages = tempFields.map((_, index) => {
                 const shape = shapes[index]
                 return {
                     fieldNames: shape.map(s => {
-                        const { red, green, blue } = hexRgb(s.color as string);
+                        const {red, green, blue} = hexRgb(s.color as string);
                         return {
                             type: 'text',
                             color: `${red},${green},${blue}`,
@@ -45,35 +59,31 @@ export const SaveTemplate = () => {
                 name,
                 description,
                 pages: pages
-    
+
             }
 
-        let existingTemplates = []
-        try {
-            const data = localStorage.getItem('templates');
-            if (data) {
-                existingTemplates = JSON.parse(data);
-            }
+            let existingTemplates = []
+            try {
+                const data = localStorage.getItem('templates');
+                if (data) {
+                    existingTemplates = JSON.parse(data);
+                }
 
-        } catch {
-            console.error("Invalid information found in templates, it will be overwritten")
-        }
-        localStorage.setItem('templates', JSON.stringify([...existingTemplates, tempFile]))
-        addFile(tempFile)
+            } catch {
+                console.error("Invalid information found in templates, it will be overwritten")
+            }
+            // TODO: Need to persist this to the backend
+            localStorage.setItem('templates', JSON.stringify([...existingTemplates, tempFile]))
         }
 
         setShapes([]);
         setFields([new Set(), new Set()]);
         setDrawnFields(new Set());
         setSelectedField(null);
-        localStorage.setItem('shapes', '');
-        localStorage.setItem('images', '');
-        localStorage.setItem('screenshots', '');
-        localStorage.setItem('images', '');
-        localStorage.setItem('files', '');
+        reset();
         navigate("/")
-    } 
-    
+    }
+
     return (
         <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2"
              data-testid="save-template-page">

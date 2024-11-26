@@ -8,6 +8,8 @@ import * as pdfjsLib from "pdfjs-dist";
 
 import './ExtractUploadFile.scss';
 import { FileInput } from "./FileInput/file-input";
+import {TemplateAPI} from "../types/templates.ts";
+import {useQuery} from "@tanstack/react-query";
 
 
 
@@ -35,11 +37,18 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   onUploadComplete,
 }) => {
   const id = useId();
-  const { addFile, clearFiles, files, setSelectedTemplates, selectedTemplates } = useFiles();
+  const { addFile, files, setSelectedTemplates, selectedTemplates , clearTemplates,} = useFiles();
   const navigate = useNavigate();
   const [templates, setTemplates] = useState<Template[]>([]);
+    const _templates = useQuery(
+        {
+            queryKey: ['templates'],
+            queryFn: TemplateAPI.getTemplates
+        }
+    ).data || [];
   const [isUploadComplete, setIsUploadComplete] = useState<boolean>(false);
   const [uploadedFile, setUploadedFile] = useState<File[]>([]);
+
   const loadTemplatesTestData = () => {
     const sampleTemplates: Template[] = [
       {
@@ -63,15 +72,17 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
         ],
       },
     ];
-
     setTemplates(sampleTemplates);
   };
+
 
   useEffect(() => {
     // Load templates from local storage, and if none are found, load test data
     const loadTemplatesFromLocalStorage = () => {
       const storedTemplates = localStorage.getItem("templates");
-      if (storedTemplates) {
+      if (_templates.length > 0) {
+        setTemplates(_templates);
+      } else if (storedTemplates) {
         const parsedTemplates = JSON.parse(storedTemplates);
         setTemplates(parsedTemplates);
       } else {
@@ -79,8 +90,6 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
       }
     };
     loadTemplatesFromLocalStorage();
-
-    return () => clearFiles();
 
   }, []);
   const simulateFileUpload = async(files: File[]) => {
@@ -138,6 +147,12 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   const handleSelect = (templateName: string, fileName: string, index: number) => {
     setSelectedTemplates({ templateName, fileName }, index);
   }
+
+  const onCancel = () => {
+    navigate('/');
+    clearTemplates();
+  }
+
   return (
     <div className="display-flex flex-column flex-align-start flex-justify-start height-full width-full padding-2 bg-primary-lighter">
       <div className="extract-upload-header">
@@ -251,14 +266,14 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
           type="button"
           outline
           className="margin-right-1"
-          onClick={() => navigate('/')}
+          onClick={onCancel}
         >
           Cancel Import
         </Button>
         <Button
           type="button"
           className="usa-button display-flex flex-align-center margin-left-auto margin-right-auto"
-          disabled={uploadedFile.length === 0 || selectedTemplates.length === 0}
+          disabled={uploadedFile.length === 0 || selectedTemplates.length !== uploadedFile.length}
           onClick={() => navigate("/extract/process")}
         >
           Extract Data
