@@ -23,8 +23,8 @@ output "ocrsubnet_id" {
   description = "Id of lbsubnet in the network"
 }
 
-output "backendsubnet_id" {
-  value       = azurerm_subnet.backend-subnet.id
+output "middlewaresubnet_id" {
+  value       = azurerm_subnet.middleware-subnet.id
   description = "Id of lbsubnet in the network"
 }
 
