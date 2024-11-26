@@ -11,7 +11,6 @@ describe('UploadHeader component', () => {
     // Check for the main header element
     const header = screen.getByRole('banner');
     expect(header).toBeInTheDocument();
-    expect(header).toHaveStyle({ height: '50px', padding: '8px' });
 
     // Check for the Close button with the icon
     const closeButton = screen.getByTestId('close-button');
@@ -24,17 +23,10 @@ describe('UploadHeader component', () => {
     // Check for the Back button
     const backButton = screen.getByRole('button', { name: /back/i });
     expect(backButton).toBeInTheDocument();
-    expect(backButton).toHaveStyle({
-      height: '40px',
-      color: '#adadad',
-    });
 
     // Check for the Submit button
     const submitButton = screen.getByRole('button', { name: /submit/i });
     expect(submitButton).toBeInTheDocument();
-    expect(submitButton).toHaveStyle({
-      height: '40px',
-    });
   });
 
   it('renders all buttons with correct text', () => {

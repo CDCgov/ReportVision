@@ -12,14 +12,14 @@ import "./ExtractUpload.scss";
 
 const ExtractUpload = () => {
   const navigate = useNavigate();
-  const { files } = useFiles();
+  const { files, clearFiles } = useFiles();
   const [currentIndex, setCurrentIndex] = useState<number>(1);
   const [isUploadComplete, setIsUploadComplete] = useState<boolean>(false);
 
   const handleUploadComplete = (isComplete: boolean) => {
     setIsUploadComplete(isComplete);
   };
-
+  
   useEffect(() => {
     if (files.length > 0) {
       setCurrentIndex(1);
@@ -33,8 +33,8 @@ const ExtractUpload = () => {
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <ExtractDataHeader
-        onBack={() => navigate("/")}
-        onExit={() => navigate("/")}
+        onBack={() => {navigate("/"); clearFiles();}}
+        onExit={() => {navigate("/"); clearFiles();}}
         onSubmit={() => navigate("/extract/process")}
         isUploadComplete={isUploadComplete}
       />
