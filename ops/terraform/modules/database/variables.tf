@@ -20,6 +20,12 @@ variable "resource_group_name" {
   description = "The Azure Resource Group to deploy to"
 }
 
+variable "postgres_password" {
+  description = "The password for the PostgreSQL database"
+  type        = string
+  sensitive   = true # This ensures Terraform treats the password as sensitive
+}
+
 variable "postgres_sku_name" {
   type        = string
   description = "value"

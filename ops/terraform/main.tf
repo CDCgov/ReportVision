@@ -89,4 +89,13 @@ module "database" {
   resource_group_name = data.azurerm_resource_group.rg.name
   subnet              = module.networking.dbsubnet_id
   private_dns_zone_id = module.networking.private_dns_zone_id
+  postgres_password   = module.vault.postgres_password # Password from Vault to DB
+}
+
+module "vault" {
+  source              = "./modules/vault"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  tenant_id           = var.tenant_id
+  client_id           = var.client_id
 }
