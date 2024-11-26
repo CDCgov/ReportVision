@@ -71,7 +71,6 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
         // Add a new template if the index is equal to the length of the array
         updatedTemplates.push(template);
       }
-      console.log(updatedTemplates);
       return updatedTemplates;
     });
   };
