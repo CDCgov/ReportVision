@@ -1,13 +1,15 @@
 package gov.cdc.ReportVision.controllers;
 
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -48,7 +50,6 @@ public class ImageToTextController {
                     requestEntity,
                     String.class
             );
-            System.out.println(response.getBody());
             return ResponseEntity.status(response.getStatusCode())
                     .headers(response.getHeaders())
                     .body(response.getBody());

@@ -13,14 +13,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-
 import java.util.Base64;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
@@ -119,17 +119,17 @@ public class ImageToTextControllerTest {
             String url = invocation.getArgument(0);
             HttpEntity<?> requestEntity = invocation.getArgument(2);
 
-            // If the source_image param is invalid
+
             if (requestEntity.getBody().toString().contains("this_is_not_a_valid_base64_encoded_string")) {
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid Base64 encoding");
             }
 
-            // If labels contain an invalid color value
+
             if (requestEntity.getBody().toString().contains("invalid-color")) {
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid label format");
             }
 
-            // Otherwise, return a valid response
+
             return new ResponseEntity<>("{\"text\": \"Extracted text from image\"}", HttpStatus.OK);
         });
 
