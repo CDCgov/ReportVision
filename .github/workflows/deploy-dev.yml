@@ -26,22 +26,25 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
+      docker_tag: ${{ steps.set_tag.outputs.docker_tag }}
     steps:
       - uses: actions/checkout@v4
       - name: Lowercase the repo name
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
       - name: Set OCR Docker tag
         shell: bash
-        run: |-
-          USER_INPUT=""
+        id: set_tag
+        run: |
+          USER_INPUT="${{ github.event.inputs.ocr-docker-tag }}"
           echo "docker_tag=$(
+            #this gives a new sha as default if dispatch input is empty
             echo ${USER_INPUT:-"${{ github.sha }}"}
-          )" >> $GITHUB_ENV
+          )" >> $GITHUB_OUTPUT
       - name: Check if image exists
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ env.docker_tag }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -50,7 +53,7 @@ jobs:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          docker-tag: ${{ env.docker_tag }}
+          docker-tag: ${{ steps.set_tag.outputs.docker_tag }}
           dockerfile-path: ./OCR/Dockerfile
           docker-context-path: ./OCR/
           api-name: ocr-api
@@ -106,7 +109,7 @@ jobs:
         uses: ./.github/actions/deploy-api
         with:
           deploy-env: ${{ inputs.deploy-env }}
-          docker-tag: ${{ env.docker_tag }}
+          docker-tag: ${{ needs.build-publish-ocr.outputs.docker_tag }}
           docker-registry: ghcr.io
           api-name: ocr-api
 
