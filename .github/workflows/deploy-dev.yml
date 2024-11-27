@@ -32,9 +32,6 @@ jobs:
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
       - name: Set OCR Docker tag
         shell: bash
-        id: set-environment
-        env:
-          DEPLOY_ENV: ${{ inputs.deploy-env }}
         run: |-
           USER_INPUT=""
           echo "docker_tag=$(
