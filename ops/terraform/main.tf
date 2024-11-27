@@ -67,10 +67,10 @@ module "middleware_api" {
   resource_group = data.azurerm_resource_group.rg.name
   app_subnet_id  = module.networking.middlewaresubnet_id
 
-  app_settings = {
-    SPRING-DATASOURCE-REPORTVISION-JDBC = "@Microsoft.KeyVault(SecretUri=${data.azurerm_key_vault_secret.rv_db_jdbc.id})"
-    DB-PASSWORD                         = "@Microsoft.KeyVault(SecretUri=${data.azurerm_key_vault_secret.postgres_password.id})"
-  }
+  # app_settings = {
+  #   SPRING-DATASOURCE-REPORTVISION-JDBC = "@Microsoft.KeyVault(SecretUri=${data.azurerm_key_vault_secret.rv_db_jdbc.id})"
+  #   DB-PASSWORD                         = "@Microsoft.KeyVault(SecretUri=${data.azurerm_key_vault_secret.postgres_password.id})"
+  # }
 
   lb_subnet_id = module.networking.lbsubnet_id
   env          = local.environment
