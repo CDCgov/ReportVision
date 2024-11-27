@@ -332,7 +332,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
         <Button
           type="button"
           className="usa-button display-flex flex-align-center margin-left-auto margin-right-auto"
-          disabled={uploadedFile.length === 0 || selectedTemplates.length !== uploadedFile.length}
+          disabled={uploadedFile.length === 0 || selectedTemplates.length !== uploadedFile.length || hasError}
           onClick={() => navigate("/extract/process")}
         >
           Extract Data

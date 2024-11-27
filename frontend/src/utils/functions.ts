@@ -1,6 +1,6 @@
 import { CustomShape } from "../contexts/AnnotationContext";
 import { ImageData } from "../pages/AnnotateTemplate";
-import {useCreateTemplateStore} from "../types/templates.ts";
+// import {useCreateTemplateStore} from "../types/templates.ts";
 
 export const makeScreenshots = async (images, shapes) => {
     // const images: ImageData[] = JSON.parse(localStorage.getItem('images') || '[]') as ImageData[];
