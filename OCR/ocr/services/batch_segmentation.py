@@ -2,6 +2,7 @@ import os
 import json
 import time
 import csv
+
 from ocr.services.image_segmenter import ImageSegmenter
 from ocr.services.image_ocr import ImageOCR
 

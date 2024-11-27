@@ -1,6 +1,7 @@
 import argparse
-from tests.batch_segmentation import BatchSegmentationOCR
-from tests.batch_metrics import BatchMetricsAnalysis
+
+from ocr.services.batch_segmentation import BatchSegmentationOCR
+from ocr.services.batch_metrics import BatchMetricsAnalysis
 
 
 def main():
