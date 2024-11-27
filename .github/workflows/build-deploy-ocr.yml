@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
-      set_tag: ${{ steps.set_tag.outputs.docker_tag }}
+      docker_tag: ${{ steps.set_tag.outputs.docker_tag }}
     steps:
       - uses: actions/checkout@v4
       - name: Lowercase the repo name
@@ -37,8 +37,9 @@ jobs:
         shell: bash
         id: set_tag
         run: |-
-          USER_INPUT=""
+          USER_INPUT="0dcbc5388c299de5f8b527a2c19d6ad08ed15f47"
           echo "docker_tag=$(
+            #this gives a new sha as default if dispatch input is empty
             echo ${USER_INPUT:-"${{ github.sha }}"}
           )" >> $GITHUB_OUTPUT
       - name: Check if image exists
