@@ -1,8 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import '@trussworks/react-uswds/lib/uswds.css'
-import '@trussworks/react-uswds/lib/index.css'
+import "@trussworks/react-uswds/lib/uswds.css";
+import "@trussworks/react-uswds/lib/index.css";
 
 import "./style/index.scss";
 
@@ -19,9 +19,7 @@ import { SaveTemplate } from "./pages/SaveTemplate.tsx";
 import ReviewTemplate from "./pages/ReviewTemplate.tsx";
 import SubmissionTemplate from "./pages/SubmissionTemplate.tsx";
 import NotFound from "./pages/404Page.tsx";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   {
@@ -58,8 +56,8 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <NotFound />
-  }
+    element: <NotFound />,
+  },
 ]);
 
 const queryClient = new QueryClient();
@@ -67,11 +65,11 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-    <AnnotationProvider>
-      <FilesProvider>
-        <RouterProvider router={router} />
-      </FilesProvider>
-    </AnnotationProvider>
+      <AnnotationProvider>
+        <FilesProvider>
+          <RouterProvider router={router} />
+        </FilesProvider>
+      </AnnotationProvider>
     </QueryClientProvider>
-  </StrictMode>
+  </StrictMode>,
 );

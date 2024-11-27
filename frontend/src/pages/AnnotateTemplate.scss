@@ -1,62 +1,61 @@
 .label-container {
-    &:hover {
-        cursor: pointer;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
-        outline: 1px solid #dadada;
-        outline-offset: 4px;
-    }
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+    outline: 1px solid #dadada;
+    outline-offset: 4px;
+  }
 }
 
-.img-annotation-container { 
-    background: #F5FBFF !important;
+.img-annotation-container {
+  background: #f5fbff !important;
 }
 
 li:hover {
-    background-color: rgba(221, 241, 247, 0.5);
-    outline: 2px solid #005EA2 !important;
+  background-color: rgba(221, 241, 247, 0.5);
+  outline: 2px solid #005ea2 !important;
 }
 
-.hover{
-    background-color: rgba(221, 241, 247, 0.5);
-    outline: 2px solid #005EA2 !important;
+.hover {
+  background-color: rgba(221, 241, 247, 0.5);
+  outline: 2px solid #005ea2 !important;
 }
 
 .field-container {
-    height: 100%;
-    min-width: 496px;
-    width: 496px;
-    border-right: 1px solid #EAEAEA;
-    border-left: 1px solid #EAEAEA;
-    border-bottom: 1px solid #EAEAEA;
-    background-color: white;
+  height: 100%;
+  min-width: 496px;
+  width: 496px;
+  border-right: 1px solid #eaeaea;
+  border-left: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+  background-color: white;
 }
-
 
 .usa-accordion__button {
-    background-color: #ffffff;
-    border-bottom: 1px solid #EAEAEA;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eaeaea;
 }
 .annotate-label-heading {
-    margin-top: 16px;
-    margin-bottom: 16px;;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 .annotate-headers {
-    margin-left: 16px;
+  margin-left: 16px;
 }
 
-.accordion { 
-    background-color: white;
+.accordion {
+  background-color: white;
 }
 
 .annotation-copy {
-    margin-left: 16px;
-    margin-right: 16px;;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
 .field-label-container {
-    display: inline-flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }
