@@ -10,7 +10,7 @@ on:
         options:
           - dev
           - demo
-      docker-tag:
+      ocr-docker-tag:
         description: 'This is optional if you would like to deploy an already published OCR-API image'
         required: false
 
@@ -30,11 +30,21 @@ jobs:
       - uses: actions/checkout@v4
       - name: Lowercase the repo name
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: Set OCR Docker tag
+        shell: bash
+        id: set-environment
+        env:
+          DEPLOY_ENV: ${{ inputs.deploy-env }}
+        run: |-
+          USER_INPUT=""
+          echo "docker_tag=$(
+            echo ${USER_INPUT:-"${{ github.sha }}"}
+          )" >> $GITHUB_ENV
       - name: Check if image exists
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ github.sha }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ env.docker_tag }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -43,7 +53,7 @@ jobs:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          docker-tag: ${{ github.sha }}
+          docker-tag: ${{ env.docker_tag }}
           dockerfile-path: ./OCR/Dockerfile
           docker-context-path: ./OCR/
           api-name: ocr-api
@@ -99,7 +109,7 @@ jobs:
         uses: ./.github/actions/deploy-api
         with:
           deploy-env: ${{ inputs.deploy-env }}
-          docker-tag: ${{ github.sha }}
+          docker-tag: ${{ env.docker_tag }}
           docker-registry: ghcr.io
           api-name: ocr-api
 
