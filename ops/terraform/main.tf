@@ -90,6 +90,7 @@ module "database" {
   subnet              = module.networking.dbsubnet_id
   private_dns_zone_id = module.networking.private_dns_zone_id
   postgres_password   = module.vault.postgres_password # Password from Vault to DB
+  # middlewaresubnetcidr = local.environment == "dev" ? local.dev.middlewaresubnetcidr : local.demo.middlewaresubnetcidr
 }
 
 module "vault" {
