@@ -1,18 +1,20 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  workflow_dispatch:
-    inputs:
-      deploy-env:
-        description: 'The environment to deploy to'
-        required: true
-        type: choice
-        options:
-          - dev
-          - demo
-      docker-tag:
-        description: 'This is optional if you would like to deploy an already published OCR-API image'
-        required: false
+  push:
+    branches: use-sha-instead-of-version
+  # workflow_dispatch:
+  #   inputs:
+  #     deploy-env:
+  #       description: 'The environment to deploy to'
+  #       required: true
+  #       type: choice
+  #       options:
+  #         - dev
+  #         - demo
+  #     docker-tag:
+  #       description: 'This is optional if you would like to deploy an already published OCR-API image'
+  #       required: false
 
 permissions:
   contents: read
@@ -58,7 +60,7 @@ jobs:
   deploy-ocr:
     name: Deploy OCR
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
+    environment: dev
     needs: [build-publish-ocr]
     steps:
       - uses: actions/checkout@v4
@@ -70,7 +72,7 @@ jobs:
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
-          deploy-env: ${{ inputs.deploy-env }}
+          deploy-env: dev
           docker-tag: ${{ github.sha }}
           docker-registry: ghcr.io
           api-name: ocr-api
