@@ -38,7 +38,7 @@ jobs:
         env:
           DEPLOY_ENV: ${{ inputs.deploy-env }}
         run: |-
-          USER_INPUT=""
+          USER_INPUT="634fa0a0a12141b198e3f1544a9ccd320917efd3"
           echo "docker_tag=$(
             echo ${USER_INPUT:-"${{ github.sha }}"}
           )" >> $GITHUB_ENV
