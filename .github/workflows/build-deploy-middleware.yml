@@ -11,7 +11,7 @@ on:
           - dev
           - demo
       middleware-version:
-        description: 'Create a version for this OCR API image'
+        description: 'Create a version for this Middleware API image'
         required: true
 
 permissions:
@@ -50,12 +50,12 @@ jobs:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          docker-tag: ${{ inputs.ocr-version }}
+          docker-tag: ${{ inputs.middleware-version }}
           dockerfile-path: ./backend/Dockerfile
           docker-context-path: ./backend/
           api-name: middleware-api
 
-  deploy-ocr:
+  deploy-middleware:
     name: Deploy middleware
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
@@ -67,10 +67,10 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: Deploy OCR-API
+      - name: Deploy Middleware-API
         uses: ./.github/actions/deploy-api
         with:
           deploy-env: ${{ inputs.deploy-env }}
-          docker-tag: ${{ inputs.ocr-version }}
+          docker-tag: ${{ inputs.middleware-version }}
           docker-registry: ghcr.io
           api-name: middleware-api
