@@ -45,7 +45,6 @@ resource "azurerm_subnet" "lb-subnet" {
   depends_on = [azurerm_virtual_network.vnet]
 }
 
-
 resource "azurerm_subnet" "db-subnet" {
   name                 = "${var.name}-db-subnet-${var.env}"
   virtual_network_name = azurerm_virtual_network.vnet.name

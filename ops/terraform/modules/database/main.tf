@@ -7,7 +7,7 @@ resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
   resource_group_name   = var.resource_group_name
   sku_name              = var.postgres_sku_name
   version               = var.engine_version
-  storage_mb            = 32768 # 32 GiB storage for Standard_B1ms
+  storage_mb            = 32768 # 32 GiB storage for B_Standard_B1ms
   backup_retention_days = 7
 
   administrator_login    = var.db_username
