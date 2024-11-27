@@ -1,18 +1,17 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  workflow_dispatch:
-    inputs:
-      deploy-env:
-        description: 'The environment to deploy to'
-        required: true
-        type: choice
-        options:
-          - dev
-          - demo
-      ocr-version:
-        description: 'Create a version for this OCR API image'
-        required: true
+  push:
+    branches: use-sha-instead-of-version
+  # workflow_dispatch:
+  #   inputs:
+  #     deploy-env:
+  #       description: 'The environment to deploy to'
+  #       required: true
+  #       type: choice
+  #       options:
+  #         - dev
+  #         - demo
 
 permissions:
   contents: read
@@ -41,7 +40,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ inputs.ocr-version }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ github.sha }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -50,7 +49,7 @@ jobs:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          docker-tag: ${{ inputs.ocr-version }}
+          docker-tag: ${{ github.sha }}
           dockerfile-path: ./OCR/Dockerfile
           docker-context-path: ./OCR/
           api-name: ocr-api
@@ -58,7 +57,7 @@ jobs:
   deploy-ocr:
     name: Deploy OCR
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
+    environment: dev
     needs: [build-publish-ocr]
     steps:
       - uses: actions/checkout@v4
@@ -70,7 +69,7 @@ jobs:
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
-          deploy-env: ${{ inputs.deploy-env }}
-          docker-tag: ${{ inputs.ocr-version }}
+          deploy-env: dev
+          docker-tag: ${{ github.sha }}
           docker-registry: ghcr.io
           api-name: ocr-api
