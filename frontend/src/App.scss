@@ -25,3 +25,56 @@
 .nav-link {
   text-decoration: none;
 }
+
+.home-header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 94, 162, 0.14);
+  box-shadow: 0px 2px 4px 0px rgba(0, 94, 162, 0.04);
+}
+
+.first-time-content {
+  padding-inline: 116px;
+  width: 800px;
+  height: 700px;
+  background: white;
+  border: 1px solid #F0F0F0 !important;
+}
+
+.first-time-header {
+  color: #000;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.first-time-copy {
+  color: #000;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 162%;
+}
+
+.first-time-card {
+  border-radius: 5px;
+  border: 2px solid  #F0F0F0;
+  background: #009EC1;
+  height: 300px;
+  width: 550px;
+}
+
+.img-copy {
+  color: #FFF;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.card-column-image {
+  padding-left: 36px;
+  width: 200px;
+}
