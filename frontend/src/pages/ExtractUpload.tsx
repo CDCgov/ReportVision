@@ -41,7 +41,7 @@ const ExtractUpload = () => {
           navigate("/");
           clearFiles();
         }}
-        onSubmit={() => navigate("/extract/process")}
+        hasSubmit={false}
         isUploadComplete={isUploadComplete}
       />
       <Divider margin="0px" />
