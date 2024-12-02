@@ -151,8 +151,8 @@ const ExtractProcess = () => {
   return (
     <LoadingWrapper
       isLoading={isLoading}
-      title="Extracting your data"
-      subtitle="This process could take up to 10-15 seconds."
+      title="Extracting your data and aligning your image"
+      subtitle="Hang tight! We're processing your file by applying templates and aligning your images for optimal orientation. This could take around 30 seconds."
     >
       <div className="display-flex flex-column flex-justify-start center width-full height-full padding-top-2">
         <ExtractDataHeader
