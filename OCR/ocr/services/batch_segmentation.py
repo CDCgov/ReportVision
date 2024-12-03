@@ -8,11 +8,14 @@ from ocr.services.image_ocr import ImageOCR
 
 
 class BatchSegmentationOCR:
-    def __init__(self, image_folder, segmentation_template, labels_path, output_folder):
+    def __init__(self, image_folder, segmentation_template, labels_path, output_folder, model=None):
         self.image_folder = image_folder
         self.segmentation_template = segmentation_template
         self.labels_path = labels_path
         self.output_folder = output_folder
+        self.model = model
+        if self.model is None:
+            self.model = ImageOCR()
         os.makedirs(self.output_folder, exist_ok=True)
 
     def process_images(self):
@@ -20,7 +23,7 @@ class BatchSegmentationOCR:
         Processes all images and returns OCR results with time taken.
         """
         segmenter = ImageSegmenter()
-        ocr = ImageOCR()
+        ocr = self.model
         results = []
         time_dict = {}
 
