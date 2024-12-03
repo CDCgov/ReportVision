@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Icon, Header } from "@trussworks/react-uswds";
 
-import './ExtractDataHeader.scss'
+import "./ExtractDataHeader.scss";
 
 interface ExtractDataHeaderProps {
   onBack: () => void;
@@ -48,18 +48,16 @@ export const ExtractDataHeader: React.FC<ExtractDataHeaderProps> = ({
           >
             Back
           </Button>
-          {
-            hasSubmit && (
-              <Button
-                className="extract-button-submit"
-                onClick={onSubmit}
-                type="submit"
-                disabled={!isUploadComplete}
-              >
-                Submit
-              </Button>
-            )
-          }
+          {hasSubmit && (
+            <Button
+              className="extract-button-submit"
+              onClick={onSubmit}
+              type="submit"
+              disabled={!isUploadComplete}
+            >
+              Submit
+            </Button>
+          )}
         </div>
       </div>
     </Header>

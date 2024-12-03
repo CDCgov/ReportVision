@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
-import { Shape } from './AnnotationContext';
-import { ImageData } from '../pages/AnnotateTemplate';
+import { createContext, useContext, useState, ReactNode } from "react";
+import { Shape } from "./AnnotationContext";
+import { ImageData } from "../pages/AnnotateTemplate";
 
 export interface TemplatePair {
   fileName: string;
@@ -8,29 +8,29 @@ export interface TemplatePair {
 }
 
 export interface Field {
-    color: string;
-    label: string;
-    type: string;
+  color: string;
+  label: string;
+  type: string;
 }
 
 export interface Field {
-    color: string;
-    label: string;
-    type: string;
+  color: string;
+  label: string;
+  type: string;
 }
 
 export interface Page {
-    // base 64 encoded image
-    sourceImage: ImageData;
-    templateImage: string;
-    fieldNames: Field[];
-    shapes: Shape[];
+  // base 64 encoded image
+  sourceImage: ImageData;
+  templateImage: string;
+  fieldNames: Field[];
+  shapes: Shape[];
 }
 
 export interface FileType {
-    name: string;
-    description: string;
-    pages: Page[];
+  name: string;
+  description: string;
+  pages: Page[];
 }
 
 interface FileContextType {
@@ -48,7 +48,9 @@ const FilesContext = createContext<FileContextType | undefined>(undefined);
 
 export const FilesProvider = ({ children }: { children: ReactNode }) => {
   const [files, setFiles] = useState<File[]>([]);
-  const [selectedTemplates, _setSelectedTemplates] = useState<TemplatePair[]>([]);
+  const [selectedTemplates, _setSelectedTemplates] = useState<TemplatePair[]>(
+    [],
+  );
   const addFile = (file: File) => {
     setFiles((prev) => [...prev, file]);
   };
@@ -61,7 +63,7 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
     setFiles([]);
   };
 
-  const setSelectedTemplates = (template: TemplatePair, index: number ) => {
+  const setSelectedTemplates = (template: TemplatePair, index: number) => {
     _setSelectedTemplates((prev) => {
       const updatedTemplates = [...prev];
       if (index < updatedTemplates.length) {
@@ -71,17 +73,27 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
         // Add a new template if the index is equal to the length of the array
         updatedTemplates.push(template);
       }
-      console.log(updatedTemplates);
       return updatedTemplates;
     });
   };
 
   const clearTemplates = () => {
     _setSelectedTemplates([]);
-  }
+  };
 
   return (
-    <FilesContext.Provider value={{ files, selectedTemplates, addFile, removeFile, clearFiles, setFiles, setSelectedTemplates, clearTemplates }}>
+    <FilesContext.Provider
+      value={{
+        files,
+        selectedTemplates,
+        addFile,
+        removeFile,
+        clearFiles,
+        setFiles,
+        setSelectedTemplates,
+        clearTemplates,
+      }}
+    >
       {children}
     </FilesContext.Provider>
   );
@@ -90,7 +102,7 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
 export const useFiles = (): FileContextType => {
   const context = useContext(FilesContext);
   if (context === undefined) {
-    throw new Error('useFiles must be used within a FilesProvider');
+    throw new Error("useFiles must be used within a FilesProvider");
   }
   return context;
 };

@@ -1,9 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import { AnnotationProvider, useAnnotationContext } from './AnnotationContext';
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { AnnotationProvider, useAnnotationContext } from "./AnnotationContext";
 
 // Mocking the useImageAnnotator hook
-vi.mock('react-image-label', () => ({
+vi.mock("react-image-label", () => ({
   useImageAnnotator: () => ({
     annotator: undefined,
     setHandles: vi.fn(),
@@ -12,14 +12,15 @@ vi.mock('react-image-label', () => ({
 
 // Mock component to test the context
 const MockComponent = () => {
-  const { selectedField, setSelectedField, shapes, setShapes } = useAnnotationContext();
+  const { selectedField, setSelectedField, shapes, setShapes } =
+    useAnnotationContext();
 
   return (
     <div>
       <input
         type="text"
         placeholder="First Name"
-        value={selectedField || ''}
+        value={selectedField || ""}
         onChange={(e) => setSelectedField(e.target.value)}
       />
       <button onClick={() => setShapes([[], []])}>Set Shapes</button>
@@ -29,28 +30,28 @@ const MockComponent = () => {
   );
 };
 
-describe('AnnotationContext', () => {
-  it('should provide the initial state', () => {
+describe("AnnotationContext", () => {
+  it("should provide the initial state", () => {
     render(
       <AnnotationProvider>
         <MockComponent />
-      </AnnotationProvider>
+      </AnnotationProvider>,
     );
 
-    expect(screen.getByPlaceholderText('First Name')).toHaveValue('');
-    expect(screen.getByTestId('shapesLength')).toHaveTextContent('0');
+    expect(screen.getByPlaceholderText("First Name")).toHaveValue("");
+    expect(screen.getByTestId("shapesLength")).toHaveTextContent("0");
   });
 
-  it('should update shapes when setShapes is called', () => {
+  it("should update shapes when setShapes is called", () => {
     render(
       <AnnotationProvider>
         <MockComponent />
-      </AnnotationProvider>
+      </AnnotationProvider>,
     );
 
-    const button = screen.getByText('Set Shapes');
+    const button = screen.getByText("Set Shapes");
     fireEvent.click(button);
 
-    expect(screen.getByTestId('shapesLength')).toHaveTextContent('2');
+    expect(screen.getByTestId("shapesLength")).toHaveTextContent("2");
   });
 });

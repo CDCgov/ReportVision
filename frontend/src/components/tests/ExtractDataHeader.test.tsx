@@ -11,7 +11,7 @@ describe("ExtractDataHeader component", () => {
         onSubmit={vi.fn()}
         isUploadComplete={false}
       />,
-      { wrapper: BrowserRouter }
+      { wrapper: BrowserRouter },
     );
 
     const header = screen.getByRole("banner");
@@ -25,7 +25,7 @@ describe("ExtractDataHeader component", () => {
 
     const backButton = screen.getByRole("button", { name: /back/i });
     expect(backButton).toBeInTheDocument();
-    expect(backButton).toHaveClass('extract-button-reset')
+    expect(backButton).toHaveClass("extract-button-reset");
 
     const submitButton = screen.getByRole("button", { name: /submit/i });
     expect(submitButton).toBeInTheDocument();
@@ -38,7 +38,7 @@ describe("ExtractDataHeader component", () => {
         onSubmit={vi.fn()}
         isUploadComplete={false}
       />,
-      { wrapper: BrowserRouter }
+      { wrapper: BrowserRouter },
     );
 
     const backButton = screen.getByRole("button", { name: /back/i });

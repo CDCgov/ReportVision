@@ -3,7 +3,7 @@ locals {
 }
 
 resource "azurerm_service_plan" "asp" {
-  name                = "${var.name}-ocr-appserviceplan-${var.env}"
+  name                = "${var.name}-${var.service}-appserviceplan-${var.env}"
   location            = var.location
   os_type             = "Linux"
   resource_group_name = var.resource_group
@@ -11,7 +11,7 @@ resource "azurerm_service_plan" "asp" {
 }
 
 resource "azurerm_linux_web_app" "linux_webapp" {
-  name                      = "${var.name}-ocr-${var.env}"
+  name                      = "${var.name}-${var.service}-${var.env}"
   https_only                = var.https_only
   location                  = var.location
   resource_group_name       = var.resource_group
