@@ -90,7 +90,6 @@ module "database" {
   subnet              = module.networking.dbsubnet_id
   private_dns_zone_id = module.networking.private_dns_zone_id
   postgres_password   = module.vault.postgres_password # Password from Vault to DB
-  # middlewaresubnetcidr = local.environment == "dev" ? local.dev.middlewaresubnetcidr : local.demo.middlewaresubnetcidr
 }
 
 module "vault" {
@@ -99,4 +98,7 @@ module "vault" {
   resource_group_name = data.azurerm_resource_group.rg.name
   tenant_id           = var.tenant_id
   client_id           = var.client_id
+  object_id           = var.object_id
+  subscription_id     = var.subscription_id
+  postgres_server_id  = module.database.postgres_server_id
 }

@@ -18,9 +18,22 @@ resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
   # Disable Public Network Access 
   public_network_access_enabled = false
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # mode {
+
+  # }
+  # Primary availability zone
+  # availability_zone = "1"
+
+  # # High availability (standby availability zone)
+  # mode {
+  #   high_availability {
+  #     standby_availability_zone = "2"
+  #   }
+  # }
+
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 
 resource "azurerm_postgresql_flexible_server_database" "postgres_db" {
