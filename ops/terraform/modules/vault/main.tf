@@ -19,10 +19,3 @@ resource "azurerm_key_vault_secret" "postgres_db_secret" {
   key_vault_id = azurerm_key_vault.this.id
 }
 
-# resource "azurerm_postgresql_flexible_server_vnet_rule" "postgres_middleware_vnet_rule" {
-#   name                      = "allow-reportvision-middleware-and-postgres-vnet-access"
-#   resource_group_name       = azurerm_postgresql_flexible_server.this.resource_group_name
-#   server_name               = azurerm_postgresql_flexible_server.this.name
-#   virtual_network_subnet_id = azurerm_subnet.middlewaresubnetcidr.id # Only allow access from the middleware subnet
-# }
-
