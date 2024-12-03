@@ -59,7 +59,7 @@ jobs:
           docker-tag: ${{ steps.set_tag.outputs.docker_tag }}
           dockerfile-path: ./backend/Dockerfile
           docker-context-path: ./backend/
-          api-name: middleware-api
+          api-name: middleware
 
   build-publish-ocr:
     name: Build and Publish OCR
@@ -96,7 +96,7 @@ jobs:
           docker-tag: ${{ steps.set_tag.outputs.docker_tag }}
           dockerfile-path: ./OCR/Dockerfile
           docker-context-path: ./OCR/
-          api-name: ocr-api
+          api-name: ocr
 
   build-frontend:
     name: Build Frontend
@@ -151,7 +151,7 @@ jobs:
           deploy-env: ${{ inputs.deploy-env }}
           docker-tag: ${{ needs.build-publish-middleware.outputs.docker_tag }}
           docker-registry: ghcr.io
-          api-name: middleware-api
+          api-name: middleware
 
   deploy-ocr:
     name: Deploy OCR
@@ -171,7 +171,7 @@ jobs:
           deploy-env: ${{ inputs.deploy-env }}
           docker-tag: ${{ needs.build-publish-ocr.outputs.docker_tag }}
           docker-registry: ghcr.io
-          api-name: ocr-api
+          api-name: ocr
 
   deploy-frontend:
     name: Deploy Frontend
