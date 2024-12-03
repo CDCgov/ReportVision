@@ -37,7 +37,9 @@ resource "azurerm_role_definition" "postgres_key_vault_role_definition" {
     ]
     not_actions = []
   }
-  # Scope at which the role will be assigned
+
+  # TODO: Review terraform version and documentation.
+  # Hashicorp documentation shows only assignable_scopes but error requires scope.
   assignable_scopes = [
     azurerm_key_vault.this.id
   ]
