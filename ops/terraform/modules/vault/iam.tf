@@ -32,7 +32,7 @@ resource "azurerm_role_definition" "postgres_key_vault_role_definition" {
   description = "Custom role to allow access to Key Vault secrets for PostgreSQL"
   permissions {
     actions = [
-      "Microsoft.KeyVault/vaults/secrets/get",
+      "Microsoft.KeyVault/vaults/secrets/read",
       "Microsoft.KeyVault/vaults/secrets/list"
     ]
     not_actions = []
