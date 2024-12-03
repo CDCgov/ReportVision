@@ -1,11 +1,22 @@
 import os
 
 import tesserocr
+from tesserocr import PSM
 import numpy as np
 from PIL import Image
 
 
 class TesseractOCR:
+    def __init__(self, psm=PSM.AUTO, variables=dict()):
+        """
+        Initialize the tesseract OCR model.
+
+        `psm` (int): an enum (from `PSM`) that defines tesseract's page segmentation mode. Default is `AUTO`.
+        `variables` (dict): a dict to customize tesseract's behavior with internal variables
+        """
+        self.psm = psm
+        self.variables = variables
+
     @staticmethod
     def _guess_tessdata_path(wanted_lang="eng") -> bytes:
         """
@@ -52,7 +63,7 @@ class TesseractOCR:
 
     def image_to_text(self, segments: dict[str, np.ndarray]) -> dict[str, tuple[str, float]]:
         digitized: dict[str, tuple[str, float]] = {}
-        with tesserocr.PyTessBaseAPI(path=self._guess_tessdata_path()) as api:
+        with tesserocr.PyTessBaseAPI(psm=self.psm, variables=self.variables, path=self._guess_tessdata_path()) as api:
             for label, image in segments.items():
                 if image is None:
                     continue
