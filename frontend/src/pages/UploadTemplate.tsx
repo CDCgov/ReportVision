@@ -25,7 +25,6 @@ export const UploadTemplate = () => {
         onBack={() => {
           navigate("/");
         }}
-        onSubmit={() => navigate("/new-template/annotate")}
         isUpload={files.length === 0}
       />
       <Divider margin="0px" />

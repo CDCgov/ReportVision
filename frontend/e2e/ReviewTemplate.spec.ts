@@ -15,17 +15,6 @@ test.describe("ReviewTemplate Page", () => {
     await expect(page).toHaveURL("/extract/upload");
   });
 
-  // Test the Done button functionality
-  test("Done button navigates correctly", async ({ page }) => {
-    const submitButton = page.getByRole("button", { name: "Done" });
-    await expect(submitButton).toBeDisabled();
-    const errorRows = await page.locator("tr *[data-testid='edit-fix-error']");
-    for (const row of await errorRows.elementHandles()) {
-      await row.click();
-      await page.keyboard.press("Enter");
-    }
-  });
-
   // Test the extracted data section
   test("Displays extracted data with overall confidence score", async ({
     page,
@@ -120,10 +109,11 @@ test.describe("ReviewTemplate Page", () => {
       await page.keyboard.press("Enter");
     }
 
+    const finalSubmitButton = page.getByRole("button", { name: "Download CSV" });
     await expect(submitButton).toBeEnabled();
     await submitButton.click();
 
-    await submitButton.click();
+    await finalSubmitButton.click();
     await expect(page).toHaveURL("/");
   });
 });

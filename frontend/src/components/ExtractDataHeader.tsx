@@ -5,9 +5,9 @@ import "./ExtractDataHeader.scss";
 
 interface ExtractDataHeaderProps {
   onBack: () => void;
-  onSubmit: () => void;
   onExit: () => void;
   isUploadComplete: boolean;
+  onSubmit?: () => void;
   hasSubmit?: boolean;
 }
 
