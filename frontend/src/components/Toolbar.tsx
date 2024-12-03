@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import PageNumber from './PageNumber';
+import React, { useState } from "react";
+import PageNumber from "./PageNumber";
 
-import './Toolbar.scss';
+import "./Toolbar.scss";
 
 interface ToolbarProps {
   initialPage?: number;
@@ -9,7 +9,11 @@ interface ToolbarProps {
   onPageChange?: (page: number) => void;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ initialPage = 1, totalPages, onPageChange }) => {
+const Toolbar: React.FC<ToolbarProps> = ({
+  initialPage = 1,
+  totalPages,
+  onPageChange,
+}) => {
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   const handlePrevious = () => {

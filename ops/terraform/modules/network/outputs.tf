@@ -18,8 +18,13 @@ output "lbsubnet_id" {
   description = "Id of lbsubnet in the network"
 }
 
-output "appsubnet_id" {
-  value       = azurerm_subnet.app-subnet.id
+output "ocrsubnet_id" {
+  value       = azurerm_subnet.ocr-subnet.id
+  description = "Id of lbsubnet in the network"
+}
+
+output "middlewaresubnet_id" {
+  value       = azurerm_subnet.middleware-subnet.id
   description = "Id of lbsubnet in the network"
 }
 

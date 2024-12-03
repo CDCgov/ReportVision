@@ -49,6 +49,14 @@ exports[`UploadTemplate component > matches the snapshot 1`] = `
           >
             Back
           </button>
+          <button
+            class="usa-button usa-button--base"
+            data-testid="button"
+            disabled=""
+            type="submit"
+          >
+            Submit
+          </button>
         </div>
       </div>
     </header>

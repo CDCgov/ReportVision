@@ -12,41 +12,45 @@ to the the app in dev mode
 npm run dev
 ```
 
-
 # E2E common commands
 
 Inside that directory, you can run several commands:
 
-  Runs the end-to-end tests.
-  ```shell
-  npx playwright test
-  ```
+Runs the end-to-end tests.
 
-  Starts the interactive UI mode. 
-  ```shell
-  npx playwright test --ui
-  ```
+```shell
+npx playwright test
+```
 
-  Runs the tests only on Desktop Chrome.
-  ```shell
-  npx playwright test --project=chromium
-  ```
+Starts the interactive UI mode.
 
-  Runs the tests in a specific file.
-  ```shell
-  npx playwright test example
-  ```
+```shell
+npx playwright test --ui
+```
 
-  Runs the tests in debug mode.
-  ```shell
-    npx playwright test --debug
-  ```
+Runs the tests only on Desktop Chrome.
 
-  Auto generate tests with Codegen.
-  ```shell
-  npx playwright codegen
-  ```
+```shell
+npx playwright test --project=chromium
+```
 
+Runs the tests in a specific file.
+
+```shell
+npx playwright test example
+```
+
+Runs the tests in debug mode.
+
+```shell
+  npx playwright test --debug
+```
+
+Auto generate tests with Codegen.
+
+```shell
+npx playwright codegen
+```
 
 # React + TypeScript + Vite
 
@@ -68,11 +72,11 @@ export default tseslint.config({
   languageOptions: {
     // other options...
     parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
       tsconfigRootDir: import.meta.dirname,
     },
   },
-})
+});
 ```
 
 - Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
@@ -81,11 +85,11 @@ export default tseslint.config({
 
 ```js
 // eslint.config.js
-import react from 'eslint-plugin-react'
+import react from "eslint-plugin-react";
 
 export default tseslint.config({
   // Set the react version
-  settings: { react: { version: '18.3' } },
+  settings: { react: { version: "18.3" } },
   plugins: {
     // Add the react plugin
     react,
@@ -94,7 +98,7 @@ export default tseslint.config({
     // other rules...
     // Enable its recommended rules
     ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
+    ...react.configs["jsx-runtime"].rules,
   },
-})
+});
 ```

@@ -7,6 +7,7 @@ variable "app_subnet_id" {}
 variable "sku_name" {
   default = "S2"
 }
+variable "service" {}
 
 
 variable "https_only" {

@@ -13,6 +13,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  fastapi:
+    url: ${FASTAPI_URL:http://localhost:8000}
 management:
   endpoints:
     web:
