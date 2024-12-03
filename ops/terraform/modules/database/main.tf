@@ -2,7 +2,7 @@
 # As a result we are using Azure Database for PostgreSQL Flexible Server
 # with granular control, flexibility and better cost optimization. 
 resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
-  name                  = "reportvisionpostgresql-flexible-server"
+  name                  = "reportvisionpostgresql-flexible-server-${var.env}"
   location              = var.location
   resource_group_name   = var.resource_group_name
   sku_name              = var.postgres_sku_name

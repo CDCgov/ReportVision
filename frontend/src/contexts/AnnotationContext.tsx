@@ -1,5 +1,5 @@
-import { createContext, useState, useContext, ReactNode } from 'react';
-import { useImageAnnotator } from 'react-image-label';
+import { createContext, useState, useContext, ReactNode } from "react";
+import { useImageAnnotator } from "react-image-label";
 
 export interface Shape {
   points: number[][];
@@ -9,22 +9,24 @@ export interface Shape {
   id: number;
 }
 
-export interface CustomShape extends Shape { 
+export interface CustomShape extends Shape {
   field: string;
 }
 
 interface Field {
-    displayedName: string;
-    name: string;
-    id: string;
-    color: string;
+  displayedName: string;
+  name: string;
+  id: string;
+  color: string;
 }
 
 interface AnnotationContextType {
   selectedField: Field | null;
   setSelectedField: (field: Field | null) => void;
   annotator: AnnotatorHandles | undefined;
-  setHandles: React.Dispatch<React.SetStateAction<AnnotatorHandles | undefined>>
+  setHandles: React.Dispatch<
+    React.SetStateAction<AnnotatorHandles | undefined>
+  >;
   shapes: CustomShape[][];
   fields: Array<Set<string>>;
   drawnFields: Set<string>;
@@ -40,40 +42,63 @@ interface AnnotationContextType {
 }
 
 interface AnnotationProviderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 type AnnotatorHandles = {
-    drawRectangle(): void;
-    drawPolygon(): void;
-    drawCircle(): void;
-    drawEllipse(): void;
-    drawDot(): void;
-    stop: () => void;
-    stopEdit: () => void;
-    edit: (id: number) => void;
-    delete: (id: number) => void;
-    updateCategories: (id: number, categories: string[], color?: string) => void;
-    zoom: (factor: number, relative?: boolean) => void;
-    getShapes: () => Shape[];
-    container: HTMLDivElement;
+  drawRectangle(): void;
+  drawPolygon(): void;
+  drawCircle(): void;
+  drawEllipse(): void;
+  drawDot(): void;
+  stop: () => void;
+  stopEdit: () => void;
+  edit: (id: number) => void;
+  delete: (id: number) => void;
+  updateCategories: (id: number, categories: string[], color?: string) => void;
+  zoom: (factor: number, relative?: boolean) => void;
+  getShapes: () => Shape[];
+  container: HTMLDivElement;
 };
 
-
-const AnnotationContext = createContext<AnnotationContextType | undefined>(undefined);
+const AnnotationContext = createContext<AnnotationContextType | undefined>(
+  undefined,
+);
 
 export const AnnotationProvider = ({ children }: AnnotationProviderProps) => {
-  const [fields, setFields] = useState<Array<Set<string>>>([new Set(), new Set()]);
+  const [fields, setFields] = useState<Array<Set<string>>>([
+    new Set(),
+    new Set(),
+  ]);
   const [drawnFields, setDrawnFields] = useState<Set<string>>(new Set());
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [selectedField, setSelectedField] = useState<Field | null>(null);
   const [shapes, setShapes] = useState<CustomShape[][]>([]);
-    const [index, setIndex] = useState<number>(0);
+  const [index, setIndex] = useState<number>(0);
   const { setHandles, annotator } = useImageAnnotator();
 
   return (
-    <AnnotationContext.Provider value={{ selectedField, setSelectedField, annotator, setHandles, shapes, setShapes, fields, setFields, name, setName, description, setDescription, index, setIndex, drawnFields, setDrawnFields }}>
+    <AnnotationContext.Provider
+      value={{
+        selectedField,
+        setSelectedField,
+        annotator,
+        setHandles,
+        shapes,
+        setShapes,
+        fields,
+        setFields,
+        name,
+        setName,
+        description,
+        setDescription,
+        index,
+        setIndex,
+        drawnFields,
+        setDrawnFields,
+      }}
+    >
       {children}
     </AnnotationContext.Provider>
   );
@@ -82,7 +107,9 @@ export const AnnotationProvider = ({ children }: AnnotationProviderProps) => {
 export const useAnnotationContext = () => {
   const context = useContext(AnnotationContext);
   if (!context) {
-    throw new Error('useAnnotationContext must be used within an AnnotationProvider');
+    throw new Error(
+      "useAnnotationContext must be used within an AnnotationProvider",
+    );
   }
   return context;
 };

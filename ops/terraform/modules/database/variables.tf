@@ -41,3 +41,8 @@ variable "private_dns_zone_id" {
   type        = string
   description = "Private DNS Zone for PostgreSQL Flexible Server"
 }
+
+variable "env" {
+  type        = string
+  description = "Environment variable for the environment being provisioned"
+}

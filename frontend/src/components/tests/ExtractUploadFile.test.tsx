@@ -9,17 +9,21 @@ vi.mock("pdfjs-dist", () => ({
   GlobalWorkerOptions: {
     workerSrc: `//unpkg.com/pdfjs-dist@2.0.0/build/pdf.worker.min.mjs`,
   },
-  version: '2.0.0',
+  version: "2.0.0",
   getDocument: vi.fn().mockReturnValue({
     promise: Promise.resolve({
       numPages: 1,
-      getPage: vi.fn().mockReturnValue(Promise.resolve({
-        getTextContent: vi.fn().mockReturnValue(Promise.resolve({
-          items: [{ str: "Mocked text content" }]
-        }))
-      }))
-    })
-  })
+      getPage: vi.fn().mockReturnValue(
+        Promise.resolve({
+          getTextContent: vi.fn().mockReturnValue(
+            Promise.resolve({
+              items: [{ str: "Mocked text content" }],
+            }),
+          ),
+        }),
+      ),
+    }),
+  }),
 }));
 
 describe("ExtractUploadFile component", () => {

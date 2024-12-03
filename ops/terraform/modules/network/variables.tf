@@ -3,9 +3,10 @@ variable "name" {}
 variable "vnetcidr" {}
 variable "websubnetcidr" {}
 variable "lbsubnetcidr" {}
-variable "dbsubnetcidr" {}
-variable "appsubnetcidr" {}
+variable "ocrsubnetcidr" {}
 variable "env" {}
+variable "middlewaresubnetcidr" {}
+variable "dbsubnetcidr" {}
 
 variable "location" {
   default = "eastus2"

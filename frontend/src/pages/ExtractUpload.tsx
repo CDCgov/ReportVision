@@ -19,7 +19,7 @@ const ExtractUpload = () => {
   const handleUploadComplete = (isComplete: boolean) => {
     setIsUploadComplete(isComplete);
   };
-  
+
   useEffect(() => {
     if (files.length > 0) {
       setCurrentIndex(1);
@@ -27,14 +27,20 @@ const ExtractUpload = () => {
 
     return () => {
       setCurrentIndex(0);
-    }
-  }, [files.length])
+    };
+  }, [files.length]);
 
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <ExtractDataHeader
-        onBack={() => {navigate("/"); clearFiles();}}
-        onExit={() => {navigate("/"); clearFiles();}}
+        onBack={() => {
+          navigate("/");
+          clearFiles();
+        }}
+        onExit={() => {
+          navigate("/");
+          clearFiles();
+        }}
         onSubmit={() => navigate("/extract/process")}
         isUploadComplete={isUploadComplete}
       />
@@ -46,11 +52,9 @@ const ExtractUpload = () => {
       <div className="display-flex flex-column flex-justify-center width-full height-full">
         <Divider margin="0px" />
         <div className="display-flex flex-row flex-justify-center width-full height-full">
-        <div className="display-flex flex-column flex-align-center height-full bg-primary-lighter vertical-stepper-container">
-            <VerticalStepper steps={[
-                { label: 'Upload' },
-                { label: 'Select templates'},
-              ]}
+          <div className="display-flex flex-column flex-align-center height-full bg-primary-lighter vertical-stepper-container">
+            <VerticalStepper
+              steps={[{ label: "Upload" }, { label: "Select templates" }]}
               currentStep={currentIndex}
             />
           </div>

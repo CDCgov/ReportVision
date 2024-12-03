@@ -1,4 +1,9 @@
-export const Divider = ({ color = '#ccc', thickness = '1px', margin = '16px 0', style = {} }) => {
+export const Divider = ({
+  color = "#ccc",
+  thickness = "1px",
+  margin = "16px 0",
+  style = {},
+}) => {
   return (
     <div
       style={{

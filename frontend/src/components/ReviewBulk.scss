@@ -1,43 +1,42 @@
 .bulk-header {
-    color: #1B1B1B;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    margin-left: 24px;
+  color: #1b1b1b;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-left: 24px;
 }
 
 .content-container {
-    text-align: left;
-    width: 70%;
-    
+  text-align: left;
+  width: 70%;
 }
 
 .error-text {
-    color: #B32C54;
+  color: #b32c54;
 }
 
 .table-container {
-    padding: 24px 16px 24px 8px;
-    background-color: #FFF;
-    border-radius: 8px;
+  padding: 24px 16px 24px 8px;
+  background-color: #fff;
+  border-radius: 8px;
 }
 
 .table-div {
-    margin-left: 24px;
+  margin-left: 24px;
 }
 
 .usa-table--striped tbody tr:nth-child(odd) td.usa-input--error {
-    color: #d54309;
-    background-color:  #DCDEE0;
-  }
-  
+  color: #d54309;
+  background-color: #dcdee0;
+}
+
 .usa-table--striped tbody tr:nth-child(even) td.usa-input--error {
-    color: #d54309;
-    background-color: inherit;
+  color: #d54309;
+  background-color: inherit;
 }
 
 .review-template-header {
-    justify-content: space-between;
-    margin: 24px 16px;
+  justify-content: space-between;
+  margin: 24px 16px;
 }

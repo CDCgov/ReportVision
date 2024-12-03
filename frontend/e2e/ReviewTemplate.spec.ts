@@ -22,7 +22,7 @@ test.describe("ReviewTemplate Page", () => {
     const errorRows = await page.locator("tr *[data-testid='edit-fix-error']");
     for (const row of await errorRows.elementHandles()) {
       await row.click();
-      await page.keyboard.press('Enter');
+      await page.keyboard.press("Enter");
     }
   });
 
@@ -36,7 +36,7 @@ test.describe("ReviewTemplate Page", () => {
     await expect(extractedDataHeader).toBeVisible();
 
     await expect(page.locator("p")).toHaveText(
-      "Here is your batch export. Please review all forms and correct any items with a low confidence score (CS) before downloading."
+      "Here is your batch export. Please review all forms and correct any items with a low confidence score (CS) before downloading.",
     );
   });
 
@@ -46,7 +46,6 @@ test.describe("ReviewTemplate Page", () => {
     await expect(headers.nth(1)).toHaveText("Page Count"); // Second header
     await expect(headers.nth(2)).toHaveText("Errors"); // Third header
     await expect(headers.nth(3)).toHaveText("CS"); // Fourth header
-
   });
 
   test("should calculate overall confidence score correctly", async ({
@@ -72,9 +71,7 @@ test.describe("ReviewTemplate Page", () => {
     await expect(DrawLocation.nth(3)).toHaveClass(/error-text/);
   });
 
-  test("should click into single table view", async ({
-    page,
-  }) => {
+  test("should click into single table view", async ({ page }) => {
     const DrawLocation = page.locator("tr .error-text");
     await DrawLocation.nth(3).click();
 
@@ -84,13 +81,11 @@ test.describe("ReviewTemplate Page", () => {
     await expect(extractedDataHeader).toBeVisible();
 
     await expect(page.locator("p")).toHaveText(
-      "Review and edit errors before you submit."
-    ); 
+      "Review and edit errors before you submit.",
+    );
   });
 
-  test("should handle error fixes", async ({
-    page,
-  }) => {
+  test("should handle error fixes", async ({ page }) => {
     const DrawLocation = page.locator("tr .error-text");
     await DrawLocation.nth(3).click();
     const submitButton = page.getByRole("button", { name: "Done" });
@@ -99,7 +94,7 @@ test.describe("ReviewTemplate Page", () => {
     await expect(submitButton).toBeDisabled();
     for (const row of await errorRows.elementHandles()) {
       await row.click();
-      await page.keyboard.press('Enter');
+      await page.keyboard.press("Enter");
     }
     await expect(submitButton).toBeEnabled();
     await submitButton.click();
@@ -113,7 +108,7 @@ test.describe("ReviewTemplate Page", () => {
     await expect(submitButton).toBeDisabled();
     for (const row of await errorRows.elementHandles()) {
       await row.click();
-      await page.keyboard.press('Enter');
+      await page.keyboard.press("Enter");
     }
 
     await expect(submitButton).toBeEnabled();
@@ -122,7 +117,7 @@ test.describe("ReviewTemplate Page", () => {
     await expect(submitButton).toBeDisabled();
     for (const row of await errorRows.elementHandles()) {
       await row.click();
-      await page.keyboard.press('Enter');
+      await page.keyboard.press("Enter");
     }
 
     await expect(submitButton).toBeEnabled();
