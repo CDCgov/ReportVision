@@ -47,7 +47,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-middleware-api:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-middleware:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push the middleware
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -84,7 +84,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push the OCR
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
