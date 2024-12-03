@@ -76,6 +76,11 @@ const ReviewBulk = ({
     );
   };
 
+  const handleCSVDownload = () => {
+    onDownload();
+    navigate("/");
+  }
+
   return (
     <div className="display-flex flex-column flex-justify-start width-full height-full padding-1 padding-top-2">
       <ExtractDataHeader
@@ -107,7 +112,7 @@ const ReviewBulk = ({
                   0
                 }
                 type="button"
-                onClick={() => onDownload()}
+                onClick={handleCSVDownload}
               >
                 <Icon.FileDownload className="csv-icon" />
                 Download CSV
@@ -142,14 +147,6 @@ const ReviewBulk = ({
                 outline
               >
                 Cancel
-              </Button>
-              <Button
-                className="extract-button-submit"
-                onClick={() => navigate("/")}
-                type="submit"
-                disabled={resultsTable.some((row) => row.errors > 0)}
-              >
-                Done
               </Button>
             </div>
           </div>
