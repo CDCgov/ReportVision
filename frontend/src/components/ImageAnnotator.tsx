@@ -70,8 +70,8 @@ export const MultiImageAnnotator: FC<MultiImageAnnotatorProps> = ({
   return (
     <div className="display-flex flex-justify-center flex-align-center flex-column height-full width-full">
       <ImageAnnotator
+        height={500}
         setHandles={setHandles}
-        naturalSize={true}
         imageUrl={images[index]}
         shapes={shapes[index] || []}
         onAdded={handleShapeAddition}
