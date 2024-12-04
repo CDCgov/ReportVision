@@ -30,8 +30,7 @@ def parse_args():
         "--model", choices=["tesseract", "trocr"], default="trocr", help="OCR model to run for `--ocr` option."
     )
 
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 def main():
@@ -55,8 +54,9 @@ def run_segmentation_and_ocr(args):
     model = None
 
     if args.model == "tesseract":
-        # Disable border rejection of text too close to the edge of the image as we, not tesseract, are doing segmentation
-        # Enforce single-line mode for tesseract
+        # We are doing segmentation (not tesseract) so:
+        # * Disable border rejection of text too close to the edge of the image
+        # * Enforce single-line mode for tesseract
         model = TesseractOCR(psm=PSM.SINGLE_LINE, variables=dict(tessedit_image_border="0"))
     elif args.model == "trocr":
         model = ImageOCR()
