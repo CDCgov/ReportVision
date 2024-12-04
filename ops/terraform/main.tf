@@ -72,6 +72,7 @@ module "middleware_api" {
   vnet         = module.networking.network_name
   sku_name     = var.sku_name
   https_only   = true
+  depends_on = [module.networking.middlewaresubnet_id, module.networking.lbsubnet_id]
 }
 
 module "ocr_api" {
@@ -86,6 +87,7 @@ module "ocr_api" {
   vnet           = module.networking.network_name
   sku_name       = var.sku_name
   https_only     = true
+  depends_on = [module.networking.ocrsubnet_id, module.networking.middlewaresubnet_id]
 }
 
 module "ocr_autoscale" {
