@@ -23,7 +23,7 @@ variable "resource_group_name" {
 variable "postgres_sku_name" {
   type        = string
   description = "value"
-  default     = "Standard_B1ms"
+  default     = "B_Standard_B1ms"
 }
 
 variable "subnet" {
