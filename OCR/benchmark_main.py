@@ -6,17 +6,29 @@ from ocr.services.batch_metrics import BatchMetricsAnalysis
 from ocr.services.tesseract_ocr import TesseractOCR, PSM
 from ocr.services.image_ocr import ImageOCR
 
+
 def parse_args():
-    parser = argparse.ArgumentParser(description="Run OCR and metrics analysis.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description="Run OCR and metrics analysis.", formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument("image_folder", help="Path to the folder containing image files.")
     parser.add_argument("segmentation_template", help="Path to the segmentation template.")
     parser.add_argument("labels_path", help="Path to the labels file (JSON).")
     parser.add_argument("output_folder", help="Path to the folder where OCR results will be saved.")
     parser.add_argument("ground_truth_folder", help="Path to the folder with ground truth JSON files.")
     parser.add_argument("csv_output_folder", help="Path to the folder where CSV metrics will be saved.")
-    parser.add_argument("--ocr", action=argparse.BooleanOptionalAction, default=True, help="Run (or don't run) segmentation and OCR analysis")
-    parser.add_argument("--metrics", action=argparse.BooleanOptionalAction, default=True, help="Run (or don't run) metrics analysis")
-    parser.add_argument("--model", choices=["tesseract", "trocr"], default="trocr", help="OCR model to run for `--ocr` option.")
+    parser.add_argument(
+        "--ocr",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Run (or don't run) segmentation and OCR analysis",
+    )
+    parser.add_argument(
+        "--metrics", action=argparse.BooleanOptionalAction, default=True, help="Run (or don't run) metrics analysis"
+    )
+    parser.add_argument(
+        "--model", choices=["tesseract", "trocr"], default="trocr", help="OCR model to run for `--ocr` option."
+    )
 
     args = parser.parse_args()
     return args
@@ -45,13 +57,13 @@ def run_segmentation_and_ocr(args):
     if args.model == "tesseract":
         # Disable border rejection of text too close to the edge of the image as we, not tesseract, are doing segmentation
         # Enforce single-line mode for tesseract
-        model = TesseractOCR(psm=PSM.SINGLE_LINE, variables=dict(
-            tessedit_image_border="0",
-            ))
+        model = TesseractOCR(psm=PSM.SINGLE_LINE, variables=dict(tessedit_image_border="0"))
     elif args.model == "trocr":
         model = ImageOCR()
 
-    segmentation_ocr = BatchSegmentationOCR(args.image_folder, args.segmentation_template, args.labels_path, args.output_folder, model=model)
+    segmentation_ocr = BatchSegmentationOCR(
+        args.image_folder, args.segmentation_template, args.labels_path, args.output_folder, model=model
+    )
     ocr_results = segmentation_ocr.process_images()
     print(f"OCR results saved to: {args.output_folder}")
     return ocr_results
