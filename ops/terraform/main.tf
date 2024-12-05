@@ -44,8 +44,9 @@ module "app_gateway" {
   tags          = local.management_tags
   env           = local.environment
 
-  fqdns      = module.ocr_api.app_hostname
-  depends_on = [module.networking, module.ocr_api]
+  fqdns_ocr      = module.ocr_api.app_hostname
+  fqdns_middleware = module.middleware_api.app_hostname
+  depends_on = [module.networking, module.ocr_api, module.middleware_api]
 }
 
 module "storage" {
