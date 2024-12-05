@@ -44,9 +44,9 @@ module "app_gateway" {
   tags          = local.management_tags
   env           = local.environment
 
-  fqdns_ocr      = module.ocr_api.app_hostname
+  fqdns_ocr        = module.ocr_api.app_hostname
   fqdns_middleware = module.middleware_api.app_hostname
-  depends_on = [module.networking, module.ocr_api, module.middleware_api]
+  depends_on       = [module.networking, module.ocr_api, module.middleware_api]
 }
 
 module "storage" {
@@ -73,7 +73,7 @@ module "middleware_api" {
   vnet         = module.networking.network_name
   sku_name     = var.sku_name
   https_only   = true
-  depends_on = [module.networking.middlewaresubnet_id, module.networking.lbsubnet_id]
+  depends_on   = [module.networking.middlewaresubnet_id, module.networking.lbsubnet_id]
 }
 
 module "ocr_api" {
@@ -88,7 +88,7 @@ module "ocr_api" {
   vnet           = module.networking.network_name
   sku_name       = var.sku_name
   https_only     = true
-  depends_on = [module.networking.ocrsubnet_id, module.networking.middlewaresubnet_id]
+  depends_on     = [module.networking.ocrsubnet_id, module.networking.middlewaresubnet_id]
 }
 
 module "ocr_autoscale" {

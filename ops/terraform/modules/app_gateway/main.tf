@@ -10,27 +10,27 @@ resource "azurerm_public_ip" "lb-pip" {
 
 # since these variables are re-used - a locals block makes this more maintainable
 locals {
-  backend_address_pool_name_static = "${var.name}-${var.env}-beap-static"
-  backend_address_pool_name_api_ocr    = "${var.name}-${var.env}-beap-api-ocr"
-  backend_address_pool_name_api_middleware    = "${var.name}-${var.env}-beap-api"
-  frontend_port_name_api_ocr           = "${var.name}-${var.env}-feport-api-ocr"
-  frontend_port_name_api_middleware           = "${var.name}-${var.env}-feport-api"
-  frontend_port_name_static        = "${var.name}-${var.env}-feport-static"
-  frontend_ip_configuration_name   = "${var.name}-${var.env}-feip"
-  http_setting_name_static         = "${var.name}-${var.env}-be-htst-static"
-  http_setting_name_api_ocr            = "${var.name}-${var.env}-be-htst-api-ocr"
-  http_setting_name_api_middleware            = "${var.name}-${var.env}-be-htst-api"
-  listener_name_static             = "${var.name}-${var.env}-httplstn-static"
-  listener_name_api_ocr                = "${var.name}-${var.env}-httplstn-api-ocr"
-  listener_name_api_middleware                = "${var.name}-${var.env}-httplstn-api"
-  request_routing_rule_name_api_ocr    = "${var.name}-${var.env}-rqrt-api-ocr"
-  request_routing_rule_name_api_middleware    = "${var.name}-${var.env}-rqrt-api"
-  request_routing_rule_name_static = "${var.name}-${var.env}-rqrt-static"
-  redirect_configuration_name      = "${var.name}-${var.env}-rdrcfg"
-  static_probe_name_app            = "${var.name}-${var.env}-be-probe-app-static"
-  api_probe_name_app_ocr               = "${var.name}-${var.env}-be-probe-app-api-ocr"
-  api_probe_name_app_middleware               = "${var.name}-${var.env}-be-probe-app-api_middleware"
-  redirect_rule                    = "${var.name}-${var.env}-redirect"
+  backend_address_pool_name_static         = "${var.name}-${var.env}-beap-static"
+  backend_address_pool_name_api_ocr        = "${var.name}-${var.env}-beap-api-ocr"
+  backend_address_pool_name_api_middleware = "${var.name}-${var.env}-beap-api"
+  frontend_port_name_api_ocr               = "${var.name}-${var.env}-feport-api-ocr"
+  frontend_port_name_api_middleware        = "${var.name}-${var.env}-feport-api"
+  frontend_port_name_static                = "${var.name}-${var.env}-feport-static"
+  frontend_ip_configuration_name           = "${var.name}-${var.env}-feip"
+  http_setting_name_static                 = "${var.name}-${var.env}-be-htst-static"
+  http_setting_name_api_ocr                = "${var.name}-${var.env}-be-htst-api-ocr"
+  http_setting_name_api_middleware         = "${var.name}-${var.env}-be-htst-api"
+  listener_name_static                     = "${var.name}-${var.env}-httplstn-static"
+  listener_name_api_ocr                    = "${var.name}-${var.env}-httplstn-api-ocr"
+  listener_name_api_middleware             = "${var.name}-${var.env}-httplstn-api"
+  request_routing_rule_name_api_ocr        = "${var.name}-${var.env}-rqrt-api-ocr"
+  request_routing_rule_name_api_middleware = "${var.name}-${var.env}-rqrt-api"
+  request_routing_rule_name_static         = "${var.name}-${var.env}-rqrt-static"
+  redirect_configuration_name              = "${var.name}-${var.env}-rdrcfg"
+  static_probe_name_app                    = "${var.name}-${var.env}-be-probe-app-static"
+  api_probe_name_app_ocr                   = "${var.name}-${var.env}-be-probe-app-api-ocr"
+  api_probe_name_app_middleware            = "${var.name}-${var.env}-be-probe-app-api_middleware"
+  redirect_rule                            = "${var.name}-${var.env}-redirect"
 }
 
 resource "azurerm_application_gateway" "load_balancer" {
@@ -225,7 +225,7 @@ resource "azurerm_application_gateway" "load_balancer" {
       paths                      = ["/middleware-api/*", "/middleware-api"]
       backend_address_pool_name  = local.backend_address_pool_name_api_middleware
       backend_http_settings_name = local.http_setting_name_api_middleware
-      rewrite_rule_set_name = "${var.name}-middleware-routing"
+      rewrite_rule_set_name      = "${var.name}-middleware-routing"
     }
   }
   rewrite_rule_set {
