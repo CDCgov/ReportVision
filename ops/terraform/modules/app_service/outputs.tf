@@ -9,3 +9,7 @@ output "service_plan_id" {
 output "webapp_name" {
   value = azurerm_linux_web_app.linux_webapp.name
 }
+
+output "webapp_id" {
+  value = azurerm_linux_web_app.linux_webapp.identity[0].principal_id
+}

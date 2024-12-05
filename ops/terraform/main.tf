@@ -118,7 +118,7 @@ module "vault" {
   resource_group_name = data.azurerm_resource_group.rg.name
   tenant_id           = var.tenant_id
   client_id           = var.client_id
-  object_id           = var.object_id
+  object_id           = module.ocr_api.webapp_id
   subscription_id     = var.subscription_id
   postgres_server_id  = module.database.postgres_server_id
   service_plan_id     = module.middleware_api.service_plan_id
