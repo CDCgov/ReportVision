@@ -103,7 +103,6 @@ module "ocr_autoscale" {
   weekend_capacity_instances = 1
 }
 
-
 module "database" {
   source              = "./modules/database"
   env                 = local.environment
