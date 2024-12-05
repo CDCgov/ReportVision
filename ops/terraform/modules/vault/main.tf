@@ -23,8 +23,6 @@ resource "azurerm_key_vault" "this" {
       "List",
     ]
   }
-
-
 }
 
 # Random string resource for the postgres password
