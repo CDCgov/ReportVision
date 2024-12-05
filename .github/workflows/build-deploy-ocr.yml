@@ -1,18 +1,20 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  workflow_dispatch:
-    inputs:
-      deploy-env:
-        description: 'The environment to deploy to'
-        required: true
-        type: choice
-        options:
-          - dev
-          - demo
-      ocr-docker-tag:
-        description: 'This is optional if you would like to deploy an already published OCR-API image'
-        required: false
+  push:
+    branches: put-middle-behind-app-gateway
+  # workflow_dispatch:
+  #   inputs:
+  #     deploy-env:
+  #       description: 'The environment to deploy to'
+  #       required: true
+  #       type: choice
+  #       options:
+  #         - dev
+  #         - demo
+  #     ocr-docker-tag:
+  #       description: 'This is optional if you would like to deploy an already published OCR-API image'
+  #       required: false
 
 permissions:
   contents: read
@@ -35,7 +37,7 @@ jobs:
         shell: bash
         id: set_tag
         run: |
-          USER_INPUT="${{ github.event.inputs.ocr-docker-tag }}"
+          USER_INPUT="94c027a592208de803795dd22efa4fb4c27f914e"
           echo "docker_tag=$(
             #this gives a new sha as default if dispatch input is empty
             echo ${USER_INPUT:-"${{ github.sha }}"}
@@ -44,7 +46,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-middleware:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -54,14 +56,14 @@ jobs:
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
           docker-tag: ${{ steps.set_tag.outputs.docker_tag }}
-          dockerfile-path: ./OCR/Dockerfile
-          docker-context-path: ./OCR/
-          api-name: ocr
+          dockerfile-path: ./backend/Dockerfile
+          docker-context-path: ./backend/
+          api-name: middleware
 
   deploy-ocr:
     name: Deploy OCR
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
+    environment: dev
     needs: [build-publish-ocr]
     steps:
       - uses: actions/checkout@v4
@@ -73,7 +75,7 @@ jobs:
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
-          deploy-env: ${{ inputs.deploy-env }}
+          deploy-env: dev
           docker-tag: ${{ needs.build-publish-ocr.outputs.docker_tag }}
           docker-registry: ghcr.io
-          api-name: ocr
+          api-name: middleware
