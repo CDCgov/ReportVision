@@ -1,19 +1,26 @@
-# Stage 1: Build the application
-FROM gradle:7-jdk11 AS build
+# Use a Gradle base image
+FROM gradle:latest AS build
+
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the Gradle wrapper and project files
-COPY gradlew /app/gradlew
-COPY gradle/wrapper /app/gradle/wrapper
-COPY build.gradle.kts /app/build.gradle
-COPY settings.gradle.kts /app/settings.gradle
-COPY src /app/src
+# Copy the project files into the container
+COPY . .
 
-# Make the Gradle wrapper executable
-RUN chmod +x gradlew
-RUN ./gradlew build
+# Build the project
+RUN gradle build
 
+# Use a smaller base image for the final image
+FROM openjdk:latest
 
-COPY /app/build/libs/*.jar app.jar
-EXPOSE 8081
+# Set the working directory in the final image
+WORKDIR /app
+
+# Copy the built JAR file from the build stage
+COPY --from=build /app/build/libs/*.jar app.jar
+
+# Expose the port your application listens on (if applicable)
+EXPOSE 8080
+
+# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
