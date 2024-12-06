@@ -41,7 +41,6 @@ resource "azurerm_application_gateway" "load_balancer" {
   sku {
     name     = "Standard_v2"
     tier     = "Standard_v2"
-    capacity = 2
   }
 
   gateway_ip_configuration {
@@ -272,5 +271,10 @@ resource "azurerm_application_gateway" "load_balancer" {
         query_string = "{var_query_string}"
       }
     }
+  }
+
+  autoscale_configuration {
+    min_capacity = 0
+    max_capacity = 5
   }
 }
