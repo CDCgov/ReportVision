@@ -1,20 +1,18 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  push:
-    branches: put-middle-behind-app-gateway
-  # workflow_dispatch:
-  #   inputs:
-  #     deploy-env:
-  #       description: 'The environment to deploy to'
-  #       required: true
-  #       type: choice
-  #       options:
-  #         - dev
-  #         - demo
-  #     ocr-docker-tag:
-  #       description: 'This is optional if you would like to deploy an already published OCR-API image'
-  #       required: false
+  workflow_dispatch:
+    inputs:
+      deploy-env:
+        description: 'The environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - demo
+      ocr-docker-tag:
+        description: 'This is optional if you would like to deploy an already published OCR-API image'
+        required: false
 
 permissions:
   contents: read
@@ -37,7 +35,7 @@ jobs:
         shell: bash
         id: set_tag
         run: |
-          USER_INPUT="94c027a592208de803795dd22efa4fb4c27f914e"
+          USER_INPUT="${{ github.event.inputs.ocr-docker-tag }}"
           echo "docker_tag=$(
             #this gives a new sha as default if dispatch input is empty
             echo ${USER_INPUT:-"${{ github.sha }}"}
@@ -63,7 +61,7 @@ jobs:
   deploy-ocr:
     name: Deploy OCR
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ inputs.deploy-env }}
     needs: [build-publish-ocr]
     steps:
       - uses: actions/checkout@v4
