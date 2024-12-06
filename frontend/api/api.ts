@@ -45,7 +45,7 @@ export const ImageToText = async (
     labels: JSON.stringify(fieldNames),
   });
 
-  const imageToTextURL = `${apiUrl}image_to_text/`;
+  const imageToTextURL = `${apiUrl}image_to_text`;
   try {
     const response = await fetch(imageToTextURL, {
       method: "POST",
