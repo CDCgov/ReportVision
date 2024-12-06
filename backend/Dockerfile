@@ -2,7 +2,7 @@ FROM eclipse-temurin:17.0.8_7-jdk as build
 
 WORKDIR /app/
 
-ADD ./backend /app/backend
+ADD . /app/backend
 
 # compile backend into a jar
 RUN cd backend && ./gradlew clean build -x test -x checkstyleMain -x spotlessCheck
