@@ -36,6 +36,7 @@ class TesseractOCR:
             "/usr/local/share/tesseract/tessdata",
             "/usr/share/tesseract/tessdata",
             "/usr/share/tesseract-ocr/4.00/tessdata",
+            "/usr/share/tesseract-ocr/5/tessdata",
             "/opt/homebrew/share/tessdata",
             "/opt/local/share/tessdata",
         ]
