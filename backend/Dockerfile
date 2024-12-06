@@ -2,7 +2,7 @@
 FROM gradle:7-jdk11 AS build
 WORKDIR /app
 COPY . .
-RUN ./gradlew build
+CMD ["./gradlew", "build"]
 
 # Stage 2: Create the runtime image
 FROM openjdk:11-jre-slim
