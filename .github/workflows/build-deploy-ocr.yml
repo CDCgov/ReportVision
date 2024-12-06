@@ -46,7 +46,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-middleware:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -56,8 +56,8 @@ jobs:
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
           docker-tag: ${{ steps.set_tag.outputs.docker_tag }}
-          dockerfile-path: ./OCR/Dockerfile
-          docker-context-path: ./OCR/
+          dockerfile-path: ./backend/Dockerfile
+          docker-context-path: ./backend/
           api-name: ocr
 
   deploy-ocr:
@@ -78,4 +78,4 @@ jobs:
           deploy-env: dev
           docker-tag: ${{ needs.build-publish-ocr.outputs.docker_tag }}
           docker-registry: ghcr.io
-          api-name: ocr
+          api-name: middleware
