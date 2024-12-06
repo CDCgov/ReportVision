@@ -1,8 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:reportvision}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:super_secret_password}
+    url: ${POSTGRES_HOST:postgres_fqdn}?sslmode=require
+    username: ${DB_USERNAME:postgres_user}
+    password:  ${POSTGRES_USER:postgres_password}
+    name: ${POSTGRES_DB:postgres_db_name}
   devtools:
     restart:
       enabled: true

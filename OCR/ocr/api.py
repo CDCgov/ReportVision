@@ -10,7 +10,7 @@ import asyncio
 from fastapi import FastAPI, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from ocr.services.image_ocr import ImageOCR
+from ocr.services.tesseract_ocr import TesseractOCR
 from ocr.services.alignment import ImageAligner
 from ocr.services.image_segmenter import ImageSegmenter, segment_by_color_bounding_box
 
@@ -31,7 +31,7 @@ app.add_middleware(
 segmenter = ImageSegmenter(
     segmentation_function=segment_by_color_bounding_box,
 )
-ocr = ImageOCR()
+ocr = TesseractOCR()
 
 
 def data_uri_to_image(data_uri: str):

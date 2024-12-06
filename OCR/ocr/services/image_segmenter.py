@@ -31,7 +31,7 @@ def segment_by_mask_then_crop(raw_image, segmentation_template, labels, debug) -
         segmentation_template = np.array(segmentation_template, copy=True)
         color = tuple(map(int, reversed(color.split(","))))
         # create a mask for that color
-        mask = np.all(segmentation_template == color, axis=2).astype(int)
+        mask = np.all(segmentation_template == color, axis=2).astype(np.uint8)
 
         # add a third dimension to the mask
         mask = mask[:, :, np.newaxis]
@@ -100,11 +100,11 @@ class ImageSegmenter:
         ):
             raise FileNotFoundError("One or more input files do not exist.")
 
-        raw_image = cv.imread(raw_image_path)
+        raw_image = cv.imread(raw_image_path, cv.IMREAD_COLOR)
         if raw_image is None:
             raise ValueError(f"Failed to open image file: {raw_image_path}")
 
-        segmentation_template = cv.imread(segmentation_template_path)
+        segmentation_template = cv.imread(segmentation_template_path, cv.IMREAD_COLOR)
         if segmentation_template is None:
             raise ValueError(f"Failed to open image file: {segmentation_template_path}")
 
