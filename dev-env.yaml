@@ -30,12 +30,11 @@ services:
     shm_size: 128mb
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_DB: ${postgres_db_name}
-      POSTGRES_HOST: ${postgres_fqdn}
-      POSTGRES_USER:  ${postgres_user}
-      POSTGRES_PASSWORD: ${postgres_password}
-      sslmode: require
+  environment:
+    POSTGRES_DB: reportvision
+    POSTGRES_HOST: localhost
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: super_secret_password
   api:
     build: 
       context: ./backend
