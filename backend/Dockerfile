@@ -11,7 +11,7 @@ COPY src /app/src
 
 # Make the Gradle wrapper executable
 RUN chmod +x gradlew
-CMD ["./gradlew", "build"]
+RUN ./gradlew build
 
 
 COPY /app/build/libs/*.jar app.jar
