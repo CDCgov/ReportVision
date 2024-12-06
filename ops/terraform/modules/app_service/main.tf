@@ -1,7 +1,3 @@
-locals {
-  app_settings = merge(var.app_settings, { WEBSITES_PORT = "8000" })
-}
-
 resource "azurerm_service_plan" "asp" {
   name                = "${var.name}-${var.service}-appserviceplan-${var.env}"
   location            = var.location
@@ -18,7 +14,7 @@ resource "azurerm_linux_web_app" "linux_webapp" {
   service_plan_id           = azurerm_service_plan.asp.id
   virtual_network_subnet_id = var.app_subnet_id
 
-  app_settings = local.app_settings
+  app_settings = var.app_settings
 
   identity {
     type = "SystemAssigned"
@@ -26,7 +22,7 @@ resource "azurerm_linux_web_app" "linux_webapp" {
 
   site_config {
     always_on                         = "true"
-    health_check_path                 = "/"
+    health_check_path                 = var.health_path
     health_check_eviction_time_in_min = 5
     scm_minimum_tls_version           = "1.2"
     use_32_bit_worker                 = false
