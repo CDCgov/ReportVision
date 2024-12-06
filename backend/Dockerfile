@@ -4,9 +4,7 @@ WORKDIR /app
 COPY . .
 CMD ["./gradlew", "build"]
 
-# Stage 2: Create the runtime image
-FROM openjdk:11-jre-slim
-WORKDIR /app
-COPY --from=build /app/build/libs/*.jar app.jar
+
+COPY ./build/libs/*.jar app.jar
 EXPOSE 8081
 ENTRYPOINT ["java", "-jar", "app.jar"]
