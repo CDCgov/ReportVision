@@ -5,7 +5,7 @@ WORKDIR /app/
 ADD . /app/backend
 
 # compile backend into a jar
-RUN ./backend/gradlew clean build -x test -x checkstyleMain -x spotlessCheck
+RUN gradle --no-daemon assemble
 
 FROM eclipse-temurin:17.0.8_7-jre
 
