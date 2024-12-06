@@ -5,8 +5,8 @@ WORKDIR /app
 # Copy the Gradle wrapper and project files
 COPY gradlew /app/gradlew
 COPY gradle/wrapper /app/gradle/wrapper
-COPY build.gradle /app/build.gradle
-COPY settings.gradle /app/settings.gradle
+COPY build.gradle.kts /app/build.gradle
+COPY settings.gradle.kts /app/settings.gradle
 COPY src /app/src
 
 # Make the Gradle wrapper executable
