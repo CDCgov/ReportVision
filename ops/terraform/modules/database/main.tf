@@ -7,11 +7,11 @@ resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
   resource_group_name   = var.resource_group_name
   sku_name              = var.postgres_sku_name
   version               = var.engine_version
-  storage_mb            = 32768 # 32 GB, the lowest of the valid options
+  storage_mb            = 32768 # 32 GiB storage for B_Standard_B1ms
   backup_retention_days = 7
 
   administrator_login    = var.db_username
-  administrator_password = random_string.setup_rds_password.result
+  administrator_password = var.postgres_password
   delegated_subnet_id    = var.subnet
   private_dns_zone_id    = var.private_dns_zone_id
 
@@ -20,18 +20,11 @@ resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
 
   lifecycle {
     prevent_destroy = true
+    ignore_changes  = [zone]
   }
 }
 
 resource "azurerm_postgresql_flexible_server_database" "postgres_db" {
   name      = "${azurerm_postgresql_flexible_server.postgres_flexible_server.name}-db"
   server_id = azurerm_postgresql_flexible_server.postgres_flexible_server.id
-}
-
-# Random string resource for the postgres password
-resource "random_string" "setup_rds_password" {
-  length = 16 # Length of the password
-
-  # Character set that excludes problematic characters like quotes, backslashes, etc.
-  override_special = "_!@#-$%^&*()[]{}"
 }

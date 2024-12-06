@@ -19,13 +19,11 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy    = true
+      recover_soft_deleted_key_vaults = true
+    }
+  }
 }
 
-# # Provider for Azure Active Directory resources (e.g., service principals)
-# provider "azuread" {
-
-#   client_id = var.client_id
-#   tenant_id = var.tenant_id
-
-# }
