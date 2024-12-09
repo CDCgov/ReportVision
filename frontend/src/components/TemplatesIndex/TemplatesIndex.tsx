@@ -51,22 +51,13 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
 
   const templateColumnNames = {
     name: "Name",
-    labName: "Lab",
-    lab: "Lab",
-    createdBy: "Creator",
-    status: "Status",
-    updatedAt: "Updated On",
+    created: "Created On",
+    facility: "Facility",
+    condition: "Condition",
   };
 
   const templateColumnFormatters = {
-    updatedAt: (d) => {
-      const date = Date.parse(d);
-      if (isNaN(date)) {
-        return new Date().toLocaleDateString();
-      }
-      return new Date(date).toLocaleDateString();
-    },
-    lastUpdated: (d) => {
+    created: (d) => {
       const date = Date.parse(d);
       if (isNaN(date)) {
         return new Date().toLocaleDateString();
@@ -77,11 +68,9 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
 
   const templateColumns = [
     "name",
-    "updatedAt",
-    "createdBy",
-    "lab",
-    "status",
-    "labName",
+    "condition",
+    "facility",
+    "created",
   ];
 
   useEffect(() => {
