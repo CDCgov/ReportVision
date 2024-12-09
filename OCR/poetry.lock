@@ -232,19 +232,6 @@ tests = ["cloudpickle", "hypothesis", "mypy (>=1.11.1)", "pympler", "pytest (>=4
 tests-mypy = ["mypy (>=1.11.1)", "pytest-mypy-plugins"]
 
 [[package]]
-name = "cdifflib"
-version = "1.2.6"
-description = "C implementation of parts of difflib"
-optional = false
-python-versions = ">=3.4"
-files = [
-    {file = "cdifflib-1.2.6-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:bd236fc9e166e911f8ad87d89c1d1ade4e33df6f67e8c34fbe5f2bd89f0225f1"},
-    {file = "cdifflib-1.2.6-cp38-cp38-macosx_12_0_x86_64.whl", hash = "sha256:3b509f3a2b51abe45af36dc074a878ba3309a48968683a14e4104b46c2ef5b44"},
-    {file = "cdifflib-1.2.6-cp39-cp39-macosx_12_0_x86_64.whl", hash = "sha256:90c3bc02f3812f8def2e5b901345795a73e0547e9ea7aab2153200f4c84cab44"},
-    {file = "cdifflib-1.2.6.tar.gz", hash = "sha256:57517c390392a71d59e9d7e799e9b685eaf9e07812fc8f234540ff19c4b03e66"},
-]
-
-[[package]]
 name = "certifi"
 version = "2024.8.30"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -3583,4 +3570,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "2993b1bb088823677673c61c126ae057f2032e87edbe3a772fee9b9c21ba2396"
+content-hash = "45a5fb639bff707f562a3f4d44cb73158f74a9b0debb5c5bdd7c930931dd6944"
