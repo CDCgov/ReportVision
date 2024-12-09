@@ -44,8 +44,9 @@ module "app_gateway" {
   tags          = local.management_tags
   env           = local.environment
 
-  fqdns      = module.ocr_api.app_hostname
-  depends_on = [module.networking, module.ocr_api]
+  fqdns_ocr        = module.ocr_api.app_hostname
+  fqdns_middleware = module.middleware_api.app_hostname
+  depends_on       = [module.networking, module.ocr_api, module.middleware_api]
 }
 
 module "storage" {
@@ -67,7 +68,12 @@ module "middleware_api" {
   resource_group = data.azurerm_resource_group.rg.name
   app_subnet_id  = module.networking.middlewaresubnet_id
 
+  app_settings = {
+    WEBSITES_PORT = "8081"
+  }
+
   lb_subnet_id = module.networking.lbsubnet_id
+  health_path = "/actuator/health"
   env          = local.environment
   vnet         = module.networking.network_name
   sku_name     = var.sku_name
@@ -82,6 +88,11 @@ module "ocr_api" {
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
   app_subnet_id  = module.networking.ocrsubnet_id
+
+  app_settings = {
+    WEBSITES_PORT = "8000"
+  }
+
   lb_subnet_id   = module.networking.middlewaresubnet_id
   env            = local.environment
   vnet           = module.networking.network_name
