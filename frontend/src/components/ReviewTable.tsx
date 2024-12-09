@@ -10,6 +10,7 @@ import ErrorIcon from "../assets/error_icon.svg";
 import { useNavigate } from "react-router-dom";
 
 import "./ReviewTable.scss";
+import Toolbar from "./Toolbar";
 
 interface ReviewTableProps {
   isSingle: boolean;
@@ -53,7 +54,6 @@ const ReviewTable = ({
   maskShape,
   index,
   images,
-  setImages,
   setIndex,
   handleSubmit,
   handleBack,
@@ -80,7 +80,7 @@ const ReviewTable = ({
         <ExtractStepper currentStep={ExtractStep.Review} />
       </div>
 
-      <div className="display-flex flex-justify-between padding-top-4">
+      <div className="display-flex flex-justify-between padding-top-4 information-display">
         <div className="width-50 height-full table-container-half">
           <div className="display-flex flex-column review-template-header-container">
             <h2>Extracted Data</h2>
@@ -180,15 +180,7 @@ const ReviewTable = ({
         <div className="image-container">
           <div className="width-full bg-white border-gray-5 border-1px">
             <div>
-              {images.map((_, index) => (
-                <Button
-                  key={index}
-                  onClick={() => handleImageChange(index)}
-                  type="button"
-                >
-                  Image {index + 1}
-                </Button>
-              ))}
+              <Toolbar totalPages={images.length} onPageChange={(index) => handleImageChange(index - 1)} />
             </div>
             {images.map((image, innerIndex) => (
               <svg

@@ -123,6 +123,7 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
       - uses: ./.github/actions/tf-setup
         name: Setup this environment with Terraform
         with:
@@ -131,6 +132,7 @@ jobs:
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
           app-name: reportvision
 
   deploy-middleware:
@@ -145,6 +147,7 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
       - name: Deploy middleware-API
         uses: ./.github/actions/deploy-api
         with:
@@ -165,6 +168,7 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
@@ -186,6 +190,7 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
       - name: Deploy frontend
         uses: ./.github/actions/deploy-frontend
         with:

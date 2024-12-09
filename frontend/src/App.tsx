@@ -8,10 +8,12 @@ import { TemplatesIndex } from "./components/TemplatesIndex/TemplatesIndex.tsx";
 import Comment from './assets/comment.svg';
 import CSV from './assets/csv.svg';
 import "./App.scss";
+import { useFiles } from "./contexts/FilesContext.tsx";
 
 function App() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { setFiles } = useFiles();
   const [isFirstVisit, setIsFirstVisit] = useState(false);
 
   useEffect(() => {
@@ -20,6 +22,7 @@ function App() {
       setIsFirstVisit(true);
       localStorage.setItem("hasVisited", "true");
     }
+    setFiles([]);
   }, []);
 
   const navLinks = [

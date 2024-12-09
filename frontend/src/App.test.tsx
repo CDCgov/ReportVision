@@ -3,6 +3,7 @@ import '@testing-library/jest-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { FilesProvider } from './contexts/FilesContext';
 
 // Mock the imports
 vi.mock('./components/AppHeader/AppHeader.tsx', () => ({
@@ -29,7 +30,9 @@ describe('App component', () => {
   const renderComponent = () => {
     render(
       <BrowserRouter>
-        <App />
+        <FilesProvider>
+          <App />
+        </FilesProvider>
       </BrowserRouter>
     );
   };
