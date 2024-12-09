@@ -50,10 +50,13 @@
   margin: 24px 16px;
 }
 
+.toolbar-border {
+  box-shadow: -2px 4px 11px 2px rgba(231, 242, 250, 0.58);
+}
+
 .image-container {
   width: 50%;
   background-color: #f5fbff;
-  padding: 16px;
 }
 
 .text-success-confidence {

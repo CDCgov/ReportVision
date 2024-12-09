@@ -5,12 +5,14 @@ import "./Toolbar.scss";
 
 interface ToolbarProps {
   initialPage?: number;
+  className?: string;
   totalPages: number;
   onPageChange?: (page: number) => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
   initialPage = 1,
+  className = '',
   totalPages,
   onPageChange,
 }) => {
@@ -33,7 +35,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <div className="toolbar" data-testid="toolbar">
+    <div className={`toolbar ${className}`} data-testid="toolbar">
       <PageNumber
         currentPage={currentPage}
         totalPages={totalPages}
