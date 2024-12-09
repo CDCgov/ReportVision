@@ -36,7 +36,7 @@ services:
   api:
     build: 
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: dev-dockerfile
     environment:
       - DB_HOST=db
     ports: 
