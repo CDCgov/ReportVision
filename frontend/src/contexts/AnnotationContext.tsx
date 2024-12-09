@@ -34,9 +34,11 @@ interface AnnotationContextType {
   setDrawnFields: React.Dispatch<React.SetStateAction<Set<string>>>;
   setShapes: React.Dispatch<React.SetStateAction<CustomShape[][]>>;
   name: string;
-  description: string;
+  condition: string;
+  facility: string;
   setName: (name: string) => void;
-  setDescription: (description: string) => void;
+  setCondition: (condition: string) => void;
+  setFacility: (facility: string) => void;
   index: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -72,7 +74,8 @@ export const AnnotationProvider = ({ children }: AnnotationProviderProps) => {
   ]);
   const [drawnFields, setDrawnFields] = useState<Set<string>>(new Set());
   const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [condition, setCondition] = useState<string>("");
+  const [facility, setFacility] = useState<string>("");
   const [selectedField, setSelectedField] = useState<Field | null>(null);
   const [shapes, setShapes] = useState<CustomShape[][]>([]);
   const [index, setIndex] = useState<number>(0);
@@ -91,8 +94,10 @@ export const AnnotationProvider = ({ children }: AnnotationProviderProps) => {
         setFields,
         name,
         setName,
-        description,
-        setDescription,
+        condition,
+        setCondition,
+        facility,
+        setFacility,
         index,
         setIndex,
         drawnFields,

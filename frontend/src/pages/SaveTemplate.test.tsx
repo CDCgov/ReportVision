@@ -71,7 +71,10 @@ describe("SaveTemplate Component", () => {
       screen.getByTestId("segmentation-template-name-input"),
     ).toBeInTheDocument();
     expect(
-      screen.getByTestId("segmentation-template-description-input"),
+      screen.getByTestId("segmentation-template-facility-input"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId("segmentation-template-condition-input"),
     ).toBeInTheDocument();
   });
 
@@ -102,6 +105,14 @@ describe("SaveTemplate Component", () => {
         </FilesProvider>
       </BrowserRouter>,
     );
+
+    const nameInput =   screen.getByTestId("segmentation-template-name-input");
+    const facilityInput = screen.getByTestId("segmentation-template-facility-input");
+    const conditionInput = screen.getByTestId("segmentation-template-condition-input");
+
+    fireEvent.change(nameInput, { target: { value: "Template 1" } });
+    fireEvent.change(facilityInput, { target: { value: "Facility 1" } });
+    fireEvent.change(conditionInput, { target: { value: "Condition 1" } });
 
     await act(async () => {
       fireEvent.click(screen.getByText(/submit/i));

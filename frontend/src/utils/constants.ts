@@ -40,7 +40,6 @@ export const fakeData = {
 export const fakeTemplates: Array<any> = [
   {
     name: "covid",
-    description: "covid",
     pages: [
       {
         fieldNames: [
@@ -98,7 +97,6 @@ export const fakeTemplates: Array<any> = [
   },
   {
     name: "marge",
-    description: "marge",
     pages: [
       {
         fieldNames: [
@@ -189,7 +187,6 @@ export const fakeTemplates: Array<any> = [
   },
   {
     name: "template name",
-    description: "description",
     pages: [
       {
         fieldNames: [

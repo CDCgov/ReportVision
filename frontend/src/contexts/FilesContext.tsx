@@ -29,7 +29,8 @@ export interface Page {
 
 export interface FileType {
   name: string;
-  description: string;
+  condition: string;
+  facility: string;
   pages: Page[];
 }
 

@@ -29,7 +29,8 @@ interface IFilesObj {
 
 interface Template {
   name: string;
-  description: string;
+  condition: string;
+  facility: string;
   pages: {
     image: string;
     fieldNames: string[];
@@ -64,23 +65,25 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
     const sampleTemplates: Template[] = [
       {
         name: "Test Template COVID",
-        description: "This is the first sample template.",
         pages: [
           {
             image: "base64encodedimage1",
             fieldNames: ["patient_name", "patient_dob"],
           },
         ],
+        condition: "covid",
+        facility: "texas"
       },
       {
         name: "Test Template Syph",
-        description: "This is the second sample template.",
         pages: [
           {
             image: "base64encodedimage2",
             fieldNames: ["patient_name", "address"],
           },
         ],
+        condition: "covid",
+        facility: "texas"
       },
     ];
     setTemplates(sampleTemplates);
