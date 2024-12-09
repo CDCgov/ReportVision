@@ -31,11 +31,12 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: ${postgres_db_name}
-      POSTGRES_HOST: ${postgres_fqdn}
-      POSTGRES_USER:  ${postgres_user}
-      POSTGRES_PASSWORD: ${postgres_password}
-      sslmode: require
+      POSTGRES_DB: ${postgres_db_name:-reportvision}
+      POSTGRES_HOST: ${postgres_fqdn:-localhost}
+      POSTGRES_USER: ${postgres_user:-postgres}
+      POSTGRES_PASSWORD: ${postgres_password:-super_secret_password}
+      DB_PORT: ${postgres_port:-5432}
+      SSL_MODE: ${postgres_sslmode:-disable}
   api:
     build: 
       context: ./backend
