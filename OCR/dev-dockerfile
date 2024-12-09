@@ -12,4 +12,4 @@ COPY ./pyproject.toml /ocr/pyproject.toml
 COPY ./poetry.lock /ocr/poetry.lock
 
 WORKDIR /ocr
-RUN poetry install && poetry cache list | xargs -n1 poetry cache clear --all
+RUN poetry install --without=torch && poetry cache list | xargs -n1 poetry cache clear --all

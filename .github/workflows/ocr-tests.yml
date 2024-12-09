@@ -20,6 +20,6 @@ jobs:
           sudo apt install tesseract-ocr-eng tesseract-ocr -y
           python -m pip install --upgrade pip
           pip install poetry
-          poetry install --with dev
+          poetry install --with dev --with torch
       - name: Run tests
         run: poetry run pytest tests/ocr_test.py tests/segmentation_template_test.py tests/alignment_test.py

@@ -1,5 +1,9 @@
 name: OCR Poetry Benchmark Tests
 on:
+  pull_request:
+    paths:
+      - .github/workflows/ocr-benchmarks.yml
+      - OCR/**
   push:
     branches:
       - main
@@ -16,31 +20,13 @@ jobs:
           python-version: "3.10"
       - name: Install dependencies
         run: |
+          sudo apt update && sudo apt install tesseract-ocr-eng tesseract-ocr
           cd OCR/tests
           python -m pip install --upgrade pip
           pip install poetry
           pip install pytest pytest-benchmark
-          poetry install --with dev
+          poetry install --with dev --with torch
       - name: Run tests
         run: |
           cd OCR/tests
           poetry run pytest benchmark_test.py -v --benchmark-json output.json
-      # - name: Store benchmark result
-      #   uses: benchmark-action/github-action-benchmark@v1
-      #   with:
-      #     tool: 'pytest'
-      #     output-file-path: OCR/tests/output.json
-      #     auto-push: false
-      # - name: Push benchmark result
-      #   run: git push 'https://CDCgov:${{ secrets.GITHUB_TOKEN }}@github.com/CDCgov/IDWA.git' gh-pages:gh-pages
-      # - name: Fetch data.js from gh-pages
-      #   run: |
-      #     git config --global user.name 'GitHub Action'
-      #     git config --global user.email 'action@github.com'
-      #     git fetch
-      #     git checkout gh-pages
-      #     rm ./dev/bench/index.html
-      #     cp ./dev/bench/index-template.html ./dev/bench/index.html
-      #     git add .
-      #     git commit -m "template to index"
-      #     git push origin gh-pages
