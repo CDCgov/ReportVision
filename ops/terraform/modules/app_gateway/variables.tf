@@ -10,7 +10,9 @@ variable "zones" {
   default = ["1", "2", "3"]
 }
 
-variable "fqdns" {
+variable "fqdns_middleware" {
+}
+variable "fqdns_ocr" {
 }
 
 variable "ip_addresses" {
