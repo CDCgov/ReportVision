@@ -1,6 +1,7 @@
 variable "client_id" {}
 variable "name" {}
 variable "object_id" {}
+variable "postgres_server_id" {}
 variable "tenant_id" {}
 variable "sku_name" {
   type        = string
@@ -10,3 +11,4 @@ variable "subscription_id" {}
 variable "resource_group_name" {
   description = "value of the Azure resource group to deploy to"
 }
+

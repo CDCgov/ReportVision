@@ -20,6 +20,8 @@ module "networking" {
   middlewaresubnetcidr = local.workspace["middlewaresubnetcidr"]
   dbsubnetcidr         = local.workspace["dbsubnetcidr"]
   env                  = local.environment
+  # The DNS zone and DNS link are managed inside the networking module.
+  postgres_server_id = module.database.postgres_server_id
 }
 
 module "securitygroup" {
@@ -66,6 +68,7 @@ module "middleware_api" {
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
   app_subnet_id  = module.networking.middlewaresubnet_id
+
 
   lb_subnet_id = module.networking.lbsubnet_id
   env          = local.environment
