@@ -43,3 +43,13 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+plugins {
+    id 'com.palantir.docker' version '0.25.0' // Or the latest version
+}
+
+docker {
+    name "${project.name}:${project.version}"
+    files bootJar.archiveFile
+    buildArgs(['JAR_FILE': "${bootJar.archiveFileName.get()}"])
+}
