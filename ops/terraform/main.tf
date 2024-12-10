@@ -9,16 +9,17 @@ locals {
 }
 
 module "networking" {
-  source         = "./modules/network"
-  name           = var.name
-  location       = data.azurerm_resource_group.rg.location
-  resource_group = data.azurerm_resource_group.rg.name
-  vnetcidr       = local.workspace["vnetcidr"]
-  websubnetcidr  = local.workspace["websubnetcidr"]
-  lbsubnetcidr   = local.workspace["lbsubnetcidr"]
-  appsubnetcidr  = local.workspace["appsubnetcidr"]
-  dbsubnetcidr   = local.workspace["dbsubnetcidr"]
-  env            = local.environment
+  source               = "./modules/network"
+  name                 = var.name
+  location             = data.azurerm_resource_group.rg.location
+  resource_group       = data.azurerm_resource_group.rg.name
+  vnetcidr             = local.workspace["vnetcidr"]
+  websubnetcidr        = local.workspace["websubnetcidr"]
+  lbsubnetcidr         = local.workspace["lbsubnetcidr"]
+  ocrsubnetcidr        = local.workspace["ocrsubnetcidr"]
+  middlewaresubnetcidr = local.workspace["middlewaresubnetcidr"]
+  dbsubnetcidr         = local.workspace["dbsubnetcidr"]
+  env                  = local.environment
   # The DNS zone and DNS link are managed inside the networking module.
   postgres_server_id = module.database.postgres_server_id
 }
@@ -121,6 +122,7 @@ module "database" {
   subnet              = module.networking.dbsubnet_id
   private_dns_zone_id = module.networking.private_dns_zone_id
   postgres_password   = module.vault.postgres_password # Password from Vault to DB
+  # middlewaresubnetcidr = local.environment == "dev" ? local.dev.middlewaresubnetcidr : local.demo.middlewaresubnetcidr
 }
 
 module "vault" {

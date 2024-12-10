@@ -36,6 +36,7 @@ resource "azurerm_postgresql_flexible_server_database" "postgres_db" {
   server_id = azurerm_postgresql_flexible_server.postgres_flexible_server.id
 }
 
+//TODO: TEST WITHOUT
 // Allow Azure services to access the database
 // See here: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_firewall_rule
 resource "azurerm_postgresql_flexible_server_firewall_rule" "allow_azure_services" {
