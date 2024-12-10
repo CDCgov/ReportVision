@@ -161,7 +161,7 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
       </>
     );
   }
-  console.log(templates)
+  
   return (
     <>
       <div className="bg-white padding-2 border-gray-5 border-1px">
