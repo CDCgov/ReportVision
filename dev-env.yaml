@@ -8,7 +8,7 @@ services:
     volumes:
       - ./OCR:/ocr
     restart: "no"
-    command: "/bin/sh -c 'poetry install && poetry run fastapi dev ocr/api.py --host 0.0.0.0 --port 8000'" 
+    command: "/bin/sh -c 'poetry install --without=torch --sync && poetry run fastapi dev ocr/api.py --host 0.0.0.0 --port 8000'"
   frontend:
     build:
       context: ./frontend
