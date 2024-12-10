@@ -6,6 +6,7 @@ import "./Header.scss";
 interface UploadHeaderProps {
   title: string;
   isUpload?: boolean;
+  isDisabled?: boolean;
   onBack: () => void;
   onSubmit?: () => void;
 }
@@ -13,6 +14,7 @@ interface UploadHeaderProps {
 export const UploadHeader = ({
   title,
   isUpload,
+  isDisabled,
   onBack,
   onSubmit,
 }: UploadHeaderProps) => {
@@ -43,7 +45,7 @@ export const UploadHeader = ({
           </Button>
           {
             onSubmit && (
-              <Button disabled={isUpload} onClick={onSubmit} type="submit" base>
+              <Button disabled={isUpload || isDisabled} onClick={onSubmit} type="submit" base>
                 Submit
               </Button>
             )

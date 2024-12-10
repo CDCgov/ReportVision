@@ -14,11 +14,13 @@ export const SaveTemplate = () => {
   const navigate = useNavigate();
   const {
     fields,
-    setDescription,
     setName,
     name,
-    description,
+    condition,
+    facility,
     shapes,
+    setCondition,
+    setFacility,
     setShapes,
     setFields,
     setDrawnFields,
@@ -57,7 +59,7 @@ export const SaveTemplate = () => {
         };
       });
       if (pages.length !== images.length) {
-        images.forEach((_, idx) => {
+        images.forEach((_: unknown, idx: number) => {
           if (!tempFields[idx]) {
             pages.push({
               fieldNames: [],
@@ -74,7 +76,8 @@ export const SaveTemplate = () => {
       }
       const tempFile: FileType = {
         name,
-        description,
+        condition,
+        facility,
         pages: pages,
       };
 
@@ -100,6 +103,9 @@ export const SaveTemplate = () => {
     setFields([new Set(), new Set()]);
     setDrawnFields(new Set());
     setSelectedField(null);
+    setName('');
+    setFacility('');
+    setCondition('');
     reset();
     navigate("/");
   };
@@ -112,6 +118,7 @@ export const SaveTemplate = () => {
       <UploadHeader
         title="Save template"
         onBack={() => navigate("/new-template/annotate")}
+        isDisabled={name.length === 0 || facility.length === 0 || condition.length === 0}
         onSubmit={handleSubmit}
       />
       <Divider margin="0px" />
@@ -127,7 +134,7 @@ export const SaveTemplate = () => {
           <div className="display-flex flex-column flex-align-self-center">
             <div className="display-flex flex-column flex-align-start width-full">
               <Label htmlFor="segmentation-template-name">
-                Segmentation template name
+                Segmentation template name*
               </Label>
               <TextInput
                 id="segmentation-template-name"
@@ -141,16 +148,35 @@ export const SaveTemplate = () => {
           </div>
           <div className="display-flex flex-column flex-align-self-center">
             <div className="display-flex flex-column flex-align-start width-full">
-              <Label htmlFor="segmentation-template-description">
-                Segmentation template description
+              <Label htmlFor="segmentation-template-facility">
+                Facility*
               </Label>
               <TextInput
-                id="segmentation-template-description"
-                onChange={(e) => setDescription(e.target.value)}
+                id="segmentation-template-facility"
+                onChange={(e) => setFacility(e.target.value)}
+                value={facility}
+                required
                 className="bg-white"
-                name="segmentation-template-description"
+                name="segmentation-template-facility"
                 type="text"
-                data-testid="segmentation-template-description-input"
+                data-testid="segmentation-template-facility-input"
+              />
+            </div>
+          </div>
+          <div className="display-flex flex-column flex-align-self-center">
+            <div className="display-flex flex-column flex-align-start width-full">
+              <Label htmlFor="segmentation-template-condition">
+                Condition*
+              </Label>
+              <TextInput
+                id="segmentation-template-condition"
+                value={condition}
+                required
+                onChange={(e) => setCondition(e.target.value)}
+                className="bg-white"
+                name="segmentation-template-condition"
+                type="text"
+                data-testid="segmentation-template-condition-input"
               />
             </div>
           </div>
