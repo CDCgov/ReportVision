@@ -5,11 +5,24 @@ import { useNavigate } from "react-router-dom";
 import extractImage from "../../assets/extract_image.svg";
 import { useQuery } from "@tanstack/react-query";
 import { TemplateAPI } from "../../types/templates.ts";
+import usePagination from "../../hooks/use-pagination/index.ts";
+
+import './TemplatesIndex.scss'
 
 type TemplateIndexProps = unknown;
 
 export const TemplatesIndex: FC<TemplateIndexProps> = () => {
   const [templates, setTemplates] = useState([]);
+  const { 
+    currentItems,
+    currentPage,
+    nextPage,
+    previousPage,
+    goToPage,
+    getPageNumbers,
+    hasNextPage,
+    hasPreviousPage
+  } = usePagination(templates, 10, 1);
   const navigate = useNavigate();
   // TODO: Pagination and sorting will be added later
   const templateQuery = useQuery({
@@ -148,7 +161,7 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
       </>
     );
   }
-
+  console.log(templates)
   return (
     <>
       <div className="bg-white padding-2 border-gray-5 border-1px">
@@ -181,10 +194,44 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
           <h2>Saved Templates</h2>
           <SortableTable
             columns={templateColumns}
-            data={templates}
+            data={currentItems}
             formatters={templateColumnFormatters}
             columnNames={templateColumnNames}
           />
+          <div className="display-flex flex-row width-full pagination-container">
+            <p className="pagination-text">
+              Showing {Math.min(currentPage * 10, templates.length)} of {templates.length} templates
+            </p>
+            <div className="flex items-center justify-center space-x-2 pagination-button-group">
+              <Button
+                onClick={previousPage}
+                disabled={!hasPreviousPage}
+                type="button"
+              >
+                Previous
+              </Button>
+
+              {getPageNumbers().map(pageNum => (
+                <Button
+                  key={pageNum}
+                  onClick={() => goToPage(pageNum)}
+                  type="button"
+                  outline={pageNum !== currentPage}
+                >
+                  {pageNum}
+                </Button>
+              ))}
+
+              <Button
+                onClick={nextPage}
+                disabled={!hasNextPage}
+                type="button"
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+
         </div>
       </div>
     </>
