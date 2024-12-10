@@ -20,3 +20,6 @@ variable "app_settings" {
   default     = {}
   description = "App Settings or environment variables to apply."
 }
+variable "health_path" {
+  default = "/"
+}

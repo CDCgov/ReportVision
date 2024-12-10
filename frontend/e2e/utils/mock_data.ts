@@ -38,6 +38,8 @@ export const fakeTemplates = [
   {
     name: "covid",
     description: "covid",
+    condition: "covid",
+    facility: "texas",
     pages: [
       {
         fieldNames: [
@@ -96,6 +98,8 @@ export const fakeTemplates = [
   {
     name: "marge",
     description: "marge",
+    facility: 'texas',
+    condtion: 'covid',
     pages: [
       {
         fieldNames: [
@@ -186,7 +190,8 @@ export const fakeTemplates = [
   },
   {
     name: "template name",
-    description: "description",
+    condition: "condition",
+    facility: "texas",
     pages: [
       {
         fieldNames: [
