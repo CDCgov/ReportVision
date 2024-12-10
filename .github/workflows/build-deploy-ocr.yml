@@ -37,7 +37,7 @@ jobs:
         shell: bash
         id: set_tag
         run: |
-          USER_INPUT="94c027a592208de803795dd22efa4fb4c27f914e"
+          USER_INPUT="eb399bfe9a098349d033489df425ff9b9c843e0d"
           echo "docker_tag=$(
             #this gives a new sha as default if dispatch input is empty
             echo ${USER_INPUT:-"${{ github.sha }}"}
@@ -46,7 +46,7 @@ jobs:
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-middleware:94c027a592208de803795dd22efa4fb4c27f914e > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-middleware:eb399bfe9a098349d033489df425ff9b9c843e0d > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -77,6 +77,6 @@ jobs:
         uses: ./.github/actions/deploy-api
         with:
           deploy-env: demo
-          docker-tag: 94c027a592208de803795dd22efa4fb4c27f914e
+          docker-tag: eb399bfe9a098349d033489df425ff9b9c843e0d
           docker-registry: ghcr.io
           api-name: middleware
