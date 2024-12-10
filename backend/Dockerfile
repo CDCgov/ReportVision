@@ -1,4 +1,4 @@
-FROM amazoncorretto:17
+FROM openjdk:11-jre-slim
 ENV HOME=/app
 RUN mkdir -p $HOME
 WORKDIR $HOME
