@@ -28,19 +28,3 @@ resource "azurerm_postgresql_flexible_server_database" "postgres_db" {
   name      = "${azurerm_postgresql_flexible_server.postgres_flexible_server.name}-db"
   server_id = azurerm_postgresql_flexible_server.postgres_flexible_server.id
 }
-
-# TODO: This may not be necessary
-# resource "azurerm_postgresql_flexible_server_configuration" "[changeName]" {
-#   name      = "azure.extensions"
-#   server_id = azurerm_postgresql_flexible_server.postgres_flexible_server.id
-#   value     = "UUID-OSSP" 
-# }
-
-// Allow Azure services to access the database
-// See here: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_firewall_rule
-resource "azurerm_postgresql_flexible_server_firewall_rule" "allow_azure_services" {
-  name             = "allow_azure_services"
-  server_id        = azurerm_postgresql_flexible_server.postgres_flexible_server.id
-  start_ip_address = "0.0.0.0"
-  end_ip_address   = "0.0.0.0"
-}

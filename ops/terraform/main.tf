@@ -77,7 +77,6 @@ module "middleware_api" {
   postgres_user     = module.database.postgres_user
   postgres_db_name  = module.database.postgres_db_name
 
-
   app_settings = {
     WEBSITES_PORT = "8081"
   }
