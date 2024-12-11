@@ -78,6 +78,7 @@ export const SaveTemplate = () => {
         name,
         condition,
         facility,
+        created: new Date().toLocaleDateString(),
         pages: pages,
       };
 
