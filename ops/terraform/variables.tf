@@ -1,6 +1,9 @@
 variable "client_id" {}
 variable "name" {}
+variable "postgres_db_name" {}
+variable "postgres_password" {}
 variable "postgres_server_id" {}
+variable " postgres_user" {}
 variable "object_id" {}
 variable "tenant_id" {}
 variable "sku_name" {

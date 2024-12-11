@@ -61,7 +61,6 @@ resource "azurerm_subnet" "middleware-subnet" {
   }
 }
 
-
 resource "azurerm_subnet" "db-subnet" {
   name                 = "${var.name}-db-subnet-${var.env}"
   virtual_network_name = azurerm_virtual_network.vnet.name

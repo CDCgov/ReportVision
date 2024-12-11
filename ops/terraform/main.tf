@@ -23,6 +23,8 @@ module "networking" {
 
   # The DNS zone and DNS link are managed inside the networking module.
   postgres_server_id = module.database.postgres_server_id
+
+
 }
 
 module "securitygroup" {
@@ -70,6 +72,11 @@ module "middleware_api" {
   location       = data.azurerm_resource_group.rg.location
   resource_group = data.azurerm_resource_group.rg.name
   app_subnet_id  = module.networking.middlewaresubnet_id
+
+  postgres_password = module.vault.postgres_password
+  postgres_user     = module.database.postgres_user
+  postgres_db_name  = module.database.postgres_db_name
+
 
   app_settings = {
     WEBSITES_PORT = "8081"
