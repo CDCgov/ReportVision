@@ -23,8 +23,6 @@ module "networking" {
 
   # The DNS zone and DNS link are managed inside the networking module.
   postgres_server_id = module.database.postgres_server_id
-
-
 }
 
 module "securitygroup" {
