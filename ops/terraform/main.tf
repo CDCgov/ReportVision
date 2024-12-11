@@ -73,12 +73,12 @@ module "middleware_api" {
   resource_group = data.azurerm_resource_group.rg.name
   app_subnet_id  = module.networking.middlewaresubnet_id
 
-  postgres_password = module.vault.postgres_password
-  postgres_user     = module.database.postgres_user
-  postgres_db_name  = module.database.postgres_db_name
-
   app_settings = {
-    WEBSITES_PORT = "8081"
+    WEBSITES_PORT     = "8081"
+    POSTGRES_HOST     = module.database.postgres_fqdn
+    POSTGRES_DB       = module.database.postgres_db_name
+    POSTGRES_USER     = module.database.postgres_user
+    POSTGRES_PASSWORD = module.vault.postgres_password
   }
 
   lb_subnet_id = module.networking.lbsubnet_id
