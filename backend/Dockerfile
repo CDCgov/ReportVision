@@ -11,4 +11,4 @@ RUN chmod +x ./gradlew
 
 EXPOSE 8081
 
-ENTRYPOINT [ "./gradlew", "bootRun", "--continuous", "--args=--server.port=8081" ]
+ENTRYPOINT [ "./gradlew", "bootRun", "--args=--server.port=8081" ]
