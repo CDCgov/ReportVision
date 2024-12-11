@@ -22,19 +22,3 @@ variable "app_settings" {
 variable "health_path" {
   default = "/"
 }
-
-variable "postgres_db_name" {
-  description = "The name of the PostgreSQL database"
-  type        = string
-}
-
-variable "postgres_password" {
-  description = "The password for the PostgreSQL database"
-  type        = string
-  sensitive   = true # This ensures Terraform treats the password as sensitive
-}
-
-variable "postgres_user" {
-  description = "The username for the PostgreSQL database"
-  type        = string
-}
