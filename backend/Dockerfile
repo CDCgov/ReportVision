@@ -1,10 +1,9 @@
-FROM openjdk:11-jre-slim as build
+FROM amazoncorretto:17
+
 WORKDIR /app/
-ARG JAR_FILE
 
-FROM openjdk:11-jre-slim
-ARG JAR_FILE
-COPY --from=build ${JAR_FILE} app.jar
+COPY . .
 
-EXPOSE 8081
-ENTRYPOINT ["java","-jar","/app.jar"]
+RUN chmod +x ./gradlew
+
+ENTRYPOINT [ "./gradlew", "bootRun", "--continuous", "--args=--server.port=8081" ]
