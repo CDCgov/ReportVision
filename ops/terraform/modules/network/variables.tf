@@ -11,3 +11,8 @@ variable "dbsubnetcidr" {}
 variable "location" {
   default = "eastus2"
 }
+
+variable "postgres_server_id" {
+  description = "The ID of the PostgreSQL server"
+  type        = string
+}

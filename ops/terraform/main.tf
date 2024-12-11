@@ -20,6 +20,11 @@ module "networking" {
   middlewaresubnetcidr = local.workspace["middlewaresubnetcidr"]
   dbsubnetcidr         = local.workspace["dbsubnetcidr"]
   env                  = local.environment
+
+  # The DNS zone and DNS link are managed inside the networking module.
+  postgres_server_id = module.database.postgres_server_id
+
+
 }
 
 module "securitygroup" {
@@ -69,11 +74,15 @@ module "middleware_api" {
   app_subnet_id  = module.networking.middlewaresubnet_id
 
   app_settings = {
-    WEBSITES_PORT = "8081"
+    WEBSITES_PORT     = "8081"
+    POSTGRES_HOST     = module.database.postgres_fqdn
+    POSTGRES_DB       = module.database.postgres_db_name
+    POSTGRES_USER     = module.database.postgres_user
+    POSTGRES_PASSWORD = module.vault.postgres_password
   }
 
   lb_subnet_id = module.networking.lbsubnet_id
-  health_path = "/actuator/health"
+  health_path  = "/actuator/health"
   env          = local.environment
   vnet         = module.networking.network_name
   sku_name     = var.sku_name
@@ -93,12 +102,12 @@ module "ocr_api" {
     WEBSITES_PORT = "8000"
   }
 
-  lb_subnet_id   = module.networking.middlewaresubnet_id
-  env            = local.environment
-  vnet           = module.networking.network_name
-  sku_name       = var.sku_name
-  https_only     = true
-  depends_on     = [module.networking.ocrsubnet_id, module.networking.middlewaresubnet_id]
+  lb_subnet_id = module.networking.middlewaresubnet_id
+  env          = local.environment
+  vnet         = module.networking.network_name
+  sku_name     = var.sku_name
+  https_only   = true
+  depends_on   = [module.networking.ocrsubnet_id, module.networking.middlewaresubnet_id]
 }
 
 module "ocr_autoscale" {

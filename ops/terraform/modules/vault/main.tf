@@ -31,7 +31,7 @@ resource "random_string" "postgres_password" {
   override_special = "_!@#-$%^&*()[]{}" # excluded characters
 }
 
-resource "azurerm_key_vault_secret" "postgres_db_secret" {
+resource "azurerm_key_vault_secret" "postgres_db_password" {
   name         = "reportvision-postgres-db-password"
   value        = random_string.postgres_password.result
   key_vault_id = azurerm_key_vault.this.id
