@@ -1,20 +1,20 @@
 name: Create, publish, deploy a OCR API image
 
 on:
-  push:
-    branches: test-deploy-middleware
-  # workflow_dispatch:
-  #   inputs:
-  #     deploy-env:
-  #       description: 'The environment to deploy to'
-  #       required: true
-  #       type: choice
-  #       options:
-  #         - dev
-  #         - demo
-  #     ocr-docker-tag:
-  #       description: 'This is optional if you would like to deploy an already published OCR-API image'
-  #       required: false
+  # push:
+  #   branches: test-deploy-middleware
+  workflow_dispatch:
+    inputs:
+      deploy-env:
+        description: 'The environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - demo
+      ocr-docker-tag:
+        description: 'This is optional if you would like to deploy an already published OCR-API image'
+        required: false
 
 permissions:
   contents: read
