@@ -81,7 +81,7 @@ module "middleware_api" {
     POSTGRES_DB       = module.database.postgres_db_name
     POSTGRES_USER     = module.database.postgres_user
     POSTGRES_PASSWORD = module.vault.postgres_password
-    WEBSITES_CONTAINER_START_TIME_LIMIT = 500
+    WEBSITES_CONTAINER_START_TIME_LIMIT = 400
     DEBUG = true
   }
 

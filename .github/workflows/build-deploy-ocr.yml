@@ -37,7 +37,7 @@ jobs:
         shell: bash
         id: set_tag
         run: |
-          USER_INPUT=""
+          USER_INPUT="fa1b599d864865dda07d564a113928f48eaaf163"
           echo "docker_tag=$(
             #this gives a new sha as default if dispatch input is empty
             echo ${USER_INPUT:-"${{ github.sha }}"}
