@@ -16,3 +16,7 @@ output "postgres_user" {
 output "postgres_db_name" {
   value = azurerm_postgresql_flexible_server.postgres_flexible_server.name
 }
+
+# output "postgres_fs_server" {
+#   value = azurerm_postgresql_flexible_server.postgres_flexible_server.postgres_flexible_server
+# }

@@ -14,3 +14,5 @@ variable "location" {
 
 variable "postgres_server_id" {
 }
+
+# variable "postgres_fs_server" {}

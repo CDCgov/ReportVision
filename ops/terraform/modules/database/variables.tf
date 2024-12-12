@@ -32,7 +32,7 @@ variable "postgres_sku_name" {
   default     = "B_Standard_B1ms"
 }
 
-variable "subnet" {
+variable "db_subnet" {
   type        = string
   description = "The subnet ID to associate with the PostgreSQL Flexible Server"
 }
