@@ -23,6 +23,7 @@ module "networking" {
 
   # The DNS zone and DNS link are managed inside the networking module.
   postgres_server_id = module.database.postgres_server_id
+
 }
 
 module "securitygroup" {
@@ -73,6 +74,7 @@ module "middleware_api" {
 
   app_settings = {
     WEBSITES_PORT     = "8081"
+    POSTGRES_PORT     = "5432"
     POSTGRES_HOST     = module.database.postgres_fqdn
     POSTGRES_DB       = module.database.postgres_db_name
     POSTGRES_USER     = module.database.postgres_user
