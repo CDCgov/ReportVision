@@ -20,7 +20,7 @@ export interface Template {
 type TemplateStatus = "Completed" | "In Progress" | "Deprecated";
 
 const MIDDLEWARE_URL =
-  import.meta.env.MIDDLEWARE_API_URL || "http://localhost:8081";
+  import.meta.env.VITE_MIDDLEWARE_API_URL || "http://localhost:8081";
 export const TemplateAPI = {
   getTemplates: async (): Promise<Template[]> => {
     const response = await fetch(`${MIDDLEWARE_URL}/templates`);
