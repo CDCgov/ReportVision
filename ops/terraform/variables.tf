@@ -1,6 +1,5 @@
 variable "client_id" {}
 variable "name" {}
-variable "postgres_server_id" {}
 variable "object_id" {}
 variable "tenant_id" {}
 

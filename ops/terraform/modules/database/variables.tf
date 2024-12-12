@@ -15,6 +15,11 @@ variable "location" {
   default     = "eastus2"
 }
 
+variable "name" {
+  type        = string
+  description = "The name of the Project"
+}
+
 variable "resource_group_name" {
   type        = string
   description = "The Azure Resource Group to deploy to"
