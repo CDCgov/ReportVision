@@ -15,6 +15,11 @@ variable "location" {
   default     = "eastus2"
 }
 
+variable "name" {
+  type        = string
+  description = "The name of the Project"
+}
+
 variable "resource_group_name" {
   type        = string
   description = "The Azure Resource Group to deploy to"
@@ -32,7 +37,7 @@ variable "postgres_sku_name" {
   default     = "B_Standard_B1ms"
 }
 
-variable "subnet" {
+variable "db_subnet" {
   type        = string
   description = "The subnet ID to associate with the PostgreSQL Flexible Server"
 }
