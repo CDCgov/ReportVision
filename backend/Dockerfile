@@ -9,6 +9,6 @@ COPY . .
 
 RUN chmod +x ./gradlew
 
-EXPOSE 8081
+EXPOSE 8080
 
 ENTRYPOINT [ "./gradlew", "bootRun" ]
