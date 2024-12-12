@@ -1,10 +1,11 @@
 resource "azurerm_key_vault" "this" {
-  name                     = "reportvisionvault-${var.env}"
-  location                 = var.location
-  resource_group_name      = var.resource_group_name
-  sku_name                 = "standard"
-  tenant_id                = data.azurerm_client_config.current.tenant_id
-  purge_protection_enabled = true
+  name                       = "${var.name}vault${var.env}"
+  location                   = var.location
+  resource_group_name        = var.resource_group_name
+  sku_name                   = "standard"
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  purge_protection_enabled   = false
+  soft_delete_retention_days = 7
 
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
@@ -32,7 +33,7 @@ resource "random_string" "postgres_password" {
 }
 
 resource "azurerm_key_vault_secret" "postgres_db_password" {
-  name         = "reportvision-postgres-db-password"
+  name         = "${var.name}postgresdb-pwd-${var.env}"
   value        = random_string.postgres_password.result
   key_vault_id = azurerm_key_vault.this.id
 

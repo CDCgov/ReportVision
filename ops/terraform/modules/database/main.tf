@@ -2,7 +2,7 @@
 # As a result we are using Azure Database for PostgreSQL Flexible Server
 # with granular control, flexibility and better cost optimization. 
 resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
-  name                  = "reportvisionpostgresql-flexible-server-${var.env}"
+  name                  = "${var.name}postgresql-fs-${var.env}"
   location              = var.location
   resource_group_name   = var.resource_group_name
   sku_name              = var.postgres_sku_name
@@ -12,14 +12,14 @@ resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
 
   administrator_login    = var.db_username
   administrator_password = var.postgres_password
-  delegated_subnet_id    = var.subnet
+  delegated_subnet_id    = var.db_subnet
   private_dns_zone_id    = var.private_dns_zone_id
 
   # Disable Public Network Access 
   public_network_access_enabled = false
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
     ignore_changes  = [zone]
   }
 }

@@ -110,4 +110,13 @@ resource "azurerm_private_endpoint" "psql_db_pivate_endpoint" {
     name                 = "dns-zone-group"
     private_dns_zone_ids = [azurerm_private_dns_zone.postgresql_dns_zone.id]
   }
+  depends_on            = [var.postgres_server_id]
 }
+
+resource "azurerm_postgresql_flexible_server_firewall_rule" "app_service_firewall_rule" {
+  name             = "allow-app-service"
+  server_id        = var.postgres_server_id
+  start_ip_address = cidrhost(var.middlewaresubnetcidr, 0)   # CIDR block start
+  end_ip_address   = cidrhost(var.middlewaresubnetcidr, 255) # CIDR block end 
+}
+

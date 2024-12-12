@@ -13,6 +13,4 @@ variable "location" {
 }
 
 variable "postgres_server_id" {
-  description = "The ID of the PostgreSQL server"
-  type        = string
 }
