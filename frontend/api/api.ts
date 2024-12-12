@@ -6,7 +6,7 @@ import {
 } from "./types/types";
 
 const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/";
-const middlewareURL =  import.meta.env.MIDDLEWARE_API_URL || "http://localhost:8000/";
+const middlewareURL =  import.meta.env.VITE_MIDDLEWARE_API_URL || "http://localhost:8080/";
 
 export const AlignImage = async (
   args: AlignImageArgs,
