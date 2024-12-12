@@ -74,8 +74,9 @@ module "middleware_api" {
   app_subnet_id  = module.networking.middlewaresubnet_id
 
   app_settings = {
-    WEBSITES_PORT     = "8081"
-    PORT = "8081"
+    WEBSITES_PORT     = "8080"
+    PORT = "8080"
+    SSL_MODE = "require"
     POSTGRES_HOST     = module.database.postgres_fqdn
     POSTGRES_DB       = module.database.postgres_db_name
     POSTGRES_USER     = module.database.postgres_user

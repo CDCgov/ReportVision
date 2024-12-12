@@ -63,7 +63,7 @@ jobs:
   deploy-ocr:
     name: Deploy OCR
     runs-on: ubuntu-latest
-    environment: demo
+    environment: dev
     needs: [build-publish-ocr]
     steps:
       - uses: actions/checkout@v4
@@ -76,7 +76,7 @@ jobs:
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
-          deploy-env: demo
+          deploy-env: dev
           docker-tag: ${{ needs.build-publish-ocr.outputs.docker_tag }}
           docker-registry: ghcr.io
           api-name: middleware
