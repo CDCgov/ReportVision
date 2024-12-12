@@ -50,5 +50,3 @@ services:
     restart: "unless-stopped"
     depends_on: 
       - db
-    command: "./gradlew bootRun --continuous --args='--server.port=8081'"
-
