@@ -22,31 +22,27 @@ test.describe("when templates exist", async () => {
       const templates = [
         {
           name: "MumpsQuestV1",
-          lab: "Quest",
-          createdBy: "J.Smith",
-          status: "Completed",
-          lastUpdated: new Date(Date.parse("2025-03-24T12:00:00.000-05:00")),
+          facility: "Quest",
+          condition: 'Mumps',
+          createdOn:  new Date(Date.parse("2025-03-24T12:00:00.000-05:00")),
         },
         {
           name: "LBTIRadar",
-          lab: "Radar",
-          createdBy: "C.Alex",
-          status: "Completed",
-          lastUpdated: new Date(Date.parse("2025-05-30T12:00:00.000-05:00")),
+          condition: 'Covid',
+          facility: "LBTI",
+          createdOn: new Date(Date.parse("2025-05-30T12:00:00.000-05:00")),
         },
         {
           name: "COVIDBaylor1",
-          lab: "Emory",
-          createdBy: "A.Bryant",
-          status: "Completed",
-          lastUpdated: new Date(Date.parse("2025-06-21T12:00:00.000-05:00")),
+          condition: 'Covid',
+          facility: "Baylor",
+          createdOn: new Date(Date.parse("2025-06-21T12:00:00.000-05:00")),
         },
         {
           name: "COVIDEMory",
-          lab: "Baylor",
-          createdBy: "D.Smith",
-          status: "Completed",
-          lastUpdated: new Date(Date.parse("2024-06-21T12:00:00.000-05:00")),
+          condition: 'Covid',
+          facility: "Emory",
+          createdOn: new Date(Date.parse("2024-06-21T12:00:00.000-05:00")),
         },
       ];
       localStorage.setItem("templates", JSON.stringify(templates));
@@ -60,14 +56,14 @@ test.describe("when templates exist", async () => {
       page.getByRole("heading", { name: "Saved Templates" }),
     ).toBeVisible();
     await expect(page.locator("tbody").getByRole("row")).toHaveCount(4);
-    await page.getByText("Updated On").click();
+    await page.getByText("Created On").click();
     await expect(
       page.locator("tbody").locator("tr").nth(0).getByRole("cell").nth(1),
-    ).toHaveText("6/21/2024");
-    await page.getByText("Updated On").click();
+    ).toHaveText("Mumps");
+    await page.getByText("Created On").click();
     await expect(
       page.locator("tbody").locator("tr").nth(0).getByRole("cell").nth(1),
-    ).toHaveText("6/21/2025");
+    ).toHaveText("Covid");
     await page.close();
   });
   test("has links to extraction", async ({ page, baseURL }) => {
