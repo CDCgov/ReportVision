@@ -12,14 +12,14 @@ resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
 
   administrator_login    = var.db_username
   administrator_password = var.postgres_password
-  delegated_subnet_id    = var.subnet
+  delegated_subnet_id    = var.db_subnet
   private_dns_zone_id    = var.private_dns_zone_id
 
   # Disable Public Network Access 
   public_network_access_enabled = false
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
     ignore_changes  = [zone]
   }
 }

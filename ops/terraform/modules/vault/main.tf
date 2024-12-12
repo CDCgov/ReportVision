@@ -1,5 +1,5 @@
 resource "azurerm_key_vault" "this" {
-  name                     = "reportvisionvault"
+  name                     = "${var.name}vault${var.env}"
   location                 = var.location
   resource_group_name      = var.resource_group_name
   sku_name                 = "standard"
@@ -31,8 +31,8 @@ resource "random_string" "postgres_password" {
   override_special = "_!@#-$%^&*()[]{}" # excluded characters
 }
 
-resource "azurerm_key_vault_secret" "postgres_db_secret" {
-  name         = "reportvision-postgres-db-password"
+resource "azurerm_key_vault_secret" "postgres_db_password" {
+  name         = "${var.name}postgresdb-pwd-${var.env}"
   value        = random_string.postgres_password.result
   key_vault_id = azurerm_key_vault.this.id
 

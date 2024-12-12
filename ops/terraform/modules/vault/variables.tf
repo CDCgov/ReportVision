@@ -1,5 +1,7 @@
 variable "client_id" {}
+variable "env" {}
 variable "location" {}
+variable "name" {}
 variable "object_id" {
   type = string
 }

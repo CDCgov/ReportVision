@@ -9,7 +9,6 @@ variable "sku_name" {
 }
 variable "service" {}
 
-
 variable "https_only" {
   type    = bool
   default = false
