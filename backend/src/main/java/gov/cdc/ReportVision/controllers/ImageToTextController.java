@@ -28,6 +28,7 @@ public class ImageToTextController {
     @Value("${spring.fastapi.url}/image_to_text")
     private String fastApiUrl;
 
+    @CrossOrigin(origins = "*")
     @PostMapping(value = "/image_file_to_text", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<?> imageToText(
             @RequestParam("source_image") String sourceImage,
