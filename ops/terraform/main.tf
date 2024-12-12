@@ -75,10 +75,13 @@ module "middleware_api" {
 
   app_settings = {
     WEBSITES_PORT     = "8081"
+    PORT = "8081"
     POSTGRES_HOST     = module.database.postgres_fqdn
     POSTGRES_DB       = module.database.postgres_db_name
     POSTGRES_USER     = module.database.postgres_user
     POSTGRES_PASSWORD = module.vault.postgres_password
+    WEBSITES_CONTAINER_START_TIME_LIMIT = 500
+    DEBUG = true
   }
 
   lb_subnet_id = module.networking.lbsubnet_id
