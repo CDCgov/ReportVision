@@ -32,7 +32,7 @@ resource "random_string" "postgres_password" {
 }
 
 resource "azurerm_key_vault_secret" "postgres_db_password" {
-  name         = "reportvision-postgres-db-password"
+  name         = "${var.name}postgresdb-pwd-${var.env}"
   value        = random_string.postgres_password.result
   key_vault_id = azurerm_key_vault.this.id
 

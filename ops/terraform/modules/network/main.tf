@@ -89,28 +89,5 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dns_link" {
   resource_group_name   = var.resource_group
   private_dns_zone_name = azurerm_private_dns_zone.postgresql_dns_zone.name
   virtual_network_id    = azurerm_virtual_network.vnet.id
-  # depends_on            = [azurerm_subnet.db-subnet]
-  # depends_on = [azurerm_postgresql_flexible_server.postgres_flexible_server]
-  depends_on = [var.postgres_server_id]
+  depends_on            = [var.postgres_server_id]
 }
-
-# # Create private endpoint for SQL server
-# resource "azurerm_private_endpoint" "psql_db_pivate_endpoint" {
-#   name                = "psql-private-endpoint-middleware-connection"
-#   location            = var.location
-#   resource_group_name = var.resource_group
-#   subnet_id           = azurerm_subnet.middleware-subnet.id
-#   #   subnet_id           = azurerm_subnet.db-subnet.id
-
-#   private_service_connection {
-#     name                           = "psql-private-serviceconnection-${var.env}"
-#     private_connection_resource_id = var.postgres_server_id
-#     subresource_names              = ["psqlServer"]
-#     is_manual_connection           = false
-#   }
-
-#   private_dns_zone_group {
-#     name                 = "dns-zone-group"
-#     private_dns_zone_ids = [azurerm_private_dns_zone.postgresql_dns_zone.id]
-#   }
-# }
