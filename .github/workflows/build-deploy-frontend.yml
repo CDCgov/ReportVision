@@ -28,7 +28,7 @@ jobs:
       - uses: ./.github/actions/build-frontend
         name: Build frontend
         with:
-          api-endpoint: https://reportvision-middleware-dev.azurewebsites.net
+          api-endpoint: https://reportvision-middleware-demo.azurewebsites.net
           frontend-tarball: ./frontend.tgz
           frontend-path: ./frontend
           frontend-build-path: ./frontend/dist/
@@ -37,7 +37,7 @@ jobs:
   deploy-with-blob-name-optional:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: dev
+    environment: demo
     needs: [build-frontend]
     steps:
       - name: Download Artifacts To Job
@@ -60,7 +60,7 @@ jobs:
         shell: bash
         run: |
           if [ -z "${{ inputs.storage-account-name }}" ]; then
-            az storage blob upload-batch --account-name reportvisionfrontenddev -d '$web' -s frontend-deploy/ --overwrite
+            az storage blob upload-batch --account-name reportvisionfrontenddemo -d '$web' -s frontend-deploy/ --overwrite
           else
             az storage blob upload-batch --account-name ${{ inputs.storage-account-name }} -d '$web' -s frontend-deploy/ --overwrite
           fi
