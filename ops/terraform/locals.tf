@@ -14,6 +14,7 @@ locals {
       websubnetcidr        = "10.0.3.0/24"
       lbsubnetcidr         = "10.0.4.0/24"
       dbsubnetcidr         = "10.0.5.0/24"
+      appgwsubnetcidr      = "10.0.6.0/24"
     }
   }
   demo = {
@@ -24,6 +25,7 @@ locals {
       websubnetcidr        = "10.1.3.0/24"
       lbsubnetcidr         = "10.1.4.0/24"
       dbsubnetcidr         = "10.1.5.0/24"
+      appgwsubnetcidr      = "10.1.6.0/24"
     }
   }
 }

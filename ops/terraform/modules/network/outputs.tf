@@ -8,6 +8,11 @@ output "websubnet_id" {
   description = "Id of websubnet in the network"
 }
 
+output "appgwsubnet_id" {
+  value       = azurerm_subnet.appgw_subnet.id
+  description = "ID of the appgwsubnet in the network"
+}
+
 output "dbsubnet_id" {
   value       = azurerm_subnet.db-subnet.id
   description = "Id of dbsubnet in the network"

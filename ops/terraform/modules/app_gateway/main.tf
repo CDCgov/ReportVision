@@ -39,13 +39,27 @@ resource "azurerm_application_gateway" "load_balancer" {
   location            = var.resource_group_location
 
   sku {
-    name     = "Standard_v2"
-    tier     = "Standard_v2"
+    name = "WAF_v2"
+    tier = "WAF_v2" # WAF tier depreciated, set to WAF_v2 tier 
+    # capacity = 2
+  }
+
+  autoscale_configuration {
+    min_capacity = 2
+    max_capacity = 5
+  }
+
+  # Enable Web Application Firewall
+  waf_configuration {
+    enabled          = true
+    firewall_mode    = "Prevention" # to block malicious traffic
+    rule_set_type    = "OWASP"
+    rule_set_version = "3.2"
   }
 
   gateway_ip_configuration {
-    name      = "${var.name}-gateway-ip-configuration"
-    subnet_id = var.lb_subnet
+    name      = "${var.name}-gateway-ip-configuration-${var.env}"
+    subnet_id = var.appgw_subnet_id
   }
 
   # ------- Static -------------------------
@@ -271,10 +285,5 @@ resource "azurerm_application_gateway" "load_balancer" {
         query_string = "{var_query_string}"
       }
     }
-  }
-
-  autoscale_configuration {
-    min_capacity = 0
-    max_capacity = 5
   }
 }
