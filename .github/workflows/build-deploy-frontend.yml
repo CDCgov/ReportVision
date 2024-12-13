@@ -59,10 +59,10 @@ jobs:
       - name: Upload to Azure blob storage
         shell: bash
         run: |
-          if [ -z "${{ inputs.storage-account-name }}" ]; then
+          if [ -z "75fcytiuc71jefqdbd3jzpci" ]; then
             az storage blob upload-batch --account-name reportvisionfrontenddemo -d '$web' -s frontend-deploy/ --overwrite
           else
-            az storage blob upload-batch --account-name ${{ inputs.storage-account-name }} -d '$web' -s frontend-deploy/ --overwrite
+            az storage blob upload-batch --account-name 75fcytiuc71jefqdbd3jzpci -d '$web' -s frontend-deploy/ --overwrite
           fi
       - name: Azure logout
         shell: bash
