@@ -74,11 +74,16 @@ module "middleware_api" {
   app_subnet_id  = module.networking.middlewaresubnet_id
 
   app_settings = {
-    WEBSITES_PORT     = "8081"
+    WEBSITES_PORT     = "8080"
+    PORT = "8080"
+    SSL_MODE = "require"
     POSTGRES_HOST     = module.database.postgres_fqdn
-    POSTGRES_DB       = module.database.postgres_db_name
+    POSTGRES_DB       = "${module.database.postgres_db_name}-db"
     POSTGRES_USER     = module.database.postgres_user
     POSTGRES_PASSWORD = module.vault.postgres_password
+    WEBSITES_CONTAINER_START_TIME_LIMIT = 400
+    FASTAPI_URL = "https://${module.ocr_api.app_hostname}"
+    DEBUG = true
   }
 
   lb_subnet_id = module.networking.lbsubnet_id
@@ -102,12 +107,12 @@ module "ocr_api" {
     WEBSITES_PORT = "8000"
   }
 
-  lb_subnet_id = module.networking.middlewaresubnet_id
+  lb_subnet_id = module.networking.lbsubnet_id
   env          = local.environment
   vnet         = module.networking.network_name
   sku_name     = var.sku_name
   https_only   = true
-  depends_on   = [module.networking.ocrsubnet_id, module.networking.middlewaresubnet_id]
+  depends_on   = [module.networking.ocrsubnet_id, module.networking.lbsubnet_id]
 }
 
 module "ocr_autoscale" {

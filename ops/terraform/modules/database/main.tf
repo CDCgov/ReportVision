@@ -19,7 +19,7 @@ resource "azurerm_postgresql_flexible_server" "postgres_flexible_server" {
   public_network_access_enabled = false
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
     ignore_changes  = [zone]
   }
 }

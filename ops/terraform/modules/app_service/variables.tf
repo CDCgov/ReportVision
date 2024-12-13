@@ -2,7 +2,7 @@ variable "env" {}
 variable "name" {}
 variable "resource_group" {}
 variable "location" {}
-variable "lb_subnet_id" {}
+
 variable "app_subnet_id" {}
 variable "sku_name" {
   default = "S2"

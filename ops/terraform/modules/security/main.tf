@@ -28,12 +28,6 @@ resource "azurerm_network_security_group" "web-nsg" {
   # }
 }
 
-resource "azurerm_subnet_network_security_group_association" "web-nsg-subnet" {
-  depends_on                = [azurerm_network_security_rule.ag_nsg_rule_inbound]
-  subnet_id                 = var.lb_subnet_id
-  network_security_group_id = azurerm_network_security_group.web-nsg.id
-}
-
 locals {
   ag_inbound_ports_map = {
     "100" : "80", # If the key starts with a number, you must use the colon syntax ":" instead of "="
