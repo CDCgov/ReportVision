@@ -44,7 +44,7 @@ export const ImageToText = async (
     labels: JSON.stringify(fieldNames),
   });
 
-  const imageToTextURL = `${middlewareURL}/api/image_file_to_text/`;
+  const imageToTextURL = `${middlewareURL}api/image_file_to_text`;
   try {
     const response = await fetch(imageToTextURL, {
       method: "POST",
