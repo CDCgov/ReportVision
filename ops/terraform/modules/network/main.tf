@@ -15,6 +15,7 @@ resource "azurerm_subnet" "appgw_subnet" {
     "Microsoft.Storage",
   ]
 }
+
 resource "azurerm_subnet" "web-subnet" {
   name                 = "${var.name}-web-subnet-${var.env}"
   virtual_network_name = azurerm_virtual_network.vnet.name
