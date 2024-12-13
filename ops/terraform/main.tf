@@ -77,7 +77,7 @@ module "middleware_api" {
     PORT = "8080"
     SSL_MODE = "require"
     POSTGRES_HOST     = module.database.postgres_fqdn
-    POSTGRES_DB       = module.database.postgres_db_name
+    POSTGRES_DB       = "${module.database.postgres_db_name}-db"
     POSTGRES_USER     = module.database.postgres_user
     POSTGRES_PASSWORD = module.vault.postgres_password
     WEBSITES_CONTAINER_START_TIME_LIMIT = 400
@@ -110,7 +110,7 @@ module "ocr_api" {
   vnet         = module.networking.network_name
   sku_name     = var.sku_name
   https_only   = true
-  depends_on   = [module.networking.ocrsubnet_id, module.networking.middlewaresubnet_id]
+  depends_on   = [module.networking.ocrsubnet_id, module.networking.lbsubnet_id]
 }
 
 module "ocr_autoscale" {
@@ -142,7 +142,6 @@ module "vault" {
   name                = var.name
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
-  env                 = local.environment
   tenant_id           = var.tenant_id
   client_id           = var.client_id
   object_id           = module.middleware_api.webapp_id

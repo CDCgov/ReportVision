@@ -11,5 +11,3 @@ variable "resource_group_name" {}
 variable "subscription_id" {}
 variable "service_plan_id" {}
 variable "tenant_id" {}
-variable "env" {  
-}
