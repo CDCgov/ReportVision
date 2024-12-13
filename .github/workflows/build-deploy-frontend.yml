@@ -28,7 +28,7 @@ jobs:
       - uses: ./.github/actions/build-frontend
         name: Build frontend
         with:
-          api-endpoint: https://reportvision-middleware-dev.azurewebsites.net/
+          api-endpoint: https://reportvision-middleware-dev.azurewebsites.net
           frontend-tarball: ./frontend.tgz
           frontend-path: ./frontend
           frontend-build-path: ./frontend/dist/
