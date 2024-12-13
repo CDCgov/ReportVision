@@ -81,6 +81,7 @@ module "middleware_api" {
     POSTGRES_USER     = module.database.postgres_user
     POSTGRES_PASSWORD = module.vault.postgres_password
     WEBSITES_CONTAINER_START_TIME_LIMIT = 400
+    FASTAPI_URL = module.ocr_api.app_hostname
     DEBUG = true
   }
 

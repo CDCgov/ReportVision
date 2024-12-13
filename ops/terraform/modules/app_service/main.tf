@@ -27,11 +27,6 @@ resource "azurerm_linux_web_app" "linux_webapp" {
     scm_minimum_tls_version           = "1.2"
     use_32_bit_worker                 = false
     ftps_state                        = "Disabled"
-    vnet_route_all_enabled            = false
-
-    ip_restriction {
-      virtual_network_subnet_id = var.lb_subnet_id
-      action                    = "Allow"
-    }
+    vnet_route_all_enabled            = true
   }
 }
