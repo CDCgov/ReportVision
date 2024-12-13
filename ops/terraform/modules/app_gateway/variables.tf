@@ -1,7 +1,8 @@
 variable "name" {}
 variable "resource_group_name" {}
 variable "resource_group_location" {}
-variable "lb_subnet" {}
+variable "appgw_subnet_id" {}
+# variable "lb_subnet" {}
 variable "blob_endpoint" {}
 variable "tags" {}
 

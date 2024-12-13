@@ -40,7 +40,7 @@ resource "azurerm_application_gateway" "load_balancer" {
 
   sku {
     name = "WAF_v2"
-    tier = "WAF_v2" # WAF tier depreciated, set to WAF_v2 tier
+    tier = "WAF_v2" # WAF tier depreciated, set to WAF_v2 tier 
     # capacity = 2
   }
 
@@ -48,7 +48,6 @@ resource "azurerm_application_gateway" "load_balancer" {
     min_capacity = 2
     max_capacity = 5
   }
-
 
   # Enable Web Application Firewall
   waf_configuration {
@@ -59,8 +58,8 @@ resource "azurerm_application_gateway" "load_balancer" {
   }
 
   gateway_ip_configuration {
-    name      = "${var.name}-gateway-ip-configuration"
-    subnet_id = var.lb_subnet
+    name      = "${var.name}-gateway-ip-configuration-${var.env}"
+    subnet_id = var.appgw_subnet_id
   }
 
   # ------- Static -------------------------

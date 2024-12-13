@@ -7,6 +7,7 @@ variable "ocrsubnetcidr" {}
 variable "env" {}
 variable "middlewaresubnetcidr" {}
 variable "dbsubnetcidr" {}
+variable "appgwsubnetcidr" {}
 
 variable "location" {
   default = "eastus2"

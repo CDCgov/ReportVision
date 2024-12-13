@@ -19,6 +19,7 @@ module "networking" {
   ocrsubnetcidr        = local.workspace["ocrsubnetcidr"]
   middlewaresubnetcidr = local.workspace["middlewaresubnetcidr"]
   dbsubnetcidr         = local.workspace["dbsubnetcidr"]
+  appgwsubnetcidr      = local.workspace["appgwsubnetcidr"]
   env                  = local.environment
 
   # The DNS zone and DNS link are managed inside the networking module.
@@ -43,10 +44,10 @@ module "app_gateway" {
   resource_group_location = data.azurerm_resource_group.rg.location
   resource_group_name     = data.azurerm_resource_group.rg.name
 
-  blob_endpoint = module.storage.primary_web_host
-  lb_subnet     = module.networking.lbsubnet_id
-  tags          = local.management_tags
-  env           = local.environment
+  blob_endpoint   = module.storage.primary_web_host
+  appgw_subnet_id = module.networking.appgwsubnet_id
+  tags            = local.management_tags
+  env             = local.environment
 
   fqdns_ocr        = module.ocr_api.app_hostname
   fqdns_middleware = module.middleware_api.app_hostname

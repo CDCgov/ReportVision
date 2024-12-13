@@ -5,6 +5,16 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = [var.vnetcidr]
 }
 
+resource "azurerm_subnet" "appgw_subnet" {
+  name                 = "${var.name}-appgw-subnet-${var.env}"
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  resource_group_name  = var.resource_group
+  address_prefixes     = [var.appgwsubnetcidr]
+  service_endpoints = [
+    "Microsoft.Sql",
+    "Microsoft.Storage",
+  ]
+}
 resource "azurerm_subnet" "web-subnet" {
   name                 = "${var.name}-web-subnet-${var.env}"
   virtual_network_name = azurerm_virtual_network.vnet.name
