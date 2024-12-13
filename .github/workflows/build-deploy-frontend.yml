@@ -1,20 +1,18 @@
 name: Build and Deploy Frontend
 
 on:
-  push:
-    branches: test-deploy-middleware
-  # workflow_dispatch:
-  #   inputs:
-  #     deploy-env:
-  #       description: 'The environment to deploy to'
-  #       required: true
-  #       type: choice
-  #       options:
-  #         - dev
-  #         - demo
-  #     storage-account-name:
-  #       description: 'After the demo env gets created, copy its blob storage name here'
-  #       required: false
+  workflow_dispatch:
+    inputs:
+      deploy-env:
+        description: 'The environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - demo
+      storage-account-name:
+        description: 'After the demo env gets created, copy its blob storage name here'
+        required: false
 
 permissions:
   id-token: write
@@ -28,7 +26,7 @@ jobs:
       - uses: ./.github/actions/build-frontend
         name: Build frontend
         with:
-          api-endpoint: https://reportvision-middleware-demo.azurewebsites.net/
+          api-endpoint: https://reportvision-middleware-${{ inputs.deploy-env }}.azurewebsites.net/
           frontend-tarball: ./frontend.tgz
           frontend-path: ./frontend
           frontend-build-path: ./frontend/dist/
@@ -37,7 +35,7 @@ jobs:
   deploy-with-blob-name-optional:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: demo
+    environment: ${{ inputs.deploy-env }}
     needs: [build-frontend]
     steps:
       - name: Download Artifacts To Job
@@ -59,10 +57,10 @@ jobs:
       - name: Upload to Azure blob storage
         shell: bash
         run: |
-          if [ -z "75fcytiuc71jefqdbd3jzpci" ]; then
-            az storage blob upload-batch --account-name reportvisionfrontenddemo -d '$web' -s frontend-deploy/ --overwrite
+          if [ -z "${{ inputs.storage-account-name }}" ]; then
+            az storage blob upload-batch --account-name reportvisionfrontend${{ inputs.deploy-env }} -d '$web' -s frontend-deploy/ --overwrite
           else
-            az storage blob upload-batch --account-name 75fcytiuc71jefqdbd3jzpci -d '$web' -s frontend-deploy/ --overwrite
+            az storage blob upload-batch --account-name ${{ inputs.storage-account-name }} -d '$web' -s frontend-deploy/ --overwrite
           fi
       - name: Azure logout
         shell: bash

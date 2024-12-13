@@ -105,7 +105,7 @@ module "ocr_api" {
     WEBSITES_PORT = "8000"
   }
 
-  lb_subnet_id = module.networking.middlewaresubnet_id
+  lb_subnet_id = module.networking.lbsubnet_id
   env          = local.environment
   vnet         = module.networking.network_name
   sku_name     = var.sku_name
