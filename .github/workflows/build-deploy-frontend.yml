@@ -26,7 +26,7 @@ jobs:
       - uses: ./.github/actions/build-frontend
         name: Build frontend
         with:
-          api-endpoint: https://reportvision-ocr-${{ inputs.deploy-env }}.azurewebsites.net/
+          api-endpoint: https://reportvision-ocr-${{ inputs.deploy-env }}.azurewebsites.net
           frontend-tarball: ./frontend.tgz
           frontend-path: ./frontend
           frontend-build-path: ./frontend/dist/

@@ -1,6 +1,7 @@
 import { Organization, Page, User } from "./models.ts";
 import { create } from "zustand";
 import { Shape } from "react-image-label";
+import {middlewareURL} from "../../api/api.ts";
 
 export interface Template {
   id: string;
@@ -19,11 +20,9 @@ export interface Template {
 
 type TemplateStatus = "Completed" | "In Progress" | "Deprecated";
 
-const MIDDLEWARE_URL =
-  import.meta.env.VITE_MIDDLEWARE_API_URL || "http://localhost:8081";
 export const TemplateAPI = {
   getTemplates: async (): Promise<Template[]> => {
-    const response = await fetch(`${MIDDLEWARE_URL}/templates`);
+    const response = await fetch(`${middlewareURL}/templates`);
     if (!response.ok) {
       throw new Error("Unable to fetch templates");
     }

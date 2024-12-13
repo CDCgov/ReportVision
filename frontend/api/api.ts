@@ -6,7 +6,7 @@ import {
 } from "./types/types";
 
 const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/";
-const middlewareURL =  import.meta.env.VITE_MIDDLEWARE_API_URL || "http://localhost:8000/";
+export const middlewareURL =  import.meta.env.VITE_MIDDLEWARE_API_URL || "http://localhost:8000";
 
 export const AlignImage = async (
   args: AlignImageArgs,
@@ -44,7 +44,7 @@ export const ImageToText = async (
     labels: JSON.stringify(fieldNames),
   });
 
-  const imageToTextURL = `${middlewareURL}api/image_file_to_text`;
+  const imageToTextURL = `${middlewareURL}/api/image_file_to_text`;
   try {
     const response = await fetch(imageToTextURL, {
       method: "POST",
