@@ -1,21 +1,23 @@
 name: Build and deploy all of ReportVision's services to a development environment
 
 on:
-  workflow_dispatch:
-    inputs:
-      deploy-env:
-        description: 'The environment to deploy to'
-        required: true
-        type: choice
-        options:
-          - dev
-          - demo
-      ocr-docker-tag:
-        description: 'This is optional if you would like to deploy an already published OCR-API image'
-        required: false
-      middleware-docker-tag:
-        description: 'This is optional if you would like to deploy an already published Middleware-API image'
-        required: false
+  push:
+    branches: set-variables-for-db-different
+  # workflow_dispatch:
+  #   inputs:
+  #     deploy-env:
+  #       description: 'The environment to deploy to'
+  #       required: true
+  #       type: choice
+  #       options:
+  #         - dev
+  #         - demo
+  #     ocr-docker-tag:
+  #       description: 'This is optional if you would like to deploy an already published OCR-API image'
+  #       required: false
+  #     middleware-docker-tag:
+  #       description: 'This is optional if you would like to deploy an already published Middleware-API image'
+  #       required: false
 
 permissions:
   contents: read
@@ -38,10 +40,10 @@ jobs:
         shell: bash
         id: set_tag
         run: |
-          USER_INPUT="${{ github.event.inputs.middleware-docker-tag }}"
+          USER_INPUT=""
           echo "docker_tag=$(
             #this gives a new sha as default if dispatch input is empty
-            echo ${USER_INPUT:-"${{ github.sha }}"}
+            echo ${USER_INPUT:-"$(git rev-parse --short HEAD)"}
           )" >> $GITHUB_OUTPUT
       - name: Check if image exists
         id: image_check
@@ -75,10 +77,10 @@ jobs:
         shell: bash
         id: set_tag
         run: |
-          USER_INPUT="${{ github.event.inputs.ocr-docker-tag }}"
+          USER_INPUT=""
           echo "docker_tag=$(
             #this gives a new sha as default if dispatch input is empty
-            echo ${USER_INPUT:-"${{ github.sha }}"}
+            echo ${USER_INPUT:-"$(git rev-parse --short HEAD)"}
           )" >> $GITHUB_OUTPUT
       - name: Check if image exists
         id: image_check
@@ -106,7 +108,7 @@ jobs:
       - uses: ./.github/actions/build-frontend
         name: Build frontend
         with:
-          api-endpoint: https://reportvision-ocr-${{ inputs.deploy-env }}.azurewebsites.net/
+          api-endpoint: https://reportvision-ocr-dev.azurewebsites.net/
           frontend-tarball: ./frontend.tgz
           frontend-path: ./frontend
           frontend-build-path: ./frontend/dist/
@@ -115,7 +117,7 @@ jobs:
   az-environment-setup:
     name: Setup Azure Environment
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
+    environment: dev
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -127,8 +129,8 @@ jobs:
       - uses: ./.github/actions/tf-setup
         name: Setup this environment with Terraform
         with:
-          deploy-env: ${{ inputs.deploy-env }}
-          azure-resource-group: reportvision-rg-${{ inputs.deploy-env }}
+          deploy-env: dev
+          azure-resource-group: reportvision-rg-dev
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -138,7 +140,7 @@ jobs:
   deploy-middleware:
     name: Deploy middleware
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
+    environment: dev
     needs: [build-publish-middleware, az-environment-setup]
     steps:
       - uses: actions/checkout@v4
@@ -151,7 +153,7 @@ jobs:
       - name: Deploy middleware-API
         uses: ./.github/actions/deploy-api
         with:
-          deploy-env: ${{ inputs.deploy-env }}
+          deploy-env: dev
           docker-tag: ${{ needs.build-publish-middleware.outputs.docker_tag }}
           docker-registry: ghcr.io
           api-name: middleware
@@ -159,7 +161,7 @@ jobs:
   deploy-ocr:
     name: Deploy OCR
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
+    environment: dev
     needs: [build-publish-ocr, az-environment-setup]
     steps:
       - uses: actions/checkout@v4
@@ -172,7 +174,7 @@ jobs:
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
-          deploy-env: ${{ inputs.deploy-env }}
+          deploy-env: dev
           docker-tag: ${{ needs.build-publish-ocr.outputs.docker_tag }}
           docker-registry: ghcr.io
           api-name: ocr
@@ -180,9 +182,9 @@ jobs:
   deploy-frontend:
     name: Deploy Frontend
     runs-on: ubuntu-latest
-    environment: ${{ inputs.deploy-env }}
+    environment: dev
     needs: [build-frontend, az-environment-setup]
-    if: ${{ inputs.deploy-env != 'demo'}}
+    if: ${{ 'dev' != 'demo'}}
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -195,4 +197,4 @@ jobs:
         uses: ./.github/actions/deploy-frontend
         with:
           frontend-tarball: frontend.tgz
-          deploy-env: ${{ inputs.deploy-env }}
+          deploy-env: dev
