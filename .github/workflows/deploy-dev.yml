@@ -43,7 +43,7 @@ jobs:
           USER_INPUT=""
           echo "docker_tag=$(
             #this gives a new sha as default if dispatch input is empty
-            echo ${USER_INPUT:-$(git rev-parse --short HEAD)}
+            echo ${USER_INPUT:-uuidgen}
           )" >> $GITHUB_OUTPUT
       - name: Check if image exists
         id: image_check
@@ -80,7 +80,7 @@ jobs:
           USER_INPUT=""
           echo "docker_tag=$(
             #this gives a new sha as default if dispatch input is empty
-            echo ${USER_INPUT:-$(git rev-parse --short HEAD)}
+            echo ${USER_INPUT:-uuidgen}
           )" >> $GITHUB_OUTPUT
       - name: Check if image exists
         id: image_check
