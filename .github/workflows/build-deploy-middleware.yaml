@@ -9,7 +9,6 @@ on:
         type: choice
         options:
           - dev
-          - demo
       middleware-docker-tag:
         description: 'This is optional if you would like to deploy an already published Middleware-API image'
         required: false
@@ -54,8 +53,8 @@ jobs:
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
           docker-tag: ${{ steps.set_tag.outputs.docker_tag }}
-          dockerfile-path: ./Backend/Dockerfile
-          docker-context-path: ./Backend/
+          dockerfile-path: ./backend/Dockerfile
+          docker-context-path: ./backend/
           api-name: middleware
 
   deploy-middleware:

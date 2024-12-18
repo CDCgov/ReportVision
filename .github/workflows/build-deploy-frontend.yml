@@ -9,10 +9,6 @@ on:
         type: choice
         options:
           - dev
-          - demo
-      storage-account-name:
-        description: 'After the demo env gets created, copy its blob storage name here'
-        required: false
 
 permissions:
   id-token: write
@@ -57,11 +53,7 @@ jobs:
       - name: Upload to Azure blob storage
         shell: bash
         run: |
-          if [ -z "${{ inputs.storage-account-name }}" ]; then
-            az storage blob upload-batch --account-name reportvisionfrontend${{ inputs.deploy-env }} -d '$web' -s frontend-deploy/ --overwrite
-          else
-            az storage blob upload-batch --account-name ${{ inputs.storage-account-name }} -d '$web' -s frontend-deploy/ --overwrite
-          fi
+          az storage blob upload-batch --account-name reportvisionfrontend${{ inputs.deploy-env }} -d '$web' -s frontend-deploy/ --overwrite
       - name: Azure logout
         shell: bash
         run: |
