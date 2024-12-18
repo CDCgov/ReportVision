@@ -29,7 +29,7 @@ export const Uploadfile = () => {
   }
 
   const onBack = () => {
-    navigate("/new-template");
+    navigate("/");
     clearFiles();
   };
 
