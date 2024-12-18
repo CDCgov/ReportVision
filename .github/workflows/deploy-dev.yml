@@ -41,7 +41,7 @@ jobs:
           USER_INPUT="${{ github.event.inputs.middleware-docker-tag }}"
           echo "docker_tag=$(
             #this gives a new sha as default if dispatch input is empty
-            echo ${USER_INPUT:-"${{ github.sha }}"}
+            echo ${USER_INPUT:-$(uuidgen)}
           )" >> $GITHUB_OUTPUT
       - name: Check if image exists
         id: image_check
@@ -78,7 +78,7 @@ jobs:
           USER_INPUT="${{ github.event.inputs.ocr-docker-tag }}"
           echo "docker_tag=$(
             #this gives a new sha as default if dispatch input is empty
-            echo ${USER_INPUT:-"${{ github.sha }}"}
+            echo ${USER_INPUT:-$(uuidgen)}
           )" >> $GITHUB_OUTPUT
       - name: Check if image exists
         id: image_check
@@ -132,7 +132,7 @@ jobs:
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          object-id: ${{ secrets.AZURE_OBJECT_ID }}
+          azure-object-id: ${{ secrets.AZURE_OBJECT_ID }}
           app-name: reportvision
 
   deploy-middleware:
