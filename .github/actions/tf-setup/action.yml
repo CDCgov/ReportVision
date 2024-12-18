@@ -32,7 +32,7 @@ runs:
       env:
         RESOURCE_GROUP_NAME: ${{ inputs.azure-resource-group }}
         NAME: ${{ inputs.app-name }}
-        SKU_NAME: S2
+        SKU_NAME: P0V3
         OBJECT_ID: ${{ inputs.azure-object-id }}
         TENANT_ID: ${{ inputs.azure-tenant-id }}
         CLIENT_ID: ${{ inputs.azure-client-id }}
