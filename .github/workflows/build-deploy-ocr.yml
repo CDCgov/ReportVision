@@ -9,7 +9,6 @@ on:
         type: choice
         options:
           - dev
-          - demo
       ocr-docker-tag:
         description: 'This is optional if you would like to deploy an already published OCR-API image'
         required: false
