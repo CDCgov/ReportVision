@@ -143,8 +143,15 @@ const AnnotateTemplate: React.FC = () => {
               color: item.color.slice(0, 7),
             });
             const tempFields = [...fields];
+            // get all fields for all indexes and 
+            const uniqueFields = new Set();
+            fields.forEach((field) => {
+              field.forEach((f) => {
+                uniqueFields.add(f);
+              });
+            });
             const tempMap = new Map(localIds);
-            if (!tempFields[index].has(item.name)) {
+            if (!tempFields[index].has(item.name) && !uniqueFields.has(item.name)) {
               annotator!.drawRectangle();
               tempFields[index].add(item.name);
               tempMap.set(
@@ -207,7 +214,6 @@ const AnnotateTemplate: React.FC = () => {
       <UploadHeader
         title="Annotate new template"
         onBack={() => navigate("/new-template/upload")}
-        onSubmit={handleSubmit}
       />
       <Divider margin="0px" />
       <div className="display-flex flex-justify-center padding-top-4">
