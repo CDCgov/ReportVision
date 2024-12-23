@@ -7,9 +7,11 @@ const SPACER_GIF =
 export const FilePreview = ({
   imageId,
   file,
+  hidePreview,
 }: {
   imageId: string;
   file: File;
+  hidePreview?: boolean;
 }): React.ReactElement => {
   const [previewSrc, setPreviewSrc] = useState(SPACER_GIF);
   const [showGenericPreview, setShowGenericPreview] = useState(false);
@@ -47,7 +49,7 @@ export const FilePreview = ({
   return (
     <div
       data-testid="file-input-preview"
-      className="usa-file-input__preview"
+      className={`${hidePreview ? 'display-none' : ''} usa-file-input__preview`}
       aria-hidden="true"
     >
       <img

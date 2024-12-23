@@ -201,6 +201,7 @@ exports[`UploadTemplate component > matches the snapshot 1`] = `
                   data-testid="file-input-box"
                 />
                 <input
+                  accept=".pdf"
                   class="usa-file-input__input"
                   data-testid="file-input-input"
                   id="file-input-:r0:"

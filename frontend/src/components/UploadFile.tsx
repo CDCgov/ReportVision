@@ -23,6 +23,10 @@ export const Uploadfile = () => {
         const file = fileList[i];
         filesObj["files"].push(file);
       }
+      if(files.length > 0) {
+        clearFiles();
+        localStorage.setItem("files", JSON.stringify('{}'));
+      }
       localStorage.setItem("files", JSON.stringify(filesObj));
       addFile(event.target?.files[0]);
     }
@@ -59,6 +63,7 @@ export const Uploadfile = () => {
           <div className="display-flex flex-column flex-align-center width-full height-full">
             <FileInput
               onChange={handleChange}
+              accept=".pdf"
               id={`file-input-${id}`}
               className="padding-bottom-2"
               name="file-input-single"
