@@ -150,6 +150,11 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const files = Array.from(event.target.files);
+      if (files.length > 0) {
+        setUploadedFile([]);
+        clearFiles();
+        setHasError(false);
+      }
       setUploadedFile(files);
       const filesObj: IFilesObj = { files };
       localStorage.setItem("files", JSON.stringify(filesObj));
@@ -243,8 +248,9 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
               >
                 {uploadedFile.length} file(s) selected
               </label>
-              {!isUploadComplete && (
                 <FileInput
+                  hidePreview
+                  accept=".pdf"
                   multiple
                   onChange={handleChange}
                   id={`file-input-multiple-${id}-2`}
@@ -253,7 +259,6 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
                   chooseText="Change file(s)"
                   dragText=" "
                 />
-              )}
             </div>
             <div
               className="display-flex flex-column width-full height-full margin-bottom-2 margin-top-1"
@@ -352,6 +357,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
               style={{ width: "80%" }}
             >
               <FileInput
+                accept=".pdf"
                 multiple
                 onChange={handleChange}
                 id={`file-input-multiple-${id}-1`}

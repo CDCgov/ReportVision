@@ -177,7 +177,7 @@ export const FileInputForwardRef: React.ForwardRefRenderFunction<
       }
     }
     setFiles(fileArr);
-
+    console.log('change')
     if (onChange) onChange(e);
   };
 

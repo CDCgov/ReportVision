@@ -19,6 +19,7 @@ type FileInputProps = {
   disabled?: boolean;
   multiple?: boolean;
   accept?: string;
+  hidePreview?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDrop?: (e: React.DragEvent) => void;
 };
@@ -43,6 +44,7 @@ export const FileInputForwardRef: React.ForwardRefRenderFunction<
     multiple,
     className,
     accept,
+    hidePreview,
     onChange,
     onDrop,
     ...inputProps
@@ -103,15 +105,14 @@ export const FileInputForwardRef: React.ForwardRefRenderFunction<
       filePreviews.push(
         <FilePreview
           key={key}
+          hidePreview
           imageId={imageId}
           file={files[parseInt(`${i}`)]}
         />,
       );
     }
   }
-
   const instructionClasses = classnames("usa-file-input__instructions", {
-    "display-none": filePreviews.length > 0,
   });
 
   const previewHeaderText =
@@ -187,7 +188,7 @@ export const FileInputForwardRef: React.ForwardRefRenderFunction<
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {filePreviews.length > 0 && (
+        {filePreviews.length > 0 && !hidePreview && (
           <div
             data-testid="file-input-preview-heading"
             className="usa-file-input__preview-heading"
