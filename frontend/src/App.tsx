@@ -11,6 +11,7 @@ import "./App.scss";
 import { useFiles } from "./contexts/FilesContext.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { TemplateAPI } from "./types/templates.ts";
+import { useError } from "./contexts/ErrorContext.tsx";
 
 function App() {
   const { pathname } = useLocation();
@@ -40,6 +41,7 @@ function App() {
     };
     getTemplates();
   }, [templateQuery.data]);
+  const { setError } = useError();
 
   useEffect(() => {
     if (templates.length > 0) {
@@ -51,7 +53,8 @@ function App() {
 
   useEffect(() => {
     setFiles([]);
-  },[]);
+    setError(null);
+  }, []);
 
   const navLinks = [
     { text: "Annotate and Extract", url: "/" },

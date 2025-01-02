@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useId, useState } from "react";
-import { Button, Icon, Select } from "@trussworks/react-uswds";
+import { Button, Select } from "@trussworks/react-uswds";
 import { useFiles } from "../contexts/FilesContext";
 import { useNavigate } from "react-router-dom";
 import image from "../assets/green_check.svg";
@@ -11,6 +11,8 @@ import "./ExtractUploadFile.scss";
 import { FileInput } from "./FileInput/file-input";
 import { TemplateAPI } from "../types/templates.ts";
 import { useQuery } from "@tanstack/react-query";
+import ErrorBanner from "../error/ErrorBanner.tsx";
+import { ERRORS, useError } from "../contexts/ErrorContext.tsx";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
@@ -51,7 +53,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
   } = useFiles();
   const navigate = useNavigate();
   const [templates, setTemplates] = useState<Template[]>([]);
-  const [hasError, setHasError] = useState<boolean>(false);
+  const { error, setError } = useError();
   const [extractedImages, setExtractedImages] = useState<ExtractedFiles[]>([]);
   const _templates =
     useQuery({
@@ -181,7 +183,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
         tempSelectedTemplates.push(template);
       }
 
-      const error = tempSelectedTemplates.some((template) => {
+      const localErr = tempSelectedTemplates.some((template) => {
         const tempplate = templates.find(
           (tpl) => tpl.name === template.templateName,
         );
@@ -190,7 +192,11 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
         );
         return tempplate?.pages.length !== extractedImage?.images.length;
       });
-      setHasError(error);
+      if (localErr) {
+        setError(ERRORS.MISMATCH_ERROR);
+      } else {
+        setError(null);
+      }
     }
 
     if (selectedTemplates.length === 0) {
@@ -198,9 +204,13 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
       const extractedImage = extractedImages.find(
         (img) => img.file === fileName,
       );
-      const error =
+      const localErr =
         checkTemplate?.pages.length !== extractedImage?.images.length;
-      setHasError(error);
+      if (localErr) {
+        setError(ERRORS.MISMATCH_ERROR);
+      } else {
+        setError(null);
+      }
     }
   };
 
@@ -209,7 +219,6 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
     clearTemplates();
     clearFiles();
   };
-
   return (
     <div className="display-flex flex-column flex-align-start flex-justify-start height-full width-full padding-2 bg-primary-lighter">
       <div className="extract-upload-header">
@@ -221,18 +230,10 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
         </p>
         <p className="helper-text">Select one or more files</p>
       </div>
-      {hasError && (
-        <div className="error-container">
-          <div className="error-header">
-            <Icon.Error className="error-icon" />
-            <h2 className="error-title">Mismatch error:</h2>
-          </div>
-          <p className="error-message">
-            The uploaded file has a different number of pages than the template.
-            Please upload a file with the correct pages to proceed or choose a
-            different template.
-          </p>
-        </div>
+      {error?.title && (
+        <ErrorBanner 
+          title={error.title}
+          message={error.message} />
       )}
       <div
         data-testid="dashed-container"
