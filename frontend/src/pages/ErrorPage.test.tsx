@@ -2,7 +2,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { describe, it, expect, vi } from "vitest";
-import NotFound from "./404Page";
+import ErrorPage from "./ErrorPage";
 
 const mockNavigate = vi.fn(); // Create a mock function for navigation
 // Mock the useNavigate hook from react-router-dom
@@ -17,7 +17,7 @@ describe("NotFound Component", () => {
   it("should render the NotFound component", () => {
     render(
       <BrowserRouter>
-        <NotFound />
+        <ErrorPage title={"Sorry, this page can’t be found"} body={"The page you are looking for doesn’t exist or has been moved."} />
       </BrowserRouter>,
     );
 
@@ -43,8 +43,8 @@ describe("NotFound Component", () => {
   it("should navigate back when the back button is clicked", () => {
     render(
       <BrowserRouter>
-        <NotFound />
-      </BrowserRouter>,
+          <ErrorPage title={"Sorry, this page can’t be found"} body={"The page you are looking for doesn’t exist or has been moved."} />
+        </BrowserRouter>,
     );
 
     fireEvent.click(screen.getByText(/back/i));

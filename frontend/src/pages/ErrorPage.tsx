@@ -6,15 +6,20 @@ import { useNavigate } from "react-router-dom";
 
 import "./404Page.scss";
 
-const NotFound: React.FC = () => {
+interface ErrorPageProps {
+  title: string;
+  body: string;
+}
+
+const ErrorPage: React.FC<ErrorPageProps> = ({ title, body }) => {
   const navigate = useNavigate();
   return (
     <div className="width-full height-full display-flex flex-column">
       <AppHeader jurisdiction={""} />
       <div className="error-content">
-        <h1 className="error-cta">Sorry, this page can’t be found</h1>
+        <h1 className="error-cta">{title}</h1>
         <img data-testid="404-image" src={image} alt="404" />
-        <p>The page you are looking for doesn’t exist or has been moved.</p>
+        <p>{body}</p>
         <Button onClick={() => navigate("/")} type="button">
           Back to Previous Page
         </Button>
@@ -23,4 +28,4 @@ const NotFound: React.FC = () => {
   );
 };
 
-export default NotFound;
+export default ErrorPage;

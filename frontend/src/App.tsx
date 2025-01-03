@@ -9,11 +9,13 @@ import Comment from './assets/comment.svg';
 import CSV from './assets/csv.svg';
 import "./App.scss";
 import { useFiles } from "./contexts/FilesContext.tsx";
+import { useError } from "./contexts/ErrorContext.tsx";
 
 function App() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { setFiles } = useFiles();
+  const { setError } = useError();
   const [isFirstVisit, setIsFirstVisit] = useState(false);
 
   useEffect(() => {
@@ -23,6 +25,7 @@ function App() {
       localStorage.setItem("hasVisited", "true");
     }
     setFiles([]);
+    setError(null);
   }, []);
 
   const navLinks = [

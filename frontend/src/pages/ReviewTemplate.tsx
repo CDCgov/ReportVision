@@ -14,6 +14,7 @@ import {
   fake_upload_images,
   fakeTemplates,
 } from "../utils/constants.ts";
+import { ERRORS, useError } from "../contexts/ErrorContext.tsx";
 
 interface ResultsTable {
   index: number;
@@ -42,6 +43,7 @@ interface Row {
 const ReviewTemplate: React.FC = () => {
   const navigate = useNavigate();
   const { clearTemplates } = useFiles();
+  const { setError } = useError();
   const [submissionIndex, setSubmissionIndex] = useState<number>(0);
   const [isReviewing, setIsReviewing] = useState<boolean>(false);
   const [index, setIndex] = useState<number>(0);
@@ -55,6 +57,7 @@ const ReviewTemplate: React.FC = () => {
 
   const onDownload = () => {
     try {
+      setError(null);
       if (submissionArray && submissionArray.length > 0) {
         // Prepare CSV data with column names
         const csvData = [
@@ -81,8 +84,9 @@ const ReviewTemplate: React.FC = () => {
         document.body.removeChild(a); // Clean up
         URL.revokeObjectURL(url); // Revoke URL
       }
-    } catch (error) {
-      console.error(error);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e) {
+      setError(ERRORS.CSV_ERROR);
     }
   };
 
