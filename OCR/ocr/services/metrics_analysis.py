@@ -48,11 +48,11 @@ class OCRMetrics:
     def hamming_distance(ocr_text, ground_truth):
         if len(ocr_text) != len(ground_truth):
             raise ValueError("Strings must be of the same length to calculate Hamming distance.")
-        return Levenshtein.hamming(ocr_text, ground_truth)
+        return Levenshtein.hamming(ocr_text.upper(), ground_truth.upper())
 
     @staticmethod
     def levenshtein_distance(ocr_text, ground_truth):
-        return Levenshtein.distance(ocr_text, ground_truth)
+        return Levenshtein.distance(ocr_text.upper(), ground_truth.upper())
 
     def extract_values_from_json(self, json_data):
         if json_data is None:

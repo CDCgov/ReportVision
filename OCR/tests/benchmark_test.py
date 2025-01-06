@@ -7,6 +7,7 @@ import pytest
 from Levenshtein import distance, ratio
 
 from ocr.services.image_ocr import ImageOCR
+from ocr.services.tesseract_ocr import TesseractOCR
 from PIL import Image, ImageDraw, ImageFont
 
 path = os.path.dirname(__file__)
@@ -95,6 +96,7 @@ def generate_exact_segments(
 
 class TestBenchmark:
     ocr = ImageOCR()
+    tess = TesseractOCR()
     sample_size = 10
 
     test_cases = [
@@ -115,9 +117,10 @@ class TestBenchmark:
 
     @pytest.mark.benchmark(group="OCR Model Performance", min_rounds=1)
     @pytest.mark.parametrize("name,segments", test_cases)
-    def test_ocr_english_sentences(self, name, segments, benchmark):
+    @pytest.mark.parametrize("model", (ocr, tess))
+    def test_ocr_english_sentences(self, name, segments, model, benchmark):
         print("\n", name)
-        results = benchmark(self.ocr.image_to_text, segments)
+        results = benchmark(model.image_to_text, segments)
 
         actual_labels = [x.lower() for x in list(results.keys())]
         predicted_labels = [x[0].lower() for x in list(results.values())]

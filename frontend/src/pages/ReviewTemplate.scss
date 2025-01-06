@@ -1,6 +1,6 @@
 .usa-table--striped tbody tr:nth-child(odd) td.usa-input--error {
   color: #d54309;
-  background-color:  #DCDEE0;
+  background-color: #dcdee0;
 }
 
 .usa-table--striped tbody tr:nth-child(even) td.usa-input--error {
@@ -16,14 +16,13 @@
 
 .table-group-container {
   margin: 24px 16px;
-  border: 1px solid #DCDEE0;
+  border: 1px solid #dcdee0;
   border-radius: 5px;
 }
 
 .table-container {
   padding: 24px 16px;
   margin-right: 16px;
-
 }
 
 .custom-tooltip-text {
@@ -51,18 +50,21 @@
   margin: 24px 16px;
 }
 
+.toolbar-border {
+  box-shadow: -2px 4px 11px 2px rgba(231, 242, 250, 0.58);
+}
+
 .image-container {
   width: 50%;
-  background-color: #F5FBFF;
-  padding: 16px;
+  background-color: #f5fbff;
 }
 
 .text-success-confidence {
-  color: #0C7C65;
+  color: #0c7c65;
 }
 
 .error-text {
-  color: #B32C54;
+  color: #b32c54;
 }
 
 .review-template-header-container {
@@ -70,8 +72,8 @@
 }
 
 .review-template-header-outer {
-  border-bottom: 1px solid #DCDEE0;
-} 
+  border-bottom: 1px solid #dcdee0;
+}
 
 .review-button-container {
   margin-left: 16px;
@@ -79,7 +81,7 @@
 }
 
 .outer-review-header-container {
-  border-bottom: 1px solid #DCDEE0;
+  border-bottom: 1px solid #dcdee0;
 }
 
 .csv {

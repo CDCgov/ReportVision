@@ -1,0 +1,79 @@
+name: Create, publish, deploy a Middleware API image
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy-env:
+        description: 'The environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+      middleware-docker-tag:
+        description: 'This is optional if you would like to deploy an already published Middleware-API image'
+        required: false
+
+permissions:
+  contents: read
+  packages: write
+  attestations: write
+  id-token: write
+
+jobs:
+  build-publish-middleware:
+    name: Build and Publish Middleware
+    runs-on: ubuntu-latest
+    outputs:
+      docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
+      docker_tag: ${{ steps.set_tag.outputs.docker_tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lowercase the repo name
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: Set Middleware Docker tag
+        shell: bash
+        id: set_tag
+        run: |
+          USER_INPUT="${{ github.event.inputs.middleware-docker-tag }}"
+          echo "docker_tag=$(
+            #this gives a new sha as default if dispatch input is empty
+            echo ${USER_INPUT:-"${{ github.sha }}"}
+          )" >> $GITHUB_OUTPUT
+      - name: Check if image exists
+        id: image_check
+        run: |
+          echo "docker_inspect=$(
+              docker manifest inspect ghcr.io/${{ env.REPO }}-middleware:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
+            )" >> $GITHUB_OUTPUT
+      - name: Build and Push backend
+        if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
+        uses: ./.github/actions/build-publish-api
+        with:
+          docker-registry: ghcr.io
+          docker-pw: ${{ secrets.GITHUB_TOKEN }}
+          docker-username: ${{ github.actor }}
+          docker-tag: ${{ steps.set_tag.outputs.docker_tag }}
+          dockerfile-path: ./backend/Dockerfile
+          docker-context-path: ./backend/
+          api-name: middleware
+
+  deploy-middleware:
+    name: Deploy Middleware
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.deploy-env }}
+    needs: [build-publish-middleware]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
+      - name: Deploy Middleware-API
+        uses: ./.github/actions/deploy-api
+        with:
+          deploy-env: ${{ inputs.deploy-env }}
+          docker-tag: ${{ needs.build-publish-middleware.outputs.docker_tag }}
+          docker-registry: ghcr.io
+          api-name: middleware

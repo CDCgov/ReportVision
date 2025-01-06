@@ -6,22 +6,18 @@ exports[`UploadTemplate component > matches the snapshot 1`] = `
     style="display: flex; flex-direction: column; justify-content: start; width: 100%; height: 100%;"
   >
     <header
-      class="usa-header"
+      class="usa-header header"
       data-testid="header"
-      style="height: 50px; padding: 8px;"
     >
       <div
-        class="display-flex height-full flex-align-center"
-        style="justify-content: space-between;"
+        class="display-flex height-full flex-align-center flex-justify"
       >
         <div
-          class="display-flex flex-jusitfy-start height-full flex-align-center"
-          style="justify-content: space-between;"
+          class="display-flex flex-jusitfy-start height-full flex-align-center flex-justify"
         >
           <button
-            class="usa-button usa-button--unstyled"
+            class="usa-button usa-button--unstyled close-button"
             data-testid="close-button"
-            style="padding-right: 8px;"
             type="button"
           >
             <svg
@@ -47,20 +43,11 @@ exports[`UploadTemplate component > matches the snapshot 1`] = `
           class="display-flex flex-jusitfy-start height-full flex-align-center"
         >
           <button
-            class="usa-button usa-button--outline"
+            class="usa-button usa-button--outline reset-button"
             data-testid="button"
-            style="height: 40px; box-shadow: inset 0 0 0 2px  #adadad; color: rgb(173, 173, 173);"
             type="reset"
           >
             Back
-          </button>
-          <button
-            class="usa-button usa-button--base"
-            data-testid="button"
-            style="height: 40px;"
-            type="submit"
-          >
-            Submit
           </button>
         </div>
       </div>
@@ -163,90 +150,86 @@ exports[`UploadTemplate component > matches the snapshot 1`] = `
       class="display-flex flex-column flex-align-center flex-justify-start height-full width-full padding-2 bg-primary-lighter"
     >
       <div
-        style="width: 70%; text-align: left;"
+        class="upload-file-header-content-container"
       >
         <h1
-          style="margin: 0px;"
+          class="upload-file-header"
         >
-          Upload new form to segment
+          Upload new file to annotate
         </h1>
-        <h2
-          style="margin: 0px;"
+        <p>
+          You can upload new lab files (PDF s or images) to annotate and save as a template. Annotation is the process of marking and labeling specific areas of an image to identify key elements or features.
+        </p>
+        <p
+          class="upload-file-instructions"
         >
-          Upload new image or PDF and save as a template
-        </h2>
-      </div>
-      <div
-        class="display-flex flex-column margin-top-205 flex-justify flex-align-center bg-white"
-        data-testid="dashed-container"
-        style="width: 70%; height: 40%; border: 1px dashed #005ea2;"
-      >
-        <svg
-          class="usa-icon usa-icon--size-5"
-          color="#005ea2"
-          data-testid="upload-icon"
-          focusable="false"
-          height="1em"
-          role="img"
-          style="margin-top: 16px;"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15.01l1.41 1.41L11 14.84V19h2v-4.16l1.59 1.59L16 15.01 12.01 11z"
-          />
-        </svg>
+          Select one file
+        </p>
         <div
-          class="display-flex flex-column flex-align-center margin-bottom-1"
-          style="width: 60%;"
+          class="width-full height-full bg-white dashed-container dashed-container-preupload"
+          data-testid="dashed-container"
         >
-          <h3
-            style="font-weight: bold;"
-          >
-            Drag and drop file here
-          </h3>
-          <p>
-            or
-          </p>
           <div
-            class="usa-file-input padding-bottom-2"
-            data-testid="file-input"
+            class="display-flex flex-column flex-align-center width-full height-full"
           >
             <div
-              class="usa-file-input__target"
-              data-testid="file-input-droptarget"
+              class="usa-file-input padding-bottom-2 width-full height-full"
+              data-testid="file-input"
             >
               <div
-                aria-hidden="true"
-                class="usa-file-input__instructions"
-                data-testid="file-input-instructions"
+                class="usa-file-input__target"
+                data-testid="file-input-droptarget"
               >
-                <span
-                  class="usa-file-input__drag-text"
+                <div
+                  aria-hidden="true"
+                  class="usa-file-input__instructions"
+                  data-testid="file-input-instructions"
                 >
-                    
-                </span>
-                <span
-                  class="usa-file-input__choose"
-                >
-                  Browse Files
-                </span>
+                  <span
+                    class="usa-file-input__drag-text"
+                  >
+                    Drag files here or
+                  </span>
+                  <span
+                    class="usa-file-input__choose"
+                  >
+                     choose from folder
+                  </span>
+                </div>
+                <div
+                  class="usa-file-input__box"
+                  data-testid="file-input-box"
+                />
+                <input
+                  accept=".pdf"
+                  class="usa-file-input__input"
+                  data-testid="file-input-input"
+                  id="file-input-:r0:"
+                  name="file-input-single"
+                  type="file"
+                />
               </div>
-              <div
-                class="usa-file-input__box"
-                data-testid="file-input-box"
-              />
-              <input
-                class="usa-file-input__input"
-                data-testid="file-input-input"
-                id="file-input-:r0:"
-                name="file-input-single"
-                style="border: 1px dashed #005ea2;"
-                type="file"
-              />
             </div>
           </div>
+        </div>
+        <div
+          class="display-flex flex-jusitfy-start flex-align-center"
+        >
+          <button
+            class="usa-button usa-button--outline upload-back-button"
+            data-testid="button"
+            type="reset"
+          >
+            Cancel Import
+          </button>
+          <button
+            class="usa-button upload-annotate-button"
+            data-testid="button"
+            disabled=""
+            type="submit"
+          >
+            Annotate
+          </button>
         </div>
       </div>
     </div>

@@ -4,7 +4,6 @@ Perspective transforms a base image between 10% and 90% distortion.
 
 from pathlib import Path
 
-import torch
 import numpy as np
 import cv2 as cv
 from PIL import Image
@@ -20,6 +19,8 @@ class RandomPerspectiveTransform:
         """
         Create a transformation matrix for a random perspective transform.
         """
+        import torch
+
         # From torchvision. BSD 3-clause
         height = self.image.height
         width = self.image.width

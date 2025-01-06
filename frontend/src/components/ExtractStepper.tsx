@@ -1,6 +1,8 @@
 import { StepIndicator, StepIndicatorStep } from "@trussworks/react-uswds";
 import { ExtractStep } from "../utils/constants.ts";
 
+import "./ExtractStepper.scss";
+
 export const ExtractStepper = ({
   currentStep,
 }: {

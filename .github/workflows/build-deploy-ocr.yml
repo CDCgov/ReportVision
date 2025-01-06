@@ -9,10 +9,9 @@ on:
         type: choice
         options:
           - dev
-          - demo
-      ocr-version:
-        description: 'Create a version for this OCR API image'
-        required: true
+      ocr-docker-tag:
+        description: 'This is optional if you would like to deploy an already published OCR-API image'
+        required: false
 
 permissions:
   contents: read
@@ -26,22 +25,25 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
+      docker_tag: ${{ steps.set_tag.outputs.docker_tag }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v4
       - name: Lowercase the repo name
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: Set OCR Docker tag
+        shell: bash
+        id: set_tag
+        run: |
+          USER_INPUT="${{ github.event.inputs.ocr-docker-tag }}"
+          echo "docker_tag=$(
+            #this gives a new sha as default if dispatch input is empty
+            echo ${USER_INPUT:-"${{ github.sha }}"}
+          )" >> $GITHUB_OUTPUT
       - name: Check if image exists
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ inputs.ocr-version }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
       - name: Build and Push backend
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
@@ -50,10 +52,10 @@ jobs:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          docker-tag: ${{ inputs.ocr-version }}
+          docker-tag: ${{ steps.set_tag.outputs.docker_tag }}
           dockerfile-path: ./OCR/Dockerfile
           docker-context-path: ./OCR/
-          api-name: ocr-api
+          api-name: ocr
 
   deploy-ocr:
     name: Deploy OCR
@@ -67,10 +69,11 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
           deploy-env: ${{ inputs.deploy-env }}
-          docker-tag: ${{ inputs.ocr-version }}
+          docker-tag: ${{ needs.build-publish-ocr.outputs.docker_tag }}
           docker-registry: ghcr.io
-          api-name: ocr-api
+          api-name: ocr

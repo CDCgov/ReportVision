@@ -8,7 +8,7 @@ services:
     volumes:
       - ./OCR:/ocr
     restart: "no"
-    command: "/bin/sh -c 'poetry install && poetry run fastapi dev ocr/api.py --host 0.0.0.0 --port 8000'" 
+    command: "/bin/sh -c 'poetry install --without=torch --sync && poetry run fastapi dev ocr/api.py --host 0.0.0.0 --port 8000'"
   frontend:
     build:
       context: ./frontend
@@ -18,6 +18,7 @@ services:
       - "8080:8080"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - api
       - ocr
@@ -30,9 +31,12 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: reportvision
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: super_secret_password
+      POSTGRES_DB: ${postgres_db_name:-reportvision}
+      POSTGRES_HOST: ${postgres_fqdn:-localhost}
+      POSTGRES_USER: ${postgres_user:-postgres}
+      POSTGRES_PASSWORD: ${postgres_password:-super_secret_password}
+      DB_PORT: ${postgres_port:-5432}
+      SSL_MODE: ${postgres_sslmode:-disable}
   api:
     build: 
       context: ./backend
@@ -46,5 +50,3 @@ services:
     restart: "unless-stopped"
     depends_on: 
       - db
-    command: "./gradlew bootRun --continuous --args='--server.port=8081'"
-

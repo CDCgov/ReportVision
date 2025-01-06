@@ -1,7 +1,7 @@
 variable "name" {}
 variable "resource_group_name" {}
 variable "resource_group_location" {}
-variable "lb_subnet" {}
+variable "appgw_subnet_id" {}
 variable "blob_endpoint" {}
 variable "tags" {}
 
@@ -10,7 +10,9 @@ variable "zones" {
   default = ["1", "2", "3"]
 }
 
-variable "fqdns" {
+variable "fqdns_middleware" {
+}
+variable "fqdns_ocr" {
 }
 
 variable "ip_addresses" {

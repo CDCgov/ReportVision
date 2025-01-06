@@ -1,0 +1,57 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  background-color: white;
+  min-height: 72px;
+
+  &__text {
+    margin: 0 8px;
+    color: #555;
+  }
+
+  &__button {
+    margin: 0 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 4px;
+  }
+
+  &__input {
+    width: 30px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 0 4px;
+  }
+
+  &__vector-button {
+    margin: 0 12px;
+    padding: 4px 12px;
+    background: #8a2be2; // Purple color
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+
+  &__profile-icon {
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    background-color: #4caf50;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__profile-initial {
+    color: #fff;
+    font-weight: bold;
+  }
+}

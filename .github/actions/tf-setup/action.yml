@@ -16,6 +16,9 @@ inputs:
   azure-subscription-id:
     description: The Azure subscription_id for this environment.
     required: true
+  azure-object-id:
+    description: The Azure object_id for this environment.
+    required: true
   app-name:
     description: The name of the application being deployed in Terraform.
     required: true
@@ -29,11 +32,19 @@ runs:
       env:
         RESOURCE_GROUP_NAME: ${{ inputs.azure-resource-group }}
         NAME: ${{ inputs.app-name }}
-        SKU_NAME: P3v3
+        SKU_NAME: P0v3
+        OBJECT_ID: ${{ inputs.azure-object-id }}
+        TENANT_ID: ${{ inputs.azure-tenant-id }}
+        CLIENT_ID: ${{ inputs.azure-client-id }}
+        SUBSCRIPTION_ID: ${{ inputs.azure-subscription-id }}
       run: |
         echo resource_group_name=\""$RESOURCE_GROUP_NAME"\" >> terraform.tfvars
         echo name=\""$NAME"\" >> terraform.tfvars
         echo sku_name=\""$SKU_NAME"\" >> terraform.tfvars
+        echo object_id=\""$OBJECT_ID"\" >> terraform.tfvars
+        echo tenant_id=\""$TENANT_ID"\" >> terraform.tfvars
+        echo client_id=\""$CLIENT_ID"\" >> terraform.tfvars
+        echo subscription_id=\""$SUBSCRIPTION_ID"\" >> terraform.tfvars
         az config set defaults.group=$RESOURCE_GROUP_NAME
     - name: Set environment
       shell: bash
@@ -50,6 +61,7 @@ runs:
         ARM_CLIENT_ID: ${{ inputs.azure-client-id }}
         ARM_TENANT_ID: ${{ inputs.azure-tenant-id }}
         ARM_SUBSCRIPTION_ID: ${{ inputs.azure-subscription-id }}
+        ARM_OBJECT_ID: ${{ inputs.azure-object-id }}
       shell: bash
       run: |
         terraform init -backend-config=config/${{ inputs.deploy-env }}.config

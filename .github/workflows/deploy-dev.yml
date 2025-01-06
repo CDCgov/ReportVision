@@ -9,10 +9,12 @@ on:
         type: choice
         options:
           - dev
-          - demo
-      ocr-version:
-        description: 'Create a version for this OCR API image'
-        required: true
+      ocr-docker-tag:
+        description: 'This is optional if you would like to deploy an already published OCR-API image'
+        required: false
+      middleware-docker-tag:
+        description: 'This is optional if you would like to deploy an already published Middleware-API image'
+        required: false
 
 permissions:
   contents: read
@@ -21,32 +23,79 @@ permissions:
   id-token: write
 
 jobs:
-  build-publish-ocr:
-    name: Build and Publish OCR
+  build-publish-middleware:
+    name: Build and Publish middleware
     runs-on: ubuntu-latest
     outputs:
       docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
+      docker_tag: ${{ steps.set_tag.outputs.docker_tag }}
     steps:
       - uses: actions/checkout@v4
       - name: Lowercase the repo name
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: Set Middleware Docker tag
+        shell: bash
+        id: set_tag
+        run: |
+          USER_INPUT="${{ github.event.inputs.middleware-docker-tag }}"
+          echo "docker_tag=$(
+            #this gives a new sha as default if dispatch input is empty
+            echo ${USER_INPUT:-$(uuidgen)}
+          )" >> $GITHUB_OUTPUT
       - name: Check if image exists
         id: image_check
         run: |
           echo "docker_inspect=$(
-              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr-api:${{ inputs.ocr-version }} > /dev/null ; echo $?
+              docker manifest inspect ghcr.io/${{ env.REPO }}-middleware:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
             )" >> $GITHUB_OUTPUT
-      - name: Build and Push backend
+      - name: Build and Push the middleware
         if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
         uses: ./.github/actions/build-publish-api
         with:
           docker-registry: ghcr.io
           docker-pw: ${{ secrets.GITHUB_TOKEN }}
           docker-username: ${{ github.actor }}
-          docker-tag: ${{ inputs.ocr-version }}
+          docker-tag: ${{ steps.set_tag.outputs.docker_tag }}
+          dockerfile-path: ./backend/Dockerfile
+          docker-context-path: ./backend/
+          api-name: middleware
+
+  build-publish-ocr:
+    name: Build and Publish OCR
+    runs-on: ubuntu-latest
+    outputs:
+      docker_inspect: ${{ steps.image_check.outputs.docker_inspect }}
+      docker_tag: ${{ steps.set_tag.outputs.docker_tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lowercase the repo name
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: Set OCR Docker tag
+        shell: bash
+        id: set_tag
+        run: |
+          USER_INPUT="${{ github.event.inputs.ocr-docker-tag }}"
+          echo "docker_tag=$(
+            #this gives a new sha as default if dispatch input is empty
+            echo ${USER_INPUT:-$(uuidgen)}
+          )" >> $GITHUB_OUTPUT
+      - name: Check if image exists
+        id: image_check
+        run: |
+          echo "docker_inspect=$(
+              docker manifest inspect ghcr.io/${{ env.REPO }}-ocr:${{ steps.set_tag.outputs.docker_tag }} > /dev/null ; echo $?
+            )" >> $GITHUB_OUTPUT
+      - name: Build and Push the OCR
+        if: ${{ steps.image_check.outputs.docker_inspect == 1 }}
+        uses: ./.github/actions/build-publish-api
+        with:
+          docker-registry: ghcr.io
+          docker-pw: ${{ secrets.GITHUB_TOKEN }}
+          docker-username: ${{ github.actor }}
+          docker-tag: ${{ steps.set_tag.outputs.docker_tag }}
           dockerfile-path: ./OCR/Dockerfile
           docker-context-path: ./OCR/
-          api-name: ocr-api
+          api-name: ocr
 
   build-frontend:
     name: Build Frontend
@@ -62,7 +111,7 @@ jobs:
           frontend-build-path: ./frontend/dist/
           node-version: 20
 
-  environment-setup:
+  az-environment-setup:
     name: Setup Azure Environment
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
@@ -73,6 +122,7 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
       - uses: ./.github/actions/tf-setup
         name: Setup this environment with Terraform
         with:
@@ -81,13 +131,14 @@ jobs:
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-object-id: ${{ secrets.AZURE_OBJECT_ID }}
           app-name: reportvision
 
-  deploy-ocr:
-    name: Deploy OCR
+  deploy-middleware:
+    name: Deploy middleware
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
-    needs: [build-publish-ocr, environment-setup]
+    needs: [build-publish-middleware, az-environment-setup]
     steps:
       - uses: actions/checkout@v4
       - uses: azure/login@v2
@@ -95,19 +146,41 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
+      - name: Deploy middleware-API
+        uses: ./.github/actions/deploy-api
+        with:
+          deploy-env: ${{ inputs.deploy-env }}
+          docker-tag: ${{ needs.build-publish-middleware.outputs.docker_tag }}
+          docker-registry: ghcr.io
+          api-name: middleware
+
+  deploy-ocr:
+    name: Deploy OCR
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.deploy-env }}
+    needs: [build-publish-ocr, az-environment-setup]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
       - name: Deploy OCR-API
         uses: ./.github/actions/deploy-api
         with:
           deploy-env: ${{ inputs.deploy-env }}
-          docker-tag: ${{ inputs.ocr-version }}
+          docker-tag: ${{ needs.build-publish-ocr.outputs.docker_tag }}
           docker-registry: ghcr.io
-          api-name: ocr-api
+          api-name: ocr
 
   deploy-frontend:
     name: Deploy Frontend
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
-    needs: [build-frontend, environment-setup]
+    needs: [build-frontend, az-environment-setup]
     if: ${{ inputs.deploy-env != 'demo'}}
     steps:
       - uses: actions/checkout@v4
@@ -116,6 +189,7 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          object-id: ${{ secrets.AZURE_OBJECT_ID }}
       - name: Deploy frontend
         uses: ./.github/actions/deploy-frontend
         with:

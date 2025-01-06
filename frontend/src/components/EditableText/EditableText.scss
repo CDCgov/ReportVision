@@ -1,4 +1,6 @@
 .hover-display-icon {
+  text-wrap: nowrap;
+  text-align: center;
   svg {
     opacity: 0;
     @media (prefers-reduced-motion: no-preference) {
@@ -8,7 +10,6 @@
 }
 
 .hover-display-icon:hover {
-
   svg {
     opacity: 1;
     @media (prefers-reduced-motion: no-preference) {
@@ -16,4 +17,3 @@
     }
   }
 }
-

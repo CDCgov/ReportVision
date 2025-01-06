@@ -1,9 +1,17 @@
 variable "resource_group" {}
 variable "name" {}
-variable "location" {}
 variable "vnetcidr" {}
 variable "websubnetcidr" {}
 variable "lbsubnetcidr" {}
-# variable "dbsubnetcidr" {}
-variable "appsubnetcidr" {}
+variable "ocrsubnetcidr" {}
 variable "env" {}
+variable "middlewaresubnetcidr" {}
+variable "dbsubnetcidr" {}
+variable "appgwsubnetcidr" {}
+
+variable "location" {
+  default = "eastus2"
+}
+
+variable "postgres_server_id" {
+}

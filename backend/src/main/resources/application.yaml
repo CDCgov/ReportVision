@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:reportvision}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:super_secret_password}
+    url: jdbc:postgresql://${POSTGRES_HOST:db}:${DB_PORT:5432}/${POSTGRES_DB:reportvision}?sslmode=${SSL_MODE:disable}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:super_secret_password}
   devtools:
     restart:
       enabled: true
@@ -13,6 +13,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  fastapi:
+    url: ${FASTAPI_URL:http://localhost:8000}
 management:
   endpoints:
     web:

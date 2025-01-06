@@ -42,4 +42,5 @@ runs:
           context: ${{ inputs.docker-context-path }}
           file: ${{ inputs.dockerfile-path }}
           push: true
+          platforms: linux/amd64
           tags: ${{ inputs.docker-registry }}/${{ env.REPO }}-${{ inputs.api-name }}:${{ inputs.docker-tag }}
