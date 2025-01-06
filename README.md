@@ -2,6 +2,7 @@
 [1. Overview](#1-overview)
 - [The Problem](#the-problem)
 - [The Solution](#the-solution)
+
 [2. Notices](#2-notices)
 - [2.1 Privacy Standard Notice](#21-privacy-standard-notice)
 - [2.2 Records Management Standard Notice](#22-records-management-standard-notice)
@@ -10,12 +11,13 @@
 - [2.5 License Standard Notice](#25-license-standard-notice)
 - [2.6 Github Notice](#26-github-notice)
 - [2.7 Contributing Standard Notice](#27-contributing-standard-notice)
+
 [3. General Disclaimer](#3-general-disclaimer)
+
 [4. CDC Managed Guidance](#4-cdc-managed-repository-guidance)
 - [4.1 Access Request](#41-access-request)
 
 # 1. Overview
-
 The IDWA project aims to support state, local, territorial, and tribal public health departments by enhancing their ability to manage, search, and secure data.  
 
 ## The Problem
@@ -29,6 +31,7 @@ This repository focuses on developing an application that helps public health de
 + [Return to Table of Contents](#table-of-contents).
 
 # 2. Notices
+
 ## 2.1 Privacy Standard Notice
 
 This repository contains only non-sensitive, publicly available data and information. All material and community participation is covered by the [Disclaimer](DISCLAIMER.md) and [Code of Conduct](code-of-conduct.md).
