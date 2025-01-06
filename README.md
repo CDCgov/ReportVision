@@ -6,6 +6,13 @@
 - [2.1 Privacy Standard Notice](#21-privacy-standard-notice)
 - [2.2 Records Management Standard Notice](#22-records-management-standard-notice)
 - [2.3 Domestic Copyright Protection Notice](#23-domestic-copyright-protection-notice)
+- [2.4 Open Source Notice](#24-open-source-notice)
+- [2.5 License Standard Notice](#25-license-standard-notice)
+- [2.6 Github Notice](#26-github-notice)
+- [2.7 Contributing Standard Notice](#27-contributing-standard-notice)
+[3. General Disclaimer](#3-general-disclaimer)
+[4. CDC Managed Guidance](#4-cdc-managed-repository-guidance)
+- [4.1 Access Request](#41-access-request)
 
 # 1. Overview
 
@@ -78,7 +85,25 @@ While we encourage continuous development of this repository's codebase, there i
    - This option allows you to manage the changes independently within your own organization's environment.
 2. Submit a pull request and contact the CDC to inquire whether a department has been assigned to manage the repository.
    - If a CDC department is designated, you can coordinate with them for further changes.
-   - Also see Access Request & Repo Creation Request.
+   - _Note_: All comments, messages, pull requests, and other submissions received through
+CDC including this GitHub page may be subject to applicable federal law, including but not limited to the Federal Records Act, and may be archived. Learn more at [http://www.cdc.gov/other/privacy.html](http://www.cdc.gov/other/privacy.html).
+   - Also see [CONTRIBUTING.md](docs/CONTRIBUTING.md) and [CDC Managed Repository Guidance](#4-cdc-managed-repository-guidance).
 
 + [Return to Table of Contents](#table-of-contents).
 
+# 3. General Disclaimer
+
+This repository was created for use by CDC programs to collaborate on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/organization/mission.htm).  
+
++ [Return to Table of Contents](#table-of-contents).
+
+# 4. CDC Managed Repository Guidance 
+## 4.1 Access Request 
+
+If the CDC manages the repository, contributors must submit an access request through the [CDC GitHub Open Project Request Form](https://forms.office.com/Pages/ResponsePage.aspx?id=aQjnnNtg_USr6NJ2cHf8j44WSiOI6uNOvdWse4I-C2NUNk43NzMwODJTRzA4NFpCUk1RRU83RTFNVi4u).  
+
+**Important**: Submitting a request requires a CDC Office365 login. If you do not have one, please contact your organization’s administrator to submit the request on your behalf.
+
+For access to the CDCEnt private organization, please use the [GitHub Enterprise Cloud Access Request form](https://forms.office.com/Pages/ResponsePage.aspx?id=aQjnnNtg_USr6NJ2cHf8j44WSiOI6uNOvdWse4I-C2NUQjVJVDlKS1c0SlhQSUxLNVBaOEZCNUczVS4u).]
+
++ [Return to Table of Contents](#table-of-contents).
