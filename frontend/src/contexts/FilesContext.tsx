@@ -36,7 +36,9 @@ export interface FileType {
 
 interface FileContextType {
   files: File[];
+  templates: any[];
   selectedTemplates: TemplatePair[];
+  setTemplates: (templates: any[]) => void;
   addFile: (file: File) => void;
   removeFile: (fileName: string) => void;
   clearFiles: () => void;
@@ -49,6 +51,7 @@ const FilesContext = createContext<FileContextType | undefined>(undefined);
 
 export const FilesProvider = ({ children }: { children: ReactNode }) => {
   const [files, setFiles] = useState<File[]>([]);
+  const [templates, setTemplates] = useState<any[]>([]);
   const [selectedTemplates, _setSelectedTemplates] = useState<TemplatePair[]>(
     [],
   );
@@ -85,8 +88,10 @@ export const FilesProvider = ({ children }: { children: ReactNode }) => {
   return (
     <FilesContext.Provider
       value={{
+        templates,
         files,
         selectedTemplates,
+        setTemplates,
         addFile,
         removeFile,
         clearFiles,
