@@ -10,7 +10,7 @@ Azure Resource Group naming convention:
 
 - `reportvision-rg-<environment-name>`
 
-With how our Github Action workflows are parametrized, to enable better automation and less user intervention, Azure Resource Groups will need to be named in a strict manor. If you would like to change the convention, you will also need to change how its parametrized in the Github Actions workflow files.
+With how our Github Action workflows are parametrized, to enable better automation and less user intervention, Azure Resource Groups will need to be named in a strict manor. If you would like to change the convention, you will also need to change how its named and parametrized in the Github Actions workflow files.
 
 ## Complete e2e build and deploy for ReportVision
 
