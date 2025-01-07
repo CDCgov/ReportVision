@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-You will need to create new App registrations(federated secrets) and Resource Groups in your Azure account for each environment, while also updating the existing `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_OBJECT_ID` ID's in each Github Environment. Most these ID's are found in each environments App Registration Overview page and under Subscriptions Overview page in the Azure Portal. To update these secrets in Github go to Settings > Environments > And select the environment you would like to edit.
+You will need to create new App registrations(federated secrets) and Resource Groups in your Azure account for each environment, while also updating the existing `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_OBJECT_ID` ID's in each Github Environment. Most these ID's are found in each environments App Registration Overview page and Subscriptions Overview page in the Azure Portal. To update these secrets in Github go to Settings > Environments > And select the environment you would like to edit.
 
 **NOTE**: Resource Groups were never created from Terraform on purpose to better replicate CDC's Azure setup and requirements for potential future migrations from Skylight's Azure. CDC would manually create Resource Groups for us.
 
