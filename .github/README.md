@@ -1,4 +1,4 @@
-# Current Github Workflows for building and deploying ReportVision in Dev or Demo
+# Current Github Workflows for building and deploying ReportVision in a dev environment
 
 ## Prerequisites
 
@@ -28,7 +28,7 @@ Optional Inputs:
 
 **NOTE**: This workflow is currently failing for a known, valid reason with Terraform. See the Terraform README.md for more details on the error. In the meantime, if you need to setup or update an environments infrastructure, it needs to be done locally with Terraform and then deploy the frontend and the API's from their separate workflows.
 
-## Build and deploy the ReportVision's frontend only
+## Build and deploy ReportVision's frontend only
 
 We made a separate workflow that builds and deploys the frontend files only, `build-deploy-frontend.yml`. Having to wait for the end-to-end deploy, along with the Terraform setup job to complete, just to refresh the frontend can be a giant waste of time. Just make sure the Azure environment is already up from the `deploy-dev.yml` workflow or at the very least a Storage Account in is created.
 
@@ -37,7 +37,7 @@ Required Inputs:
 - `branch`: Any
 - `deploy-env`: Drop down of available environments to chose from.
 
-## Build and deploy the ReportVision's OCR-API and Middleware-API separately
+## Build and deploy ReportVision's OCR-API and Middleware-API separately
 
 Just like with the frontend, we needed a way to refresh the OCR-API and/or Middleware-API without having to re-apply Terraform and deploying the frontend. With `build-deploy-ocr.yml` or `build-deploy-ocr.yml` we can either build and publish a new docker image or we can use an already registered docker image. Both the OCR-API and Middleware-API docker images are published here: 
 - https://github.com/CDCgov/ReportVision/pkgs/container/reportvision-ocr
