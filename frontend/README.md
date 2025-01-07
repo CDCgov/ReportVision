@@ -1,20 +1,59 @@
 # Frontend React App
 
-to run unit tests via Vitest
+
+Welcome to the **Frontend React App** for the ReportVision project. This guide provides instructions to help you get started with the application and run tests + linting.
+
+
+
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Setup and Installation](#setup-and-installation)
+3. [Development Workflow](#development-workflow)
+4. [Testing and E2E Commands](#testing-and-e2e-commands)
+5. [Frontend Architecture](#project-architecture)
+8. [Troubleshooting](#troubleshooting)
+
+
+
+## Introduction
+
+This frontend application is built using **React**, **TypeScript**, and **Vite**. It includes configurations for ESLint and end-to-end (E2E) testing using Playwright.
+
+---
+
+## Setup and Installation
+
+### Prerequisites
+Make sure you have the following installed on your machine:
+- [Node.js](https://nodejs.org/) (version 16 or higher recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation and Run Steps
+1. Clone the repository:
+   ```shell
+   git clone https://github.com/CDCgov/ReportVision.git
+   cd ReportVision/frontend
+
+2. Install Dependencies: 
 
 ```shell
-npm run test
+npm install 
 ```
 
-to the the app in dev mode
+3. Start the app in dev mode: 
 
 ```shell
 npm run dev
 ```
 
-# E2E common commands
+4. Run tests to verify installation
 
-Inside that directory, you can run several commands:
+```shell
+npm run tests
+```
+
+### Testing and E2E Commands 
+
 
 Runs the end-to-end tests.
 
@@ -52,14 +91,38 @@ Auto generate tests with Codegen.
 npx playwright codegen
 ```
 
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+#### Fast Refresh
 
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+
+# Troubleshooting
+
+### Common Issues
+1. Installation Errors: Ensure all prerequisites are installed.
+2. Development Server Not Starting: Check for port conflicts or missing dependencies. 
+3. Tests Failing: Verify Playwright setup and ensure browsers are installed:
+
+# Project Architecture
+
+### Description of Key Directories and Files in the frontend:
+- **`public/`**: Holds public static files like images, logos, and `index.html`. These files are directly served by the development and production servers.
+- **`src/`**: Contains the core application code, including React components, pages, styles, and utilities.
+  - **`components/`**: Houses UI components.
+  - **`pages/`**: Organizes page-level components corresponding to application routes.
+  - **`styles/`**: Includes global and component-specific styles.
+  - **`utils/`**: Contains helper functions used across the application.
+  - **`App.tsx`**: The main application component where routes and global providers are defined.
+  - **`main.tsx`**: The entry point that initializes the React app and mounts it to the DOM.
+- **`tests/`**: Includes test files for unit testing and end-to-end testing.
+- **`package.json`**: Lists project dependencies and npm scripts for building, running, and testing the application.
+- **`vite.config.ts`**: Configuration file for Vite, the build tool used for development and production builds.
+- **`tsconfig.json`**: TypeScript configuration, defining compiler options and project structure.
+
+
 
 ## Expanding the ESLint configuration
 
