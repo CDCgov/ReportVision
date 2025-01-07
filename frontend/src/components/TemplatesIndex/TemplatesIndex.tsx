@@ -1,18 +1,17 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { SortableTable } from "../SortableTable/SortableTable.tsx";
 import { useNavigate } from "react-router-dom";
 import extractImage from "../../assets/extract_image.svg";
-import { useQuery } from "@tanstack/react-query";
-import { TemplateAPI } from "../../types/templates.ts";
 import usePagination from "../../hooks/use-pagination/index.ts";
+import { useFiles } from "../../contexts/FilesContext.tsx";
 
 import './TemplatesIndex.scss'
 
 type TemplateIndexProps = unknown;
 
 export const TemplatesIndex: FC<TemplateIndexProps> = () => {
-  const [templates, setTemplates] = useState([]);
+  const { templates, setTemplates } = useFiles();
   const { 
     currentItems,
     currentPage,
@@ -24,29 +23,6 @@ export const TemplatesIndex: FC<TemplateIndexProps> = () => {
     hasPreviousPage
   } = usePagination(templates, 10, 1);
   const navigate = useNavigate();
-  // TODO: Pagination and sorting will be added later
-  const templateQuery = useQuery({
-    queryKey: ["templates"],
-    queryFn: TemplateAPI.getTemplates,
-  });
-  useEffect(() => {
-    const getTemplates = async () => {
-      const templatesJSON = localStorage.getItem("templates") || "[]";
-      if (templateQuery.data && templateQuery.data?.length > 0) {
-        setTemplates(templateQuery.data as []);
-      } else if (templatesJSON) {
-        setTemplates(
-          JSON.parse(templatesJSON).map((template) => ({
-            ...template,
-            updatedAt: template.lastUpdated,
-          })),
-        );
-      } else {
-        setTemplates([]);
-      }
-    };
-    getTemplates();
-  }, [templateQuery.data]);
 
   useEffect(() => {
     const localStorageEvent = (event) => {
