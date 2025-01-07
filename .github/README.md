@@ -26,6 +26,8 @@ Optional Inputs:
 - `middleware-docker-tag`: The Middleware Docker Tag. This input is optional because if it is left blank, the workflow will build and publish a new docker image each time. If you would like to deploy a previously built docker image, you can add the tag here.
 
 
+**NOTE**: This workflow is currently failing for a known, valid reason with Terraform. See the Terraform README.md for more details on the error. In the meantime, if you need to setup or update an environments infrastructure, it needs to be done locally with Terraform and then deploy the frontend and the API's from their separate workflows.
+
 ## Build and deploy the ReportVision's frontend only
 
 We made a separate workflow that builds and deploys the frontend files only, `build-deploy-frontend.yml`. Having to wait for the end-to-end deploy, along with the Terraform setup job to complete, just to refresh the frontend can be a giant waste of time. Just make sure the Azure environment is already up from the `deploy-dev.yml` workflow or at the very least a Storage Account in is created.
