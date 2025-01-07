@@ -1,4 +1,4 @@
-# Current Github Workflows for building and deploying ReportVision in a dev environment
+# Github Action workflows for building and deploying ReportVision in a dev environment
 
 ## Prerequisites
 
