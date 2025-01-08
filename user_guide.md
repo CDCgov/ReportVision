@@ -17,16 +17,18 @@ ReportVision is a tool that automates the reading and extracting of labs from PD
 2. [Node23.1](https://nodejs.org/en/download)
 3. [Tesseract5.5](https://formulae.brew.sh/formula/tesseract) (brew install tesseract)
 4. [Java21](https://www.oracle.com/java/technologies/downloads/)
+5. [PostgreSQL](https://www.postgresql.org/)
+6. [Docker](https://www.docker.com/) (required for DB and middleware set up
 
 ### Installation and Development Guides
 
-1. For Frontend
-2. For Middleware
-3. For OCR
+1. For [Frontend](./frontend/README.md)
+2. For [Middleware ](./backend/README.md)
+3. For OCR [OCR README](./OCR/README.md).
 
 ### High Level Architecture
 
-![](/Users/arindamkulshi/Desktop/Screenshot 2025-01-07 at 10.32.09 AM.png)
+![](arcdiagram.png)
 
 A React-based Single Page Application: This serves as the front-end user interface for the application.
 
