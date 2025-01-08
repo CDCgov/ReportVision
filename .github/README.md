@@ -27,11 +27,13 @@ Optional Inputs:
 - `middleware-docker-tag`: The Middleware Docker Tag. This input is optional because if it is left blank, the workflow will build and publish a new docker image each time. If you would like to deploy a previously built docker image, you can add the tag here.
 
 
-**NOTE**: This workflow is currently failing for a known, valid reason with Terraform. See the Terraform README.md for more details on the error. In the meantime, if you need to setup or update an environments infrastructure, it needs to be done locally with Terraform and then deploy the frontend and the API's from their separate workflows.
+**NOTE**: This workflow is currently failing for a known, valid reason with Terraform. See the Terraform README.md for more details on the error. In the meantime, if you need to setup or update an environments infrastructure, it needs to be done locally with Terraform and then deploy the frontend and the API's from their separate workflows shown below.
 
 ## Build and deploy ReportVision's frontend only
 
-We made a separate workflow that builds and deploys the frontend files only, `build-deploy-frontend.yml`. Having to wait for the end-to-end deploy, along with the Terraform setup job to complete, just to refresh the frontend can be a giant waste of time. Just make sure the Azure environment is already up from the `deploy-dev.yml` workflow or at the very least a Storage Account in is created.
+We made a separate workflow that builds and deploys the frontend files only, `build-deploy-frontend.yml`. Having to wait for the end-to-end deploy, along with the Terraform setup job to complete, just to refresh the frontend can be a giant waste of time. 
+
+Before running this workflow, just make sure the Azure environment is already up and running from either the `deploy-dev.yml` workflow, your local terraform, or at the very least a Storage Account in is created.
 
 Required Inputs:
 
@@ -46,7 +48,7 @@ Just like with the frontend, we needed a way to refresh the OCR-API and/or Middl
 
 Once the workflow builds and publishes the images, it will deploy it to the selected environments Azure App-Service Webapp. 
 
-**Note**: Using an already registered docker image will be a bit faster than waiting for a new one to be built. Also, this is how we quickly rollback versions.
+Again, Just make sure you have already applied the needed resources with Terraform before running this workflow.
 
 Required Inputs:
 
@@ -56,6 +58,8 @@ Required Inputs:
 Optional Inputs:
 
 - `ocr-docker-tag`: The OCR Docker Tag. This input is optional because if it is left blank, the workflow will build and publish a new docker image each time. If you would like to deploy a previously built docker image, you can add the tag here.
+
+**Note**: Using an already registered docker image will be a bit faster than waiting for a new one to be built. Also, this is how we quickly rollback versions.
 
 # Github Workflows for building and deploying ReportVision in Staging or Production
 
