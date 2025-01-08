@@ -18,8 +18,10 @@ import ExtractProcess from "./pages/ExtractProcess.tsx";
 import { SaveTemplate } from "./pages/SaveTemplate.tsx";
 import ReviewTemplate from "./pages/ReviewTemplate.tsx";
 import SubmissionTemplate from "./pages/SubmissionTemplate.tsx";
-import NotFound from "./pages/404Page.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ErrorPage from "./pages/ErrorPage.tsx";
+import { ErrorProvider } from "./contexts/ErrorContext.tsx";
+
 
 const router = createBrowserRouter([
   {
@@ -56,7 +58,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <NotFound />,
+    element: <ErrorPage title="Sorry, this page can’t be found" body="The page you are looking for doesn’t exist or has been moved." />,
   },
 ]);
 
@@ -64,12 +66,14 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AnnotationProvider>
-        <FilesProvider>
-          <RouterProvider router={router} />
-        </FilesProvider>
-      </AnnotationProvider>
-    </QueryClientProvider>
+    <ErrorProvider>
+        <QueryClientProvider client={queryClient}>
+          <AnnotationProvider>
+            <FilesProvider>
+              <RouterProvider router={router} />
+            </FilesProvider>
+          </AnnotationProvider>
+        </QueryClientProvider>
+    </ErrorProvider>
   </StrictMode>,
 );

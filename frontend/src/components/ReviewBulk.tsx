@@ -9,6 +9,8 @@ import { SortableTable } from "./SortableTable/SortableTable";
 
 import "./ReviewBulk.scss";
 import { Button, Icon } from "@trussworks/react-uswds";
+import ErrorBanner from "../error/ErrorBanner";
+import { useError } from "../contexts/ErrorContext";
 
 interface ReviewBulkProps {
   resultsTable: ReviewBulk[];
@@ -36,6 +38,7 @@ const ReviewBulk = ({
   onDownload,
 }: ReviewBulkProps) => {
   const navigate = useNavigate();
+  const { error } = useError();
 
   const onClick = (index: number) => {
     setIsReviewing(true);
@@ -77,8 +80,13 @@ const ReviewBulk = ({
   };
 
   const handleCSVDownload = () => {
-    onDownload();
-    navigate("/");
+    try {
+      onDownload();
+      navigate("/");
+    } catch (error) {
+      console.error("Error downloading CSV", error);
+    }
+
   }
 
   return (
@@ -118,6 +126,7 @@ const ReviewBulk = ({
                 Download CSV
               </Button>
             </div>
+            {error?.title && <div><ErrorBanner title={error.title} message={error.message} /></div>}
             <div className="table-div">
               <SortableTable
                 columns={["fileName", "pageCount", "errors", "confidence"]}

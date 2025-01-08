@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 
 import "./ReviewTable.scss";
 import Toolbar from "./Toolbar";
+import ErrorBanner from "../error/ErrorBanner";
+import { useError } from "../contexts/ErrorContext";
 
 interface ReviewTableProps {
   isSingle: boolean;
@@ -62,6 +64,7 @@ const ReviewTable = ({
   onDownload,
 }: ReviewTableProps) => {
   const navigate = useNavigate();
+  const { error } = useError();
   const handleImageChange = (index: number) => {
     setIndex(index);
   };
@@ -136,6 +139,7 @@ const ReviewTable = ({
                 )}
               </div>
             </div>
+           {error?.title && <ErrorBanner title={error.title} message={error.message} />}
             <div className="table-container">
               <SortableTable
                 columns={["name", "value", "confidence"]}
