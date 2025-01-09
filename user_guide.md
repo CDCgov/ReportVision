@@ -18,7 +18,7 @@ ReportVision is a tool that automates the reading and extracting of labs from PD
 3. [Tesseract5.5](https://formulae.brew.sh/formula/tesseract) (brew install tesseract)
 4. [Java21](https://www.oracle.com/java/technologies/downloads/)
 5. [PostgreSQL](https://www.postgresql.org/)
-6. [Docker](https://www.docker.com/) (required for DB and middleware set up
+6. [Docker](https://www.docker.com/) (required for DB and middleware set up) 
 
 ### Installation and Development Guides
 
