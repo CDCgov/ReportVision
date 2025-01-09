@@ -644,7 +644,7 @@ class PHDCBuilder:
                 )
                 patient_data.append(v)
             else:
-                logging.warning(f"Race code {patient.race_code} not found in " "the OMB classification.")
+                logging.warning(f"Race code {patient.race_code} not found in the OMB classification.")
 
         if patient.ethnic_group_code is not None:
             if patient.ethnic_group_code in ethnicity_code_and_mapping:
@@ -658,7 +658,7 @@ class PHDCBuilder:
                 )
                 patient_data.append(v)
             else:
-                logging.warning(f"Ethnic group code {patient.ethnic_group_code} not " "found in OMB classification.")
+                logging.warning(f"Ethnic group code {patient.ethnic_group_code} not found in OMB classification.")
 
         return patient_data
 
