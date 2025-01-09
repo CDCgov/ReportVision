@@ -8,10 +8,9 @@ Welcome to the **Frontend React App** for the ReportVision project. This guide p
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Setup and Installation](#setup-and-installation)
-3. [Development Workflow](#development-workflow)
-4. [Testing and E2E Commands](#testing-and-e2e-commands)
-5. [Frontend Architecture](#project-architecture)
-8. [Troubleshooting](#troubleshooting)
+3. [Testing](#testing)
+4. [Frontend Architecture](#project-architecture)
+5. [Troubleshooting](#troubleshooting)
 
 
 
@@ -33,7 +32,6 @@ Make sure you have the following installed on your machine:
    ```shell
    git clone https://github.com/CDCgov/ReportVision.git
    cd ReportVision/frontend
-
 2. Install Dependencies: 
 
 ```shell
@@ -52,7 +50,7 @@ npm run dev
 npm run tests
 ```
 
-### Testing and E2E Commands 
+### Testing
 
 
 Runs the end-to-end tests.
@@ -67,7 +65,7 @@ Starts the interactive UI mode.
 npx playwright test --ui
 ```
 
-Runs the tests only on Desktop Chrome.
+Runs the tests only on Chrome.
 
 ```shell
 npx playwright test --project=chromium
@@ -93,7 +91,7 @@ npx playwright codegen
 
 #### Fast Refresh
 
-Currently, two official plugins are available:
+Currently, two plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
@@ -110,7 +108,7 @@ Currently, two official plugins are available:
 
 ### Description of Key Directories and Files in the frontend:
 - **`public/`**: Holds public static files like images, logos, and `index.html`. These files are directly served by the development and production servers.
-- **`src/`**: Contains the core application code, including React components, pages, styles, and utilities.
+- **`src/`**: Contains the application code, including React components, pages, styles, and utilities.
   - **`components/`**: Houses UI components.
   - **`pages/`**: Organizes page-level components corresponding to application routes.
   - **`styles/`**: Includes global and component-specific styles.

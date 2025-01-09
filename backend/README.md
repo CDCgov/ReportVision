@@ -1,6 +1,6 @@
 # Backend Middleware - Spring Boot Application
 
-This document provides a guide for the **Backend Middleware** of the ReportVision project. This middleware bridges the **frontend React app** with the **OCR backend** 
+This document provides a guide for the **Backend Middleware** of the ReportVision project. This middleware bridges the **frontend app** with the **OCR backend** 
 
 ---
 
@@ -18,7 +18,7 @@ This document provides a guide for the **Backend Middleware** of the ReportVisio
 
 The backend of ReportVision is a **Spring Boot** application designed to:
 - Serve as middleware connecting the frontend with OCR.
-- Manage template storage
+- Manage storage of template in the DB
 - Act as a middle layer to pass data for OCR extraction
 
 
@@ -57,7 +57,7 @@ docker exec -it <CONTAINER_ID> /bin/bash
 
 ## Project Architecture
 
-The backend is organized into the following key directories and files:
+The backend is organized into the following directories and files:
 
 - **`src/main/java/gov/cdc/reportvision/`**:
   - **`controllers/`**: handle API requests from the frontend.
@@ -65,7 +65,7 @@ The backend is organized into the following key directories and files:
   - **`models/`**: Data models representing application entities
   - **`repositories/`**: Interfaces for database operations, 
   - **`config/`**: Configuration files for security, database connections, and CORS policies.
-  - **`utils/`**: Utility classes for tasks like validation, logging, and file manipulation.
+  - **`utils/`**: Utility classes for  validation, logging, and file manipulation.
 - **`src/test/`**: Includes unit and integration tests for the backend.
 - **`Dockerfile`**: Docker configuration file for containerizing the application.
 
@@ -104,7 +104,7 @@ The backend middleware exposes the following RESTful API endpoints:
 #### Health Check
 - **`GET /api/health`**
   - **Description**: Returns the status of the backend server.
-  - **Response**: A  status message indicating the server's health.
+  - **Response**: Status message indicating the server's health.
 
 #### Template Management
 - **`POST /api/templates`**
