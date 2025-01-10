@@ -9,9 +9,7 @@ from typing import Union
 
 @dataclass
 class Telecom:
-    """
-    A class containing all of the data elements for a telecom element.
-    """
+    """A class containing all of the data elements for a telecom element."""
 
     value: Optional[str] = None
     type: Optional[str] = None
@@ -21,9 +19,7 @@ class Telecom:
 
 @dataclass
 class Address:
-    """
-    A class containing all of the data elements for an address element.
-    """
+    """A class containing all of the data elements for an address element."""
 
     street_address_line_1: Optional[str] = None
     street_address_line_2: Optional[str] = None
@@ -39,9 +35,7 @@ class Address:
 
 @dataclass
 class Name:
-    """
-    A class containing all of the data elements for a name element.
-    """
+    """A class containing all of the data elements for a name element."""
 
     prefix: Optional[str] = None
     first: Optional[str] = None
@@ -55,9 +49,7 @@ class Name:
 
 @dataclass
 class Patient:
-    """
-    A class containing all of the data elements for a patient element.
-    """
+    """A class containing all of the data elements for a patient element."""
 
     name: List[Name] = None
     address: List[Address] = None
@@ -70,9 +62,7 @@ class Patient:
 
 @dataclass
 class Organization:
-    """
-    A class containing all of the data elements for an organization element.
-    """
+    """A class containing all of the data elements for an organization element."""
 
     id: str = None
     name: str = None
@@ -82,9 +72,7 @@ class Organization:
 
 @dataclass
 class CodedElement:
-    """
-    A class containing all of the data elements for a coded element.
-    """
+    """A class containing all of the data elements for a coded element."""
 
     xsi_type: Optional[str] = None
     code: Optional[str] = None
@@ -95,8 +83,7 @@ class CodedElement:
     text: Optional[Union[str, int]] = None
 
     def to_attributes(self) -> Dict[str, str]:
-        """
-        Given a standard CodedElements return a dictionary that can be iterated over to
+        """Given a standard CodedElements return a dictionary that can be iterated over to
         produce the corresponding XML element.
 
         :return: A dictionary of the CodedElement's attributes
@@ -116,9 +103,7 @@ class CodedElement:
 
 @dataclass
 class Observation:
-    """
-    A class containing all of the data elements for an observation element.
-    """
+    """A class containing all of the data elements for an observation element."""
 
     obs_type: str = "laboratory"
     type_code: Optional[str] = None
@@ -154,8 +139,7 @@ class Observation:
 
 @dataclass
 class PHDCInputData:
-    """
-    A class containing all of the data to construct a PHDC document when passed to the
+    """A class containing all of the data to construct a PHDC document when passed to the
     PHDCBuilder.
     """
 
