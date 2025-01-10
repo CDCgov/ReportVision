@@ -9,7 +9,7 @@ def ocr_metrics():
         {"key": "Name", "value": "John Doe"},
         {"key": "Date of Birth", "value": "1990-01-01"},
     ]
-    return OCRMetrics(ocr_json=ocr_data, ground_truth_json=ground_truth_data, testMode=True)
+    return OCRMetrics(ocr_json=ocr_data, ground_truth_json=ground_truth_data)
 
 
 def test_calculate_metrics(ocr_metrics):

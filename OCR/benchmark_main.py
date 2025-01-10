@@ -46,11 +46,9 @@ def main():
 
 
 def run_segmentation_and_ocr(args):
-    """
-    Runs segmentation and OCR processing.
+    """Runs segmentation and OCR processing.
     Returns OCR results with processing time.
     """
-
     model = None
 
     if args.model == "tesseract":
@@ -70,8 +68,7 @@ def run_segmentation_and_ocr(args):
 
 
 def run_metrics_analysis(args, ocr_results):
-    """
-    Runs metrics analysis based on OCR output and ground truth.
+    """Runs metrics analysis based on OCR output and ground truth.
     Uses OCR results to capture time values if available.
     """
     metrics_analysis = BatchMetricsAnalysis(args.output_folder, args.ground_truth_folder, args.csv_output_folder)

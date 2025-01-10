@@ -1,10 +1,21 @@
+"""Module to segment images based on a segmentation template and a set of labels."""
+
 import cv2 as cv
 import numpy as np
 import json
 import os
 
 
-def crop_zeros(image):
+def crop_zeros(image: np.ndarray) -> np.ndarray:
+    """Crops the given image to remove all-zero (black) regions.
+
+    Args:
+        image (np.ndarray): The input image represented as a NumPy array,
+                            where zero values represent black areas to be cropped.
+
+    Returns:
+        np.ndarray: A cropped version of the image with zero regions removed.
+    """
     # argwhere will give you the coordinates of every non-zero point
     true_points = np.argwhere(image)
 
@@ -21,7 +32,21 @@ def crop_zeros(image):
     ]  # inclusive
 
 
-def segment_by_mask_then_crop(raw_image, segmentation_template, labels, debug) -> dict[str, np.ndarray]:
+def segment_by_mask_then_crop(
+    raw_image: np.ndarray, segmentation_template: np.ndarray, labels: list[dict[str, str]], debug: bool
+) -> dict[str, np.ndarray]:
+    """Segments a raw image based on a color mask in the segmentation template, and then crops the resulting regions to remove zero (black) areas.
+
+    Args:
+        raw_image (np.ndarray): The input image to be segmented, as a NumPy array.
+        segmentation_template (np.ndarray): A template image used for segmenting the raw image with color masks.
+        labels (list[dict[str, str]]): A list of dicts containing 'label' and 'color' keys, where 'label' is the segment label
+                             and 'color' is the color to match in the segmentation template.
+        debug (bool): If `True`, saves debug images and prints additional information.
+
+    Returns:
+        dict[str, np.ndarray]: A dictionary where keys are segment labels and values are the cropped segmented images.
+    """
     segments = {}
 
     # iterate over the labels
@@ -53,7 +78,21 @@ def segment_by_mask_then_crop(raw_image, segmentation_template, labels, debug) -
     return segments
 
 
-def segment_by_color_bounding_box(raw_image, segmentation_template, labels, debug) -> dict[str, np.ndarray]:
+def segment_by_color_bounding_box(
+    raw_image: np.ndarray, segmentation_template: np.ndarray, labels: list[dict[str, str]], debug: bool
+) -> dict[str, np.ndarray]:
+    """Segments a raw image by detecting colored boundary boxes in the segmentation template.
+
+    Args:
+        raw_image (np.ndarray): The input image to be segmented, as a NumPy array.
+        segmentation_template (np.ndarray): A template image used for segmenting the raw image with colored boxes.
+        labels (list[dict[str, str]]): A list of dicts containing 'label' and 'color' keys, where 'label' is the segment label
+                                       and 'color' is the color to match in the segmentation template.
+        debug (bool): If `True`, saves debug images and prints additional information.
+
+    Returns:
+        dict[str, np.ndarray]: A dictionary where keys are segment labels and values are the cropped segmented images.
+    """
     segments = {}
 
     # iterate over the labels
@@ -76,23 +115,66 @@ def segment_by_color_bounding_box(raw_image, segmentation_template, labels, debu
 
 
 class ImageSegmenter:
+    """A class for segmenting images based on a segmentation template and labels.
+
+    Supports different segmentation strategies by passing in functions to `segmentation_function`.
+
+    Attributes:
+        segmentation_function (function): A function used for segmenting the image, such as
+                                          `segment_by_mask_then_crop` or `segment_by_color_bounding_box`.
+        debug (bool): If `True`, saves debug images and prints additional information.
+    """
+
     def __init__(
         self,
         segmentation_function=segment_by_mask_then_crop,
         debug=False,
     ):
+        """Initializes the ImageSegmenter with the specified segmentation function.
+
+        Args:
+            segmentation_function (function): The segmentation function to use. Default is `segment_by_mask_then_crop`.
+            debug (bool): If `True`, saves debug images and prints additional information.
+        """
         self.segmentation_function = segmentation_function
         self.debug = debug
 
     def segment(
         self,
-        raw_image,
-        segmentation_template,
-        labels,
+        raw_image: np.ndarray,
+        segmentation_template: np.ndarray,
+        labels: list[dict[str, str]],
     ) -> dict[str, np.ndarray]:
+        """Segments a raw image using the class instance's segmentation function.
+
+        Args:
+            raw_image (np.ndarray): The input image to be segmented, as a NumPy array.
+            segmentation_template (np.ndarray): A template image used for segmenting the raw image.
+            labels (list[dict[str, str]]): A list of dicts containing 'label' and 'color' keys, where 'label' is the segment label
+                                           and 'color' is the color to match in the segmentation template.
+
+        Returns:
+            dict[str, np.ndarray]: A dictionary where keys are segment labels and values are the cropped segmented images.
+        """
         return self.segmentation_function(raw_image, segmentation_template, labels, self.debug)
 
-    def load_and_segment(self, raw_image_path, segmentation_template_path, labels_path):
+    def load_and_segment(
+        self, raw_image_path: str, segmentation_template_path: str, labels_path: str
+    ) -> dict[str, np.ndarray]:
+        """Loads image files and labels from specified paths, and then segments the image.
+
+        Args:
+            raw_image_path (str): Path to the raw image file.
+            segmentation_template_path (str): Path to the segmentation template image.
+            labels_path (str): Path to the JSON file containing the segment labels and colors.
+
+        Returns:
+            dict[str, np.ndarray]: A dictionary where keys are segment labels and values are the cropped segmented images.
+
+        Raises:
+            FileNotFoundError: If any of the input files do not exist.
+            ValueError: If an image file cannot be opened.
+        """
         if (
             not os.path.isfile(raw_image_path)
             or not os.path.isfile(segmentation_template_path)
