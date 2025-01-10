@@ -3,11 +3,21 @@ import { test, expect } from "@playwright/test";
 test("has STLT Name", async ({ page }) => {
   await page.goto("/");
 
+  await page.evaluate(() => {
+    localStorage.setItem('auth_token', 'token');
+  });
+  await page.goto("/");
+
   await expect(page.getByText("Demo STLT")).toBeVisible();
 });
 
 test("has new template button", async ({ page, baseURL }) => {
   await page.goto("/");
+  await page.evaluate(() => {
+    localStorage.setItem('auth_token', 'token');
+  });
+  await page.goto("/");
+
   await expect(
     page.getByRole("button", { name: "+ New Template" }),
   ).toBeVisible();
@@ -18,6 +28,9 @@ test("has new template button", async ({ page, baseURL }) => {
 test.describe("when templates exist", async () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
+    await page.evaluate(() => {
+      localStorage.setItem('auth_token', 'token');
+    });
     await page.evaluate(() => {
       const templates = [
         {
