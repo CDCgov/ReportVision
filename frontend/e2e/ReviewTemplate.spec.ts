@@ -2,7 +2,12 @@ import { test, expect } from "@playwright/test";
 
 test.describe("ReviewTemplate Page", () => {
   test.beforeEach(async ({ page }) => {
+
     // Navigate to the ReviewTemplate page
+    await page.goto("/extract/review");
+    await page.evaluate(() => {
+      localStorage.setItem('auth_token', 'token');
+    });
     await page.goto("/extract/review");
   });
 
