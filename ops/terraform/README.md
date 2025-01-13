@@ -2,6 +2,19 @@
 
 Currently, our infrastructure is built specifically for Azure, with a traditional cloud architecture hosting our frontend code from blob storage and our OCR-API, Middleware-API running in App Service's. The frontend, OCR-API, Middleware-API, and the Postgres Database are behind a Virtual Network and load balanced by an App Gateway.
 
+## List of Azure Services being used
+
+- Resource Groups
+- App Registrations (Federated Credentials)
+- Blob Storage Accounts
+- App Service Linux Web App (autoscaling enabled for OCR)
+- Application Gateway (with Public IP)
+- Postgresql Flexible Server
+- Private DNS Zone Virtual Network Link
+- Postgresql Flexible Server Firewall Rule
+- Virtual Network (with subnets)
+- Network Security Groups
+- Key Vault
 
 ## Prerequisites
 
@@ -10,7 +23,7 @@ When using Terraform, you will need to created a `terraform.tfvars` file in the 
 ``` bash
 resource_group_name = "reportvision-rg-<environment-name>"
 name                = "reportvision"
-sku_name            = "P0V3"
+sku_name            = "P0v3"
 client_id           = "<CLIENT-ID>"
 object_id           = "<OBJECT-ID>"
 tenant_id           = "<TENANT-ID>"
