@@ -82,7 +82,6 @@ const ReviewBulk = ({
   const handleCSVDownload = () => {
     try {
       onDownload();
-      navigate("/");
     } catch (error) {
       console.error("Error downloading CSV", error);
     }
