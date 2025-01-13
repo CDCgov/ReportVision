@@ -156,6 +156,17 @@ const ReviewBulk = ({
               >
                 Cancel
               </Button>
+              <Button
+              className="extract-button-submit"
+              onClick={
+                () => navigate("/") 
+              }
+              type="submit"
+              disabled={resultsTable.reduce((sum, result) => result.errors + sum, 0) >
+                0}
+            >
+              Done
+            </Button>
             </div>
           </div>
         </div>
