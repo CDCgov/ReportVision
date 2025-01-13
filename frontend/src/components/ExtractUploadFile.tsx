@@ -155,7 +155,7 @@ export const ExtractUploadFile: React.FC<ExtractUploadFileProps> = ({
       if (files.length > 0) {
         setUploadedFile([]);
         clearFiles();
-        setHasError(false);
+        setError(null);
       }
       setUploadedFile(files);
       const filesObj: IFilesObj = { files };
