@@ -115,10 +115,12 @@ test.describe("ReviewTemplate Page", () => {
     }
 
     const finalSubmitButton = page.getByRole("button", { name: "Download CSV" });
+    const doneButton = page.getByRole("button", { name: "Done" });
     await expect(submitButton).toBeEnabled();
     await submitButton.click();
 
     await finalSubmitButton.click();
+    await doneButton.click();
     await expect(page).toHaveURL("/");
   });
 });
