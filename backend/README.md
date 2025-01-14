@@ -36,7 +36,7 @@ Make sure you are in root
 docker-compose -f backend.yaml up --build
 ```
 
-3. Verify the app is running by visiting http://localhost:8080/api/health
+3. Verify the app is running by visiting http://localhost:8081/api/health
  
 # Testing
 
@@ -100,6 +100,10 @@ The backend is organized into the following directories and files:
 ## API Endpoints
 
 The backend middleware exposes the following RESTful API endpoints:
+
+### For Swagger Docs Start API and go to /swagger-ui.html endpoint
+
+ex: http://localhost:8080/swagger-ui.html
 
 #### Health Check
 - **`GET /api/health`**

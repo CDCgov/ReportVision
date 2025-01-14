@@ -38,6 +38,7 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.h2database:h2")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 }
 
 tasks.withType<Test> {
