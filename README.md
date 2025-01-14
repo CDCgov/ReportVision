@@ -19,7 +19,7 @@
 
 ## Overview
 
-Please see the User Guide to get a overview of this project.
+Please see the [UserGuide](./user_guide.md) to get a overview of this project.
 
 
 ## Public Domain Standard Notice

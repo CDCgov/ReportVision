@@ -9,7 +9,6 @@ ReportVision is a tool that automates the reading and extracting of labs from PD
 2. Extract Data based on selected annotations
 3. Conversion of Extracted Data to PDF's 
 
-Please see "how to" instructions in order to understand features of the Application in more detail. 
 
 ### Getting Started
 
