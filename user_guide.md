@@ -30,7 +30,25 @@ Please see "how to" instructions in order to understand features of the Applicat
 
 ### High Level Architecture
 
-![](arcdiagram.png)
+
+flowchart TD
+    A[ReportVision UI] --> B[ReportVision Backend]
+    B --> C[OCR API]
+    B --> D[Data Storage - Postgres]
+    C --> D
+
+    %% Add notes for clarification
+    A:::ui_style
+    B:::backend_style
+    C:::ocr_style
+    D:::storage_style
+
+    %% Define custom styles for better visualization
+    classDef ui_style fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef backend_style fill:#ffa,stroke:#333,stroke-width:2px;
+    classDef ocr_style fill:#aff,stroke:#333,stroke-width:2px;
+    classDef storage_style fill:#aaf,stroke:#333,stroke-width:2px;
+
 
 The **ReportVision** application is composed of the following core components:
 
