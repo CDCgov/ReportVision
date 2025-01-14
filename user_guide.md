@@ -30,7 +30,7 @@ Please see "how to" instructions in order to understand features of the Applicat
 
 ### High Level Architecture
 
-
+```mermaid
 flowchart TD
     A[ReportVision UI] --> B[ReportVision Backend]
     B --> C[OCR API]
@@ -48,7 +48,7 @@ flowchart TD
     classDef backend_style fill:#ffa,stroke:#333,stroke-width:2px;
     classDef ocr_style fill:#aff,stroke:#333,stroke-width:2px;
     classDef storage_style fill:#aaf,stroke:#333,stroke-width:2px;
-
+```
 
 The **ReportVision** application is composed of the following core components:
 
