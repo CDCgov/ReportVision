@@ -23,9 +23,9 @@ ReportVision is a tool that automates the reading and extracting of labs from PD
 
 ### Installation and Development Guides
 
-1. For [Frontend](./frontend/README.md)
-2. For [Middleware ](./backend/README.md)
-3. For OCR [OCR README](./OCR/README.md).
+1. For [Frontend](https://github.com/CDCgov/ReportVision/blob/main/frontend/README.md)
+2. For [Middleware ](https://github.com/CDCgov/ReportVision/blob/main/backend/README.md)
+3. For OCR [OCR README](https://github.com/CDCgov/ReportVision/blob/main/OCR/README.md).
 
 ### High Level Architecture
 
