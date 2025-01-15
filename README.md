@@ -24,12 +24,12 @@ The Intelligent Data Workflow Automation (IDWA) ReportVision Project aims to sup
 
 ## The Problem
 
- The exchange of public health data is hindered by outdated, manual processes. Some state, local, tribal, and territorial health departments still rely on fax, email, and physical mail to receive case data, requiring staff to manually review and re-enter information from lab reports. This labor-intensive process can take up to 20 minutes per report, and electronic data extraction remains cumbersome and error-prone—particularly when handling multiple documents. As a result, low accuracy in data ingestion impedes the ability of public health departments to efficiently process and utilize critical health data.
+The exchange of public health data is hindered by outdated, manual processes. Some state, local, tribal, and territorial health departments still rely on fax, email, and physical mail to receive case data, requiring staff to manually review and re-enter information from lab reports. This labor-intensive process can take up to 20 minutes per report, and electronic data extraction remains cumbersome and error-prone—particularly when handling multiple documents. As a result, low accuracy in data ingestion impedes the ability of public health departments to efficiently process and utilize critical health data.
  
 
 ## The Solution
 
-ReportVision is a powerful tool designed to automate the reading and extracting of data from pdfs, helping public health departments streamline their workflows.  Leveraging the power of the Tesseract engine and Microsoft Azure Cloud Platform, ReportVision allows teams to create customizable, data-driven templates for automatic extraction and annotation of multiple datasets—delivering notable accuracy and speed.
+ReportVision is a powerful tool designed to automate the reading and extracting of data from lab reports, helping public health departments streamline their workflows.  Leveraging the power of the Tesseract engine and Microsoft Azure Cloud Platform, ReportVision allows teams to create customizable, data-driven templates for automatic extraction and annotation of multiple datasets—delivering notable accuracy and speed.
 
 The goal is simple yet powerful: to provide jurisdictions with a "starter kit" that empowers them to rapidly build their own resources, provision scalable Azure infrastructure, or seamlessly replicate similar configurations in Amazon Web Services (AWS) or Google Cloud Platform (GCP).
 
