@@ -2,6 +2,7 @@
 [1. Overview](#1-overview)
 - [The Problem](#the-problem)
 - [The Solution](#the-solution)
+- [Future Considerations](#future-considerations)
 
 [2. Notices](#2-notices)
 - [2.1 Privacy Standard Notice](#21-privacy-standard-notice)
@@ -18,15 +19,34 @@
 - [4.1 Access Request](#41-access-request)
 
 # 1. Overview
-The IDWA project aims to support state, local, territorial, and tribal public health departments by enhancing their ability to manage, search, and secure data.  
+The Intelligent Data Workflow Automation (IDWA) ReportVision Project aims to support the Office of Public Health Data, Surveillance, and Technology (OPHDST) in enhancing the ability of state, local, territorial, and tribal public health departments to manage, search, and secure critical data. As a key division of the CDC, OPHDST plays a vital role in public health infrastructure.
 
 ## The Problem
 
-Extracting data from PDFs is cumbersome and error-prone, particularly when dealing with multiple documents, resulting in low accuracy rates. This makes it difficult for public health departments to efficiently process and utilize critical data.
+The exchange of public health data is hindered by outdated, manual processes. State, local, tribal, and territorial health departments still rely on fax, email, and physical mail to receive case data, requiring staff to manually review and re-enter information from lab reports. This labor-intensive process can take up to 20 minutes per report, and electronic data extraction remains cumbersome and error-prone—particularly when handling multiple documents. As a result, low accuracy in data ingestion impedes the ability of public health departments to efficiently process and utilize critical health data.
 
 ## The Solution
 
-This repository focuses on developing an application that helps public health departments create data-driven templates using Microsoft Azure to consistently extract data with a higher accuracy rate. The goal is to provide jurisdictions with a "starter kit" that enables them to easily build resources from the repository, provision their own Azure infrastructure, or replicate similar configurations in Amazon Web Services (AWS) or Google Cloud Platform (GCP).
+ReportVision is a powerful tool designed to automate the reading and extracting data from pdfs, helping public health departments streamline their workflows.  This cutting-edge tool harnesses the power of Microsoft Azure to help public health teams create customizable, data-driven templates that can automatically extract and annotate multiple datasets with unprecedented accuracy and speed.
+
+The goal is simple yet powerful: to provide jurisdictions with a "starter kit" that empowers them to rapidly build their own resources, provision scalable Azure infrastructure, or seamlessly replicate similar configurations in Amazon Web Services (AWS) or Google Cloud Platform (GCP).
+
+With ReportVision, public health departments can move from cumbersome, error-prone processes to a highly efficient, automated workflow that supports critical decision-making with fast, reliable data.
+
+This application offers a robust framework for public health departments and personnel to efficiently extract relevant data from lab reports utilizing an advanced Optical Character Recognition (OCR) model.  This OCR technology significantly enhances both the speed and accuracy of data extraction, taking your data processing capabilities to the next level.
+
+Check out the following videos to see how the updated OCR model works in action, and and witness firsthand how ReportVision enhances both the speed and accuracy of data extraction!
+
+<div align="center">
+<video width="500" height="280" controls>
+  <source src="images-and-media/reportvision-demo.mp4" type="video/mp4">
+  Video Extracting Data From Lab Reports.
+</video>
+</div align="center">
+
+## Future Considerations
+
+The current version of the application is optimized only for PDF-based lab reports. However, as demand from public health departments and personnel continues to grow, we see significant potential to expand support for additional file formats in future updates.
 
 + [Return to Table of Contents](#table-of-contents).
 
@@ -57,7 +77,7 @@ This repository is a work of the United States Government and is not subject to 
 
 ## 2.4 Open Source Notice
 
-This repository is open source and follows [open practices](open_practices.md).  Contributors are expected to adhere to the organization's [rules of behavior](rules_of_behavior.md).  
+This repository is open source and follows [open practices](docs/open_practices.md).  Contributors are expected to adhere to the organization's [rules of behavior](docs/rules_of_behavior.md).  
 
 + [Return to Table of Contents](#table-of-contents).
 
@@ -96,7 +116,7 @@ CDC including this GitHub page may be subject to applicable federal law, includi
 
 # 3. General Disclaimer
 
-This repository was created for use by CDC programs to collaborate on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/organization/mission.htm).  
+This repository was created for use by CDC programs to collaborate on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/cdc/?CDC_AAref_Val=https://www.cdc.gov/about/organization/mission.htm).  
 
 + [Return to Table of Contents](#table-of-contents).
 
@@ -107,6 +127,16 @@ If the CDC manages the repository, contributors must submit an access request th
 
 **Important**: Submitting a request requires a CDC Office365 login. If you do not have one, please contact your organization’s administrator to submit the request on your behalf.
 
-For access to the CDCEnt private organization, please use the [GitHub Enterprise Cloud Access Request form](https://forms.office.com/Pages/ResponsePage.aspx?id=aQjnnNtg_USr6NJ2cHf8j44WSiOI6uNOvdWse4I-C2NUQjVJVDlKS1c0SlhQSUxLNVBaOEZCNUczVS4u).]
+For access to the CDCEnt private organization, please use the [GitHub Enterprise Cloud Access Request Form](https://forms.office.com/Pages/ResponsePage.aspx?id=aQjnnNtg_USr6NJ2cHf8j44WSiOI6uNOvdWse4I-C2NUQjVJVDlKS1c0SlhQSUxLNVBaOEZCNUczVS4u).
 
 + [Return to Table of Contents](#table-of-contents).
+
+## Other Related Documents
+
+* [Open Practices](docs/open_practices.md)
+* [Rules of Behavior](docs/rules_of_behavior.md)
+* [Disclaimer](docs/DISCLAIMER.md)
+* [Contribution Notice](docs/CONTRIBUTING.md)
+* [Code of Conduct](docs/code-of-conduct.md)
+* [Review_Guidelines](docs/REVIEW_GUIDELINES.md)
+* [Review SLAS](docs/REVIEW_SLAS.md)
