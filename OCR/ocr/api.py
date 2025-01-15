@@ -149,5 +149,5 @@ async def image_to_text(
 
 
 def start():
-    """Launched with `poetry run start` at root level"""
+    """Launched with `poetry run start` at root level."""
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=False)
