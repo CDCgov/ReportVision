@@ -10,10 +10,10 @@ on:
         options:
           - dev
       ocr-docker-tag:
-        description: 'This is optional if you would like to deploy an already published OCR-API image'
+        description: 'OCR Docker Tag (This is optional. If you would like to deploy an already published OCR-API image):'
         required: false
       middleware-docker-tag:
-        description: 'This is optional if you would like to deploy an already published Middleware-API image'
+        description: 'Middleware Docker Tag (This is optional. If you would like to deploy an already published Middleware-API image):'
         required: false
 
 permissions:

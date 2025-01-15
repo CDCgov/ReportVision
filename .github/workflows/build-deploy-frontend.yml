@@ -28,7 +28,7 @@ jobs:
           frontend-build-path: ./frontend/dist/
           node-version: 20
 
-  deploy-with-blob-name-optional:
+  deploy-frontend:
     name: Deploy
     runs-on: ubuntu-latest
     environment: ${{ inputs.deploy-env }}
