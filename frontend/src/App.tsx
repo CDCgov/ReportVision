@@ -9,20 +9,51 @@ import Comment from './assets/comment.svg';
 import CSV from './assets/csv.svg';
 import "./App.scss";
 import { useFiles } from "./contexts/FilesContext.tsx";
+import { useQuery } from "@tanstack/react-query";
+import { TemplateAPI } from "./types/templates.ts";
+import { useError } from "./contexts/ErrorContext.tsx";
 
 function App() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { setFiles } = useFiles();
-  const [isFirstVisit, setIsFirstVisit] = useState(false);
+  const { setFiles, templates, setTemplates } = useFiles();
+  const [hasMorethan1Template, setHasMoreThanOneTemplate] = useState(false);
+
+  const templateQuery = useQuery({
+    queryKey: ["templates"],
+    queryFn: TemplateAPI.getTemplates,
+  });
+  useEffect(() => {
+    const getTemplates = async () => {
+      const templatesJSON = localStorage.getItem("templates") || "[]";
+      if (templateQuery.data && templateQuery.data?.length > 0) {
+        setTemplates(templateQuery.data as []);
+      } else if (templatesJSON) {
+        setTemplates(
+          JSON.parse(templatesJSON).map((template) => ({
+            ...template,
+            updatedAt: template.lastUpdated,
+          })),
+        );
+      } else {
+        setTemplates([]);
+      }
+    };
+    getTemplates();
+  }, [templateQuery.data]);
+  const { setError } = useError();
 
   useEffect(() => {
-    const hasVisited = localStorage.getItem("hasVisited");
-    if (!hasVisited) {
-      setIsFirstVisit(true);
-      localStorage.setItem("hasVisited", "true");
+    if (templates.length > 0) {
+      setHasMoreThanOneTemplate(true);
+    } else {
+      setHasMoreThanOneTemplate(false);
     }
+  }, [templates.length]);
+
+  useEffect(() => {
     setFiles([]);
+    setError(null);
   }, []);
 
   const navLinks = [
@@ -58,7 +89,7 @@ function App() {
           <div className="flex-10 display-flex flex-column bg-idwa-light" data-testid="content-area">
             <h2 className="padding-left-2 bg-white margin-top-0 home-header" data-testid="home-header">Annotate and Extract</h2>
             <div className="display-flex flex-justify-center app-content-container width-full" data-testid="app-content-container">
-              {isFirstVisit ? (
+              {!hasMorethan1Template ? (
                 <div className="bg-white display-flex flex-column flex-justify flex-align-center first-time-content" data-testid="first-time-exp">
                   <h3 className="first-time-header" data-testid="first-time-header">
                     Welcome to Report Vision

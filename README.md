@@ -21,11 +21,20 @@
 # 1. Overview
 The Intelligent Data Workflow Automation (IDWA) ReportVision Project aims to support the Office of Public Health Data, Surveillance, and Technology (OPHDST) in enhancing the ability of state, local, territorial, and tribal public health departments to manage, search, and secure critical data. As a key division of the CDC, OPHDST plays a vital role in public health infrastructure.
 
+Please see the [UserGuide](/docs/user_guide.md) to get a technical overview of this project.
 
 ## The Problem
 
 The exchange of public health data is hindered by outdated, manual processes. Some state, local, tribal, and territorial health departments still rely on fax, email, and physical mail to receive case data, requiring staff to manually review and re-enter information from lab reports. This labor-intensive process can take up to 20 minutes per report, and electronic data extraction remains cumbersome and error-prone—particularly when handling multiple documents. As a result, low accuracy in data ingestion impedes the ability of public health departments to efficiently process and utilize critical health data.
- 
+
+## Public Domain Standard Notice
+This repository constitutes a work of the United States Government and is not
+subject to domestic copyright protection under 17 USC § 105. This repository is in
+the public domain within the United States, and copyright and related rights in
+the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+All contributions to this repository will be released under the CC0 dedication. By
+submitting a pull request you are agreeing to comply with this waiver of
+copyright interest.
 
 ## The Solution
 

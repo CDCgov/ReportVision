@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { FilesProvider } from './contexts/FilesContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock the imports
 vi.mock('./components/AppHeader/AppHeader.tsx', () => ({
@@ -29,11 +30,13 @@ describe('App component', () => {
 
   const renderComponent = () => {
     render(
-      <BrowserRouter>
-        <FilesProvider>
-          <App />
-        </FilesProvider>
-      </BrowserRouter>
+      <QueryClientProvider client={new QueryClient()}>
+        <BrowserRouter>
+          <FilesProvider>
+            <App />
+          </FilesProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
     );
   };
 
@@ -48,7 +51,7 @@ describe('App component', () => {
   });
 
   it('displays regular content on subsequent visits', () => {
-    localStorage.setItem('hasVisited', 'true');
+    localStorage.setItem('templates', JSON.stringify(['hello']));
     renderComponent();
     expect(screen.queryByTestId('first-time-exp')).not.toBeInTheDocument();
     expect(screen.getByTestId('templates-index')).toBeInTheDocument();
