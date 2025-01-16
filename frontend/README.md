@@ -162,4 +162,163 @@ export default tseslint.config({
     ...react.configs["jsx-runtime"].rules,
   },
 });
+
+## Mock Error Handling Framework
+
+To facilitate testing and simulate error scenarios in your application, you can use a mock error handling framework. This framework allows you to mock different types of errors and their corresponding behaviors, enabling you to thoroughly test your error handling logic.
+
+Here's an example of how you can set up a mock error handling framework using Jest:
+
+1. Install the necessary dependencies:
+
+```shell
+npm install jest @types/jest --save-dev
+```
+
+2. Create a `mockError.ts` file in your test directory:
+
+```typescript
+export class MockError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = 'MockError';
+  }
+}
+
+export const mockError = (message?: string): void => {
+  throw new MockError(message);
+};
+```
+
+3. Write a test case that simulates an error scenario:
+
+```typescript
+import { mockError } from './mockError';
+
+describe('Error Handling', () => {
+  it('should handle a mock error', () => {
+    expect(() => {
+      // Simulate an error by calling the mockError function
+      mockError('Something went wrong');
+    }).toThrow('MockError: Something went wrong');
+  });
+});
+```
+
+By using this mock error handling framework, you can easily simulate different error scenarios and ensure that your application handles them correctly.
+
+Remember to customize the `MockError` class and the `mockError` function according to your specific error handling needs.
+
+4. Implement an Error Provider and Context:
+
+```typescript
+import React, { createContext, useState } from 'react';
+
+interface ErrorContextProps {
+  error: Error | null;
+  setError: (error: Error | null) => void;
+}
+
+export const ErrorContext = createContext<ErrorContextProps>({
+  error: null,
+  setError: () => {},
+});
+
+export const ErrorProvider: React.FC = ({ children }) => {
+  const [error, setError] = useState<Error | null>(null);
+
+  return (
+    <ErrorContext.Provider value={{ error, setError }}>
+      {children}
+    </ErrorContext.Provider>
+  );
+};
+```
+
+5. Implement an Error Boundary component:
+
+```typescript
+import React, { Component, ErrorInfo } from 'react';
+
+interface ErrorBoundaryProps {
+  fallback: React.ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): ErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    console.error('Error caught by ErrorBoundary:', error, errorInfo);
+  }
+
+  render(): React.ReactNode {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+
+    return this.props.children;
+  }
+}
+```
+
+With the Error Provider and Context, you can manage and propagate errors throughout your application. The Error Boundary component helps catch and handle errors in your components, providing a fallback UI when an error occurs.
+
+Remember to customize the Error Provider, Context, and Error Boundary according to your specific error handling needs.
+
+## Mock API and Transition to Real API
+
+In this project, we have implemented a mock API that allows you to simulate API responses during development and testing. This is particularly useful when you are working on frontend features that depend on backend APIs that may not be fully implemented or available yet.
+
+To use the mock API, you can follow these steps:
+
+1. Open the `AuthContext.tsx` file.
+
+2. Inside the `AuthContext.tsx` file, you will find a mocked api login that checks for a sample password and usename. You can replace this with an actual implementation for a real API.
+
+  ```typescript
+  export const mockLogin = async (username: string, password: string) => {
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Mock authentication logic
+    if (username === 'test@cdc.gov' && password === 'Password1') {
+      return {
+        token: 'mock-jwt-token-' + Math.random().toString(36).substring(7)
+      };
+    } else {
+      return { token: 'error' }
+    }
+  };
+  ```
+
+3. During development and testing, your frontend application will now display the login page and can test the UX flow for logging in.
+
+Once the real API becomes available or you are ready to transition from the mock API to the real API, you can follow these steps:
+
+4. Update the API endpoints in your code to use the real API instead of the mock API. For example:
+
+  ```javascript
+  import { api } from './api';
+
+  // Use the real API instead of the mock API
+  api.get('/users').then((response) => {
+    // Handle the real API response
+  });
+  ```
+
+5. Make sure to update any data structures or logic that depend on the mock responses to work with the real API responses.
+
+By following these steps, you can easily transition from using the mock API to the real API in your application. This allows you to develop and test your frontend features with confidence, knowing that they will seamlessly integrate with the real API when it becomes available.
+
+
 ```
