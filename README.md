@@ -8,10 +8,11 @@
 - [2.1 Privacy Standard Notice](#21-privacy-standard-notice)
 - [2.2 Records Management Standard Notice](#22-records-management-standard-notice)
 - [2.3 Domestic Copyright Protection Notice](#23-domestic-copyright-protection-notice)
-- [2.4 Open Source Notice](#24-open-source-notice)
-- [2.5 License Standard Notice](#25-license-standard-notice)
-- [2.6 Github Notice](#26-github-notice)
-- [2.7 Contributing Standard Notice](#27-contributing-standard-notice)
+- [2.4 Public Domain Standard Notice](#24-public-domain-standard-notice)
+- [2.5 Open Source Notice](#25-open-source-notice)
+- [2.6 License Standard Notice](#26-license-standard-notice)
+- [2.7 Github Notice](#27-github-notice)
+- [2.8 Contributing Standard Notice](#28-contributing-standard-notice)
 
 [3. General Disclaimer](#3-general-disclaimer)
 
@@ -27,15 +28,6 @@ Please see the [UserGuide](/docs/user_guide.md) to get a technical overview of t
 
 The exchange of public health data is hindered by outdated, manual processes. Some state, local, tribal, and territorial health departments still rely on fax, email, and physical mail to receive case data, requiring staff to manually review and re-enter information from lab reports. This labor-intensive process can take up to 20 minutes per report, and electronic data extraction remains cumbersome and error-prone, particularly when handling multiple documents. As a result, low accuracy in data ingestion impedes the ability of public health departments to efficiently process and utilize critical health data.
 
-## Public Domain Standard Notice
-This repository constitutes a work of the United States Government and is not
-subject to domestic copyright protection under 17 USC § 105. This repository is in
-the public domain within the United States, and copyright and related rights in
-the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
-All contributions to this repository will be released under the CC0 dedication. By
-submitting a pull request you are agreeing to comply with this waiver of
-copyright interest.
-
 ## The Solution
 
 ReportVision is a powerful tool designed to automate the reading and extracting of data from lab reports, helping public health departments streamline their workflows.  Leveraging the power of the Tesseract engine and Microsoft Azure Cloud Platform, ReportVision allows teams to create customizable, data-driven templates for automatic extraction and annotation of multiple datasets—delivering notable accuracy and speed.
@@ -50,7 +42,7 @@ Check out the following videos to see how the updated OCR model works in action,
 
 <div align="center">
 <video width="500" height="280" controls>
-  <source src="images-and-media/reportvision-demo.mp4" type="video/mp4">
+  <source src="/images-and-media/reportvision-demo.mp4" type="video/mp4">
   Video Extracting Data From Lab Reports.
 </video>
 </div align="center">
@@ -85,13 +77,24 @@ This repository is a work of the United States Government and is not subject to 
 
 + [Return to Table of Contents](#table-of-contents).
 
-## 2.4 Open Source Notice
+## 2.4 Public Domain Standard Notice
+This repository constitutes a work of the United States Government and is not
+subject to domestic copyright protection under 17 USC § 105. This repository is in
+the public domain within the United States, and copyright and related rights in
+the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+All contributions to this repository will be released under the CC0 dedication. By
+submitting a pull request you are agreeing to comply with this waiver of
+copyright interest.
+
++ [Return to Table of Contents](#table-of-contents).
+
+## 2.5 Open Source Notice
 
 This repository is open source and follows [open practices](docs/open_practices.md).  Contributors are expected to adhere to the organization's [rules of behavior](docs/rules_of_behavior.md).  
 
 + [Return to Table of Contents](#table-of-contents).
 
-## 2.5 License Standard Notice
+## 2.6 License Standard Notice
 
 The code in this repository is licensed under the Apache License 2.0 (ASL v2), or any later version at your discretion.
 
@@ -103,14 +106,14 @@ Additionally, any code forked from this open-source project will retain its orig
 
 + [Return to Table of Contents](#table-of-contents).
 
-## 2.6 Github Notice
+## 2.7 Github Notice
 
 GitHub is not hosted by the CDC, but is a third party website used by CDC and its partners to share information and collaborate on software. CDC use of GitHub does not imply an endorsement of any one particular service, product, or enterprise. If you are new to GitHub, we recommend starting with this
 [basic tutorial](https://help.github.com/articles/set-up-git) to familiarize yourself with version control and collaboration.  
 
 + [Return to Table of Contents](#table-of-contents).
 
-## 2.7 Contributing Standard Notice
+## 2.8 Contributing Standard Notice
 
 While we encourage continuous development of this repository's codebase, there is currently no designated department overseeing its management. If you'd like to contribute, you have two options:
 
