@@ -61,7 +61,9 @@ The **ReportVision** application is composed of the following core components:
 - The application is hosted in **Azure**
 
 ### Infrastructure Guide
-- For detailed information on how the application is deployed and managed in Azure, refer to our [Infrastructure Guide](.github/README.md).
+- For detailed information on how the application is deployed and managed in Azure, refer to:
+    - [ReportVision's Terraform Setup](../ops/terraform/README.md)
+    - [Github Action workflows for building and deploying ReportVision in a dev environment](../.github/workflows/README.md)
 
 
 
