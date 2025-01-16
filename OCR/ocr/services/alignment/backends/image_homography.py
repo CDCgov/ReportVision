@@ -1,3 +1,5 @@
+"""Aligns two images using image homography algorithms."""
+
 from pathlib import Path
 
 import numpy as np
@@ -5,8 +7,30 @@ import cv2 as cv
 
 
 class ImageHomography:
+    """A class to align two images using homography techniques.
+
+    Uses Scale-Invariant Feature Transform (SIFT) algorithm to detect keypoints and
+    compute descriptors for image matching, and then estimates a homography
+    transformation matrix to align the source image with a template image.
+
+    Attributes:
+        template (np.ndarray): The template image to align against, either as a path or a NumPy array.
+        match_ratio (float): The ratio used for Lowe's ratio test to filter good matches.
+        _sift (cv.SIFT): The SIFT detector used to find keypoints and descriptors.
+    """
+
     def __init__(self, template: Path | np.ndarray, match_ratio=0.3):
-        """Initialize the image homography pipeline with a `template` image."""
+        """Initializes the ImageHomography object with a template image.
+
+        Optionally include a match ratio for filtering descriptor matches; this must be between 0 and 1.
+
+        Args:
+            template (Path | np.ndarray): The template image, either as a file path or a NumPy array.
+            match_ratio (float, optional): The ratio threshold for Lowe's ratio test. Default is 0.3.
+
+        Raises:
+            ValueError: If `match_ratio` is not between 0 and 1.
+        """
         if match_ratio >= 1 or match_ratio <= 0:
             raise ValueError("`match_ratio` must be between 0 and 1")
 
@@ -18,24 +42,64 @@ class ImageHomography:
         self._sift = cv.SIFT_create()
 
     @classmethod
-    def align(self, source_image, template_image):
+    def align(self, source_image: np.ndarray, template_image: np.ndarray) -> np.ndarray:
+        """Aligns a source image to a template image.
+
+        Args:
+            source_image (np.ndarray): The source image to align.
+            template_image (np.ndarray): The template image to align to.
+
+        Returns:
+            np.ndarray: The aligned source image.
+        """
         return ImageHomography(template_image).transform_homography(source_image)
 
     def estimate_self_similarity(self):
-        """Calibrate `match_ratio` using a self-similarity metric."""
+        """Calibrates the match ratio using a self-similarity metric (not implemented).
+
+        Raises:
+            NotImplementedError: Since this method is not implemented.
+        """
         raise NotImplementedError
 
-    def compute_descriptors(self, img):
-        """Compute SIFT descriptors for a target `img`."""
+    def compute_descriptors(self, img: np.ndarray):
+        """Computes the SIFT descriptors for a given image.
+
+        These descriptors represent distinctive features in the image that can be used for matching.
+
+        Args:
+            img (np.ndarray): The image for which to compute descriptors.
+
+        Returns:
+            tuple: A 2-element tuple containing the keypoints and their corresponding descriptors.
+        """
         return self._sift.detectAndCompute(img, None)
 
     def knn_match(self, descriptor_template, descriptor_query):
-        """Return k-nearest neighbors match (k=2) between descriptors generated from a template and query image."""
+        """Performs k-nearest neighbors matching (k=2) between descriptors to find best homography matches.
+
+        Args:
+            descriptor_template (np.ndarray): The SIFT descriptors from the template image.
+            descriptor_query (np.ndarray): The SIFT descriptors from the query image.
+
+        Returns:
+            list: A list of k-nearest neighbor matches between the template and query descriptors.
+        """
         matcher = cv.DescriptorMatcher_create(cv.DescriptorMatcher_FLANNBASED)
         return matcher.knnMatch(descriptor_template, descriptor_query, 2)
 
-    def estimate_transform_matrix(self, other):
-        "Estimate the transformation matrix based on homography."
+    def estimate_transform_matrix(self, other: np.ndarray) -> np.ndarray:
+        """Estimates the transformation matrix between the template image and another image.
+
+        This function detects keypoints and descriptors, matches them using k-nearest neighbors,
+        and applies Lowe's ratio test to filter for quality matches.
+
+        Args:
+            other (np.ndarray): The image to estimate the transformation matrix against.
+
+        Returns:
+            np.ndarray: The homography matrix that transforms the other image to align with the template image.
+        """
         # find the keypoints and descriptors with SIFT
         kp1, descriptors1 = self.compute_descriptors(self.template)
         kp2, descriptors2 = self.compute_descriptors(other)
@@ -55,17 +119,26 @@ class ImageHomography:
         M, _ = cv.findHomography(dst_pts, src_pts, cv.RANSAC, 5.0)
         return M
 
-    def transform_homography(self, other, min_axis=100, matrix=None):
-        """
-        Run the image homography pipeline against a query image.
+    def transform_homography(self, other: np.ndarray, min_axis=100, matrix=None) -> np.ndarray:
+        """Run the full image homography pipeline against a query image.
 
-        Parameters:
-        min_axis: minimum x- and y-axis length, in pixels, to attempt to do a homography transform.
-            If the input image is under the axis limits, return the original input image unchanged.
-        matrix: if specified, a transformation matrix to warp the input image. Otherwise this will be
-            estimated with `estimate_transform_matrix`.
-        """
+        If the size of the `other` image is smaller than the minimum axis length `min_axis`,
+        the image is returned unchanged.
 
+        If a transformation matrix is provided, it is used directly; otherwise, the matrix is
+        estimated using `estimate_transform_matrix`.
+
+        Args:
+            other (np.ndarray): The image to be transformed.
+            min_axis (int, optional): The minimum axis length (in pixels) to attempt the homography transform.
+                                      If the image is smaller, it will be returned unchanged. Default is 100.
+            matrix (np.ndarray, optional): The homography transformation matrix to apply. If not provided,
+                                            it will be estimated.
+
+        Returns:
+            np.ndarray: The transformed image if homography was applied, or the original image if it is
+                        smaller than the minimum axis size.
+        """
         if other.shape[0] < min_axis and other.shape[1] < min_axis:
             return other
 

@@ -1,20 +1,49 @@
+"""Module for batch processing OCR and ground truth files and calculating metrics."""
+
 from ocr.services.metrics_analysis import OCRMetrics
 import os
 import csv
 
 
 class BatchMetricsAnalysis:
-    def __init__(self, ocr_folder, ground_truth_folder, csv_output_folder):
+    """Class for batch processing OCR and ground truth files, calculating OCR metrics, and saving the results in CSV files.
+
+    Compare OCR results with ground truth data, calculates various OCR performance metrics (e.g., Levenshtein distance),
+    and saves individual CSV files for each pair of OCR and ground truth data. Problematic segments with a Levenshtein
+    distance greater than 1 (i.e., OCR results were incorrect) are identified and stored separately.
+
+    Attributes:
+        ocr_folder (str): Path to the folder containing OCR result files.
+        ground_truth_folder (str): Path to the folder containing ground truth files.
+        csv_output_folder (str): Path to the folder where CSV output files will be saved.
+    """
+
+    def __init__(self, ocr_folder: str, ground_truth_folder: str, csv_output_folder: str) -> None:
+        """Initializes the BatchMetricsAnalysis class with paths to OCR, ground truth, and output folders.
+
+        Creates the output folder if it doesn't exist.
+
+        Args:
+            ocr_folder (str): Path to the folder containing OCR result files.
+            ground_truth_folder (str): Path to the folder containing ground truth files.
+            csv_output_folder (str): Path to the folder where CSV output files will be saved.
+        """
         self.ocr_folder = ocr_folder
         self.ground_truth_folder = ground_truth_folder
         self.csv_output_folder = csv_output_folder
 
         os.makedirs(self.csv_output_folder, exist_ok=True)
 
-    def calculate_batch_metrics(self, ocr_results=None):
-        """
-        Processes OCR and ground truth files and saves individual CSVs.
+    def calculate_batch_metrics(self, ocr_results=None) -> dict:
+        """Processes OCR and ground truth files and saves individual CSVs.
+
         Ensures only matching files are processed.
+
+        Args:
+            ocr_results (dict, optional): A dictionary of OCR results.
+
+        Returns:
+            dict: A summary of total metrics for each processed OCR file.
         """
         print(f"Loading OCR files from: {self.ocr_folder}")
         print(f"Loading ground truth files from: {self.ground_truth_folder}")
@@ -68,9 +97,13 @@ class BatchMetricsAnalysis:
         return total_metrics_summary
 
     @staticmethod
-    def save_metrics_to_csv(metrics, total_metrics, file_path):
-        """
-        Saves individual and total metrics to a CSV file, including time taken.
+    def save_metrics_to_csv(metrics: list, total_metrics: dict, file_path: str) -> None:
+        """Saves individual and total metrics to a CSV file, including time taken.
+
+        Args:
+            metrics (list): A list of dictionaries containing individual metrics for each file.
+            total_metrics (dict): A dictionary containing the overall metrics for the batch.
+            file_path (str): Path to the CSV file where the metrics will be saved.
         """
         print(metrics)
         metric_keys = list(metrics[0].keys())
@@ -92,9 +125,12 @@ class BatchMetricsAnalysis:
         print(f"Metrics saved to {file_path}")
 
     @staticmethod
-    def save_problematic_segments_to_csv(segments, file_path):
-        """
-        Saves problematic segments (Levenshtein distance >= 1) to a CSV file.
+    def save_problematic_segments_to_csv(segments: list, file_path: str):
+        """Saves problematic segments (Levenshtein distance >= 1) to a CSV file.
+
+        Args:
+            segments (list): A list of problematic segments, each represented as a dictionary.
+            file_path (str): Path to the CSV file where the problematic segments will be saved.
         """
         if not segments:
             print("No problematic segments found.")
@@ -109,9 +145,13 @@ class BatchMetricsAnalysis:
 
         print(f"Problematic segments saved to {file_path}")
 
-    def extract_problematic_segments(self, metrics, ocr_file, problematic_segments):
-        """
-        Extracts segments with Levenshtein distance >= 1 and stores them.
+    def extract_problematic_segments(self, metrics: list, ocr_file: str, problematic_segments: list) -> None:
+        """Extracts segments with Levenshtein distance >= 1 and stores them.
+
+        Args:
+            metrics (list): A list of dictionaries containing individual OCR metrics.
+            ocr_file (str): The OCR file name being processed.
+            problematic_segments (list): A list to store problematic segments.
         """
         for metric in metrics:
             if metric["levenshtein_distance"] >= 1:
@@ -127,10 +167,19 @@ class BatchMetricsAnalysis:
                 )
 
     @staticmethod
-    def get_files_in_directory(directory):
-        """
-        Returns a sorted list of files in the specified directory.
+    def get_files_in_directory(directory: str) -> list:
+        """Returns a sorted list of files in the specified directory.
+
         Assumes that files are named consistently for OCR and ground truth.
+
+        Args:
+            directory (str): Path to the directory containing the files.
+
+        Returns:
+            list: A sorted list of file names in the directory.
+
+        Raises:
+            FileNotFoundError: If the directory is not found.
         """
         try:
             files = sorted(

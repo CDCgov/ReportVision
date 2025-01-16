@@ -3,9 +3,7 @@ from .models import PHDCInputData, Patient, Name, Address, Telecom
 
 
 class PHDCConverter:
-    """
-    Parse the OCR data converted to json to create an instance of the Patient data class.
-    """
+    """Parse the OCR data converted to json to create an instance of the Patient data class."""
 
     def parse_patient_data(self, json_data):
         name = Name(first=json_data.get("patient_first_name", ""), family=json_data.get("patient_last_name", ""))
@@ -31,9 +29,7 @@ class PHDCConverter:
         return patient
 
     def generate_phdc_document(self, json_data):
-        """
-        Generate the PHDC document using parsed OCR data.
-        """
+        """Generate the PHDC document using parsed OCR data."""
         patient = self.parse_patient_data(json_data)
 
         phdc_input = PHDCInputData(patient=patient, type="case_report")

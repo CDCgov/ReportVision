@@ -14,22 +14,19 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 
 class PHDC:
-    """
-    A class to represent a Public Health Data Container (PHDC) document given a
+    """A class to represent a Public Health Data Container (PHDC) document given a
     PHDCBuilder.
     """
 
     def __init__(self, data: ET.ElementTree = None):
-        """
-        Initializes the PHDC class with a PHDCBuilder.
+        """Initializes the PHDC class with a PHDCBuilder.
 
         :param builder: The PHDCBuilder to use to build the PHDC.
         """
         self.data = data
 
     def to_xml_string(self) -> bytes:
-        """
-        Return a string representation of the PHDC XML document as serialized bytes.
+        """Return a string representation of the PHDC XML document as serialized bytes.
 
         :return: The PHDC XML document as serialized bytes.
         """
@@ -43,8 +40,7 @@ class PHDC:
         ).decode()
 
     def to_element_tree(self) -> ET.ElementTree:
-        """
-        Return the PHDC XML document as an ElementTree.
+        """Return the PHDC XML document as an ElementTree.
 
         :return: The PHDC XML document as an ElementTree.
         """
@@ -54,30 +50,22 @@ class PHDC:
 
 
 class PHDCBuilder:
-    """
-    A builder class for creating PHDC documents.
-    """
+    """A builder class for creating PHDC documents."""
 
     def __init__(self):
-        """
-        Initializes the PHDCBuilder class and create and empty PHDC.
-        """
-
+        """Initializes the PHDCBuilder class and create and empty PHDC."""
         self.input_data: PHDCInputData = None
         self.phdc = self._build_base_phdc()
 
     def set_input_data(self, input_data: PHDCInputData):
-        """
-        Given a PHDCInputData object, set the input data for the PHDCBuilder.
+        """Given a PHDCInputData object, set the input data for the PHDCBuilder.
 
         :param input_data: The PHDCInputData object to use as input data.
         """
-
         self.input_data = input_data
 
     def _build_base_phdc(self) -> ET.ElementTree:
-        """
-        Create the base PHDC XML document.
+        """Create the base PHDC XML document.
 
         :return: The base PHDC XML document.
         """
@@ -107,8 +95,7 @@ class PHDCBuilder:
         return clinical_document
 
     def _get_type_id(self) -> ET.Element:
-        """
-        Creates the type ID element of the PHDC header.
+        """Creates the type ID element of the PHDC header.
 
         :return: XML element of <typeId>.
         """
@@ -118,8 +105,7 @@ class PHDCBuilder:
         return type_id
 
     def _get_id(self) -> ET.Element:
-        """
-        Creates the ID element of the PHDC header.
+        """Creates the ID element of the PHDC header.
 
         :return: XML element of <id>.
         """
@@ -129,8 +115,7 @@ class PHDCBuilder:
         return id
 
     def _get_effective_time(self) -> ET.Element:
-        """
-        Creates the effectiveTime element of the PHDC header.
+        """Creates the effectiveTime element of the PHDC header.
 
         :return: XML element of <effectiveTime>.
         """
@@ -141,8 +126,7 @@ class PHDCBuilder:
     def _get_confidentiality_code(
         self, confidentiality: Literal["normal", "restricted", "very restricted"]
     ) -> ET.Element:
-        """
-        Creates the confidentialityCode element of the PHDC header.
+        """Creates the confidentialityCode element of the PHDC header.
 
         :param confidentiality: The confidentiality code to use.
         :return: XML element of <confidentialityCode>.
@@ -159,19 +143,16 @@ class PHDCBuilder:
         return confidentiality_code
 
     def _get_realmCode(self) -> ET.Element:
-        """
-        Creates the realmCode element of the PHDC header.
+        """Creates the realmCode element of the PHDC header.
 
         :return: XML element of <realmCode>.
         """
-
         realmCode = ET.Element("realmCode")
         realmCode.set("code", "US")
         return realmCode
 
     def _get_clinical_info_code(self) -> ET.Element:
-        """
-        Creates the code element of the header for a PHDC case report.
+        """Creates the code element of the header for a PHDC case report.
 
         :return: XML element of <code>.
         """
@@ -183,8 +164,7 @@ class PHDCBuilder:
         return code
 
     def _get_title(self) -> ET.Element:
-        """
-        Creates the title element of the PHDC header.
+        """Creates the title element of the PHDC header.
 
         :return: XML element of <title>.
         """
@@ -193,8 +173,7 @@ class PHDCBuilder:
         return title
 
     def _get_setId(self) -> ET.Element:
-        """
-        Creates the setId element of the PHDC header.
+        """Creates the setId element of the PHDC header.
 
         :return: XML element of <setId>.
         """
@@ -204,8 +183,7 @@ class PHDCBuilder:
         return setid
 
     def _get_version_number(self) -> ET.Element:
-        """
-        Returns the versionNumber element of the PHDC header.
+        """Returns the versionNumber element of the PHDC header.
 
         :return: XML element of <versionNumber>.
         """
@@ -217,9 +195,7 @@ class PHDCBuilder:
         return version_number
 
     def build_header(self):
-        """
-        Builds the header of the PHDC document.
-        """
+        """Builds the header of the PHDC document."""
         root = self.phdc.getroot()
         root.append(self._get_realmCode())
         root.append(self._get_type_id())
@@ -266,8 +242,7 @@ class PHDCBuilder:
         section: ET.Element,
         data: ET.Element,
     ) -> ET.Element:
-        """
-        Adds Clinical Observation and Social History Information observations to the
+        """Adds Clinical Observation and Social History Information observations to the
         appropriate section.
 
         :param section: Section XML element.
@@ -283,8 +258,7 @@ class PHDCBuilder:
         return section
 
     def _build_clinical_info(self) -> ET.Element:
-        """
-        Builds the `ClinicalInformation` XML element, including all hardcoded aspects
+        """Builds the `ClinicalInformation` XML element, including all hardcoded aspects
         required to initialize the section.
 
         :param observation_data: List of clinical-relevant Observation data.
@@ -316,8 +290,7 @@ class PHDCBuilder:
         return component
 
     def _build_social_history_info(self) -> ET.Element:
-        """
-        Builds the Social History Information XML section, including all hardcoded
+        """Builds the Social History Information XML section, including all hardcoded
             aspects required to initialize the section.
         :return: XML element of SocialHistory data.
         """
@@ -351,8 +324,7 @@ class PHDCBuilder:
         return component
 
     def _build_repeating_questions(self) -> ET.Element:
-        """
-        Builds the Repeating Questions XML section, including all hardcoded
+        """Builds the Repeating Questions XML section, including all hardcoded
         aspects required to initialize the section.
         :return: XML element of Repeating Questions data.
         """
@@ -413,8 +385,7 @@ class PHDCBuilder:
         return component_section
 
     def _build_telecom(self, telecom: Telecom) -> ET.Element:
-        """
-        Builds a `telecom` XML element for phone data including phone number (as
+        """Builds a `telecom` XML element for phone data including phone number (as
         `value`) and use, if available. There are three types of phone uses: 'HP'
         for home phone, 'WP' for work phone, and 'MC' for mobile phone.
 
@@ -442,8 +413,7 @@ class PHDCBuilder:
         return telecom_data
 
     def _add_field(self, parent_element: ET.Element, data: str, field_name: str):
-        """
-        Adds a child element to a parent element given the data and field name.
+        """Adds a child element to a parent element given the data and field name.
 
         :param parent_element: The parent element to add the child element to.
         :param data: The data to add to the child element.
@@ -455,8 +425,7 @@ class PHDCBuilder:
             parent_element.append(e)
 
     def _build_observation(self, observation: Observation) -> ET.Element:
-        """
-        Creates Entry XML element for observation data.
+        """Creates Entry XML element for observation data.
 
         :param observation: The data for building the observation element as an
         Entry object.
@@ -496,8 +465,7 @@ class PHDCBuilder:
         return observation_data
 
     def _set_value_xsi_type(self, observation: Observation) -> Observation:
-        """
-        Ensure that observation elements with a value child element use
+        """Ensure that observation elements with a value child element use
         the correct namespace based on the data.
 
         :param observation: The observation data being used in _build_observation
@@ -540,8 +508,7 @@ class PHDCBuilder:
         self,
         address: Address,
     ) -> ET.Element:
-        """
-        Builds an `addr` XML element for address data. There are two types of address
+        """Builds an `addr` XML element for address data. There are two types of address
         uses: 'H' for home address and 'WP' for workplace address.
 
         :param address: The data for building the address element as an Address object.
@@ -563,13 +530,11 @@ class PHDCBuilder:
         return address_data
 
     def _build_name(self, name: Name) -> ET.Element:
-        """
-        Builds a `name` XML element for name data.
+        """Builds a `name` XML element for name data.
 
         :param name: The data for constructing the name element as a Name object.
         :return: XML element of name data.
         """
-
         name_data = ET.Element("name")
 
         if name.type is not None:
@@ -591,8 +556,7 @@ class PHDCBuilder:
         return name_data
 
     def _build_patient(self, patient: Patient) -> ET.Element:
-        """
-        Given a Patient object, build the patient element of the PHDC.
+        """Given a Patient object, build the patient element of the PHDC.
 
         :param patient: The Patient object to use for building the patient element.
         :return: XML element of patient data.
@@ -671,8 +635,7 @@ class PHDCBuilder:
         address_data: Optional[List[Address]] = None,
         patient_data: Optional[Patient] = None,
     ) -> ET.Element:
-        """
-        Builds a `recordTarget` XML element for recordTarget data, which refers to
+        """Builds a `recordTarget` XML element for recordTarget data, which refers to
           the medical record of the patient.
 
         :param id: recordTarget identifier
@@ -731,8 +694,7 @@ class PHDCBuilder:
         return recordTarget_data
 
     def build(self) -> PHDC:
-        """
-        Constructs a PHDC document by building the header and body components.
+        """Constructs a PHDC document by building the header and body components.
 
         :return: A PHDC document as an instance of the PHDC class.
         """

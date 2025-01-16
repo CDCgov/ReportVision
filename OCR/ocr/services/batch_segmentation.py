@@ -1,3 +1,5 @@
+"""Process and segment a batch of images and perform OCR on the results."""
+
 import os
 import json
 import time
@@ -8,7 +10,28 @@ from ocr.services.image_ocr import ImageOCR
 
 
 class BatchSegmentationOCR:
-    def __init__(self, image_folder, segmentation_template, labels_path, output_folder, model=None):
+    """Class that processes a batch of images by segmenting them and performing OCR on the segments.
+
+    Attributes:
+        image_folder (str): Path to the folder containing images to process.
+        segmentation_template (str): Path to the segmentation template to guide image segmentation.
+        labels_path (str): Path to the file containing label data used for segmentation.
+        output_folder (str): Path to the folder where OCR results and timing information will be saved.
+        model (ImageOCR): An optional pre-defined OCR model; if None, a default instance of ImageOCR is used.
+    """
+
+    def __init__(
+        self, image_folder: str, segmentation_template: str, labels_path: str, output_folder: str, model=None
+    ) -> None:
+        """Initializes the BatchSegmentationOCR instance with the specified paths and an optional OCR model.
+
+        Args:
+            image_folder (str): Path to the folder containing images to process.
+            segmentation_template (str): Path to the segmentation template to guide image segmentation.
+            labels_path (str): Path to the file containing label data used for segmentation.
+            output_folder (str): Path to the folder where OCR results and timing information will be saved.
+            model (ImageOCR, optional): An optional pre-defined OCR model. Defaults to `ImageOCR`.
+        """
         self.image_folder = image_folder
         self.segmentation_template = segmentation_template
         self.labels_path = labels_path
@@ -18,9 +41,11 @@ class BatchSegmentationOCR:
             self.model = ImageOCR()
         os.makedirs(self.output_folder, exist_ok=True)
 
-    def process_images(self):
-        """
-        Processes all images and returns OCR results with time taken.
+    def process_images(self) -> list[dict]:
+        """Processes all images and returns OCR results with time taken.
+
+        Returns:
+            list[dict]: A list of dictionaries containing the OCR results and time taken for each image.
         """
         segmenter = ImageSegmenter()
         ocr = self.model
@@ -55,9 +80,21 @@ class BatchSegmentationOCR:
         print("Processing complete.")
         return results
 
-    def segment_ocr_image(self, segmenter, ocr, image_path, image_file):
-        """
-        Segments the image and runs OCR, returning results and time taken.
+    def segment_ocr_image(
+        self, segmenter: ImageSegmenter, ocr, image_path: str, image_file: str
+    ) -> tuple[dict[str, tuple[str, float]], float]:
+        """Segments the image and runs OCR, returning results and time taken.
+
+        Args:
+            segmenter (ImageSegmenter): An instance of the ImageSegmenter used to segment the image.
+            ocr (ImageOCR): An instance of the OCR model used to extract text from the segments.
+            image_path (str): Path to the image file to be processed.
+            image_file (str): The name of the image file.
+
+        Returns:
+            tuple: A tuple containing:
+                - dict: The OCR results, where the key is the label and the value is a tuple of (text, confidence).
+                - float: The time taken to segment and process the image.
         """
         start_time = time.time()
 
@@ -77,9 +114,12 @@ class BatchSegmentationOCR:
         time_taken = time.time() - start_time
         return ocr_result, time_taken
 
-    def write_times_to_csv(self, time_dict, csv_output_path):
-        """
-        Writes the time taken for each file to a CSV.
+    def write_times_to_csv(self, time_dict: dict[str, float], csv_output_path) -> None:
+        """Writes the time taken for each file to a CSV.
+
+        Args:
+            time_dict (dict): A dictionary where the key is the image file name and the value is the time taken (in seconds).
+            csv_output_path (str): Path to the folder where the CSV file will be saved.
         """
         csv_file_path = os.path.join(csv_output_path, "time_taken.csv")
 
