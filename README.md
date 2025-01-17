@@ -57,6 +57,7 @@ The following provides a High-Level Architectural Design of the ReportVision Azu
 
 <img width="985" alt="rv-azure-architecture-diagram" src="https://github.com/user-attachments/assets/c02f9f10-90e0-4660-afa2-d77968087003" />
 
++ [Return to Table of Contents](#table-of-contents).
 
 # 3 Notices
 
