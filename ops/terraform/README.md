@@ -2,6 +2,10 @@
 
 Currently, our infrastructure is built specifically for Azure, with a traditional cloud architecture hosting our frontend code from blob storage and our OCR-API, Middleware-API running in App Service's. The frontend, OCR-API, Middleware-API, and the Postgres Database are behind a Virtual Network and load balanced by an App Gateway.
 
+This diagram provides a high-level overview of our Azure architectural design.
+
+<img width="985" alt="rv-azure-architecture-diagram" src="https://github.com/user-attachments/assets/c02f9f10-90e0-4660-afa2-d77968087003" />
+
 ## List of Azure Services being used
 
 - Resource Groups
