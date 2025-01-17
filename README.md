@@ -7,6 +7,7 @@
 [2. Infrastructure Architecture](#2-infrastructure-architecture)
 
 [3. Notices](#3-notices)
+[3. Notices](#3-notices)
 - [3.1 Privacy Standard Notice](#31-privacy-standard-notice)
 - [3.2 Records Management Standard Notice](#32-records-management-standard-notice)
 - [3.3 Domestic Copyright Protection Notice](#33-domestic-copyright-protection-notice)
@@ -17,7 +18,9 @@
 - [3.8 Contributing Standard Notice](#38-contributing-standard-notice)
 
 [4. General Disclaimer](#4-general-disclaimer)
+[4. General Disclaimer](#4-general-disclaimer)
 
+[5. Other Related Documents](#5-other-related-documents)
 [5. Other Related Documents](#5-other-related-documents)
 
 
@@ -43,7 +46,6 @@ This application offers a robust framework for public health departments and per
 Check out the following video which demos the ReportVision application including how the updated OCR model works in action, and witness firsthand how ReportVision enhances both the speed and accuracy of data extraction!
 
 https://github.com/user-attachments/assets/5b707ec2-5d11-436b-a270-98000ef21e8f
-
 
 ## Future Considerations
 
