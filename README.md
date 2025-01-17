@@ -4,15 +4,17 @@
 - [The Solution](#the-solution)
 - [Future Considerations](#future-considerations)
 
-[2. Notices](#2-notices)
-- [2.1 Privacy Standard Notice](#21-privacy-standard-notice)
-- [2.2 Records Management Standard Notice](#22-records-management-standard-notice)
-- [2.3 Domestic Copyright Protection Notice](#23-domestic-copyright-protection-notice)
-- [2.4 Public Domain Standard Notice](#24-public-domain-standard-notice)
-- [2.5 Open Source Notice](#25-open-source-notice)
-- [2.6 License Standard Notice](#26-license-standard-notice)
-- [2.7 Github Notice](#27-github-notice)
-- [2.8 Contributing Standard Notice](#28-contributing-standard-notice)
+[2. Infrastructure Architecture](#2-infrastructure-architecture)
+
+[3. Notices](#2-notices)
+- [3.1 Privacy Standard Notice](#31-privacy-standard-notice)
+- [3.2 Records Management Standard Notice](#32-records-management-standard-notice)
+- [3.3 Domestic Copyright Protection Notice](#33-domestic-copyright-protection-notice)
+- [3.4 Public Domain Standard Notice](#34-public-domain-standard-notice)
+- [3.5 Open Source Notice](#35-open-source-notice)
+- [3.6 License Standard Notice](#36-license-standard-notice)
+- [3.7 Github Notice](#37-github-notice)
+- [3.8 Contributing Standard Notice](#38-contributing-standard-notice)
 
 [3. General Disclaimer](#3-general-disclaimer)
 
@@ -38,14 +40,17 @@ With ReportVision, public health departments can move from cumbersome, error-pro
 
 This application offers a robust framework for public health departments and personnel to efficiently extract relevant data from lab reports utilizing an advanced Optical Character Recognition (OCR) model.  This OCR technology significantly enhances both the speed and accuracy of data extraction, taking your data processing capabilities to the next level.  
 
-Check out the following videos to see how the updated OCR model works in action, and and witness firsthand how ReportVision enhances both the speed and accuracy of data extraction!
+Check out the following video which demos the ReportVision application including how the updated OCR model works in action, and witness firsthand how ReportVision enhances both the speed and accuracy of data extraction!
 
-<div align="center">
-    <video width="560" height="315" controls>
-        <source src="https://github.com/CDCgov/ReportVision/raw/gh-pages/images-and-media/rv-full-product-waklthrough.mp4" type="video/mp4">
-        ReportVision Full Product Walkthrough.
-    </video>
-</div align="center">
+
+
+<!-- <a href="https://github.com/CDCgov/ReportVision/raw/main/images-and-media/rv-full-product-waklthrough.mp4" target="_blank">
+    <img src="https://github.com/CDCgov/ReportVision/raw/main/images-and-media/thumbnail.jpg" alt="ReportVision Demo" width="500" />
+</a> -->
+
+<a href="https://cdcgov.github.io/ReportVision/images-and-media/rv-full-product-waklthrough.mp4" target="_blank">
+    <img src="https://cdcgov.github.io/ReportVision/images-and-media/thumbnail.jpg" alt=" ReportVision Demo" width="500" />
+</a>
 
 ## Future Considerations
 
@@ -53,16 +58,23 @@ The current version of the application is optimized only for PDF-based lab repor
 
 + [Return to Table of Contents](#table-of-contents).
 
-# 2. Notices
+# 2. Infrastructure Architecture
 
-## 2.1 Privacy Standard Notice
+The following provides a High-Level Architectural Design of the ReportVision Azure Architecture, with OCR powered by Tesseract to enhance efficiency, user experience, and throughput.
+
+
+
+
+## 3 Notices
+
+## 3.1 Privacy Standard Notice
 This repository contains only non-sensitive, publicly available data and information. All material and community participation is covered by the [Disclaimer](DISCLAIMER.md) and [Code of Conduct](code-of-conduct.md).
 
 For more information about CDC's privacy policy, please visit [http://www.cdc.gov/other/privacy.html](https://www.cdc.gov/other/privacy.html).
 
 + [Return to Table of Contents](#table-of-contents).
 
-## 2.2 Records Management Standard Notice
+## 3.2 Records Management Standard Notice
 
 This repository is not a source of government records, but is a copy to increase
 collaboration and collaborative potential. All government records will be
@@ -71,13 +83,13 @@ published through the [CDC web site](http://www.cdc.gov).
 + [Return to Table of Contents](#table-of-contents).
 
 
-## 2.3 Domestic Copyright Protection Notice
+## 3.3 Domestic Copyright Protection Notice
 
 This repository is a work of the United States Government and is not subject to domestic copyright protection under 17 U.S.C. § 105. If published in the public domain within the United States, copyright and related rights worldwide will be waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
 
 + [Return to Table of Contents](#table-of-contents).
 
-## 2.4 Public Domain Standard Notice
+## 3.4 Public Domain Standard Notice
 This repository constitutes a work of the United States Government and is not
 subject to domestic copyright protection under 17 USC § 105. This repository is in
 the public domain within the United States, and copyright and related rights in
@@ -88,13 +100,13 @@ copyright interest.
 
 + [Return to Table of Contents](#table-of-contents).
 
-## 2.5 Open Source Notice
+## 3.5 Open Source Notice
 
 This repository is open source and follows [open practices](docs/open_practices.md).  Contributors are expected to adhere to the organization's [rules of behavior](docs/rules_of_behavior.md).  
 
 + [Return to Table of Contents](#table-of-contents).
 
-## 2.6 License Standard Notice
+## 3.6 License Standard Notice
 
 The code in this repository is licensed under the Apache License 2.0 (ASL v2), or any later version at your discretion.
 
@@ -106,14 +118,14 @@ Additionally, any code forked from this open-source project will retain its orig
 
 + [Return to Table of Contents](#table-of-contents).
 
-## 2.7 Github Notice
+## 3.7 Github Notice
 
 GitHub is not hosted by the CDC, but is a third party website used by CDC and its partners to share information and collaborate on software. CDC use of GitHub does not imply an endorsement of any one particular service, product, or enterprise. If you are new to GitHub, we recommend starting with this
 [basic tutorial](https://help.github.com/articles/set-up-git) to familiarize yourself with version control and collaboration.  
 
 + [Return to Table of Contents](#table-of-contents).
 
-## 2.8 Contributing Standard Notice
+## 3.8 Contributing Standard Notice
 
 While we encourage continuous development of this repository's codebase, there is currently no designated department overseeing its management. If you'd like to contribute, you have two options:
 
@@ -127,13 +139,13 @@ CDC including this GitHub page may be subject to applicable federal law, includi
 
 + [Return to Table of Contents](#table-of-contents).
 
-# 3. General Disclaimer
+# 4. General Disclaimer
 
 This repository was created for use by CDC programs to collaborate on public health related projects in support of the [CDC mission](https://www.cdc.gov/about/cdc/?CDC_AAref_Val=https://www.cdc.gov/about/organization/mission.htm).  
 
 + [Return to Table of Contents](#table-of-contents).
 
-# 4. Other Related Documents
+# 5. Other Related Documents
 
 * [Open Practices](docs/open_practices.md)
 * [Rules of Behavior](docs/rules_of_behavior.md)
