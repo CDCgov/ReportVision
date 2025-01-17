@@ -42,9 +42,8 @@ This application offers a robust framework for public health departments and per
 
 Check out the following video which demos the ReportVision application including how the updated OCR model works in action, and witness firsthand how ReportVision enhances both the speed and accuracy of data extraction!
 
-[ReportVision Demo Walkthrough](https://github.com/user-attachments/assets/5b707ec2-5d11-436b-a270-98000ef21e8f)
+https://github.com/user-attachments/assets/5b707ec2-5d11-436b-a270-98000ef21e8f
 
-+ [Return to Table of Contents](#table-of-contents).
 
 ## Future Considerations
 
