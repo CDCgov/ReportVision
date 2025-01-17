@@ -16,9 +16,9 @@
 - [3.7 Github Notice](#37-github-notice)
 - [3.8 Contributing Standard Notice](#38-contributing-standard-notice)
 
-[3. General Disclaimer](#3-general-disclaimer)
+[4. General Disclaimer](#4-general-disclaimer)
 
-[4. Other Related Documents](#4-other-related-documents)
+[5. Other Related Documents](#5-other-related-documents)
 
 
 # 1. Overview
@@ -42,19 +42,9 @@ This application offers a robust framework for public health departments and per
 
 Check out the following video which demos the ReportVision application including how the updated OCR model works in action, and witness firsthand how ReportVision enhances both the speed and accuracy of data extraction!
 
+[ReportVision Demo Walkthrough](https://github.com/user-attachments/assets/5b707ec2-5d11-436b-a270-98000ef21e8f)
 
-
-
-https://github.com/user-attachments/assets/5b707ec2-5d11-436b-a270-98000ef21e8f
-
-
-<!-- <a href="https://github.com/CDCgov/ReportVision/raw/main/images-and-media/rv-full-product-waklthrough.mp4" target="_blank">
-    <img src="https://github.com/CDCgov/ReportVision/raw/main/images-and-media/thumbnail.jpg" alt="ReportVision Demo" width="500" />
-</a> -->
-
-<a href="https://cdcgov.github.io/ReportVision/images-and-media/rv-full-product-waklthrough.mp4" target="_blank">
-    <img src="https://cdcgov.github.io/ReportVision/images-and-media/thumbnail.jpg" alt=" ReportVision Demo" width="500" />
-</a>
++ [Return to Table of Contents](#table-of-contents).
 
 ## Future Considerations
 
@@ -66,7 +56,7 @@ The current version of the application is optimized only for PDF-based lab repor
 
 The following provides a High-Level Architectural Design of the ReportVision Azure Architecture, with OCR powered by Tesseract to enhance efficiency, user experience, and throughput.
 
-
+<img width="985" alt="rv-azure-architecture-diagram" src="https://github.com/user-attachments/assets/c02f9f10-90e0-4660-afa2-d77968087003" />
 
 
 ## 3 Notices
