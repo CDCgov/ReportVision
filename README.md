@@ -44,6 +44,10 @@ Check out the following video which demos the ReportVision application including
 
 
 
+
+https://github.com/user-attachments/assets/5b707ec2-5d11-436b-a270-98000ef21e8f
+
+
 <!-- <a href="https://github.com/CDCgov/ReportVision/raw/main/images-and-media/rv-full-product-waklthrough.mp4" target="_blank">
     <img src="https://github.com/CDCgov/ReportVision/raw/main/images-and-media/thumbnail.jpg" alt="ReportVision Demo" width="500" />
 </a> -->
