@@ -41,10 +41,10 @@ This application offers a robust framework for public health departments and per
 Check out the following videos to see how the updated OCR model works in action, and and witness firsthand how ReportVision enhances both the speed and accuracy of data extraction!
 
 <div align="center">
-<video width="500" height="280" controls>
-  <source src="/images-and-media/reportvision-demo.mp4" type="video/mp4">
-  Video Extracting Data From Lab Reports.
-</video>
+    <video width="560" height="315" controls>
+        <source src="https://github.com/CDCgov/ReportVision/raw/gh-pages/images-and-media/rv-full-product-waklthrough.mp4" type="video/mp4">
+        ReportVision Full Product Walkthrough.
+    </video>
 </div align="center">
 
 ## Future Considerations
