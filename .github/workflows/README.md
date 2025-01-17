@@ -1,6 +1,6 @@
 # Github Action workflows for building and deploying ReportVision in a dev environment
 
-Uploading GHA-user-deploy-demo-reportvision.mp4…
+https://github.com/user-attachments/assets/31cd1870-d77f-4de1-8ed0-473fedfab8ec
 
 ## Prerequisites
 
