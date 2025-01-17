@@ -6,7 +6,7 @@
 
 [2. Infrastructure Architecture](#2-infrastructure-architecture)
 
-[3. Notices](#2-notices)
+[3. Notices](#3-notices)
 - [3.1 Privacy Standard Notice](#31-privacy-standard-notice)
 - [3.2 Records Management Standard Notice](#32-records-management-standard-notice)
 - [3.3 Domestic Copyright Protection Notice](#33-domestic-copyright-protection-notice)
@@ -58,7 +58,7 @@ The following provides a High-Level Architectural Design of the ReportVision Azu
 <img width="985" alt="rv-azure-architecture-diagram" src="https://github.com/user-attachments/assets/c02f9f10-90e0-4660-afa2-d77968087003" />
 
 
-## 3 Notices
+# 3 Notices
 
 ## 3.1 Privacy Standard Notice
 This repository contains only non-sensitive, publicly available data and information. All material and community participation is covered by the [Disclaimer](DISCLAIMER.md) and [Code of Conduct](code-of-conduct.md).
